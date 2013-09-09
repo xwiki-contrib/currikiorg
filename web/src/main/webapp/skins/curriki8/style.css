@@ -5131,6 +5131,7 @@ form#inline input { margin-bottom:3px; }
 .groups-documentation p.paragraph { display: inline; padding: 0; margin: 0; }
 #groups-documentation-main #xwikiuploadfile { width: 300px !important; }
 #groups-documentation-main #section_1 label { display: block; }
+#groups-documentation-main #section_1 label.hidden, #groups-documentation-main #section_1 label.none { display: none; }
 .groups-documentation form input.button { width: auto; }
 .groups-documentation .mceEditorContainer { padding: 0; }
 .groups-documentation .doctext { display: block; padding: 15px 0 4px; }
@@ -5334,3 +5335,45 @@ div.dialog-editorconfirmremove  div.gwt-ModalDialog-Content, div.dialog-proposed
    width: 640px;
 }
 
+/* CURRIKI-6124 Wysiwyg 2.0 table styles */
+.asset-display-text table, .doccontent table {
+    background-color: #FFFFFF;
+    border: 1px solid #A5A5A5;
+    margin: 1px;
+    width: 100%;
+    empty-cells: show;
+    font-size: 100%;
+    text-align: left;
+}
+
+.asset-display-text th, .doccontent th {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #C5C5C5;
+    font-size: 14px !important;
+    padding: 5px 10px;
+    text-align: left;
+    font-weight: 100;
+    border: 1px solid #A5A5A5;
+}
+
+.asset-display-text td, .doccontent td {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid #A5A5A5;
+}
+
+/* CURRIKI-6124 Bullets in wysiwyg 2.0 */
+.asset-display ul, .asset-display-text ul, .asset-display ul ul,.asset-display-text ol, .asset-display ol ol,
+.doccontent ul, .doccontent ul, .doccontent ul ul,.doccontent ol, .doccontent ol ol {
+  margin: 1em 0;
+  padding-left: 30px;
+  font-family: Arial;
+  list-style-type: disc !important;
+}

@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.dward</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.dward</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1218234233000</creationDate>
-<date>1224182457000</date>
-<contentUpdateDate>1266877071000</contentUpdateDate>
-<version>21.1</version>
+<date>1369944299000</date>
+<contentUpdateDate>1369944299000</contentUpdateDate>
+<version>9.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>Search.Groups</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>e2cf024c-b3fc-4211-8b49-0f974008f22d</guid>
 <property>
 <tags/>
 </property>
@@ -65,88 +65,88 @@
 ##   pagename, title, ict, contributor, contributorName, review
 #set($lucene = $xwiki.getPlugin("lucene"))
 #if(!$lucene) ##{
-	{'resultCount':'0', 'rows':[]}
+{'resultCount':'0', 'rows':[]}
 #else ## }{
-	##
-	## Set start and limit for result list
-	##
-	#set($Integer = 0)
-	#set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
-	#set($start = 0)
-	#if("$!request.start" != "") ##{
-		#set($start = $Integer.parseInt($request.start))
-	#end ##}
-	#set($start = 1 + $start)
-	#set($start = "$start")
-	#set($limit = "25")
-	#if("$!request.limit" != "") ##{
-		#set($limit = $request.limit)
-	#end ##}
-	##
-	## Set sort field
-	##
-	#set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
-	#set($sortField2 = 'date')
-	#if($!request.sort != "") ##{
-		#if($request.sort == "title") ##{
-			#set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
-			#set($sortField2 = 'date')
-		#end ##}
-		#if($request.sort == "policy") ##{
-			#set($sortField1 = 'XWiki.SpaceClass.policy.untokenized')
-			#set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
-		#end ##}
-		#if($request.sort == "updated") ##{
-			#set($sortField1 = 'date')
-			#set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
-		#end ##}
-	#end ##}
-	#if($!request.dir == "DESC") ##{
-		#set($sortField1 = "-${sortField1}")
-	#end ##}
-	#set($sortFields = "${sortField1},${sortField2}")
-	#set($sortFields = $sortFields.split(","))
-	##
-	## Create query
-	##
-	#set($q = $xwiki.arrayList)
-	##
-	## Terms
-	#if($!request.terms != "") ##{
-		#set($junk = $q.add("${request.terms}"))
-	#end ##}
-	##
-	## Subject
-	#if($!request.subject != "") ##{
-		#set($junk = $q.add("XWiki.CurrikiSpaceClass.topic:${request.subject}"))
-	#end ##}
-	##
-	## Level
-	#if($!request.level != "") ##{
-		#set($junk = $q.add("XWiki.CurrikiSpaceClass.educationLevel:${request.level}"))
-	#end ##}
-	##
-	## Language
-	#if($!request.language != "") ##{
-		#set($junk = $q.add("XWiki.CurrikiSpaceClass.language:${request.language}"))
-	#end ##}
-	##
-	## Open/Closed policy
-	#if($!request.policy != "") ##{
-		#set($junk = $q.add("XWiki.SpaceClass.policy:${request.policy}"))
-	#end ##}
-	##
-	##
-	##
-	## Put together query conditions
-	#set($conditions = "")
-	#foreach($condition in $q) ##{
-		#set($conditions = "$conditions AND $condition")
-	#end ##}
-	##
-	## General query information
-	#set($wikinames = "xwiki")
-	#set($languages = "default,en")
+##
+## Set start and limit for result list
+##
+    #set($Integer = 0)
+    #set($maxResults = $Integer.parseInt($msg.get('search.results.max')))
+    #set($start = 0)
+    #if("$!request.start" != "") ##{
+        #set($start = $Integer.parseInt($request.start))
+    #end ##}
+    #set($start = 1 + $start)
+    #set($start = "$start")
+    #set($limit = "25")
+    #if("$!request.limit" != "") ##{
+        #set($limit = $request.limit)
+    #end ##}
+##
+## Set sort field
+##
+    #set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
+    #set($sortField2 = 'date')
+    #if($!request.sort != "") ##{
+        #if($request.sort == "title") ##{
+            #set($sortField1 = 'XWiki.SpaceClass.displayTitle.untokenized')
+            #set($sortField2 = 'date')
+        #end ##}
+        #if($request.sort == "policy") ##{
+            #set($sortField1 = 'XWiki.SpaceClass.policy.untokenized')
+            #set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
+        #end ##}
+        #if($request.sort == "updated") ##{
+            #set($sortField1 = 'date')
+            #set($sortField2 = 'XWiki.SpaceClass.displayTitle.untokenized')
+        #end ##}
+    #end ##}
+    #if($!request.dir == "DESC") ##{
+        #set($sortField1 = "-${sortField1}")
+    #end ##}
+    #set($sortFields = "${sortField1},${sortField2}")
+    #set($sortFields = $sortFields.split(","))
+##
+## Create query
+##
+    #set($q = $xwiki.arrayList)
+##
+## Terms
+    #if($!request.terms != "") ##{
+        #set($junk = $q.add("${request.terms}"))
+    #end ##}
+##
+## Subject
+    #if($!request.subject != "") ##{
+        #set($junk = $q.add("XWiki.CurrikiSpaceClass.topic:${request.subject}"))
+    #end ##}
+##
+## Level
+    #if($!request.level != "") ##{
+        #set($junk = $q.add("XWiki.CurrikiSpaceClass.educationLevel:${request.level}"))
+    #end ##}
+##
+## Language
+    #if($!request.language != "") ##{
+        #set($junk = $q.add("XWiki.CurrikiSpaceClass.language:${request.language}"))
+    #end ##}
+##
+## Open/Closed policy
+    #if($!request.policy != "") ##{
+        #set($junk = $q.add("XWiki.SpaceClass.policy:${request.policy}"))
+    #end ##}
+##
+##
+##
+## Put together query conditions
+    #set($conditions = "")
+    #foreach($condition in $q) ##{
+        #set($conditions = "$conditions AND $condition")
+    #end ##}
+##
+## General query information
+    #set($wikinames = "xwiki")
+    #set($languages = "default,en")
 ## Search Group_*.WebPreferences
 ## Has a XWiki.SpaceClass object
 ##  -- display name - displayTitle
@@ -156,70 +156,70 @@
 ##  -- educational level - educationLevel
 ##  -- topics of interest - topic
 ##  -- language - language
-	#set($include = "XWiki.CurrikiSpaceClass.topic:FW_masterFramework.WebHome AND name:WebPreferences")
-	#set($exclude = "")
-	#set($luceneQuery = "$include $conditions $exclude")
-	##
-	## Do query
-	##
-	#set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
-	#set($results = $searchResults.getResults($start, $limit))
-	#set($resultCount = $searchResults.totalHitcount)
-	#set($modifiedCount = $resultCount)
-	#if($modifiedCount &gt; $maxResults) ##{
-	#set($modifiedCount = $maxResults)
-	#end ##}
+    #set($include = "XWiki.CurrikiSpaceClass.topic:FW_masterFramework.WebHome AND name:WebPreferences")
+    #set($exclude = "")
+    #set($luceneQuery = "$include $conditions $exclude")
+##
+## Do query
+##
+    #set($searchResults = $lucene.getSearchResults($luceneQuery, $sortFields, $languages))
+    #set($results = $searchResults.getResults($start, $limit))
+    #set($resultCount = $searchResults.totalHitcount)
+    #set($modifiedCount = $resultCount)
+    #if($modifiedCount &gt; $maxResults) ##{
+        #set($modifiedCount = $maxResults)
+    #end ##}
 
-	##
-	## List out results
-	##
-	#if("$!resultCount" == "") ##{
-		#set($resultCount = 0)
-	#end ##}
-	{
-	'rows':[
-	#set($first = true)
-	#foreach($result in $results) ##{
-		##
-		## Get each result
-		#set($d = $xwiki.getDocument("${result.web}.${result.name}"))
-		##
-		## Get Title
-		#set($title = $!d.getObject("XWiki.SpaceClass").getProperty("displayTitle").getValue())
-		#if(!$title || $title.length() == 0) ## {
-			#set($title = $msg.get("caption.untitled"))
-		#end ## }
-		#set($title = $title.replace("'", "&amp;#39;"))
-		##
-		## Get policy
-		#set($policy = $!d.getObject("XWiki.SpaceClass").getProperty("policy").getValue())
-		##
-		## Get URL
-		#set($url = "")
-		#set($space = $d.fullName.replace(".WebPreferences", ".WebHome"))
-		#set($url = $xwiki.getURL($space))
-		##
-		## Get Description
-		#set($desc = "")
-		#set($desc = $!d.getObject("XWiki.SpaceClass").getProperty("description").getValue())
-		#set($desc = $desc.replace("'", "&amp;#39;"))
-		#set($desc = $desc.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
-		##
-		##
-		#if($first) ##{
-			#set($first = false)
-		#else ##} {
-			,
-		#end ##}
-		{
-		 'page':'${space}'
-		,'title':'${title}'
-		,'url':'${url}'
-		,'policy':'${policy}'
-		,'description':'${desc}'
-		,'updated':'${d.date}'
-		}
-	#end ##}
+##
+## List out results
+##
+    #if("$!resultCount" == "") ##{
+        #set($resultCount = 0)
+    #end ##}
+{
+'rows':[
+    #set($first = true)
+    #foreach($result in $results) ##{
+    ##
+    ## Get each result
+        #set($d = $xwiki.getDocument("${result.web}.${result.name}"))
+    ##
+    ## Get Title
+        #set($title = $!d.getObject("XWiki.SpaceClass").getProperty("displayTitle").getValue())
+        #if(!$title || $title.length() == 0) ## {
+            #set($title = $msg.get("caption.untitled"))
+        #end ## }
+        #set($title = $title.replace("'", "&amp;#39;"))
+    ##
+    ## Get policy
+        #set($policy = $!d.getObject("XWiki.SpaceClass").getProperty("policy").getValue())
+    ##
+    ## Get URL
+        #set($url = "")
+        #set($space = $d.fullName.replace(".WebPreferences", ".WebHome"))
+        #set($url = $xwiki.getURL($space))
+    ##
+    ## Get Description
+        #set($desc = "")
+        #set($desc = $!d.getObject("XWiki.SpaceClass").getProperty("description").getValue())
+        #set($desc = $desc.replace("'", "&amp;#39;"))
+        #set($desc = $desc.replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+    ##
+    ##
+        #if($first) ##{
+            #set($first = false)
+        #else ##} {
+        ,
+        #end ##}
+    {
+    'page':'${space}'
+    ,'title':'${title}'
+    ,'url':'${url}'
+    ,'policy':'${policy}'
+    ,'description':'${desc}'
+    ,'updated':'${xwiki.formatDate($d.date,"yyyy/MM/dd HH:mm")}'
+    }
+    #end ##}
 ]
 ,'resultCount':'${modifiedCount}'
 ,'totalResults':'${resultCount}'

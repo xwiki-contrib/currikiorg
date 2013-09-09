@@ -1,0 +1,22 @@
+  ## Import styles & scripts
+  #template('conversationssetup.vm')
+  ## Import vars
+  #template('conversationsvars.vm')
+  ## Import macros
+  #template('conversationsmacros.vm')
+  ## Count comments
+  #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+  #set($comments = $topicAnswers.size())
+  #foreach($topicAnswer in $topicAnswers)
+    #set($answerDoc = $xwiki.getDocument($topicAnswer))
+    #set($answerComments = $answerDoc.getComments())
+    #set($comments = $comments + $answerDoc.getComments().size())
+  #end
+  ## Display topic header
+  #displayForumTopic($doc.fullName true)
+  ## Display answer (conversation) add form
+  #displayConversationAddForm()
+  #displayAnswers()
+  ## Enable WYSIWYG editors loading when adding comments
+  #displayEditors()
+  #template('conversationsend.vm')

@@ -1,0 +1,130 @@
+#set($tool=$xwiki.parseGroovyFromPage("Registration.SocialLoginToolGroovy"))##
+$tool.init($xwiki,$context,$request,$msg,$targets)##
+$tool.setAutoCreateUser(true)##
+$request.session.setAttribute("SocialLoginTool", $tool)##
+{pre}
+<!DOCTYPE html>
+<html>
+<head>
+  #template("xwikivars.vm")
+  #template("analytics.vm")
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Free download! Highly-rated Science Experiments You Can Do at Home.</title>
+
+  <meta property="og:title" content="Free download! Highly-rated Science Experiments You Can Do at Home." />
+  <meta property="og:url" content="http://$hostname/xwiki/bin/view/MembershipDrive/LandingPage?xpage=plain" />
+  <meta property="og:site_name" content="Curriki" />
+
+  <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet">
+  <style type="text/css">
+{/pre}
+      #includeInContext("MembershipDrive.styles")
+{pre}
+  </style>
+
+  <script type="text/javascript" src="/xwiki/js/curriki-analytics.js"></script>
+
+</head>
+
+<!-- The body contains a 2-8-2 column layout -->
+<body>
+  <div class="row">
+
+    <!-- Empty Left Main Column -->
+    <div id="left-column" class="col-md-2"></div>
+
+    <!-- Middle Content Column -->
+    <div id="mid-column" class="col-md-8">
+
+      <!-- Heading Box -->
+      <div id="header"></div>
+      <div class="row text-center">
+        <div class="col-md-1"></div>
+        <div class="col-md-3">
+          <a href="http://$hostname">
+            <img id="curriki-logo-header" src="/xwiki/bin/download/MembershipDrive/LandingPage/curriki_logo.png"/>
+          </a>
+        </div>
+
+        <div class="col-md-7">
+            <h1>Science Experiments <br> You Can Do at Home</h1>
+        </div>
+        <div class="col-md-1"></div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12"><hr/></div>
+      </div>
+
+      <!-- Alert for incorrect logins -->
+  {/pre}
+      #if($request.invalidCredentials)
+        <div class="alert alert-danger">
+          <a class="close" data-dismiss="alert">×</a>
+          <h4 class="alert-heading">Sorry!</h4>
+          You entered a wrong user name or password. Please try again, or use your Google or Facebook account to log in.
+        </div>
+      #end
+  {pre}
+
+      <!-- The centered content row with the text to call the user to action (to login or start the download)-->
+      <div id="content" class="row">
+
+        <div id="campaign-logo-container" class="col-md-6">
+          <img id="campaign-logo" src="/xwiki/bin/download/MembershipDrive/LandingPage/campaign_logo.png">
+        </div>
+
+        <!-- Either include the logins we have (Social logins, Curriki logins) -->
+        <div id="call-to-action" class="col-md-6">
+  {/pre}
+          #if($isGuest)
+            <h1>Powders & Crystals: Experiments For Grades 3-5</h1>
+            <p>
+              Get Science Experiments You Can Do At Home FREE when you join our mailing list. You will receive our monthly newsletter full of FREE, quality K-12 resources and be part of the 400K+ strong global Curriki community. Sign in or join to begin downloading.
+            </p>
+            #includeInContext("MembershipDrive.Logins")
+          #else
+            <h1>Powders & Crystals: Experiments For Grades 3-5</h1>
+            <p>
+              Download the highly-rated <strong>“Science Experiments You Can Do at Home”</strong> resource. Have fun together as you introduce children to the chemical and physical properties of crystals and powders.
+            </p>
+            <p>
+              Click the Download Now button to start your download.
+            </p>
+            #includeInContext("MembershipDrive.ResourceDownload")
+          #end
+  {pre}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-12"><hr/></div>
+      </div>
+      <div class="row">
+        <div class="col-md-12">
+          <!-- AddThis Button BEGIN -->
+          <div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+            <a class="addthis_button_facebook"></a>
+            <a class="addthis_button_twitter"></a>
+            <a class="addthis_button_pinterest_share"></a>
+            <a class="addthis_button_google_plusone_share"></a>
+            <a class="addthis_button_compact"></a><a class="addthis_counter addthis_bubble_style"></a>
+          </div>
+          <script type="text/javascript">var addthis_config = {"data_track_addressbar":true};</script>
+          <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=curriki"></script>
+          <!-- AddThis Button END -->
+        </div>
+      </div>
+    </div>
+
+    <div id="right-column" class="col-md-2"></div>
+  </div>
+
+  <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+  <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+  <!-- Include all compiled plugins (below), or include individual files as needed -->
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+  </body>
+</html>
+{/pre}

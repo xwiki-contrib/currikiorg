@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1215124816000</creationDate>
-<date>1332456442000</date>
-<contentUpdateDate>1332456442000</contentUpdateDate>
-<version>17.1</version>
+<date>1367912318000</date>
+<contentUpdateDate>1367912318000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment>Importé depuis un le XAR</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>CreateResources.CurrikiStandardLessonPlan</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>3e5c4729-05fd-4ff9-9d33-91fb8f594229</guid>
+<guid>7d278c11-b3c3-4478-9e4f-cf20606501e4</guid>
 <property>
 <tags/>
 </property>
@@ -101,7 +101,7 @@
      #set( $newAsset  = $xwiki.curriki.fetchAsset($pageName) )
   #else ## } {
     ## empty pageName means no asset... so create new one. This is "default" action
-     #set( $newAsset = $xwiki.curriki.createAsset($xwiki.null) )
+     #set( $newAsset = $xwiki.curriki.createAsset($util.null) )
      ## note-below: &lt;input type="hidden"	name="pageName"		value="$!newAsset.fullName"	/&gt;
      ## so followup POSTs set pageName to newly created asset, i.e. condition below:
   #end ## }

@@ -276,7 +276,15 @@ Curriki.loadingMask.msg=_(b);Curriki.loadingMask.enable();Curriki.loadingMask.sh
 console.log("Set ISO8601 parsing to "+Curriki.ISO8601DateParsing);return Curriki.ISO8601DateParsing
 };Curriki.hideLoading=function(a){if(a===true){Curriki.loadingCount--}if(Curriki.loadingCount==0&&!Ext.isEmpty(Curriki.loadingMask)){Curriki.loadingMask.hide();
 Curriki.loadingMask.disable()}else{if(Curriki.loadingCount<0){Curriki.loadingCount=0
-}}};Curriki.logEvent=function(c,b){var d=c.reverse();d.push("_trackEvent");d=d.reverse();
+}}};Curriki.start=function(callback){console.log("Start Callback: ",callback);var args={};
+if("object"===typeof callback){if(callback.args){args=callback.args}if(callback.callback){callback=callback.callback
+}else{if(callback.module){callback=callback.module}}}if("string"===typeof callback){var module=eval("(Curriki.module."+callback.toLowerCase()+")");
+if(module&&"function"===typeof module.init){module.init(args);if("function"===typeof module.start){callback=module.start
+}else{callback=Ext.emptyFn}}else{switch(callback){default:callback=Ext.emptyFn;break
+}}}if("function"===typeof callback){callback(args)}};Curriki.init=function(a){console.log("Curriki.init: ",a);
+if(Ext.isEmpty(Curriki.initialized)){Curriki.data.user.GetUserinfo(function(){Curriki.start(a)
+});Curriki.initialized=true}else{Curriki.start(a)}};if(typeof Curriki=="undefined"){Curriki={}
+}Curriki.logEvent=function(c,b){var d=c.reverse();d.push("_trackEvent");d=d.reverse();
 if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)}}else{try{if(b){window.top._gaq.push(d).push(b)
 }else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)}}catch(a){try{if(console){console.info("Failed to track: ",page)
 }}catch(a){}}}};Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)
@@ -284,14 +292,7 @@ if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)}}else{try{if(b){win
 }else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();window.top.pageTrackerQueue.push(a)
 }if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
 window.pageTrackerQueue.push(a);if(console){console.info("Would track: ",a)}}catch(b){}}}}};
-Curriki.start=function(callback){console.log("Start Callback: ",callback);var args={};
-if("object"===typeof callback){if(callback.args){args=callback.args}if(callback.callback){callback=callback.callback
-}else{if(callback.module){callback=callback.module}}}if("string"===typeof callback){var module=eval("(Curriki.module."+callback.toLowerCase()+")");
-if(module&&"function"===typeof module.init){module.init(args);if("function"===typeof module.start){callback=module.start
-}else{callback=Ext.emptyFn}}else{switch(callback){default:callback=Ext.emptyFn;break
-}}}if("function"===typeof callback){callback(args)}};Curriki.init=function(a){console.log("Curriki.init: ",a);
-if(Ext.isEmpty(Curriki.initialized)){Curriki.data.user.GetUserinfo(function(){Curriki.start(a)
-});Curriki.initialized=true}else{Curriki.start(a)}};Ext.ns("Curriki.data.user");Curriki.data.user={me:{username:"XWiki.XWikiGuest",fullname:"Guest"},collections:[],groups:[],collectionChildren:[],groupChildren:[],gotCollections:false,json_prefix:"/xwiki/curriki/users/",user_try:0,GetUserinfo:function(a){if(!Ext.isEmpty(Curriki.global)&&!Ext.isEmpty(Curriki.global.username)&&!Ext.isEmpty(Curriki.global.fullname)){this.me={username:Curriki.global.username,fullname:Curriki.global.fullname};
+Ext.ns("Curriki.data.user");Curriki.data.user={me:{username:"XWiki.XWikiGuest",fullname:"Guest"},collections:[],groups:[],collectionChildren:[],groupChildren:[],gotCollections:false,json_prefix:"/xwiki/curriki/users/",user_try:0,GetUserinfo:function(a){if(!Ext.isEmpty(Curriki.global)&&!Ext.isEmpty(Curriki.global.username)&&!Ext.isEmpty(Curriki.global.fullname)){this.me={username:Curriki.global.username,fullname:Curriki.global.fullname};
 if(Curriki.settings&&Curriki.settings.localCollectionFetch){a()}else{this.GetCollections(a)
 }}else{this.user_try++;Ext.Ajax.request({url:this.json_prefix+"me",method:"GET",disableCaching:true,headers:{Accept:"application/json"},scope:this,success:function(b,c){var d=b.responseText;
 var e=d.evalJSON(true);if(!e){console.warn("Cannot get user information");if(this.user_try<5){this.GetUserinfo(a)
@@ -560,7 +561,7 @@ var f=window.setInterval(function(){clearInterval(f);Curriki.ui.login.liveValida
 },50)})})},queueQueryNow:function(f){var h=f.dom.name;var d=f.dom.value;Curriki.console.log("Validation on field "+h+" with value '"+d+"'.");
 if(h!="email"&&h!="username"&&h!="postalCode"){var g=false;var b=h=="firstName"||h=="lastName"||h=="password";
 if(h=="agree"){g=d!="0"}if(h=="member_type"){g=d!="-"}if(h=="firstName"||h=="lastName"){g=d.length>=1
-}if(h=="password"){g=d.length>5&&!(d.indexOf(" ")>-1)}Curriki.console.log("passed? "+g+".");
+}if(h=="password"){g=d.length>=5&&!(d.indexOf(" ")>-1)}Curriki.console.log("passed? "+g+".");
 if(g==false){if(b){Curriki.ui.login.liveValidation.notifyValidationResult(f,null)
 }else{Curriki.ui.login.liveValidation.notifyValidationResult(f,false)}}if(g==true){Curriki.ui.login.liveValidation.notifyValidationResult(f,true)
 }return}var e=new Object();e.value=f.getValue();Curriki.ui.login.liveValidation.queriedValue=f.getValue();
@@ -581,7 +582,16 @@ if(b){}else{return}var c=new Date().getTime();if(d.startedPollingTime&&d.started
 }var e=b.dom.value;if(typeof(e)!="undefined"){if(typeof(d.lastValue)!="undefined"){if(!(e==d.lastValue)){d.lastChanged=c;
 d.lastValue=e}else{if(d.lastChanged&&c-d.lastChanged>200&&(d.lastChanged>d.lastChecked||d.lastChecked===undefined)&&(typeof(d.queriedValue)=="undefined"||d.queriedValue!=e)){d.lastChecked=c;
 d.queueQueryNow(b)}}}else{d.lastValue=e;d.lastChanged=c}}else{Curriki.console.log("Giving up value undefined.")
-}}}}();(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
+}}}}();function postMessageHandler(c){console.log("postMessage: ",c);var b=c.data;
+var a=b.substring(0,b.indexOf(":"));var g=b.indexOf(":");var e=b.indexOf(":",g+1);
+var f=b.substring(g+1,e);var d=b.substring(e+1);switch(a){case"resize":console.log("received resize event (resize "+f+" to "+d+")");
+window.resizeThatCurrikiIframe(f,d);break}}function resizeThatCurrikiIframe(c,b){var a="currikiIFrame_"+c;
+if(c.startsWith("currikiIFrame")){a=c}var d=document.getElementById(a);if(d){d.setAttribute("style",b);
+d.parentNode.setAttribute("style",b)}else{console.log("No frame found for "+a)}}if(typeof window.attachEvent==="function"||typeof window.attachEvent==="object"){console.log("attached Listener to event via window.attachEvent");
+window.attachEvent("onmessage",postMessageHandler)}else{if(typeof window.addEventListener==="function"){console.log("attached Listener to event via window.addEvenListener");
+window.addEventListener("message",postMessageHandler,false)}else{if(typeof document.attachEvent==="function"){console.log("cors iframe communication is not possible");
+document.attachEvent("onmessage",postMessageHandler)}else{console.log("Frame communication not possible")
+}}}(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
 }Curriki.ui.Rating=Ext.extend(Ext.form.NumberField,{fieldClass:"x-form-field x-form-rating-field",allowDecimals:false,allowNegative:false,minValue:0,maxValue:5,unit:17,wrapClass:"ux-form-rater-wrap",starsClass:"ux-form-rater-stars",hoverClass:"ux-form-rater-hover",voteClass:"ux-form-rater-vote",votedClass:"ux-form-rater-voted",textRightClass:"ux-form-rater-text-right",hoverText:b,displayValue:undefined,ratedValue:undefined,hoverValue:undefined,rated:false,initComponent:function(){Curriki.ui.Rating.superclass.initComponent.call(this);
 this.addEvents("beforerating","rate")},onRender:function(d,c){Curriki.ui.Rating.superclass.onRender.apply(this,arguments);
 this.wrap=this.el.wrap({cls:this.wrapClass});if(Ext.isIE){this.wrap.setHeight(this.unit)
@@ -656,7 +666,7 @@ var b=(c.getValues(false))["assetSource"];if(c.isValid()){a.SourceSelected(b,c.g
 }else{b.setHeight(d.getInnerHeight()-(d.findByType("panel")[0].getBox().height+(Ext.isIE?a.ie_size_shift:0)))
 }})}},items:[{xtype:"box",autoEl:{tag:"div",html:_("add.contributemenu.subtitle_have"),cls:"subtitle"}},{xtype:"radio",value:"file",inputValue:"file",boxLabel:_("add.contributemenu.option.file"),checked:true,listeners:{check:a.RadioSelect}},{xtype:"container",id:"file-container-cmp",autoEl:{tag:"div",id:"file-container",html:""},items:[{xtype:"textfield",inputType:"file",id:"file-entry-box",name:"filepath",allowBlank:false,preventMark:true,hideMode:"display",hideLabel:true,listeners:{focus:function(){var b=Ext.getCmp("file-entry-box").getValue();
 var e=b.lastIndexOf("\\");var d=b.lastIndexOf("/");var c=(e>d)?e:d;b=b.substring(c+1);
-Ext.getCmp("filename-entry-box").setValue(b)}}},{xtype:"textfield",id:"filename-entry-box",name:"filename",allowBlank:false,preventMark:true,hideLabel:true,hidden:true,disabled:true}]},{xtype:"radio",value:"video_upload",inputValue:"video_upload",boxLabel:_("add.contributemenu.option.video_upload"),listeners:{check:a.RadioSelect}},{xtype:"container",id:"video_upload-container-cmp",hidden:true,autoEl:{tag:"div",id:"video_upload-container",html:""},items:[{xtype:"textfield",inputType:"file",id:"video_upload-entry-box",name:"upload[file]",allowBlank:false,preventMark:true,hideMode:"display",hideLabel:true,hidden:true,disabled:true,listeners:{focus:function(){}}}]},{xtype:"radio",value:"link",inputValue:"link",boxLabel:_("add.contributemenu.option.link"),listeners:{check:a.RadioSelect}},{xtype:"container",id:"link-container-cmp",hidden:true,autoEl:{tag:"div",id:"link-container",html:""},items:[{xtype:"textfield",id:"link-entry-box",name:"link",value:"http://",disabled:true,hidden:true,allowBlank:false,preventMark:true,hideMode:"display",hideLabel:true,vtype:"url"}]},{xtype:"radio",value:"repository",inputValue:"repository",boxLabel:_("add.contributemenu.option.repository"),hidden:true||!this.toFolder,hideLabel:true||!this.toFolder,hideParent:true},{xtype:"box",autoEl:{tag:"div",html:_("add.contributemenu.subtitle_make"),cls:"subtitle"}},{xtype:"radio",value:"template",inputValue:"template",boxLabel:_("add.contributemenu.option.template")},{xtype:"radio",value:"scratch",inputValue:"scratch",boxLabel:_("add.contributemenu.option.scratch")},{xtype:"radio",value:"folder",inputValue:"folder",boxLabel:_("add.contributemenu.option.folder"),hidden:!this.toFolder,hideParent:true}]}]});
+Ext.getCmp("filename-entry-box").setValue(b)}}},{xtype:"textfield",id:"filename-entry-box",name:"filename",allowBlank:false,preventMark:true,hideLabel:true,hidden:true,disabled:true}]},{xtype:"radio",value:"video_upload",inputValue:"video_upload",boxLabel:_("add.contributemenu.option.video_upload"),listeners:{check:a.RadioSelect}},{xtype:"container",id:"video_upload-container-cmp",hidden:true,autoEl:{tag:"div",id:"video_upload-container",html:""},items:[{xtype:"textfield",inputType:"file",id:"video_upload-entry-box",name:"upload[file]",allowBlank:false,preventMark:true,hideMode:"display",hideLabel:true,hidden:true,disabled:true,listeners:{focus:function(){}}}]},{xtype:"radio",value:"link",inputValue:"link",boxLabel:_("add.contributemenu.option.link"),listeners:{check:a.RadioSelect}},{xtype:"container",id:"link-container-cmp",hidden:true,autoEl:{tag:"div",id:"link-container",html:""},items:[{xtype:"textfield",id:"link-entry-box",name:"link",value:"http://",disabled:true,hidden:true,allowBlank:false,preventMark:true,hideMode:"display",hideLabel:true,vtype:"url"}]},{xtype:"radio",value:"repository",inputValue:"repository",boxLabel:_("add.contributemenu.option.repository"),hidden:true||!this.toFolder,hideLabel:true||!this.toFolder,hideParent:true},{xtype:"box",autoEl:{tag:"div",html:_("add.contributemenu.subtitle_make"),cls:"subtitle"}},{xtype:"radio",value:"scratch",inputValue:"scratch",boxLabel:_("add.contributemenu.option.scratch")},{xtype:"radio",value:"folder",inputValue:"folder",boxLabel:_("add.contributemenu.option.folder"),hidden:!this.toFolder,hideParent:true}]}]});
 a.AddSource.superclass.initComponent.call(this)}});Ext.reg("apSource",a.AddSource);
 a.TemplateList=function(){var e="add.select"+Curriki.current.templateType;var d=[];
 var c=1;while(_(e+".list"+c+".header")!==e+".list"+c+".header"){var b=[];b.push({xtype:"radio",name:"templateName",value:"list"+c,checked:(c===1?true:false),boxLabel:_(e+".list"+c+".header"),listeners:{check:a.TemplateSelect}});

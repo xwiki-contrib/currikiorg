@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1171480785000</creationDate>
-<date>1351544040000</date>
-<contentUpdateDate>1351544040000</contentUpdateDate>
-<version>126.1</version>
+<date>1367909492000</date>
+<contentUpdateDate>1367909492000</contentUpdateDate>
+<version>2.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>removing "spurious EOLs".</comment>
+<comment>ported navigation from prod</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -99,7 +99,7 @@
 <name>Panels.Navigation</name>
 <number>0</number>
 <className>Panels.PanelClass</className>
-<guid>cbebff8e-9394-4a86-b480-97544eb116ac</guid>
+<guid>637470a6-e37b-4b91-8049-4fe09a79bff0</guid>
 <property>
 <category>Navigation</category>
 </property>
@@ -115,9 +115,9 @@ function tourpop()
 ##
 &lt;div id="treeviewtemp" style="display: none;"&gt;&lt;/div&gt;
 ##
+&lt;!-- PanelIncludes.GlobalNavigation below --&gt;
 $xwiki.includeTopic("PanelIncludes.GlobalNavigation")
-##
-##
+#*
 ## the default expandation state for categories 
 #set($defstate=false)
 ##
@@ -131,9 +131,9 @@ $xwiki.includeTopic("PanelIncludes.GlobalNavigation")
 #navigationCategory($msg.get('panel.navigation.find'), $rot, "",  $defstate, 
   [
    [$msg.get('panel.navigation.find.about'), "Main.AboutFindingCollecting"], 
-
-
-
+##
+##
+##
  [$msg.get('panel.navigation.advanced_search'), "/xwiki/bin/view/Search/#o%3Af%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Ereview%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Especial%25253Ds%2525253A%25255Eictprfx%25253Ds%2525253A%25255Eict%25253Ds%2525253A%255Egroup%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Elevel%25253Ds%2525253A%25255Elanguage%25253Ds%2525253A%25255Epolicy%25253Ds%2525253A%255Emember%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%25255Esubjectparent%25253Ds%2525253A%25255Esubject%25253Ds%2525253A%25255Emember_type%25253Ds%2525253A%25255Ecountry%25253Ds%2525253A%255Eblog%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%255Ecurriki%253Do%25253Aterms%25253Ds%2525253Aenter%25252520search%25252520terms%25255Esince%25253Ds%2525253A20080825%25255Eother%25253Ds%2525253A%5Ep%3Do%253Aresource%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Egroup%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Emember%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Eblog%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%255Ecurriki%253Do%25253Ac%25253Dn%2525253A0%25255Es%25253Dn%2525253A25%5Et%3Ds%253Asearch-resource-tab%5Ea%3Do%253Aresource%253Do%25253Aa%25253Db%2525253A1%255Egroup%253Do%25253Aa%25253Db%2525253A1"], 
 
 
@@ -291,17 +291,19 @@ $xwiki.includeTopic("PanelIncludes.GlobalNavigation")
 ##
 ##
 #endNavigationPanel()
+*#
 ##
 ##
 &lt;script type="text/javascript"&gt;
+{pre} // xwiki pre tag here
 /* &lt;![CDATA[ */
 Ext.onReady(function(){
-#if($doc.space.startsWith("Coll_")) ##{
-#set($cookiebase = "${context.user}_asset_")##
+#if($doc.web.startsWith("Coll_")) ##{
+#set($cookiebase = "${context.user}_asset_")
 #else ##}{
-#set($cookiebase = "${context.user}_")##
+#set($cookiebase = "${context.user}_")
 #end ##} 
-#set($cookiebase = "${cookiebase}_currikinavcategory_home")##
+#set($cookiebase = "${cookiebase}_currikinavcategory_home")
 	Ext.ns('Curriki.data.nav');
 	var nav = Curriki.data.nav;
 	nav.expanded = true;
@@ -315,9 +317,11 @@ Ext.onReady(function(){
 		}
 	}
 	Ext.select('#navigation-inner/div[class*=home]/a').first().dom.innerHTML = '&lt;span id="navhome-expander" class="'+(nav.expanded?"expanded":"collapsed")+'"&gt;&lt;/span&gt;' + Ext.select('#navigation-inner/div[class*=home]/a').first().dom.innerHTML;
+
 	if (!nav.expanded) {
 		Ext.select('#navigation-inner/div[id]').each(function(el) {el.setVisibilityMode(Ext.Element.DISPLAY); el.hide();})
 	}
+
 	Ext.get('navhome-expander').on({
 		'click':{
 			fn: function(e, t, o){
@@ -337,6 +341,7 @@ Ext.onReady(function(){
 	});
 });
 /* ]]&gt; */
+{/pre} // xwiki /pre tag here
 &lt;/script&gt;</content>
 </property>
 <property>
@@ -379,7 +384,7 @@ Ext.onReady(function(){
 <name>Panels.Navigation</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>9e78db17-318d-4977-8d63-25d25b8fde61</guid>
+<guid>6e79f178-ca82-4fca-ae74-e6620f675f01</guid>
 <property>
 <tags/>
 </property>

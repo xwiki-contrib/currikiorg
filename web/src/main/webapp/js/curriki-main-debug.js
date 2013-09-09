@@ -1868,67 +1868,6 @@ Curriki.hideLoading = function(multi){
 	}
 }
 
-Curriki.logEvent = function(eventParams, followup) {
-    var gaqParams=eventParams.reverse();
-    gaqParams.push("_trackEvent"); gaqParams = gaqParams.reverse();
-    if(window._gaq) {
-        if(followup) {
-            _gaq.push(gaqParams).push(followup);
-        } else {
-            _gaq.push(gaqParams);
-        }
-    } else {
-        try{
-            if(followup) {
-                window.top._gaq.push(gaqParams).push(followup);
-            } else {
-                window.top._gaq.push(gaqParams);
-            }
-            if(console) console.info('Would track: ', page);
-        }catch(e){
-            try{
-                if(console) console.info('Failed to track: ', page);
-            }catch(e){
-
-            }
-        }
-
-    }
-}
-
-Curriki.logView = function(page){
-	// Usage in site example:
-	// <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
-	if (window.pageTracker) {
-		pageTracker._trackPageview(page);
-    } else if (_gaq) {
-        _gaq.push(["_trackPageview", page]);
-    } else {
-
-		// Double try catch for CURRIKI-5828
-		// This is needed because we can not define if we
-		// are coming from an embedded search in a resource proxy.
-		// So we need to try to address not the top frame if thats fails.
-		try{
-            if (window.top._gaq) {
-                window.top._gaq.push(["_trackPageview", page]);
-            } else {
-                window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
-                window.top.pageTrackerQueue.push(page);
-            }
-			if(console) console.info('Would track: ', page);
-		}catch(e){
-			try{
-	 			window.pageTrackerQueue = window.pageTrackerQueue || new Array();
-		        window.pageTrackerQueue.push(page);
-				if(console) console.info('Would track: ', page);
-			}catch(e){
-
-			}
-		}
-	}
-}
-
 Curriki.start = function(callback){
 console.log('Start Callback: ', callback);
 	var args = {};
@@ -1979,7 +1918,68 @@ console.log('Curriki.init: ', callback);
 		Curriki.start(callback);
 	}
 };
-// vim: ts=4:sw=4
+if(typeof Curriki == 'undefined') Curriki = {}
+
+Curriki.logEvent = function(eventParams, followup) {
+  var gaqParams=eventParams.reverse();
+  gaqParams.push("_trackEvent"); gaqParams = gaqParams.reverse();
+  if(window._gaq) {
+    if(followup) {
+      _gaq.push(gaqParams).push(followup);
+    } else {
+      _gaq.push(gaqParams);
+    }
+  } else {
+    try{
+      if(followup) {
+        window.top._gaq.push(gaqParams).push(followup);
+      } else {
+        window.top._gaq.push(gaqParams);
+      }
+      if(console) console.info('Would track: ', page);
+    }catch(e){
+      try{
+        if(console) console.info('Failed to track: ', page);
+      }catch(e){
+
+      }
+    }
+
+  }
+}
+
+Curriki.logView = function(page){
+  // Usage in site example:
+  // <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
+  if (window.pageTracker) {
+    pageTracker._trackPageview(page);
+  } else if (_gaq) {
+    _gaq.push(["_trackPageview", page]);
+  } else {
+
+    // Double try catch for CURRIKI-5828
+    // This is needed because we can not define if we
+    // are coming from an embedded search in a resource proxy.
+    // So we need to try to address not the top frame if thats fails.
+    try{
+      if (window.top._gaq) {
+        window.top._gaq.push(["_trackPageview", page]);
+      } else {
+        window.top.pageTrackerQueue = window.top.pageTrackerQueue || new Array();
+        window.top.pageTrackerQueue.push(page);
+      }
+      if(console) console.info('Would track: ', page);
+    }catch(e){
+      try{
+        window.pageTrackerQueue = window.pageTrackerQueue || new Array();
+        window.pageTrackerQueue.push(page);
+        if(console) console.info('Would track: ', page);
+      }catch(e){
+
+      }
+    }
+  }
+}// vim: ts=4:sw=4
 /*global Ext */
 /*global Curriki */
 /*global _ */
@@ -3835,7 +3835,7 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="agree") passed = fieldValue!="0";
                 if(fieldName=="member_type") passed = fieldValue!="-";
                 if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
-                if(fieldName=="password") passed = fieldValue.length>5 && !(fieldValue.indexOf(" ")>-1);
+                if(fieldName=="password") passed = fieldValue.length>=5 && !(fieldValue.indexOf(" ")>-1);
                 Curriki.console.log("passed? " + passed + ".");
                 // manual check here, just long enough
                 if(passed==false) {
@@ -3953,7 +3953,47 @@ Curriki.ui.login.liveValidation = function() {
     };
 }();
 
-// vim: ts=4:sw=4
+
+function postMessageHandler(event){ // Event having data of the form "eventtype:value"
+    console.log("postMessage: ",event);
+    var eventData = event.data;
+    var eventType = eventData.substring(0,eventData.indexOf(":")); // Get the "eventtype"
+    var p = eventData.indexOf(":"); var q = eventData.indexOf(":",p+1);
+    var target = eventData.substring(p+1, q); // Get the "target"
+    var value = eventData.substring(q+1); // Get the "value"
+    //console.log("eventData: \"" + eventData + "\", p=" +p + ", q=" + q + " target: \"" + target + "\".");
+    switch(eventType){
+        case 'resize':
+            console.log("received resize event (resize " + target + " to " + value + ")");
+            window.resizeThatCurrikiIframe(target, value);
+            break
+    }
+}
+
+function resizeThatCurrikiIframe(target, styleString){
+    var frameName = "currikiIFrame_" + target;
+    if(target.startsWith("currikiIFrame")) frameName = target;
+    var frame = document.getElementById(frameName);
+    if(frame) {
+        frame.setAttribute("style", styleString);
+        frame.parentNode.setAttribute("style", styleString);
+    } else
+        console.log("No frame found for " + frameName);
+}
+
+///  postMessage Processing
+if(typeof window.attachEvent === "function" || typeof window.attachEvent === "object"){ // Firefox
+    console.log("attached Listener to event via window.attachEvent");
+    window.attachEvent('onmessage',postMessageHandler);
+}else if (typeof window.addEventListener === "function"){
+    console.log("attached Listener to event via window.addEvenListener");
+    window.addEventListener("message", postMessageHandler, false);
+}else if(typeof document.attachEvent === "function"){
+    console.log("cors iframe communication is not possible");
+    document.attachEvent('onmessage',postMessageHandler);
+}else{
+    console.log("Frame communication not possible");
+}// vim: ts=4:sw=4
 
 /*
  * Based on Ext.ux.form.Rater (http://extjs.com/forum/showthread.php?t=10822)

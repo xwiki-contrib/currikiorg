@@ -1,0 +1,45 @@
+  ## Import styles & scripts
+  #template('conversationssetup.vm')
+  ## Import vars
+  #template('conversationsvars.vm')
+  ## Import macros
+  #template('conversationsmacros.vm')
+  #set($topics = $xwiki.searchDocuments(', BaseObject as obj where doc.parent = ? and obj.name = doc.fullName and obj.className = ?', 0, 0, [$doc.fullName, 'ConversationCode.TopicClass']))
+  ## Count comments
+  #set($comments = 0)
+  #foreach($topic in $topics)
+    #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$topic, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
+    #foreach($topicAnswer in $topicAnswers)
+      #set($answerDoc = $xwiki.getDocument($topicAnswer))
+      #set($comments = $comments + $answerDoc.getComments().size())
+    #end
+  #end
+
+  ## Display forum title and helpers
+   #if($doc.space.startsWith("Group_")||$doc.space.startsWith("Discussions_Group_"))
+    <div id="forum-header" class="forum-header-groups">
+     <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
+    </div>
+   #else
+    <div id="forum-header" class="forum-header-nongroups">
+    <span id="forum-title" class="forum-title">
+     <h1>$doc.displayTitle</h1>
+    </span>
+    #if($doc.hasAccessLevel('edit') && $doc.creator==$context.user)
+     <span class="commenttool commentedit"><a class="edit" href="$doc.getURL('edit')" title="$msg.get('conversations.forum.edit')">$msg.get('conversations.forum.edit')</a></span>
+    #end
+    <span id="forum-topic-nb" class="conversation-topic">$topics.size()</span> 
+    </div>
+   #end 
+  <div id="forum-description">$doc.display('description')</div>
+  <div id="forum-buttons">
+  <label>$msg.get("conversations.forum.sorttopicsby")</label>
+   #displayTopicSortButton("date")
+   #displayTopicSortButton("votes")
+   #displayTopicSortButton("comments")
+   #displayTopicAddForm($space)   
+  </div>  
+  ## Display topic list
+  #displayTopics()
+  #displayEditors()
+  #template('conversationsend.vm')

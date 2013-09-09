@@ -26,9 +26,9 @@
 #groupsheader("curriculum")
 <div id="groups-main-header">
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
-{pre}
+#verbatim_start
 <a class="button-orange" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
-{/pre}
+#verbatim_end
 #end ##}
 <div id="groups-main-header-title" class="main-title">
 $s.getDisplayTitle() $msg.get("groups.curriculum.contributions.title")<br />
@@ -229,7 +229,7 @@ $msg.get("groups.curriculum.contributions.about")
 #macro(groups_contributions_search)
 #groupsinit()
 #groupsheader("curriculum")
-{pre}
+#verbatim_start
 <script type="text/javascript">
 /* <![CDATA[ */
     Ext.ns('Curriki.userinfo');
@@ -253,7 +253,7 @@ Curriki.module.search.restrictions = 'web:Coll_${spaceName}';
 Curriki.module.search.start();
 /* ]]> */
 </script>
-{/pre}
+#verbatim_end
 <div id="search-div"></div>
 <form id="history-form" class="x-hidden">
     <input type="hidden" id="x-history-field" />
@@ -311,22 +311,20 @@ Curriki.module.search.start();
 <div class="frame-content">
 ##
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
-{pre}
-	<a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
-{/pre}
+#verbatim_start
+<a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
+#verbatim_end
 #end ##}
 $msg.get("groups.curriculum.contributions.about")
-	<div style="clear:both;">
-{pre}
+<div style="clear:both;">
+#verbatim_start
 		<form id="groupsearch" name="groupsearch" method="post"
 			onsubmit="if (document.groupsearch.brsqry.value!='$msg.get("groups.curriculum.search.default")') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
 			action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
-{/pre}
 			<div class="groupcontribution-leftbutton">
 				<a class="button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
 				$msg.get('groups.curriculum.contributions.viewORsearch')
 			</div>
-		##
 			<div id="curriki-search-field-container">
 				<div class="curriki-search-a" id="curriki-search-field">
 					<input type="hidden" value="" name="area" class="hidden"/>
@@ -338,11 +336,11 @@ $msg.get("groups.curriculum.contributions.about")
 				</div>
 			</div>
 		</form>
+#verbatim_end
 	</div>
 </div>
 </div>
-##
-{pre}
+#verbatim_start
 <script type="text/javascript">
 var $hidden = false;
 function toggle_desc(){
@@ -363,14 +361,14 @@ function toggle_desc(){
 	return false;
 }
 </script>
-{/pre}
+#verbatim_end
 #if($sm.isMember($spaceName, $context.user) || $hasGlobalAdmin) ##{
 #set($cnt = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, StringProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CompositeAssetClass' and doc.web='Coll_${spaceName}' and doc.name != 'WebHome' and props.id.name='type' and props.value='collection'").get(0))
 #set($multiple = ($cnt > 1))
 #if($multiple) ##{
 #set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${spaceName}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
-{pre}
+#verbatim_start
 <script type="text/javascript">
 /* <![CDATA[ */
 Curriki.data.reorder = {
@@ -381,7 +379,7 @@ Curriki.data.reorder = {
 /* ]]> */
 </script>
 <script type="text/javascript" src="/xwiki/js/curriki-module-reorder.js"></script>
-{/pre}
+#verbatim_end
 #end ##}
 #end ##}
 <div id="groups-collections" class="frame">
@@ -391,9 +389,9 @@ Curriki.data.reorder = {
 ## TODO: We need to know who can add to the collection here
 #if($context.action == "view")
 #if($sm.isMember($spaceName, $context.user))
-{pre}
+#verbatim_start
 <a class="button-orange" onclick="Curriki.module.addpath.startPath('M', {publishSpace:'Coll_${spaceName}'});" alt="$msg.get("groups.curriculum.collections.addButton")" title="$msg.get("groups.curriculum.collections.addButton_tooltip")">$msg.get("groups.curriculum.collections.addButton")</a>
-{/pre}
+#verbatim_end
 #end
 #end
 <div id="groups-collections-instructional-text">

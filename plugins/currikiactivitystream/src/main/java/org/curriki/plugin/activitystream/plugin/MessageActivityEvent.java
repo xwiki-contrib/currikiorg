@@ -51,7 +51,7 @@ public class MessageActivityEvent extends ActivityEvent
             if (article != null) {
                 articleTitle = article.getStringValue("title");
                 articleLink =
-                    "[" + articleTitle + ">" + article.getName().replaceAll("@", "%40") + "]";
+                    "[[" + articleTitle + ">>" + article.getName().replaceAll("@", "%40") + "]]";
             }
         } catch (XWikiException e) {
         }

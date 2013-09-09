@@ -24,12 +24,11 @@
         <meta name="description" content="$escapetool.xml($description.replaceAll('<[^>]+>','').replaceAll('\n',' '))" />
         <meta name="author" content="$xwiki.getUserName($doc.creator,false).toString()" />
     #else
-        <meta name="description" content="Curriki, the online education community, is building the first website to offer free, open-source instructional materials for K-12. We have thousands of free worksheets, lesson plans, exams, project ideas and activities for English language arts, math, science, social studies, technology integration and other subjects. All of our educational material is contributed by teachers and partners and is free and open source." />
-        <meta name="author" content="The Curriki team and community" />
+        $xwiki.parseContent($!xwiki.getSpacePreference("meta"))
+        ##<meta name="description" content="Curriki, the online education community, is building the first website to offer free, open-source instructional materials for K-12. We have thousands of free worksheets, lesson plans, exams, project ideas and activities for English language arts, math, science, social studies, technology integration and other subjects. All of our educational material is contributed by teachers and partners and is free and open source." />
+        ##<meta name="author" content="The Curriki team and community" />
     #end
     <meta name="language" content="$context.language" />
-
-    $xwiki.parseContent($!xwiki.getSpacePreference("meta"))
 #*
     <meta name="keywords" content="education, curriculum, curricula, open-source, worksheets, lesson plans, exams, project ideas, activities, English language arts, Math, Science, Social Studies, educational, instructional materials, teachers, educators, teaching" />
     <meta name="distribution" content="GLOBAL" />
@@ -40,14 +39,14 @@
     <meta name="revisit-after" content="7 days" />
 
     <link rel="alternate" type="application/rss+xml" title="Wiki RSS Feed" href="/xwiki/bin/view/Main/WebRss?xpage=rdf" />
-    <link rel="image_src" href="/xwiki/skins/curriki8/images/curriki%2Dlogo.gif"/>
+    ## (only for neaGPS or to override) <link rel="icon" type="image/ico" href="/xwiki/skins/curriki8/img/favicon.ico"/>
     #set($headerfile="html")
 #template("javascripts.vm")
 #template("ie.vm")
 #template("onloadunloadjs.vm")
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
 </head>
-<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
+<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName' itemscope itemtype="http://schema.org/CreativeWork">
 #if(!($viewer.startsWith("embed")))
 <div id="main">
 	<div id="shadow-right">
