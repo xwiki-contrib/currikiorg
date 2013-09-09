@@ -1918,6 +1918,8 @@ console.log('Curriki.init: ', callback);
 		Curriki.start(callback);
 	}
 };
+if(typeof Curriki == 'undefined') Curriki = {}
+
 Curriki.logEvent = function(eventParams, followup) {
   var gaqParams=eventParams.reverse();
   gaqParams.push("_trackEvent"); gaqParams = gaqParams.reverse();
