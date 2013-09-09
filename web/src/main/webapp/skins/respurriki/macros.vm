@@ -117,3 +117,27 @@ $msg.get("panel.navigation.home")
 #macro(editActionButton $action $resourceIdentifier)
 #submitButton("action_${action}", $msg.get("core.shortcuts.edit.${resourceIdentifier}"), $msg.get($resourceIdentifier))
 #end
+
+#macro(ru_listMessages)
+#set($the_space = "Messages_${doc.space}")
+#set($messages = $xwiki.getSpaceDocsName($the_space))
+#set($options = ["success", "info", "warning", "danger"])
+#set($counter = 0)
+#foreach($message_row in $messages)
+#set($message_doc = $xwiki.getDocument($the_space, $message_row))
+#set($messageObj = $message_doc.getObject("XWiki.ArticleClass"))
+#if("$!messageObj" != "")
+#if($counter == 3)
+ #set($counter = 0)
+#end
+{{html clean="false"}}
+<div class="alert alert-$options[$counter]">
+<h4>{{/html}} $messageObj.getProperty("title").value {{html clean="false"}}</h4>
+{{/html}} $messageObj.get("content") {{html clean="false"}}
+</div>
+{{/html}}
+#set($counter = $counter + 1)
+#end
+#end
+#end
+
