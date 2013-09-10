@@ -113,8 +113,7 @@ public class SocialLoginToolGroovy {
             if(userDoc==null) return null;
             context.context.put("ajax",true);
             xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
-            request.session.setAttribute("curriki.analytics.toLogView","/join/"+
-                    ( providerId==null ? "inCurriki" : providerId) +"/login");
+            this.toLogView("/join/"+( providerId==null ? "inCurriki" : providerId) +"/login");
             nowTarget = getRedirectTarget(true);
             this.hasAuthenticated  = true;
             //nowTarget = request.session.getAttribute("xredirect");
@@ -223,7 +222,7 @@ public class SocialLoginToolGroovy {
                 authenticateUser(userDoc)
             }
 
-            if(!autoCreateUser && (userDocs==null || userDocs.isEmpty())) {
+            if(userDocs==null || userDocs.isEmpty()) {
                 // Not authenticated/redirected yet ? -> You must be new here
                 // You will have to pick-up a username and dad will create an account for you
 
@@ -242,33 +241,17 @@ public class SocialLoginToolGroovy {
                         request.session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
                         return "backFromAuthorization";
                     }
-                }
-
-
-                // take to the display of the form to create the username
-                nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
-                return "backFromAuthorization";
-            }
-
-            else if(autoCreateUser && (userDocs==null || userDocs.isEmpty())) {
-                // Store the social profile in the session
-                request.session.setAttribute("org.brickred.socialauth.Profile", profile);
-                readProviderProfile();
-
-                def validation = xwiki.parseGroovyFromPage("Registration.Validation");
-                validation.init(xwiki, errors, warningFields, okFields);
-                if(!validation.isValidEmail(((Profile)profile).email, false)) {
-                    if(validation.foundAccountName) {
-                        validation.zapErrors();
-                        mergeAccountWithProfile(profile, validation.foundAccountName, providerId);
-                        request.session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
-                        return "backFromAuthorization";
-                    }
+                }else if(autoCreateUser) {
+                    // Automatically register user
+                    this.toLogView("/xwiki/bin/view/MembershipDrive/LandingPage/UserAutoRegistered")
+                    return tryCreateNewProfile();
                 } else {
-                    tryCreateNewProfile();
+                    // take to the display of the form to create the username
+                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
+                    return "backFromAuthorization";
                 }
-            }
-            else {
+
+            } else {
                 // final step, login worked, existing user
                 def afterLogin = targets!=null? targets.afterLogin : request.getSession().getAttribute("xredirect");
                 nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=" + afterLogin;
@@ -834,5 +817,26 @@ public class SocialLoginToolGroovy {
 
     public void setAutoCreateUser(boolean autoCreateUser) {
         this.autoCreateUser = autoCreateUser
+    }
+
+    /**
+     * Add an url to the queue of the google analytics tracking code
+     * put out at analytics.vm.
+     * This method is a candidate to get pulled out here and
+     * placed into a more general location. For now it rests here.
+     *
+     * @param page the page to add the the queue
+     */
+    private void toLogView(String page){
+        def currentValue = request.getSession().getAttribute("curriki.analytics.toLogView");
+
+        if(currentValue == null) currentValue = ""
+
+        if(currentValue == "") {
+            currentValue += page
+        } else {
+            currentValue += "," + page
+        }
+        request.getSession().setAttribute("curriki.analytics.toLogView", currentValue);
     }
 }
