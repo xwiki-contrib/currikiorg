@@ -1,0 +1,172 @@
+### Generate a dropdown item for button
+###
+### @param actionurl The URL this entry points to
+### @param linktext The menu item text
+###
+#macro(ru_dropdown_item $actionurl $linktext)
+<li><a href="$actionurl">$linktext</a></li>
+#end
+
+### Generate button input
+###
+### @param linktext the button text
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_button $linktext $attributes)
+<button type="button" $attributes>$linktext</button>
+#end
+
+### Generate anchor
+###
+### @param linktext the button text
+### @param linkurl the url for the anchor
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_anchor $linktext $linkurl $attributes)
+<a href="$linkurl" $attributes>$linktext</a>
+#end
+
+
+#**
+ * Begin the navigation panel
+ *
+*#
+#macro(beginNavigationPanel $homerollovertext) ##{
+
+<div id="wrapper-sidebar">
+#set($active = false)
+#checkActive("Main.WebHome" $active)
+<div class="panel panel-primary">
+  <!-- Default panel contents -->
+  <div class="panel-heading">Panel heading</div>
+
+  <div class="list-group">
+<a title="${homerollovertext}" class="list-group-item titles#if($active) active#end" href="$xwiki.getURL("Main.WebHome")"
+#if(!$active) 	onmouseover="addClass(this.parentNode, 'active');" 
+		onmouseout="rmClass(this.parentNode, 'active');" 
+#end >
+$msg.get("panel.navigation.home")
+#if($active) ##{
+	<img src="$xwiki.getSkinFile("menu-selected.gif")" />
+#end ##}
+</a>
+</div>
+</div>
+#end ##}
+##
+
+#**
+  * End the navigation panel
+  *
+  *#
+#macro(endNavigationPanel) ##{
+  </div>
+#end ##}
+
+
+#**
+  * Displays a navigation category, with sub-elements
+  *
+  *#
+#macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
+  #set($iniexp = $expanded)
+  #if($doc.space.startsWith("Coll_")) ##{
+      #set ($expanded = $util.null)#setVariable ("$expanded" false)#set($expanded=false) ##{
+    #set($cookiebase = "${context.user}_asset_")
+  #else ##}{
+    #set($cookiebase = "${context.user}_")
+  #end ##}  
+  #if(!$navcatcounter)  ##{
+    #set($navcatcounter = 1)
+  #else ##}{
+    #set($navcatcounter = $navcatcounter + 1)
+  #end ##}	  
+  #set($id = "currikinavcategory_${navcatcounter}")
+  #if($expanded == true) ##{
+    #set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
+  #else ##}{
+    #set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
+  #end ##}	  
+  #set($exp2 = "")
+  #set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
+  #if(!$exp2.equals("")) ##{
+    #if($exp2 == 'true') ##{
+      #set($expanded = true)
+    #else ##}{
+      #set($expanded = false)
+    #end ##}
+  #end ##}	  
+  #set($active = false)
+  #foreach($item in $items) ##{
+    #checkActive($item.get(1) $active)
+  #end ##}	  
+  #set($theCategLink = $link)
+  #normalizelink($theCategLink)
+<div class="panel panel-primary" id="${id}">
+    <div class="panel-heading">$text</div>
+  <div class="list-group">
+  #foreach($item in $items) ##{
+    #set($active = false)
+    #checkActive($item.get(1) $active)
+    #set($theItemLink = $item.get(1))
+    #normalizelink($theItemLink)
+    #set($linktitle = "")
+    #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
+    <a class="list-group-item #if($active)selected#end" href="{pre}${theItemLink}{/pre}">$item.get(0)</a>
+    #set($linktitle = "")
+  #end ##}
+  </div>
+  </div> ##}
+  #set($expanded=$iniexp) ##rolling back the parameter to initial value so it won't affect future calls to this macro
+#end  ##}
+
+
+#**
+ * Displays a navigation entry (without sub-elements)
+ *#
+#macro(navigationTopLevelEntry $text $link)
+#set($active = false)
+#checkActive($link $active)
+<div class="curriki-nav-tlentry#if($active)active selected#end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
+<div class="curriki-nav-header"><h4>[$text>$link]</h4></div>
+</div>
+#end
+
+#macro(submitButton $name $shortcut $value)
+<input class="btn btn-default" type="submit" name="$name"#if($keyboardShortcutsEnabled) title="$shortcut"#end value="$value"/>
+#end
+
+#**
+ * Displays a submit button for the editor. This macro calls submitButton,
+ * composing all its parameters based on the action's identifier and the
+ * identifier of the corresponding localized resources.
+ * @param action The identifier of the button's action.
+ * @param resourceIdentifier The key used to identify the localized resources.
+ *#
+#macro(editActionButton $action $resourceIdentifier)
+#submitButton("action_${action}", $msg.get("core.shortcuts.edit.${resourceIdentifier}"), $msg.get($resourceIdentifier))
+#end
+
+#macro(ru_listMessages)
+#set($the_space = "Messages_${doc.space}")
+#set($messages = $xwiki.getSpaceDocsName($the_space))
+#set($options = ["success", "info", "warning", "danger"])
+#set($counter = 0)
+#foreach($message_row in $messages)
+#set($message_doc = $xwiki.getDocument($the_space, $message_row))
+#set($messageObj = $message_doc.getObject("XWiki.ArticleClass"))
+#if("$!messageObj" != "")
+#if($counter == 3)
+ #set($counter = 0)
+#end
+{{html clean="false"}}
+<div class="alert alert-$options[$counter]">
+<h4>{{/html}} $messageObj.getProperty("title").value {{html clean="false"}}</h4>
+{{/html}} $messageObj.get("content") {{html clean="false"}}
+</div>
+{{/html}}
+#set($counter = $counter + 1)
+#end
+#end
+#end
+

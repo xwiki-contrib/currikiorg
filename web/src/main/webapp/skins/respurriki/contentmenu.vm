@@ -1,10 +1,3 @@
-<div class="gradientfilterIE"></div>
-<div class="componentcontainer">
-<strong id="xwikicontentmenutitle" class="hidden">$msg.get('core.menu.content.title')</strong>
-<div class="rightmenu">
-</div>
-<div class="leftmenu">
-<div id="sub-options">
 #if($hasEdit && !$isReadOnly)
   ## Compute the default edit mode
   #set($editaction = $doc.getDefaultEditMode())
@@ -13,37 +6,26 @@
   ##
   #if($isAdvancedUser)
     <div class="btn-group">
-        <button type="button" class="btn btn-info">$msg.get('core.menu.edit')</button>
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        #ru_button($msg.get('core.menu.edit') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
         <ul class="dropdown-menu" role="menu">
-          <li><a href="$doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wiki")">$msg.get('core.menu.edit.wiki')</a></li>
-          <li><a href="$doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wysiwyg")">$msg.get('core.menu.edit.wysiwyg')</a></li>
-          <li><a href="$doc.getURL($editaction, "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=inline")">$msg.get('core.menu.edit.inline')</a></li>
+          #ru_dropdown_item($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wiki") $msg.get('core.menu.edit.wiki'))
+          #ru_dropdown_item($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wysiwyg") $msg.get('core.menu.edit.wysiwyg'))
+          #ru_dropdown_item($doc.getURL($editaction, "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=inline") $msg.get('core.menu.edit.inline'))
           <li class="divider"></li>
-          <li><a href="$doc.getURL('edit', 'editor=rights')">$msg.get('core.menu.edit.rights')</a></li>
-          <li><a href="$doc.getURL('edit', 'editor=object')">$msg.get('core.menu.edit.object')</a></li>
+          #ru_dropdown_item($doc.getURL('edit', 'editor=rights') $msg.get('core.menu.edit.rights'))
+          #ru_dropdown_item($doc.getURL('edit', 'editor=object') $msg.get('core.menu.edit.object'))
           #if($hasAdmin)
-          <li><a href="$doc.getURL('edit', 'editor=class')">$msg.get('core.menu.edit.class')</a></li>
+          #ru_dropdown_item($doc.getURL('edit', 'editor=class') $msg.get('core.menu.edit.class'))
           #end
         </ul>
     </div><!-- /btn-group -->
 
-    ##xwikitopmenuentrystart($doc.getURL($editaction, $!languageparams) $msg.get('core.menu.edit') 'tmEdit' 'hasIcon')
-    ##submenuitem($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wiki") $msg.get('core.menu.edit.wiki') 'tmEditWiki', '')
-    ##submenuitem($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wysiwyg") $msg.get('core.menu.edit.wysiwyg') 'tmEditWysiwyg', '')
-    ##submenuitem($doc.getURL($editaction, "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=inline") $msg.get('core.menu.edit.inline') 'tmEditInline', '')
-    ##submenuseparator()
-    ##submenuitem($doc.getURL('edit', 'editor=rights') $msg.get('core.menu.edit.rights') 'tmEditRights', '')
-    ##submenuitem($doc.getURL('edit', 'editor=object') $msg.get('core.menu.edit.object') 'tmEditObject', '')
-    ##if($hasAdmin)
-      ##submenuitem($doc.getURL('edit', 'editor=class') $msg.get('core.menu.edit.class') 'tmEditClass', '')
-    ##end
-    ##xwikitopmenuentryend()
   #else ## !isAdvanced
     <div class="btn-group">
-        <button type="button" class="btn btn-info"><a href="$doc.getURL($editaction, $!languageparams)">$msg.get('core.menu.edit')</a></button>
+        #ru_anchor($msg.get('core.menu.edit') $doc.getURL($editaction, $!languageparams) 'class="btn btn-info"')
+        ##<button type="button" class="btn btn-info"><a href="$doc.getURL($editaction, $!languageparams)">$msg.get('core.menu.edit')</a></button>
     </div><!-- /btn-group -->
-    ##xwikitopmenuentry($doc.getURL($editaction, $!languageparams) $msg.get('core.menu.edit') 'tmEdit', 'hasIcon')
   #end
   #if($keyboardShortcutsEnabled)
     <script type="text/javascript">
@@ -68,53 +50,31 @@
 ##
 #if(!$doc.isNew())
     <div class="btn-group">
-        <button type="button" class="btn btn-info">$msg.get('core.menu.export')</button>
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        #ru_button($msg.get('core.menu.export') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
         <ul class="dropdown-menu" role="menu">
-          <li><a href="$doc.getURL('view', "xpage=pdfoptions&amp;$!docvariant")">$msg.get('core.menu.export.pdf')</a></li>
+          #ru_dropdown_item($doc.getURL('view', "xpage=pdfoptions&amp;$!docvariant") $msg.get('core.menu.export.pdf'))
           #if("$!{oomanager.serverState}" == "Connected")
-          <li><a href="$doc.getURL('export', "format=odt&amp;$!docvariant")">$msg.get('core.menu.export.odt')</a></li>
-            ##submenuitem($doc.getURL('export', "format=odt&amp;$!docvariant") $msg.get('core.menu.export.odt') 'tmExportOdt', '')
+          #ru_dropdown_item($doc.getURL('export', "format=odt&amp;$!docvariant") $msg.get('core.menu.export.odt'))
           #end
-          <li><a href="$doc.getURL('export', "format=rtf&amp;$!docvariant")">$msg.get('core.menu.export.rtf')</a></li>
-          <li><a href="$doc.getURL('export', "format=html&amp;$!docvariant")">$msg.get('core.menu.export.html')</a></li>
+          #ru_dropdown_item($doc.getURL('export', "format=rtf&amp;$!docvariant") $msg.get('core.menu.export.rtf'))
+          #ru_dropdown_item($doc.getURL('export', "format=html&amp;$!docvariant") $msg.get('core.menu.export.html'))
           #if($hasAdmin)
-          <li><a href="$doc.getURL('export', "format=xar&amp;name=$escapetool.url($doc.fullName)&amp;pages=$escapetool.url($doc.fullName)&amp;$!docvariant")">$msg.get('core.menu.export.xar')</a></li>
+          #ru_dropdown_item($doc.getURL('export', "format=xar&amp;name=$escapetool.url($doc.fullName)&amp;pages=$escapetool.url($doc.fullName)&amp;$!docvariant") $msg.get('core.menu.export.xar'))
           #end
         </ul>
     </div><!-- /btn-group -->
-
-  ##xwikitopmenuentrystart('' $msg.get('core.menu.export') 'tmExport' '')
-  ##submenuitem($doc.getURL('view', "xpage=pdfoptions&amp;$!docvariant") $msg.get('core.menu.export.pdf') 'tmExportPdf', '')
-  ##if("$!{oomanager.serverState}" == "Connected")
-    ##submenuitem($doc.getURL('export', "format=odt&amp;$!docvariant") $msg.get('core.menu.export.odt') 'tmExportOdt', '')
-  ##end
-  ##submenuitem($doc.getURL('export', "format=rtf&amp;$!docvariant") $msg.get('core.menu.export.rtf') 'tmExportRtf', '')
-  ##submenuitem($doc.getURL('export', "format=html&amp;$!docvariant") $msg.get('core.menu.export.html') 'tmExportHtml', '')
-  ##if($hasAdmin)
-    ##submenuitem($doc.getURL('export', "format=xar&amp;name=$escapetool.url($doc.fullName)&amp;pages=$escapetool.url($doc.fullName)&amp;$!docvariant") $msg.get('core.menu.export.xar') 'tmExportXar', '')
-  ##end
-  ##xwikitopmenuentryend()
 #end
 ##
 ## Actions menu
 ##
 #if(!$doc.isNew())
-
     <div class="btn-group">
-        <button type="button" class="btn btn-info">$msg.get('core.menu.moreactions')</button>
-        <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></button>
+        #ru_button($msg.get('core.menu.moreactions') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
         <ul class="dropdown-menu" role="menu">
-          <li><a href="$doc.getURL('view', "xpage=print&amp;$!docvariant")">$msg.get('core.menu.preview')</a></li>
-          <li><a href="$doc.getURL('view', "viewer=code")">$msg.get('core.menu.view.source')</a></li>
+          #ru_dropdown_item($doc.getURL('view', "xpage=print&amp;$!docvariant") $msg.get('core.menu.preview'))
+          #ru_dropdown_item($doc.getURL('view', "viewer=code") $msg.get('core.menu.view.source'))
         </ul>
-    </div><!-- /btn-group -->    
-
-  ##xwikitopmenuentrystart('' $msg.get('core.menu.moreactions') 'tmMoreActions' '')
-  ##submenuitem($doc.getURL('view', "xpage=print&amp;$!docvariant") $msg.get('core.menu.preview') 'tmPrintPreview', '')
-  ##submenuitem($doc.getURL('view', "viewer=code") $msg.get('core.menu.view.source') 'tmViewSource', '')
-  ##xwikitopmenuentryend()
+    </div><!-- /btn-group -->
 #end
-</div>
-</div>
-</div>

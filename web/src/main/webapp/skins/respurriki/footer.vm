@@ -1,22 +1,22 @@
 #if($isInServletMode)## Visible only in a page
-<div class="container">
-<div id="footerglobal" class="layoutsection row">
-<div class="col-md-12 text-center">
-<hr/>
-  <div id="xwikilicence">$!copyright</div>
-  #set ($version = $xwiki.getSpacePreference('version'))
-  #if ("$!version" == "")
-    #set ($version = $xwiki.getXWikiPreference("version"))
-  #end
-  #if ("$!version" != "")
-    #set ($version = $xwiki.parseContent($version))
-  #else
-    #set ($version = $!xwiki.version)
-  #end
-  <div id="xwikiplatformversion">$version</div>
-<hr/>
-</div>
-</div>
-</div>
+<div class="container" id="the-footer">
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <hr />
+            <p>$!copyright</p>
+            #set ($version = $xwiki.getSpacePreference('version'))
+            #if ("$!version" == "")
+              #set ($version = $xwiki.getXWikiPreference("version"))
+            #end
+            #if ("$!version" != "")
+              #set ($version = $xwiki.parseContent($version))
+            #else
+              #set ($version = $!xwiki.version)
+            #end
+            <p>$version</p>
+            <hr />
+        </div>
+    </div>
+</div> ##end the-footer
 #end
 ### TODO: Format the footer for pdf output

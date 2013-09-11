@@ -4,16 +4,10 @@
 ### The uppermost area of each page
 ### Contains the company logo, links to global actions and the search facility
 ###
-<div class="container">
+<div class="container" id="the-header">
 #if($isInServletMode) ## Visible only in a page
-<div id="headerglobal" class="layoutsection row">
-#if($xcontext.action == "view")
-##<div class="minwidthb"></div>
-#else
-##<div class="minwidthd"></div>
-#end
-  <div id="company" class="col-md-6 col-xs-6">
-  <div id="companylogo">
+<div class="row">
+  <div class="col-md-6 col-xs-6">
     <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home">
     #if("$!{themeDocFullName}" == '')
       #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")
@@ -37,9 +31,8 @@
     #end
     <img src="$!logourl" alt="Wiki Logo"/>
     </a>
-  </div> ## companylogo
-  </div> ## company
-  <div id="globallinks" class="col-md-3 col-md-offset-3 col-xs-6 text-right">
+  </div> ## col-md-6
+  <div class="col-md-3 col-md-offset-3 col-xs-6 text-right">
     <form class="form-inline" role="form" action="#if($xwiki.exists('Main.Search'))$xwiki.getURL('Main.Search')#else$xwiki.getURL('Main.WebSearch')#end">
       <div class="row">
       
@@ -76,9 +69,8 @@
   </span>
 </p>
 #end
-  </div> ## globallinks
-  ##<div class="clearfloats"></div>
-</div> ## headerglobal
+  </div> ## col-md-6
+</div> ## row
 #end
 ### TODO: Format the header for pdf output
 </div>
