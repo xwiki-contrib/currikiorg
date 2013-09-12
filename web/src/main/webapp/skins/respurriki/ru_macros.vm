@@ -26,12 +26,26 @@
 <a href="$linkurl" $attributes>$linktext</a>
 #end
 
+### Generate breadcrumb
+###
+### @param linktext the button text
+### @param linkurl the url for the anchor
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_breadcrumb )
+    <ol class="breadcrumb">
+        <li><a href="#">GWF</a></li>
+        <li><a href="#">Selling Geometry</a></li>
+        <li><a href="#">Introduction</a></li>
+        <li class="active">Introduction to Geometry</li>
+    </ol>
+#end
 
 #**
  * Begin the navigation panel
  *
 *#
-#macro(beginNavigationPanel $homerollovertext) ##{
+#macro(ru_beginNavigationPanel $homerollovertext) ##{
 
 <div id="wrapper-sidebar">
 #set($active = false)
@@ -59,7 +73,7 @@ $msg.get("panel.navigation.home")
   * End the navigation panel
   *
   *#
-#macro(endNavigationPanel) ##{
+#macro(ru_endNavigationPanel) ##{
   </div>
 #end ##}
 
@@ -68,7 +82,7 @@ $msg.get("panel.navigation.home")
   * Displays a navigation category, with sub-elements
   *
   *#
-#macro(navigationCategory $text $rollovertext $link $expanded $items) ##{
+#macro(ru_navigationCategory $text $rollovertext $link $expanded $items) ##{
   #set($iniexp = $expanded)
   #if($doc.space.startsWith("Coll_")) ##{
       #set ($expanded = $util.null)#setVariable ("$expanded" false)#set($expanded=false) ##{
@@ -124,7 +138,7 @@ $msg.get("panel.navigation.home")
 #**
  * Displays a navigation entry (without sub-elements)
  *#
-#macro(navigationTopLevelEntry $text $link)
+#macro(ru_navigationTopLevelEntry $text $link)
 #set($active = false)
 #checkActive($link $active)
 <div class="curriki-nav-tlentry#if($active)active selected#end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
@@ -132,7 +146,7 @@ $msg.get("panel.navigation.home")
 </div>
 #end
 
-#macro(submitButton $name $shortcut $value)
+#macro(ru_submitButton $name $shortcut $value)
 <input class="btn btn-default" type="submit" name="$name"#if($keyboardShortcutsEnabled) title="$shortcut"#end value="$value"/>
 #end
 
@@ -143,7 +157,7 @@ $msg.get("panel.navigation.home")
  * @param action The identifier of the button's action.
  * @param resourceIdentifier The key used to identify the localized resources.
  *#
-#macro(editActionButton $action $resourceIdentifier)
+#macro(ru_editActionButton $action $resourceIdentifier)
 #submitButton("action_${action}", $msg.get("core.shortcuts.edit.${resourceIdentifier}"), $msg.get($resourceIdentifier))
 #end
 

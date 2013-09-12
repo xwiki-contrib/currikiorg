@@ -5,50 +5,75 @@
     Description:
         Purpose of the stylesheet follows.
 */
-ul.navbar-nav li.dropdown{
-    display: block !important;
+#main-nav{
+    float: left;
+    width: 100%;
+    list-style: none;
+    margin-bottom: 0px;
 }
-.navbar{
-    margin-bottom: 10px;
+#main-nav li{
+    float: left;
+    width: 25%;
 }
-
-.list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus{
-    background: none;
-    font-weight: bold;
-    color: #000;
-    border: 1px solid #DDDDDD;
-}
-.panel-primary > .panel-heading{
+#main-nav a{
+    background-color: #29a3ce;
+    display: block;
+    color: #fff;
     text-transform: uppercase;
+    text-align: center;
+    border: 1px #fff solid;
+    padding: 12% 0%;
+    position: relative;
+    border-right: none;
 }
-#btn-search{
-    padding-top: 8px;
-    padding-bottom: 8px;
+#main-nav a:hover{
+    text-decoration: none;
+}
+#main-nav a.current{
+    border-bottom: 1px solid #29a3ce;
+}
+#the-content{
+    background-color: #29a3ce;
+    padding-top: 15px;
+}
+#the-breadcrumb .breadcrumb{
+    background: none;
+    border:none;
+}
+#the-breadcrumb .breadcrumb li a{
+    color: #fff;
+    text-decoration: underline;
+}
+#the-breadcrumb .breadcrumb li a:hover{
+    text-decoration: none;
+}
+#the-breadcrumb .breadcrumb > .active{
+    color: #fff;
+    font-weight: bold;
 }
 
-#contentmenu .btn-group{
-    display: inline-block !important;
+#the-breadcrumb .breadcrumb > li + li:before {
+    color: #fff;
+    content: "> ";
 }
-#contentcolumn #contentmenu{
-    margin-bottom: 15px;
+#breadcrumb-icon{
+    float: left;
+    padding-top: 8px;
+    text-align: right;
 }
-#editmenu{
-    margin-bottom: 15px;
+#breadcrumb-icon .icon-list-ul:before{
+    color: #fff;
 }
-.bottombuttons .buttons{
-    margin-top: 15px;
+#breadcrumb-wrapper{
+    float: left;
 }
-.separator-line{
-    color: #5bc0de;
-    background-color: #5bc0de;
-    height: 3px;
+#main-content{
+    background-color: #fff;
 }
-.add-clearing{
-    clear: both;
-}
-.tab-content{
-    border: solid 1px #dddddd;
+#inner-content{
     padding: 10px;
-    border-top: none;
-    margin-bottom: 15px;
+}
+
+#sidebar a{
+    color: #fff;
 }

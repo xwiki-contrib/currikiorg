@@ -5,72 +5,45 @@
 ### Contains the company logo, links to global actions and the search facility
 ###
 <div class="container" id="the-header">
-#if($isInServletMode) ## Visible only in a page
-<div class="row">
-  <div class="col-md-6 col-xs-6">
-    <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home">
-    #if("$!{themeDocFullName}" == '')
-      #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")
+    #if($isInServletMode) ## Visible only in a page
+        <div class="row">
+            <div class="col-md-3 col-xs-2">
+                <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home">
+                    #if("$!{themeDocFullName}" == '')
+                        #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")
+                    #end
+                    #if($themeDocFullName == '')
+                        #set($themeDocFullName = 'ColorThemes.DefaultColorTheme')
+                    #end
+                    #set($themeDoc = $xwiki.getDocument($themeDocFullName))
+                    #set($themeObj = $themeDoc.getObject('ColorThemes.ColorThemeClass'))
+                    #set($logoname = $themeObj.getProperty('logoImage').value)
+                    #if("$!{logoname}" != '')
+                        #set($logourl = $themeDoc.getAttachmentURL($logoname))
+                        #else
+                            #set($logoname = $xwiki.getSkinPreference('logo', 'logo.png'))
+                            #set($logo = $!prefdoc.getAttachment($logoname))
+                        #if(!$logo)
+                            #set($logourl = $xwiki.getSkinFile($logoname))
+                        #else
+                            #set($logourl = $prefdoc.getAttachmentURL($logo.filename))
+                        #end
+                    #end
+                    <img src="$!logourl" alt="Wiki Logo"/>
+                </a>
+            </div>
+            <div class="col-md-8 col-xs-9">
+                <ul id="main-nav">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#" class="current">Course</a></li>
+                    <li><a href="#">Discussions</a></li>
+                    <li><a href="#">Projects</a></li>
+                </ul>
+            </div>
+            <div class="cold-md-1 col-xs-1">
+                Icon
+            </div>
+        </div>
     #end
-    #if($themeDocFullName == '')
-      #set($themeDocFullName = 'ColorThemes.DefaultColorTheme')
-    #end
-    #set($themeDoc = $xwiki.getDocument($themeDocFullName))
-    #set($themeObj = $themeDoc.getObject('ColorThemes.ColorThemeClass'))
-    #set($logoname = $themeObj.getProperty('logoImage').value)
-    #if("$!{logoname}" != '')
-      #set($logourl = $themeDoc.getAttachmentURL($logoname))
-    #else
-      #set($logoname = $xwiki.getSkinPreference('logo', 'logo.png'))
-      #set($logo = $!prefdoc.getAttachment($logoname))
-      #if(!$logo)
-        #set($logourl = $xwiki.getSkinFile($logoname))
-      #else
-        #set($logourl = $prefdoc.getAttachmentURL($logo.filename))
-      #end
-    #end
-    <img src="$!logourl" alt="Wiki Logo"/>
-    </a>
-  </div> ## col-md-6
-  <div class="col-md-3 col-md-offset-3 col-xs-6 text-right">
-    <form class="form-inline" role="form" action="#if($xwiki.exists('Main.Search'))$xwiki.getURL('Main.Search')#else$xwiki.getURL('Main.WebSearch')#end">
-      <div class="row">
-      
-        <div class="col-md-12">
-            <div class="input-group">
-              <input type="text" class="form-control" placeholder="$msg.get('panels.search.inputText')" name="text" value="" size="15" />
-              <span class="input-group-btn">
-                <input id="btn-search" class="btn btn-default" type="image" value="$msg.get('panels.search.submit')" alt="$msg.get('panels.search.submit')" src="$xwiki.getSkinFile('icons/xwiki/search.png')"/>
-              </span>
-            </div><!-- /input-group -->
-          </div>
-          
-      </div>
-    </form>
-#if($xwiki.isMultiLingual())
-<p>
-    <br />
-  <span class="glink" id="headerlanguages">
-  #set($defaultLanguage = "$!{doc.getDefaultLanguage()}")
-  #if($defaultLanguage == '')
-    #set($defaultLanguage = "$!{doc.getLanguage()}")
-  #end
-  #if($defaultLanguage == '')
-    #set($defaultLanguage = "default")
-  #end
-  <a href="$!doc.getURL("view", "language=$defaultLanguage")" class="language-default#if($tdoc.realLanguage == $defaultLanguage || ($defaultLanguage == 'default' && $tdoc.realLanguage == '')) language-current#end btn btn-info btn-xs">$defaultLanguage</a>
-  #set ($wikiSettingsLanguages = $!xwiki.getXWikiPreference('languages').trim().split('\s*[,| ]\s*'))
-  #set ($hasLanguagesSet = $wikiSettingsLanguages.size() > 1 || "$!wikiSettingsLanguages.get(0)" != '')
-  #foreach($lang in $doc.translationList)
-    #if(!$hasLanguagesSet || $wikiSettingsLanguages.contains($lang))
-      <a href="$!doc.getURL("view", "language=$lang")" class="language-translation#if($tdoc.realLanguage == $lang) language-current#end btn btn-info btn-xs">$!lang</a>
-    #end
-  #end
-  </span>
-</p>
-#end
-  </div> ## col-md-6
-</div> ## row
-#end
-### TODO: Format the header for pdf output
+    ### TODO: Format the header for pdf output
 </div>
