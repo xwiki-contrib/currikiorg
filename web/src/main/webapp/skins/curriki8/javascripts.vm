@@ -121,5 +121,19 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin -->
 ## Use $xwiki.jsfx.use("jsfile.js", true)
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+
+## Search for the login to view flag
+#set($LOGIN_TO_VIEW_SESSION_FLAG = $request.getSession().getAttribute("LOGIN_TO_VIEW_SESSION_FLAG"))
+<!-- LOGIN_TO_VIEW_SESSION_FLAG:"$!LOGIN_TO_VIEW_SESSION_FLAG" -->
+#if("$!LOGIN_TO_VIEW_SESSION_FLAG" != "" && $context.user && "XWiki.XWikiGuest"=="$context.user")
+<script type="text/javascript">
+Ext.onReady(function(){
+  if(window.location.pathname != "/xwiki/bin/view/Registration/LoginOrRegister"){
+    Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&&message=$LOGIN_TO_VIEW_SESSION_FLAG');
+  }
+});
+</script>
+#end
+
 ## the HTML comment there actually inserts it!
 <!-- end javascripts.vm -->

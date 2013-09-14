@@ -5,39 +5,49 @@
 ## We need to no display content for AssetTemp otherwise posting in the CB GWT Editor
 ## will fail in IE with JS errors. This is not a nice hack but is necessary
 #if($doc.space!="AssetTemp")
-## Need to do this before xwikivars is called otherwise the data might be removed
-#if($request.method=="POST") ##{
-  #set($fileuploadlist = $xwiki.fileupload.getFileItems())
-#end ##}
-#if("$!viewer" == "") ##{
-  #set($viewer = $request.getParameter("viewer"))
-#end ##}
-#if("$!viewer" == "") ##{
-  #set($viewer = "view")
-#end ##}
-## In Print Mode we don't want the standard header
-#if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
-  #template("startpage.vm")
-#end
-#if($viewer == "view")##{
-  #template("contentview.vm")
-#elseif($viewer == "edit")##{
-  #template("assetedit.vm")
-#else ##}{
-  #template("${viewer}.vm")
-#end ##}
-<div class="clearfloats"></div>
-</div>## main
-#if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
-  #template("endpage.vm")
-#else ##}{
-  </div>## contentcolumn
-  </div>## leftsidecolumns
+
+  #template("curriki-analytics.vm")
+
+  ## Need to do this before xwikivars is called otherwise the data might be removed
+  #if($request.method=="POST") ##{
+    #set($fileuploadlist = $xwiki.fileupload.getFileItems())
+  #end ##}
+
+  #if("$!viewer" == "") ##{
+    #set($viewer = $request.getParameter("viewer"))
+  #end ##}
+
+  #if("$!viewer" == "") ##{
+    #set($viewer = "view")
+  #end ##}
+
+  ## In Print Mode we don't want the standard header
+  #if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
+    #template("startpage.vm")
+  #end
+
+  #if($viewer == "view")##{
+    #template("contentview.vm")
+  #elseif($viewer == "edit")##{
+    #template("assetedit.vm")
+  #else ##}{
+    #template("${viewer}.vm")
+  #end ##}
+
   <div class="clearfloats"></div>
-  </div>## contentcontainerinner
-  </div>## contentcontainer
-  #template("htmlfooter.vm")
-#end ##}
+  </div>## main
+
+  #if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
+    #template("endpage.vm")
+  #else ##}{
+    </div>## contentcolumn
+    </div>## leftsidecolumns
+    <div class="clearfloats"></div>
+    </div>## contentcontainerinner
+    </div>## contentcontainer
+    #template("htmlfooter.vm")
+  #end ##}
+
 #else
 ## Forcing temporary asset to not be displayed
 AssetTemp

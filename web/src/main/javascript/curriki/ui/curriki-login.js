@@ -2,7 +2,7 @@
 Ext.ns('Curriki.ui.login');
 
 Curriki.ui.login.displayLoginDialog = function(url) {
-    if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
+    if(Curriki.ui.login.loginDialog && window.opener != null && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
     var w = 630, h=400;
     //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
