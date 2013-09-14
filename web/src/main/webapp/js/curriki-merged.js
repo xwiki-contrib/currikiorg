@@ -477,7 +477,7 @@ this.handleFailure(a)}else{if(Curriki.data.user.collectionChildren.length>0){a.r
 this.handleFailure(a)}else{if(Curriki.data.user.groupChildren.length>0){a.responseText=Ext.util.JSON.encode(Curriki.data.user.groupChildren)
 }else{a.responseText='[{"id":"NOGROUPCOLLECTIONS", "text":"'+_("add.chooselocation.groups.empty")+'", "allowDrag":false, "allowDrop":false, "leaf":true}]'
 }this.handleResponse(a)}}).createDelegate(this))}}}}else{if(typeof c=="function"){c()
-}}}});Ext.ns("Curriki.ui.login");Curriki.ui.login.displayLoginDialog=function(b){if(Curriki.ui.login.loginDialog&&window.opener.top.Curriki.ui.login.loginDialog.isVisible()){Curriki.ui.login.loginDialog.hide()
+}}}});Ext.ns("Curriki.ui.login");Curriki.ui.login.displayLoginDialog=function(b){if(Curriki.ui.login.loginDialog&&window.opener!=null&&window.opener.top.Curriki.ui.login.loginDialog.isVisible()){Curriki.ui.login.loginDialog.hide()
 }var a=630,c=400;if(window.innerWidth&&window.innerWidth<a){a=Math.round(window.innerWidth*0.95)
 }if(b.indexOf("?")>=0){b=b+"&framed=true"}else{b=b+"?framed=true"}var d=".x-window .x-window-tl, .x-panel-ghost .x-window-tl";
 if(Ext&&Ext.isIE){d=".x-window .x-window-tl"}Ext.util.CSS.updateRule(d,"background-color","#4E83C7");

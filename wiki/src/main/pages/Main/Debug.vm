@@ -1,28 +1,64 @@
-<% System.out.println("cdbg is " + request.getCookie("cdbg")) %>
-#if($request.remove == "true")
-<%
-  def cookie = new javax.servlet.http.Cookie("cdbg","false");
-  cookie.setMaxAge(0);
-  response.addCookie(cookie);
-  response.sendRedirect( xwiki.getURL(doc.fullName) );
-%>
-#end
-#if($request.add == "true")
-<% response.addCookie(new javax.servlet.http.Cookie("cdbg","true"));
-  response.sendRedirect( xwiki.getURL(doc.fullName) );
-%>
-#end
+// <%
+import java.lang.management.ManagementFactory;
+import javax.management.MBeanServer;
+import javax.servlet.http.Cookie;
 
-1 Debug status
+System.out.println("cdbg is " + request.getCookie("cdbg"));
+println("");
 
-#if($globalDebug)
-your cookie says DEBUG
+void adjustLogLevel(String verbosity) {
+MBeanServer server = ManagementFactory.getPlatformMBeanServer();
+def mbean = new GroovyMBean(server, 'logback:type=xwiki');
 
-<a href="${doc.name}?remove=true">remove it.</a>
-#else
-  Your cookie doesn't say DEBUG.
+List categories = ["org.xwiki", "groovyPages.Search2.IndexProcessor"]
+if(request.categories!=null) categories = request.categories.split(",");
 
-  <a href="${doc.name}?add=true">activate it</a>
-#end
+for(String c : categories ) {
+print "* Current log level for '${c}':"
+print mbean.getLoggerLevel(c);
 
-globalDebug variable is $globalDebug.
+println ". Set log level to ${verbosity}."
+mbean.setLoggerLevel(c, verbosity);
+}
+}
+
+
+if(request.remove=="true") {
+println("1 Disabling Debugging")
+def cookie = new Cookie("cdbg","false");
+cookie.setMaxAge(0);
+response.addCookie(cookie);
+adjustLogLevel("INFO");
+println("Cookie removed.");
+println("Redirecting in 3s.");
+println("<script type='text/javascript'>window.setTimeout(function() {window.location.replace('Debug');},5000);</script>");
+} else if (request.add=="true"){
+
+println("1 Enabling Debugging")
+response.addCookie(new Cookie("cdbg","true"));
+adjustLogLevel("DEBUG");
+println("Cookie added.");
+println("Redirecting in 3s.");
+println("<script type='text/javascript'>window.setTimeout(function() {window.location.replace('Debug');},5000);</script>");
+} else {
+
+
+println("1 Debug status");
+
+// ported globalDebug evaluation methods out of xwikivars.vm
+def debugCookie = xwiki.getUserPreferenceFromCookie('cdbg');
+boolean globalDebug;
+globalDebug  = debugCookie ||
+xwiki.curriki.getPublicCurrikiConfig('globalDebug','-missing-config-')=="";
+
+if(globalDebug) {
+println("your cookie says DEBUG");
+println("<a href=\"Debug?remove=true\">remove it.</a>");
+} else {
+println("    Your cookie doesn't say DEBUG.");
+println("    <a href=\"Debug?add=true\">activate it</a>");
+}
+
+}
+
+//    %>
