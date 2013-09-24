@@ -461,3 +461,27 @@
 </script>
 {{/html}}
 #end
+
+#macro(ru_showdialog )
+    {{html clean="false"}}
+    <div id="dialog-message" title="hey there!">
+        <p>
+        Hello im a dialog that you can close
+        </p>
+        <iframe src="http://www.boliviaweb.com/" width="100%"></iframe>
+    </div>
+
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+            jQuery( "#dialog-message" ).dialog({
+                modal: true,
+                minWidth: 400,
+                minHeight: 300,
+              });
+        });
+    /* ]]> */
+    </script>
+    {{/html}}
+#end
