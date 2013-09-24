@@ -1,7 +1,10 @@
+#set($showLeftPanels="0")<!-- Panels would be here -->
 #if($showLeftPanels == "1" || $request.getParameter("forceLeftPanels"))
     <div class="col-md-3 col-md-pull-9" id="sidebar">
         #foreach($panel in $leftPanels)
-            #displaypanel($panel.trim())
+            #if($panel!="Panels.Navigation" && $panel!="Panels.Watch Curriki Grow")<!-- Panel: $panel -->
+                #displaypanel($panel.trim())
+            #end
         #end
     </div>
 #end
