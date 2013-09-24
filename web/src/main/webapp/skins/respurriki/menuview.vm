@@ -1,9 +1,9 @@
-#if ($isInServletMode)## Visible only in a page
+#if ($isInServletMode && $hasGlobalAdmin)## Visible only in a page
     #set ($workspaceManagerMainDocumentReference = $services.model.createDocumentReference($xcontext.mainWikiName, 'WorkspaceManager', 'WebHome'))
     #set ($isWorkspaceManagerAppInstalled = $xwiki.exists($workspaceManagerMainDocumentReference))
     #set ($isWorkspace = $services.workspace.isWorkspace($xcontext.database))
     #set ($isMainWikiUser = ($xcontext.mainWikiName == "$!{xcontext.userReference.wikiReference.name}"))
-    <nav class="navbar navbar-default" role="navigation">
+    <nav id="menuview" class="navbar navbar-default" role="navigation" style="display:none">
         <!-- Brand and toggle get grouped for better mobile display -->
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">

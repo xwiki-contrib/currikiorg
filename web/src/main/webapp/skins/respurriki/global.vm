@@ -7,7 +7,8 @@
 <div class="container" id="the-header">
     #if($isInServletMode) ## Visible only in a page
         <div class="row">
-            <div class="col-md-3 col-xs-2">
+            <div class="col-md-3 col-xs-2" onmouseover="jQuery(jQuery('#menuview')[0]).show();"
+                 onmouseout="if(window.hider){window.clearInterval(window.hider);}; window.hider = window.setTimeout('jQuery(jQuery(\'#menuview\')[0]).hide();', 3000);">
                 <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home" id="main-logo">
                     #if("$!{themeDocFullName}" == '')
                         #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")
