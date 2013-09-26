@@ -3,6 +3,7 @@
 ###
 ### General wrapper for view actions
 ###
+## #template("ru_xwikivars.vm")
 #if ($request.getParameter("raw").equals("1"))
   #template("code.vm")
 #else
@@ -14,13 +15,13 @@
     #set($viewer = 'content')
   #end
   <div id="inner-content">
-  #if($displayContentMenu)
-    <div id="contentmenu" class="actionmenu">
-    #template("contentmenu.vm")
-    </div>
-  #end
+##  #if($displayContentMenu)
+##    <div id="contentmenu" class="actionmenu">
+##    #template("contentmenu.vm")
+##    </div>
+##  #end
   <div id="mainContentArea">
-  #template("hierarchy.vm")
+##  #template("hierarchy.vm")
   #if($viewer == 'content')
     #template("contentview.vm")
   #else
@@ -28,9 +29,9 @@
   #end
   <div class="clearfloats"></div>
   </div>## mainContentArea
-  #if($viewer == 'content' && $displayDocExtra)
-    #template("docextra.vm")
-  #end
+##  #if($viewer == 'content' && $displayDocExtra)
+##    #template("docextra.vm")
+##  #end
   </div>## main
   #template("endpage.vm")
 #end

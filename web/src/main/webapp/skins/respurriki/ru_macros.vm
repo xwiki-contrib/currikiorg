@@ -33,13 +33,422 @@
 ### @param attributes class, id, html5 dom data
 ###
 #macro(ru_breadcrumb )
-    <ol class="breadcrumb">
+    #*<ol class="breadcrumb">
         <li><a href="#">GWF</a></li>
         <li><a href="#">Selling Geometry</a></li>
         <li><a href="#">Introduction</a></li>
         <li class="active">Introduction to Geometry</li>
-    </ol>
+    </ol> *#
+    #ru_curriki_breadcrumb()
 #end
+
+## ==================== breadcrumbs, copied from curiki =====================================
+#**
+ * Curriki breadcrumb entry point
+ *#
+#macro(ru_curriki_breadcrumb)
+<div id="breadcrumb">
+    #ru_curriki_breadcrumb_bc($request.bc $doc)
+</div>
+#end
+
+#**
+ * Parents Breadcrumb
+ *#
+#macro(ru_curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
+## prepare group data
+    #set($sm = $xwiki.csm)
+    #set($spaceName = $bcCurrentDoc.getSpace())
+    #set($s = "$!sm.getSpace($spaceName)")
+    #if( $s!="") #if( $s.isNew() || $s.isDeleted() )
+        #set( $s = "")
+    #end #end
+
+    #if("Groups.CreateNewGroup"=="$!bcDoc.fullName")
+    ## special breadcrumb parent for groups creation page
+        #set($usr = $context.user)
+        $xwiki.getUserName($usr,true) &gt;
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #elseif($bcCurrentDoc.space.startsWith("Documentation_"))
+    ## special breadcrumb parent for groups documentation space
+        #set($grName = $bcCurrentDoc.space.substring( 14 ))
+        #set($s = $sm.getSpace($grName))
+        #if( $s )
+            #if( $s.isNew() || $s.isDeleted() )
+                #set( $s = "" )
+            #end
+        #end
+        #if("$!s"!="")<!-- s is $s -->
+        <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
+            #set($docPageName = $grName+".Documentation")
+            #set($docPage = $xwiki.getDocument( $docPageName ) )
+        <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
+        #end
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #elseif ("$!s" != "" && !$s.endsWith("WebPreferences") )
+    ## special breadcrumb parent for groups space
+    <!-- s is $s -->
+    <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+
+        #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
+        <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
+        #end
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #else
+    ## prepare bcParent breadcrumb info of the parent page
+    ## prepare bcLocal breadcrum info of the current page
+        #set($bcParent = $bcParam)
+        #if("$!bcParam" != "")
+            #if($bcParam.endsWith($bcCurrentDoc.fullName))
+                #set($bcLocal = $bcParam)
+            #else
+                #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+            #end
+        #else
+            #set($bcLocal = $bcCurrentDoc.fullName)
+        #end
+
+    ## find the top parent in the bcParam that is valid
+        #set($topParentDoc = $bcCurrentDoc)
+        #if("$!bcParam" != "")
+            #set($topParentDone = false)
+            #foreach($bcItem in $bcLocal.split(";"))
+            ## ignoring empty elements and the XWiki.XWikiUsers parent page
+                #if(!$topParentDone && "$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+                    #set($topParentDone = true)
+                    #set($topParentDoc = $xwiki.getDocument($bcItem))
+                #end
+            #end
+        #end
+
+    ## enhance bcLocal from this top Parent
+        #ru_curriki_breadcrumb_parent($topParentDoc, 0)
+    #end
+## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
+    #set($isFirst = true)
+    #set($previousBc = "")
+<div class="row">
+<div id="the-breadcrumb" class="col-md-12">
+<div id="breadcrumb-icon">
+    <i class="icon-list-ul"></i>
+</div>
+<div id="breadcrumb-wrapper">
+<ol class="breadcrumb">## loop on each element of the breadcrumb
+    #foreach($bcItem in $bcLocal.split(";"))
+    ## ignoring empty elements and the XWiki.XWikiUsers parent page
+        #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+            #if(!$isFirst)
+            &gt;
+            #end
+            #set($isFirst = false)
+            #ru_curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
+        #end
+    #end
+</ol></div></div></div>
+#end
+
+#**
+ * Breadcrumb display of a page
+ *#
+#macro(ru_curriki_breadcrumb_display $bcItem $previousBc)
+    #set($bcDoc = $xwiki.getDocument($bcItem))
+## custom handling of EditArticle action
+    #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
+        #set($bcDoc = $xwiki.getDocument($request.editArticle))
+    #end
+## find the page title
+    #asset_findtitle($bcDoc)
+## custom title for groups
+    #ru_curriki_breadcrumb_groups_fixtitle()
+## custom arguments for My Curriki
+    #set($userArg = "")
+    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+        #set($userArg="&user=$request.user")
+    #end
+    #if(($currikiTitle.length()>125) && ($bcDoc.name!="Documentation") && ($bcDoc.name!=$msg.groups_home_page))
+        #set($currikiTitle = $currikiTitle.substring(0,125))
+        #set($currikiTitle = "${currikiTitle}...")
+    #end
+## Display the breacrumb
+<li><a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a></li>
+    #set($previousBc = "${previousBc};${bcItem}")
+## Display additional groups breadcrumb
+    #ru_curriki_breadcrumb_groups_addbrowseinfo()
+#end
+
+#**
+ * Breadcrumb title change for groups features
+ *#
+#macro(ru_curriki_breadcrumb_groups_fixtitle)
+## groups specific rules
+    #if("$!s"=="")
+    ##don't fix anything
+    #else
+        #if($bcDoc.name==$msg.groups_home_page) ##home page
+            #set($currikiTitle = $msg.groups_home_tabname)
+            #if($request.action)
+                #if($request.action=="editmasthead")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
+                #end
+                #if($request.action=="editinfo")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
+                #end
+            #end
+        #end ##end home page
+        #if($bcDoc.name=="Documentation") ##documentation page
+            #if(	$request.action)
+                #if($request.action == "newdoc" && $request.method != "POST" )
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
+                #end
+                #if($request.action == "editdoc" && $request.method != "POST" )
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
+                #end
+                #if($request.action == "history")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
+                #end
+                #if($request.action == "compare")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
+                #end
+            #end
+        #end  ##end documentation page
+    ###else
+    ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
+    ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+    ##  #end
+    #end
+##end of groups specific rules
+#end
+
+#**
+ * This method adds one more level of breadcrumb for the browse groups page
+ * depending on which category is browsed
+ *#
+#macro(ru_curriki_breadcrumb_groups_addbrowseinfo)
+    #set($more = "")
+    #if("Groups.Browse"==$bcDoc.fullName)
+        #if( $request.subject )
+            #set($sdoc = $xwiki.getDocument($request.subject))
+            #set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
+            #set($more_href = "${doc.getURL()}?subject=${request.subject}")
+        #end
+    #end
+    #if("$!more" != "")
+    &gt; <a href="$more_href">$more</a>
+    #end
+#end
+
+
+
+#**
+ * Builds the Parents Breadcrumb in bcLocal
+ *#
+#macro(ru_curriki_breadcrumb_parent $bcDoc $level)
+    #if("$!bcDoc"!="")
+    ## prepare group info
+        #set($sm = $xwiki.csm)
+        #set($spaceName = $bcDoc.getSpace())
+        #set($s = $sm.getSpace($spaceName))
+        #if( $s ) #if( $s.isNew() || $s.isDeleted() )
+            #set( $s = "" )
+        #end #end
+
+        #if("$!s"=="")
+            #set($collType = "")
+            #set($category = $bcDoc.getValue("category"))
+            #if("collection"=="$!category")
+                #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
+                #set($collType = $bcDoc.getValue("type"))
+            #end
+            #if("$!collType"!="" && "$!collType" != "folder")
+            ## do nothing because we have a collection or root collection
+            #else
+            ## handling breadcrumb if it is not a group
+                #set($parentList = $util.arrayList)
+                #set($parent = "")
+                #if($bcDoc.getObject("CurrikiCode.AssetClass"))
+                ## handling of breadcrumb for an Asset. Taking the first one.
+                ## TODO: setup a cache
+                    #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' AND doc.space !='Coll_Group_CRSCollaboration' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate")
+                    #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
+                #end
+
+            ## if the parent list has more than 1 then we should
+            ## not follow the parent path
+                #if("$!parentList"!=""|| $parentList.size() < 2)
+                    #if("$!parentList"!="" && $parentList.size()>0)
+                        #foreach($par in $parentList)
+                            #set($parent = $par)
+                        #end
+                    #end
+                #else
+                    #if("$!parent" == "")
+                        #set($parent = $bcDoc.parent)
+                    #end
+                #end
+
+                #if("$!parentList"!="" || $parentList.size() == 0)
+                    #if("$!parent" == "")
+                        #set($parent = $bcDoc.parent)
+                    #else
+                    #end
+                #end
+
+                #if($parent && ("$!parent" != "") && $xwiki.checkAccess("$parent","view") && $level < 6 && ($bcLocal.indexOf($parent) == -1))
+                    #set($bcLocal = "${parent};${bcLocal}")
+                    #set($level = $level + 1)
+                    #set($parentDoc = $xwiki.getDocument($parent))
+                    #ru_curriki_breadcrumb_parent($parentDoc,$level)
+                #end
+            #end ## end check collection or root collection
+        #end ## end check groups
+    #end ## end check null bcName
+#end ## end macro
+
+
+##
+## login/logout witness
+##
+#macro(loginLogout)
+## the dialog to be popped-up
+#* <div id="dialog-message" title="Login or register">
+    <iframe src="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup" width="100%"></iframe>
+</div> *#<div id="loginPopup"></div>
+<script type="text/javascript">
+    /* <![CDATA[ */
+    function displayLoginDialog(url) {
+        var w = 630, h=400;
+        //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
+        if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
+        if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
+        // the default header should be blue, not green as it is in AddPath, adjust the CSS live
+        jQuery( "#loginPopup" ).dialog({
+            modal: true,
+            width: w,
+            height: h
+                ,minWidth:400
+                ,minHeight:100
+                ,maxHeight:575
+            ,resizable:false
+                ,title:"login"
+            });
+        jQuery("#loginPopup").html("<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>");
+        /* Curriki.ui.login.loginDialog = new Ext.Window({
+            title:_("join.login.title"),
+            border:false,
+            id: 'loginDialogWindow',
+            scrollbars: false
+            ,modal:true
+            ,width: w
+            //, height: h
+            ,minWidth:400
+            ,minHeight:100
+            ,maxHeight:575
+            ,autoScroll:false
+            ,constrain:true
+            ,collapsible:false
+            ,closable:false
+            ,resizable:false
+            , monitorResize: true
+            ,shadow:false
+            ,defaults:{border:false},
+            html: "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
+        }); */
+    }
+    /* ]]> */
+</script>
+<!-- member area -->
+<div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
+    #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+    ##{
+        #if ($request.xredirect) ##{
+            #set($logredir = $request.xredirect)
+        #elseif($doc.space == "Registration") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.WebHome") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.JoinCurriki") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($logredir.contains("/login")) ##}{
+            #set($logredir = "")
+        #end ##}
+        #if("$!logredir"!="") ##{
+            #set($logredir = "xredirect=$logredir")
+        #elseif($request.srid) ##}{
+            #set($logredir = "srid=$request.srid")
+        #end ##}
+        #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+        #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+        #set($anchorAtts="href='$targetURL' onclick='displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+        <p><a $anchorAtts>login</a></p>
+    ## join.header.title.1 = Login,
+    ## join.header.title.2=Join Curriki,
+        #if($!request.getHeader("User-Agent").contains("MSIE 7"))
+            &nbsp;
+        #end
+        <p>
+            <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
+        ## join.header.title.3=orSign-in using
+            <!-- $msg.get('join.header.title.3') -->##
+            #foreach($provider in ["Facebook","Google"])
+                <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
+                #set($xredirect="${request.getRequestURI()}")##
+                <!-- xredirect is $xredirect -->
+                #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
+                <a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
+                   onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
+                    <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="18"
+                         title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /></a>
+            #end</p>
+    #end
+    #else ## }{ ## is logged in
+    ## crtUserDoc is set in fudocs.vm
+        <span style="font-size: small">
+        #set($fname = $crtUserDoc.display("first_name","view"))
+        <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+        #* #if($hasGlobalAdmin)
+            <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> ($xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host"))#sep()
+        #end
+        #if("MyCurriki"=="$doc.space")
+            #set($logredir = "/xwiki/bin/view/MyCurriki/${doc.name}?user=${crtUserDoc.fullName}")
+        #elseif($xwiki.hasAccessLevel("view","XWiki.XWikiGuest","$doc.fullName"))
+            #set($logredir = $request.getRequestURI())
+        #else
+            #set($logredir = $xwiki.getURL("Main.WebHome"))
+        #end*#
+        #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+        <a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
+        </span>
+    #end ##}
+    #set($headerMsg="$!request.session.getAttribute('header.message')")##
+    #if("$!headerMsg"!="")
+        <p>##
+            #if($headerMsg=="logout-ok")##
+                $request.session.removeAttribute("header.message")##
+                    $msg.get("logout.ok-you-left")<!-- logout message here -->##
+                #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
+                    #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
+                    #if($idProviderName.equalsIgnoreCase("facebook"))
+                        <a href="http://www.facebook.com/logout.php" target="_facebook_window"
+                                >$msg.get("logout.offer-logout.facebook")</a>
+                    #elseif($idProviderName.equalsIgnoreCase("google"))
+                        <a href="http://www.google.com/"
+                           target="_google_logout_window"
+                                >$msg.get("logout.offer-logout.google")</a>
+                    #end##
+                #end##
+                    #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
+                    <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
+            #else$msg.get($headerMsg,[$context.user.substring(6)])#end## "XWiki.".length() = 6
+        </p>
+    #end##
+##
+</div> ##} ##header-member
+<!-- end of member area -->
+
+#end
+
+
+
 
 #**
   * Macro for verifying if an entry in the nav panel is active
