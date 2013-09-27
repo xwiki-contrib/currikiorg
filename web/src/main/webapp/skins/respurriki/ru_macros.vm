@@ -308,11 +308,12 @@
 ##
 ## login/logout witness
 ##
-#macro(loginLogout)
+#macro(ru_loginLogout)
 ## the dialog to be popped-up
 #* <div id="dialog-message" title="Login or register">
     <iframe src="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup" width="100%"></iframe>
-</div> *#<div id="loginPopup"></div>
+</div> *#
+<div id="loginPopup"></div>
 <script type="text/javascript">
     /* <![CDATA[ */
     function displayLoginDialog(url) {
@@ -322,6 +323,8 @@
         if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
         // the default header should be blue, not green as it is in AddPath, adjust the CSS live
         jQuery( "#loginPopup" ).dialog({
+            dialogClass: "dialog-login",
+            buttons: [ { text: "Close", click: function() { jQuery( this ).dialog( "close" ); } } ],
             modal: true,
             width: w,
             height: h
