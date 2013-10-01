@@ -304,12 +304,40 @@
 ##
 #macro(ru_loginLogout)
 ## the dialog to be popped-up
-#* <div id="dialog-message" title="Login or register">
-    <iframe src="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup" width="100%"></iframe>
-</div> *#
 <div id="loginPopup"></div>
+
+<div class="modal fade" id="my-modal">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Login</h4>
+      </div>
+      <div class="modal-body">
+        
+      </div>
+      <div class="modal-footer"></div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
 <script type="text/javascript">
     /* <![CDATA[ */
+    function displayLoginDialogAlt(url) {
+        var w = 620, h=400;
+        if(window.innerWidth && window.innerWidth<w){
+            w = Math.round(window.innerWidth*0.95);
+        }
+        if(url.indexOf('?')>=0){
+            url = url + "&framed=true";
+        }else{
+            url = url + "?framed=true";
+        }
+        var html_content = "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='" + url + "' width='" + (w-5) + "' height='" + (h-31) + "'/>";
+        jQuery('#my-modal .modal-body').html(html_content);
+        jQuery('#my-modal').modal('show');
+    }
     function displayLoginDialog(url) {
         var w = 630, h=400;
         //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
@@ -329,27 +357,6 @@
                 ,title:"login"
             });
         jQuery("#loginPopup").html("<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>");
-        /* Curriki.ui.login.loginDialog = new Ext.Window({
-            title:_("join.login.title"),
-            border:false,
-            id: 'loginDialogWindow',
-            scrollbars: false
-            ,modal:true
-            ,width: w
-            //, height: h
-            ,minWidth:400
-            ,minHeight:100
-            ,maxHeight:575
-            ,autoScroll:false
-            ,constrain:true
-            ,collapsible:false
-            ,closable:false
-            ,resizable:false
-            , monitorResize: true
-            ,shadow:false
-            ,defaults:{border:false},
-            html: "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>" //
-        }); */
     }
     /* ]]> */
 </script>
@@ -375,7 +382,7 @@
         #end ##}
         #set($escapedURL=$escapetool.url($request.getRequestURI()))##
         #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
-        #set($anchorAtts="href='$targetURL' onclick='displayLoginDialog(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+        #set($anchorAtts="href='$targetURL' onclick='displayLoginDialogAlt(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
         <p><a $anchorAtts>login</a></p>
     ## join.header.title.1 = Login,
     ## join.header.title.2=Join Curriki,
