@@ -33,12 +33,26 @@
     border-bottom: 1px solid #29a3ce;
 }
 #the-content{
+    /*background-color: #29a3ce;
+    padding-top: 15px;*/
+}
+#the-breadcrumb{
+    position: relative;
     background-color: #29a3ce;
-    padding-top: 15px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+#dropable-toc{
+    position: absolute;
+    display: none;
+    top: 40px;
+    left: 0px;
+    z-index: 100;
 }
 #the-breadcrumb .breadcrumb{
     background: none;
     border:none;
+    margin-bottom: 0px;
 }
 #the-breadcrumb .breadcrumb li a{
     color: #fff;
@@ -110,10 +124,45 @@
 #wrapper-toc ul ul li{
     border-bottom: 1px #3698bb solid;
 }
+#dropable-toc{
+    background-color: #399abd;
+}
+#dropable-toc ul{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+#dropable-toc ul li{
+    border-bottom: 1px #3698bb solid;
+}
+#dropable-toc ul li a{
+    color: #aad3e3;
+    padding: 10px 15px;
+    display: block;
+}
+#dropable-toc ul li a.current{
+    color: #fff;
+    font-weight: bold;
+}
+#dropable-toc ul li a i{
+    float: right;
+}
+#dropable-toc ul ul{
+    background-color: #50a5c4;
+    
+}
+#dropable-toc ul ul li{
+    border-bottom: 1px #3698bb solid;
+}
 .dialog-login{}
 .dialog-login .ui-dialog-titlebar{
     display: none;
 }
 #loginPopup{
     overflow: hidden;
+}
+
+/* temporary hide the toc */
+#sidebar #wrapper-toc{
+    display: none;
 }

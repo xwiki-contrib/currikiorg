@@ -47,16 +47,14 @@
  * Curriki breadcrumb entry point
  *#
 #macro(ru_curriki_breadcrumb)
-<div id="breadcrumb">
     #ru_curriki_breadcrumb_bc($request.bc $doc)
-</div>
 #end
 
 #**
  * Parents Breadcrumb
  *#
 #macro(ru_curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
-## prepare group data
+    ## prepare group data
     #set($sm = $xwiki.csm)
     #set($spaceName = $bcCurrentDoc.getSpace())
     #set($s = "$!sm.getSpace($spaceName)")
@@ -79,19 +77,19 @@
             #end
         #end
         #if("$!s"!="")<!-- s is $s -->
-        <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt; ##groups name
+        <a href="$s.getHomeURL()">$s.getDisplayTitle()</a>
             #set($docPageName = $grName+".Documentation")
             #set($docPage = $xwiki.getDocument( $docPageName ) )
-        <a href="$docPage.getURL()">${docPage.displayTitle}</a> &gt; ##documentation page
+        <a href="$docPage.getURL()">${docPage.displayTitle}</a>
         #end
         #set($bcLocal = $bcCurrentDoc.fullName)
     #elseif ("$!s" != "" && !$s.endsWith("WebPreferences") )
     ## special breadcrumb parent for groups space
     <!-- s is $s -->
-    <a href="$s.getHomeURL()">$s.getDisplayTitle()</a> &gt;
+    <a href="$s.getHomeURL()">$s.getDisplayTitle()</a>
 
         #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
-        <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a> &gt;
+        <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a>
         #end
         #set($bcLocal = $bcCurrentDoc.fullName)
     #else
@@ -124,27 +122,23 @@
     ## enhance bcLocal from this top Parent
         #ru_curriki_breadcrumb_parent($topParentDoc, 0)
     #end
-## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
+    ## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
     #set($isFirst = true)
     #set($previousBc = "")
-<div class="row">
-<div id="the-breadcrumb" class="col-md-12">
-<div id="breadcrumb-icon">
-    <i class="icon-list-ul"></i>
-</div>
-<div id="breadcrumb-wrapper">
-<ol class="breadcrumb">## loop on each element of the breadcrumb
-    #foreach($bcItem in $bcLocal.split(";"))
-    ## ignoring empty elements and the XWiki.XWikiUsers parent page
-        #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
-            #if(!$isFirst)
-            &gt;
+    <div id="breadcrumb-icon">
+        <a class="icon-list-ul" href="#"></a>
+    </div>
+    <div id="breadcrumb-wrapper">
+        <ol class="breadcrumb">## loop on each element of the breadcrumb
+            #foreach($bcItem in $bcLocal.split(";"))
+            ## ignoring empty elements and the XWiki.XWikiUsers parent page
+                #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+                    #set($isFirst = false)
+                    #ru_curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
+                #end
             #end
-            #set($isFirst = false)
-            #ru_curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
-        #end
-    #end
-</ol></div></div></div>
+        </ol>
+    </div>
 #end
 
 #**
@@ -152,15 +146,15 @@
  *#
 #macro(ru_curriki_breadcrumb_display $bcItem $previousBc)
     #set($bcDoc = $xwiki.getDocument($bcItem))
-## custom handling of EditArticle action
+    ## custom handling of EditArticle action
     #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
         #set($bcDoc = $xwiki.getDocument($request.editArticle))
     #end
-## find the page title
+    ## find the page title
     #asset_findtitle($bcDoc)
-## custom title for groups
+    ## custom title for groups
     #ru_curriki_breadcrumb_groups_fixtitle()
-## custom arguments for My Curriki
+    ## custom arguments for My Curriki
     #set($userArg = "")
     #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
         #set($userArg="&user=$request.user")
@@ -169,10 +163,10 @@
         #set($currikiTitle = $currikiTitle.substring(0,125))
         #set($currikiTitle = "${currikiTitle}...")
     #end
-## Display the breacrumb
-<li><a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a></li>
+    ## Display the breacrumb
+    <li><a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a></li>
     #set($previousBc = "${previousBc};${bcItem}")
-## Display additional groups breadcrumb
+    ## Display additional groups breadcrumb
     #ru_curriki_breadcrumb_groups_addbrowseinfo()
 #end
 
