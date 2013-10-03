@@ -54,5 +54,5 @@ public abstract class Trigger {
     /**
      * Call notifiers to remove their notifications
      */
-    protected abstract void removeNotifications();
+    protected abstract void removeNotifications(Object notification);
 }

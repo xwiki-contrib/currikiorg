@@ -45,6 +45,11 @@ public class LoginToViewSessionNotifier implements Notifier {
     public final static String THRESHOLD_NOTIFICATION_VALUE = "THRESHOLD_NOTIFICATION_VALUE";
 
     /**
+     *
+     */
+    public final static String DELETE_COOKIE_VALUE = "DELETE_COOKIE";
+
+    /**
      * The module this notifier is part of.
      */
     private LoginToViewAnalyticsModule loginToViewAnalyticsModule;
@@ -72,6 +77,7 @@ public class LoginToViewSessionNotifier implements Notifier {
         if(currentAnalyticsSession.getCookie(LOGIN_TO_VIEW_COOKIE_NAME) == null && numberOfRemainingViews == 0){
             Cookie cookie = new Cookie(LOGIN_TO_VIEW_COOKIE_NAME, String.valueOf(numberOfMatches));
             cookie.setMaxAge(60*60*24*30);
+            cookie.setPath("/");
             currentAnalyticsSession.setCookie(cookie);
         }
     }
@@ -79,10 +85,16 @@ public class LoginToViewSessionNotifier implements Notifier {
     /**
      * Remove all values from the session this notifier ever set.
      */
-    public void removeNotification() {
+    public void removeNotification(Object notification) {
+        boolean delete_cookie = ((Map<String, Boolean>) notification).get(DELETE_COOKIE_VALUE);
         LOG.warn("LoginToViewSessionNotifier: " + "Remove all existing notifications");
         loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(LOGIN_TO_VIEW_SESSION_FLAG);
         loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY);
+
+        if(delete_cookie){
+            LOG.warn("LoginToViewSessionNotifier: Delete LOGIN_TO_VIEW_COOKIE");
+            loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeCookie(LOGIN_TO_VIEW_COOKIE_NAME);
+        }
     }
 
     /**

@@ -5,7 +5,9 @@ import org.curriki.plugin.analytics.UrlStore;
 import org.curriki.plugin.analytics.module.Notifier;
 import org.curriki.plugin.analytics.module.Trigger;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * This Trigger is just a dummy to remove all notifications
@@ -19,7 +21,7 @@ public class DisableLoginToViewTrigger extends Trigger {
 
     @Override
     public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
-        removeNotifications();
+        removeNotifications(null);
     }
 
     @Override
@@ -34,9 +36,11 @@ public class DisableLoginToViewTrigger extends Trigger {
     }
 
     @Override
-    protected void removeNotifications() {
+    protected void removeNotifications(Object notification) {
         for(Notifier notifier : notifiers){
-            notifier.removeNotification();
+            Map notificationValues = new HashMap<String, Boolean>();
+            notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, true);
+            notifier.removeNotification(notificationValues);
         }
     }
 }

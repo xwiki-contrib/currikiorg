@@ -16,5 +16,5 @@ public interface Notifier {
     /**
      * Remove the notificaton if this notifier
      */
-    public void removeNotification();
+    public void removeNotification(Object notification);
 }
