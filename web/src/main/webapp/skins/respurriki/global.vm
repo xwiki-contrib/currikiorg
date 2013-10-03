@@ -33,16 +33,43 @@
                     <img src="$!logourl" alt="Wiki Logo"/>
                 </a>
             </div>
-            <div class="col-md-8 col-xs-9">
-                <ul id="main-nav">
-                    <li><a href="#">Home <span>13</span></a></li>
-                    <li><a href="#" class="current">Course</a></li>
-                    <li><a href="#">Discussions</a></li>
-                    <li><a href="#">Projects</a></li>
-                </ul>
-            </div>
-            <div class="cold-md-1 col-xs-1">
-                #ru_loginLogout()
+            <!-- doc.space: $doc.space of class $doc.space.getClass() -->
+            #if($doc.space.startsWith("Group_"))
+                #set($groupName=$doc.space.substring(6))<!-- Group_  -->##
+            #elseif($doc.space.startsWith("Coll_Group_"))
+                #set($groupName=$doc.space.substring(11))<!-- Coll_Group $doc.space.substring(10) -->##
+            #elseif($doc.space.startsWith("Discussions_Group_"))<!-- Discussions_Group_ -->##
+                #set($groupName=$doc.space.substring(18))##
+            #elseif($doc.space.startsWith("Messages_Group_"))<!-- Messages_Group_ -->
+                #set($groupName=$doc.space.substring(14))##
+            #else
+                #set($groupName="")<!-- no group recognized -->
+            #end
+            #if($groupName!="")
+                <div class="col-md-8 col-xs-9">
+                    <ul id="main-nav">
+                        <li><a href="../Group_${groupName}/?skin=respurriki" ##
+                            #if($doc.name=="WebHome" || $doc.space=="Group_${groupName}") class="current" #end##
+                                >Home <span>13</span></a></li>
+                        <li><a href="../Coll_Group_${groupName}/Main?skin=respurriki"
+                            #if($doc.space.startsWith("Coll_")) class="current" #end##
+                                >Course</a></li>
+                        <li><a href="../Group_${groupName}/Discussions?skin=respurriki"
+                            #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
+                                >Discussions</a></li>
+                        <li><a href="#">Projects??</a></li>
+                    </ul>
+                </div>
+            #else
+                <div class="col-md-8 col-xs-9">
+                    <ul id="main-nav">
+                        <li>Here will be </li>
+                        <li>the tabs for</li>
+                        <li>non-group navigation</li>
+                    </ul>
+                </div>
+            #end
+            #ru_loginLogout()
                 ## Icon
 ### login
 
