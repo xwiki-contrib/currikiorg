@@ -90,13 +90,15 @@ $text
 #macro(mycurriki_header $userobj $userdoc) ## {
 <div id="mycurriki-img">
   <a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
-  #set($current_avatar = $userobj.get('avatar'))
-  #if($current_avatar && "${current_avatar}" != "") ##{
-    #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-    <img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true" />
-  #else ##}{
-    <img src="$xwiki.getSkinFile("noavatar.png")" />
-#end ##}
+    #set($current_avatar = $userobj.get('avatar'))
+    #if($current_avatar && "$!{current_avatar}" != "") ##{
+      #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
+    #end ##}
+    #if($attach && "$!{attach}" != "") ##{
+      <img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true" />
+    #else ##}{
+      <img src="$xwiki.getSkinFile("noavatar.png")" />
+    #end ##}
   </a>
 </div>
 <h2>$userobj.first_name $userobj.last_name</h2>
