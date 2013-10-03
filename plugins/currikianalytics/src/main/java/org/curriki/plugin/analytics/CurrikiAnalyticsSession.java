@@ -1,5 +1,6 @@
 package org.curriki.plugin.analytics;
 
+import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.api.Context;
 import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.web.XWikiMessageTool;
@@ -257,5 +258,13 @@ public class CurrikiAnalyticsSession {
      */
     public XWikiMessageTool getMessageTool(){
         return this.msg;
+    }
+
+    public Context getContext(){
+        return this.context;
+    }
+
+    public String getUser(){
+        return this.context.getUser();
     }
 }

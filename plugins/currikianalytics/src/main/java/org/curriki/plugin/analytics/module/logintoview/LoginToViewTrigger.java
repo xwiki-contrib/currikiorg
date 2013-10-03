@@ -49,15 +49,34 @@ public class LoginToViewTrigger extends Trigger {
     public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
         LOG.warn("Triggered");
         int matches = match(currikiAnalyticsSession.getUrlStore(), referer);
+        boolean currentUrlMatches = matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), referer, matches);
+        boolean currentUrlIsException = urlIsException(currikiAnalyticsSession.getUrlStore().getLast());
+        boolean loginToViewCookieIsPresent = currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME) == null;
+        boolean currentUserIsGuest = currikiAnalyticsSession.getUser() != null && ("XWiki.XWikiGuest".equals(currikiAnalyticsSession.getUser()));
+
+        // If the current user is logged in. Don't show notifications and remove the login to view cookie
+        if(!currentUserIsGuest){
+            Map notificationValues = new HashMap<String, Boolean>();
+            notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, true);
+            removeNotifications(notificationValues);
+        }
 
         // If the user has an analytics cookie set, we need to add the notification
         // for the exceeded threshold. But if it is an exception we go further with matching
-        if(currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME) != null && !urlIsException(currikiAnalyticsSession.getUrlStore().getLast())){
+        else if(loginToViewCookieIsPresent && !currentUrlIsException && currentUrlMatches){
             addNotifications(this.threshold);
-        }else if(matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), referer, matches)){
+        }
+
+        // If the current url matches add notifications
+        else if(currentUrlMatches){
             addNotifications(matches);
-        } else {
-            removeNotifications();
+        }
+
+        // If no match was found an no other condition was given, don't show notifications
+        else {
+            Map notificationValues = new HashMap<String, Boolean>();
+            notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, false);
+            removeNotifications(notificationValues);
         }
     }
 
@@ -71,11 +90,19 @@ public class LoginToViewTrigger extends Trigger {
         return matches;
     }
 
+    /**
+     * Crawl the UrlStore for the given pattern and count matches.
+     * Double entries in the UrlStore with a match are only counted as +1.
+     * @param pattern the pattern to match with
+     * @param urlStore the url store to search in
+     * @param referer the referer of the request.
+     * @return the number of matches of the pattern against the url store.
+     */
     private int matchUrlHistory(Pattern pattern, UrlStore urlStore, String referer){
         int matches = 0;
         LinkedList<String> alreadyMatched = new LinkedList<String>();
         for (String url : urlStore) {
-            if (!exceptions.contains(url) && pattern.matcher(url).matches() && !alreadyMatched.contains(url)) {
+            if (!urlIsException(url) && pattern.matcher(url).matches() && !alreadyMatched.contains(url)) {
                 LOG.warn("Match for: " + url);
                 alreadyMatched.add(url);
                 matches++;
@@ -183,10 +210,10 @@ public class LoginToViewTrigger extends Trigger {
     }
 
     @Override
-    protected void removeNotifications(){
+    protected void removeNotifications(Object notification) {
         LOG.warn("Calling " + super.notifiers.size() + " Notifiers to tell them to remove their notifications");
         for (Notifier notifier : super.notifiers) {
-            notifier.removeNotification();
+            notifier.removeNotification(notification);
         }
     }
 }

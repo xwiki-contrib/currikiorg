@@ -125,7 +125,7 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 ## Search for the login to view flag
 #set($LOGIN_TO_VIEW_SESSION_FLAG = $request.getSession().getAttribute("LOGIN_TO_VIEW_SESSION_FLAG"))
 <!-- LOGIN_TO_VIEW_SESSION_FLAG:"$!LOGIN_TO_VIEW_SESSION_FLAG" -->
-#if("$!LOGIN_TO_VIEW_SESSION_FLAG" != "" && $context.user && "XWiki.XWikiGuest"=="$context.user")
+#if("$!LOGIN_TO_VIEW_SESSION_FLAG" != "")
 <script type="text/javascript">
 Ext.onReady(function(){
   if(window.location.pathname != "/xwiki/bin/view/Registration/LoginOrRegister"){
