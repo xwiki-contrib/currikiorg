@@ -48,13 +48,13 @@
             #if($groupName!="")
                 <div class="col-md-8 col-xs-9">
                     <ul id="main-nav">
-                        <li><a href="../Group_${groupName}/?skin=respurriki" ##
-                            #if($doc.name=="WebHome" || $doc.space=="Group_${groupName}") class="current" #end##
+                        <li><a href="../Group_${groupName}/" ##
+                            #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
                                 >Home <span>13</span></a></li>
-                        <li><a href="../Coll_Group_${groupName}/Main?skin=respurriki"
+                        <li><a href="../Coll_Group_${groupName}/Main"
                             #if($doc.space.startsWith("Coll_")) class="current" #end##
                                 >Course</a></li>
-                        <li><a href="../Group_${groupName}/Discussions?skin=respurriki"
+                        <li><a href="../Group_${groupName}/Discussions"
                             #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
                                 >Discussions</a></li>
                         <li><a href="#">Projects??</a></li>

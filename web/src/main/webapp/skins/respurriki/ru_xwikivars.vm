@@ -17,12 +17,6 @@
 #* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
 #* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
-#template("frequentlyUsedDocs.vm")
-##  GWT settings
-#set($gwtmainpath = "/xwiki/bin/view/GWT/Editor?xpage=plain&")
-#set($gwtsitepath = "/xwiki/gwt")
-## Loaded settings
-## $xwiki.includeTopic('Admin.Configuration', false)
 ## Rights vars
 #set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
 #set($hasEdit = $xwiki.hasAccessLevel("edit"))
@@ -42,7 +36,6 @@
 #set($spaceViewUrl = $spaceDoc.getURL("view"))
 #set($viewUrl = $doc.getURL("view"))
 #set($userObj = $!crtUserDoc.getObject("XWiki.XWikiUsers",0))
-### end compatibility
 #if($context.user == "XWiki.superadmin")
 #set($isAdvancedUser = true)
 #elseif(!$objuser.getProperty("usertype").value)
@@ -81,16 +74,16 @@
 #elseif("$!languageparams" != "")
 #set($docvariant = "$languageparams")
 #end
-#template("deprecatedVars.vm")
+## #template("deprecatedVars.vm")
 #set($hostname=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config'))
 #set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA', "-missing-curriki.system.GA"))
 #set($ADDTHIS_acct=$xwiki.curriki.getPublicCurrikiConfig('addthis',"0"))
-
-
+##
+##
 #set ($isInServletMode = $xwikimode == 0)
 #set ($isInPortletMode = $xwikimode == 1)
 ##
 #set($viewer="$!request.viewer")
-#if($viewer=="")#set($viewer="view")#end
+## -- this line creates an Empty stack if commented-in; go figure!
+## #if("$viewer"=="")#set($viewer="view")#end
 #set($target="_self")##
-##set($gVersion="1111")
