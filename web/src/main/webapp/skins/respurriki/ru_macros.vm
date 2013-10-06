@@ -309,14 +309,8 @@
 <div class="modal fade" id="my-modal">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h4 class="modal-title">Login</h4>
-      </div>
       <div class="modal-body">
-        
       </div>
-      <div class="modal-footer"></div>
     </div><!-- /.modal-content -->
   </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
@@ -406,9 +400,10 @@
     #end
     #else ## }{ ## is logged in
     ## crtUserDoc is set in fudocs.vm
-        <span style="font-size: small">
         #set($fname = $crtUserDoc.display("first_name","view"))
-        <span class="welcome"><a href='$crtUserDoc.getURL()'>$msg.get("header.welcome", ["$fname"])</a></span>
+        <ul id="wrapper-account">
+        <li><a href='$crtUserDoc.getURL()'><i class="icon-user icon-2x"></i></a></li>
+        <li><a href='$crtUserDoc.getURL()'>$msg.get("", ["$fname"])</a></li>
         #* #if($hasGlobalAdmin)
             <a href="$xwiki.getURL("Admin.WebHome","view")">$msg.get("header.admin")</a> ($xwiki.curriki.getPublicCurrikiConfig("appserverHost", "missing-host"))#sep()
         #end
@@ -420,8 +415,8 @@
             #set($logredir = $xwiki.getURL("Main.WebHome"))
         #end*#
         #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-        <a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a>
-        </span>
+        <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
+        </ul>
     #end ##}
     #set($headerMsg="$!request.session.getAttribute('header.message')")##
     #if("$!headerMsg"!="")
@@ -843,11 +838,11 @@
             var json_data = JSON.stringify($lastAssetJSON);
             var json_objects = jQuery.parseJSON(json_data);
             var html_output = '';
-            var html_sub_output = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';
+            var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';
             jQuery.each(json_objects.children, function(){
-                html_output += '<li><a href="' + this.href + '">' + this.displayTitle + '<i class="icon-check-sign"></i></a>' + html_sub_output + '</li>';
+                html_output += '<li><a href="' + this.href + '" class="has-dropdown">' + this.displayTitle + '<i class="icon-caret-left"></i></a>' + html_output_sub + '</li>';
             });
-            jQuery('#wrapper-toc').append('<ul>' + html_output + '</ul>');
+            jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
         });
 
         /*
@@ -858,9 +853,6 @@
         */
         /* ]]> */
         </script>
-        <div id="wrapper-toc">
-            
-        </div>
         {{/html}}
     #end
 #end
