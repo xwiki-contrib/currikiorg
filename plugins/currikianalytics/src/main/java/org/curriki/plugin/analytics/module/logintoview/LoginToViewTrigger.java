@@ -51,11 +51,12 @@ public class LoginToViewTrigger extends Trigger {
         int matches = match(currikiAnalyticsSession.getUrlStore(), referer);
         boolean currentUrlMatches = matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), referer, matches);
         boolean currentUrlIsException = urlIsException(currikiAnalyticsSession.getUrlStore().getLast());
-        boolean loginToViewCookieIsPresent = currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME) == null;
+        boolean loginToViewCookieIsPresent = currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME) != null;
         boolean currentUserIsGuest = currikiAnalyticsSession.getUser() != null && ("XWiki.XWikiGuest".equals(currikiAnalyticsSession.getUser()));
 
         // If the current user is logged in. Don't show notifications and remove the login to view cookie
         if(!currentUserIsGuest){
+            LOG.warn("User is already logged in");
             Map notificationValues = new HashMap<String, Boolean>();
             notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, true);
             removeNotifications(notificationValues);
@@ -64,16 +65,19 @@ public class LoginToViewTrigger extends Trigger {
         // If the user has an analytics cookie set, we need to add the notification
         // for the exceeded threshold. But if it is an exception we go further with matching
         else if(loginToViewCookieIsPresent && !currentUrlIsException && currentUrlMatches){
+            LOG.warn("LTV Cookie found and current url matches");
             addNotifications(this.threshold);
         }
 
         // If the current url matches add notifications
         else if(currentUrlMatches){
+            LOG.warn("No LTV Cookie but the current url matches");
             addNotifications(matches);
         }
 
         // If no match was found an no other condition was given, don't show notifications
         else {
+            LOG.warn("Wether a LTV Cookie or a match for the current url, do nothing.");
             Map notificationValues = new HashMap<String, Boolean>();
             notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, false);
             removeNotifications(notificationValues);
@@ -184,10 +188,9 @@ public class LoginToViewTrigger extends Trigger {
             if (exception.matcher(url).matches()) {
                 LOG.warn("Match for exception\"" + exception.toString() + "\"");
                 return true;
-            } else {
-                LOG.warn("No match for exception\"" + exception.toString() + "\"");
             }
         }
+        LOG.warn("No match for exception");
         return false;
     }
 
