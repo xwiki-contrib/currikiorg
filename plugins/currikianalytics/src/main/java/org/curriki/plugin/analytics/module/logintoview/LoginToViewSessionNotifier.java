@@ -68,18 +68,18 @@ public class LoginToViewSessionNotifier implements Notifier {
     public void setNotification(Object notificationValues) {
         Integer numberOfMatches = (Integer)((Map)notificationValues).get(NUMBER_OF_MATCHES_NOTIFICATION_VALUE);
         Integer numberOfRemainingViews = (Integer)((Map)notificationValues).get(NUMBER_OF_REMAINING_VIEWS_NOTIFICATIONS_VALUE);
-
-        LOG.warn("LoginToViewSessionNotifier: viewed=" + String.valueOf(numberOfMatches) + " remaining=" + String.valueOf(numberOfRemainingViews));
         CurrikiAnalyticsSession currentAnalyticsSession = loginToViewAnalyticsModule.getCurrentAnalyticsSession();
-        currentAnalyticsSession.setHttpSessionAttribute(LOGIN_TO_VIEW_SESSION_FLAG, getNotificationMessage(notificationValues));
-        currentAnalyticsSession.setHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY, currentAnalyticsSession.getURIWithQueryStringOfLastRequest());
 
-        if(currentAnalyticsSession.getCookie(LOGIN_TO_VIEW_COOKIE_NAME) == null && numberOfRemainingViews == 0){
-            Cookie cookie = new Cookie(LOGIN_TO_VIEW_COOKIE_NAME, String.valueOf(numberOfMatches));
-            cookie.setMaxAge(60*60*24*30);
-            cookie.setPath("/");
-            currentAnalyticsSession.setCookie(cookie);
+        if(numberOfMatches > 1) {
+            LOG.warn("LoginToViewSessionNotifier: viewed=" + String.valueOf(numberOfMatches) + " remaining=" + String.valueOf(numberOfRemainingViews));
+            currentAnalyticsSession.setHttpSessionAttribute(LOGIN_TO_VIEW_SESSION_FLAG, getNotificationMessage(notificationValues));
+            currentAnalyticsSession.setHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY, currentAnalyticsSession.getURIWithQueryStringOfLastRequest());
         }
+
+        Cookie cookie = new Cookie(LOGIN_TO_VIEW_COOKIE_NAME, String.valueOf(numberOfMatches));
+        cookie.setMaxAge(60*60*24*30);
+        cookie.setPath("/");
+        currentAnalyticsSession.setCookie(cookie);
     }
 
     /**
