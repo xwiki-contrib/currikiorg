@@ -12,18 +12,18 @@ public class UrlStore extends LinkedList<String> {
     @Override
     public void addLast(String s) {
         if(this.size()+1>MAX_SIZE)this.removeFirst();
-        super.addLast(s);    //To change body of overridden methods use File | Settings | File Templates.
+        super.addLast(s);
     }
 
     @Override
     public void addFirst(String s) {
         if(this.size()+1>MAX_SIZE)this.removeLast();
-        super.addFirst(s);    //To change body of overridden methods use File | Settings | File Templates.
+        super.addFirst(s);
     }
 
     @Override
     public boolean add(String s) {
         if(this.size()+1>MAX_SIZE)this.removeFirst();
-        return super.add(s);    //To change body of overridden methods use File | Settings | File Templates.
+        return super.add(s);
     }
 }
