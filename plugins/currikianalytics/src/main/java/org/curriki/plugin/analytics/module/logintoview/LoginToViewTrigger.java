@@ -7,6 +7,7 @@ import org.curriki.plugin.analytics.module.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.Cookie;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -48,10 +49,9 @@ public class LoginToViewTrigger extends Trigger {
     @Override
     public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
         LOG.warn("Triggered");
-        int matches = match(currikiAnalyticsSession.getUrlStore(), referer);
+        int matches = getMatchCountFromLoginToViewCookie(currikiAnalyticsSession);
         boolean currentUrlMatches = matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), referer, matches);
         boolean currentUrlIsException = urlIsException(currikiAnalyticsSession.getUrlStore().getLast());
-        boolean loginToViewCookieIsPresent = currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME) != null;
         boolean currentUserIsGuest = currikiAnalyticsSession.getUser() != null && ("XWiki.XWikiGuest".equals(currikiAnalyticsSession.getUser()));
 
         // If the current user is logged in. Don't show notifications and remove the login to view cookie
@@ -62,22 +62,16 @@ public class LoginToViewTrigger extends Trigger {
             removeNotifications(notificationValues);
         }
 
-        // If the user has an analytics cookie set, we need to add the notification
-        // for the exceeded threshold. But if it is an exception we go further with matching
-        else if(loginToViewCookieIsPresent && !currentUrlIsException && currentUrlMatches){
-            LOG.warn("LTV Cookie found and current url matches");
-            addNotifications(this.threshold);
-        }
-
         // If the current url matches add notifications
-        else if(currentUrlMatches){
-            LOG.warn("No LTV Cookie but the current url matches");
+        else if (currentUrlMatches && !currentUrlIsException) {
+            LOG.warn("The current url matches, increase counter");
+            matches = matches + 1;
             addNotifications(matches);
         }
 
         // If no match was found an no other condition was given, don't show notifications
         else {
-            LOG.warn("Wether a LTV Cookie or a match for the current url, do nothing.");
+            LOG.warn("No match for current url, remove notifications");
             Map notificationValues = new HashMap<String, Boolean>();
             notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, false);
             removeNotifications(notificationValues);
@@ -137,16 +131,6 @@ public class LoginToViewTrigger extends Trigger {
         LinkedList<String> history = new LinkedList<String>(urlStore);
         history.removeLast();
 
-        if(urlIsException(currentUrl)){
-            return false;
-        }
-
-        // Don't match the current url if it is the first resource you visit.
-        if(historicMatches == 1){
-            LOG.warn("First view on a resource, don't show a login dialog.");
-            return false;
-        }
-
         // If we come from the login page and the limit is not exceeded, we don't match the current url
         if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches < this.threshold){
             LOG.warn("Coming from the login page, don't show the login page again");
@@ -192,6 +176,25 @@ public class LoginToViewTrigger extends Trigger {
         }
         LOG.warn("No match for exception");
         return false;
+    }
+
+
+    public int getMatchCountFromLoginToViewCookie(CurrikiAnalyticsSession currikiAnalyticsSession) {
+        int result = 0;
+        if(currikiAnalyticsSession != null){
+            Cookie cookie = currikiAnalyticsSession.getCookie(LoginToViewSessionNotifier.LOGIN_TO_VIEW_COOKIE_NAME);
+            boolean loginToViewCookieIsPresent = (cookie != null);
+
+            if(loginToViewCookieIsPresent){
+                String cookieValue = cookie.getValue();
+                try {
+                    result = Integer.valueOf(cookieValue);
+                }catch (Exception e){
+                    result = 0;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
