@@ -2,24 +2,19 @@
 /*global Ext */
 /*global Curriki */
 /*global _ */
-Ext.ns('Curriki.module.search');
-var Search = Curriki.module.search;
 
 (function(){
-
-    var modNames = ['outerResource', 'resource'];
-    for(var i=0; i<2; i++) {
-    var modName = modNames[i];
+var modName = 'resource';
 
 Ext.ns('Curriki.module.search.form.'+modName);
 
+var Search = Curriki.module.search;
 
+var form = Search.form[modName];
+var data = Search.data[modName];
 
-
-Search.form[modName].init = function(modName){
-    var form = Search.form[modName];
-    var data = Search.data[modName];
-    console.log('form.'+modName+': init');
+form.init = function(){
+	console.log('form.'+modName+': init');
 
 	var comboWidth = 140;
 	var comboListWidth = 250;
@@ -402,7 +397,7 @@ Search.form[modName].init = function(modName){
 				}]
 			}
 		]
-	};
+	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
 
@@ -431,7 +426,7 @@ Search.form[modName].init = function(modName){
 					}
 				},
 				getQtip: function(values){
-					var f = Curriki.module.search.data[modName].filter;
+					var f = Curriki.module.search.data.resource.filter;
 
 					var desc = Ext.util.Format.stripTags(values.description||'');
 					desc = Ext.util.Format.ellipsis(desc, 256);
@@ -620,19 +615,14 @@ Search.form[modName].init = function(modName){
 
 	// Adjust title with count
 	Search.util.registerTabTitleListener(modName);
-    console.log("Finished initting form for " + modName + ".");
-    console.log("Now get: Curriki.module.search.form['otherResource']: " + Curriki.module.search.form['otherResource'])
 };
-}
-    Ext.onReady(function(){
-        for(var i=0; i<2; i++) {
-            var modName = modNames[i];
-            Search.form[modName].init(modName);
-        }
-    });
+
+Ext.onReady(function(){
+	form.init();
+});
+
+// TODO:  Register this tab somehow with the main form
 
 })();
-
-
 
 

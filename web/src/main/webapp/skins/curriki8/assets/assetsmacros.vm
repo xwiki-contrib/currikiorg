@@ -40,9 +40,9 @@
 <!--<img src="images/collectionmedium.gif">-->
     #set($mediaType="")
 	#set($assetTitle = $asset.getDisplayTitle(125))
-		<h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
-			#asset_info_rollover($asset 0)
-	</div>
+    <h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+    #asset_info_rollover($asset 0)
+    </div>
 #end
 
 
@@ -69,18 +69,18 @@
 	#curriki_avatar_width_height($assetAuthorDoc 200 80)
 #end
 	</li>
-#if($assetIsFromGroup)
-	#if($assetGroup.getDisplayTitle())
-		#set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
-	#else
-		#set($assetGroupDisplayName = "")
-	#end
-	#if($viewer == "embed-teachhub")
-		<li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
-	#else
-		<li id="asset-group">$msg.get("rve.title.attribution.group") <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
-	#end
-#end
+    #if($assetIsFromGroup)
+        #if($assetGroup.getDisplayTitle())
+            #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
+        #else
+            #set($assetGroupDisplayName = "")
+        #end
+        #if($viewer == "embed-teachhub")
+            <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+        #else
+            <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+        #end
+    #end
     <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
 </ul>
 #end
@@ -320,8 +320,8 @@ function checkEditOrCopy() {
 	#if($isEmbed)
 		#asset_icontitle($asset)
 		#asset_attribution($asset)
-        <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
-	#end
+        <a id="powered-by-curriki" href="http://${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
+    #end
 	#if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
 		#asset_links($asset)
 	#end

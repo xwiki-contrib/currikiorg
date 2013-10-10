@@ -1229,21 +1229,21 @@ $memberdoc.getRenderedContent("$!content","xwiki/1.0")</div>
     #if($doc.fullName=="Search.WebHome") ##{
         $msg.get("main.curriki") - $msg.get("caption.search")
     #elseif($doc.fullName.startsWith("Coll_"))
-    ${msg.get('app.siteName')} - $doc.displayTitle
+    Curriki - $doc.displayTitle
     #elseif($doc.space == "MyCurriki")
         #set($user = $context.user)#if($request.user)#set($user=$request.user)#end##
         #set($userDoc=$xwiki.getDocument($user))##
         #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))##
-    ${msg.get('app.siteName')}  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
-    #elseif($hasSpace && $doc.name=="WebHome"       )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_home_tabname")##
-    #elseif($hasSpace && $doc.name=="Messages"      )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_messages_tabname")##
-    #elseif($hasSpace && $doc.name=="Curriculum"    )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_curriculum_tabname")
-    #elseif($hasSpace && $doc.name=="Members"       )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_members_tabname")
-    #elseif($hasSpace && $doc.name=="Documentation" )${msg.get('app.siteName')} - $space.getDisplayTitle() - $msg.get("groups_documentation_tabname")
+    Curriki  - $msg.get("mycurriki.tab.${doc.name.toLowerCase()}.label") - $userObj.first_name $userObj.last_name
+    #elseif($hasSpace && $doc.name=="WebHome"       )Curriki - $space.getDisplayTitle() - $msg.get("groups_home_tabname")##
+    #elseif($hasSpace && $doc.name=="Messages"      )Curriki - $space.getDisplayTitle() - $msg.get("groups_messages_tabname")##
+    #elseif($hasSpace && $doc.name=="Curriculum"    )Curriki - $space.getDisplayTitle() - $msg.get("groups_curriculum_tabname")
+    #elseif($hasSpace && $doc.name=="Members"       )Curriki - $space.getDisplayTitle() - $msg.get("groups_members_tabname")
+    #elseif($hasSpace && $doc.name=="Documentation" )Curriki - $space.getDisplayTitle() - $msg.get("groups_documentation_tabname")
     #else ##}{
         #if($title)$!escapetool.xml($!title.replaceAll('<[^>]+>','').replaceAll('\n',' '))
-        #elseif($doc.displayTitle)${msg.get('app.siteName')} - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
-        #else ${msg.get('app.siteName')} $doc.name
+        #elseif($doc.displayTitle)Curriki - $!escapetool.xml($!doc.displayTitle.replaceAll('<[^>]+>','').replaceAll('\n',' '))
+        #else Curriki $doc.name
         #end
     #end ##}
 #end ##}
@@ -1559,28 +1559,10 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #set($reqHeight=$!height+$!height)
 #set($reqWidth=$!width+$!width)
 #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
-#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
-#set($current_avatar = $userobj.get('avatar'))
-
-#if($current_avatar && "${current_avatar}" != "") ## {
-   #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-
-     #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
-    <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
-      #if("$!width"=="" && "$!height"=="")##
-         <img src="$src" class="photo"/>##
-      #elseif("$!width"=="")##
-         <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
-      #elseif("$!height"=="")##
-         <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
-      #else##
-         <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" class="photo"/>
-      #end##
-    </a>
-#else ## } {
-  #set($src=$xwiki.getSkinFile("noavatar.png"))##
-  <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
- #if("$!width"=="" && "$!height"=="")##
+#if($userdoc.attachmentList.size()==0)  ## {
+    #set($src=$xwiki.getSkinFile("noavatar.png"))##
+     <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+#if("$!width"=="" && "$!height"=="")##
      <img src="$src" class="photo"/>
  #elseif("$!width"=="")##
      <img src="$src?height=$reqHeight" height="$height" class="photo"/>
@@ -1590,6 +1572,21 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
      <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" class="photo"/>
  #end##
  </a>
+#else ## } {
+ #foreach ($attach in $userdoc.attachmentList) ## {
+     #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
+     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
+     #if("$!width"=="" && "$!height"=="")##
+         <img src="$src" class="photo"/>##
+      #elseif("$!width"=="")##
+         <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
+      #elseif("$!height"=="")##
+          <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
+      #else##
+          <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" class="photo"/>
+      #end##
+  </a>
+ #end ## }
 #end ## }
 #end ## macro ## }
 
@@ -1755,258 +1752,4 @@ $response.setHeader("Pragma","-")##
 #set($expires = $expires+$mathtool.mul(1000,$numSeconds))##
 #set($expires =$util.getDate($expires))##
 $response.setDateHeader("Expires",$expires.getTime())##
-#end
-
-#**
-  * When verbatim in xwiki syntax 2.0 gets fixed, replace {{html wiki=false}}**verbatim{{/html}} with {{{**verbatim**}}}
-  *
-  * @param $text the text on which there should be no wiki transformations
-  *#
-#macro(verbatim $text)#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end
-#**
-  * Starts a verbatim block
-  *#
-#macro(verbatim_start)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{html wiki=false clean=false}}
-  #else
-{pre}
-  #end
-#end
-#**
-  * Ends a verbatim block
-  *#
-#macro(verbatim_end)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{/html}}
-  #else
-{/pre}
-  #end
-#end
-
-#macro(markup_editAssetProperty $editedDocument $propertyId $syntax)
-<script type="text/javascript" src="$xwiki.getSkinFile("wikibits.js")"></script>
-<script type="text/javascript">
-## Syntax elements is a list of: [identifier, start markup, end markup, image name].
-## The identifier is used to display the button title, and the sample text.
-## The image is retrieved from /resources/icons/silk/imageName.gif
-#set($syntax10Elements = [])
-#set($discard = $syntax10Elements.add(['bold', '*', '*', 'text_bold']))
-#set($discard = $syntax10Elements.add(['italics', '~~', '~~', 'text_italic']))
-#set($discard = $syntax10Elements.add(['underline', '__', '__', 'text_underline']))
-#set($discard = $syntax10Elements.add(['strikethrough', '--', '--', 'text_strikethrough']))
-#set($discard = $syntax10Elements.add(['ulist', '\n* ', '\n', 'text_list_bullets']))
-#set($discard = $syntax10Elements.add(['olist', '\n# ', '\n', 'text_list_numbers']))
-#set($discard = $syntax10Elements.add(['ilink', '[', ']', 'link']))
-#set($discard = $syntax10Elements.add(['elink', '[', ']', 'link_go']))
-#set($discard = $syntax10Elements.add(['h1', '\n1 ', '\n', 'text_heading_1']))
-#set($discard = $syntax10Elements.add(['h2', '\n1.1 ', '\n', 'text_heading_2']))
-#set($discard = $syntax10Elements.add(['h3', '\n1.1.1 ', '\n', 'text_heading_3']))
-#set($discard = $syntax10Elements.add(['h4', '\n1.1.1.1 ', '\n', 'text_heading_4']))
-#set($discard = $syntax10Elements.add(['hr', '\n----\n', '', 'text_horizontalrule']))
-#set($discard = $syntax10Elements.add(['img', '{image:', '}', 'image']))
-#set($tmp = '#sign("' + $xcontext.user + '")')
-#set($discard = $syntax10Elements.add(['sign', $tmp, '', 'text_signature']))
-#set($syntax20Elements = [])
-#set($discard = $syntax20Elements.add(['bold', '**', '**', 'text_bold']))
-#set($discard = $syntax20Elements.add(['italics', '//', '//', 'text_italic']))
-#set($discard = $syntax20Elements.add(['underline', '__', '__', 'text_underline']))
-#set($discard = $syntax20Elements.add(['strikethrough', '--', '--', 'text_strikethrough']))
-#set($discard = $syntax20Elements.add(['subscript', ',,', ',,', 'text_subscript']))
-#set($discard = $syntax20Elements.add(['superscript', '^^', '^^', 'text_superscript']))
-#set($discard = $syntax20Elements.add(['ulist', '\n* ', '\n', 'text_list_bullets']))
-#set($discard = $syntax20Elements.add(['olist', '\n1. ', '\n', 'text_list_numbers']))
-#set($discard = $syntax20Elements.add(['ilink', '[[', ']]', 'link']))
-#set($discard = $syntax20Elements.add(['elink20', '[[', ']]', 'link_go']))
-#set($discard = $syntax20Elements.add(['h1', '\n= ', '=\n', 'text_heading_1']))
-#set($discard = $syntax20Elements.add(['h2', '\n== ', '==\n', 'text_heading_2']))
-#set($discard = $syntax20Elements.add(['h3', '\n=== ', '===\n', 'text_heading_3']))
-#set($discard = $syntax20Elements.add(['h4', '\n==== ', '====\n', 'text_heading_4']))
-#set($discard = $syntax20Elements.add(['hr', '\n----\n', '', 'text_horizontalrule']))
-#set($discard = $syntax20Elements.add(['img', '[[image:', ']]', 'image']))
-#set($discard = $syntax20Elements.add(['html', '\n{{html}}\n', '\n{{/html}}\n', 'html']))
-#set($discard = $syntax20Elements.add(['velocity', '\n{{velocity}}\n', '\n{{/velocity}}\n', 'cog']))
-#set($syntaxHtmlElements = [])
-#set($discard = $syntaxHtmlElements.add(['bold', '<strong>', '</strong>', 'text_bold']))
-#set($discard = $syntaxHtmlElements.add(['italics', '<em>', '</em>', 'text_italic']))
-#set($discard = $syntaxHtmlElements.add(['underline', '<ins>', '</ins>', 'text_underline']))
-#set($discard = $syntaxHtmlElements.add(['strikethrough', '<del>', '</del>', 'text_strikethrough']))
-#set($discard = $syntaxHtmlElements.add(['subscript', '<sub>', '</sub>', 'text_subscript']))
-#set($discard = $syntaxHtmlElements.add(['superscript', '<sup>', '</sup>', 'text_superscript']))
-#set($discard = $syntaxHtmlElements.add(['ulist', '\n<ul>', '</ul>\n', 'text_list_bullets']))
-#set($discard = $syntaxHtmlElements.add(['olist', '\n<ol>', '</ol>\n', 'text_list_numbers']))
-#set($discard = $syntaxHtmlElements.add(['ilink', '<a href="/xwiki/bin/view/Space/Page">', '</a>', 'link']))
-#set($discard = $syntaxHtmlElements.add(['elink20', '<a hreg="http://www.example.com">', '</a>', 'link_go']))
-#set($discard = $syntaxHtmlElements.add(['h1', '\n<h1>', '</h1>\n', 'text_heading_1']))
-#set($discard = $syntaxHtmlElements.add(['h2', '\n<h2>', '</h2>\n', 'text_heading_2']))
-#set($discard = $syntaxHtmlElements.add(['h3', '\n<h3>', '</h3>\n', 'text_heading_3']))
-#set($discard = $syntaxHtmlElements.add(['h4', '\n<h4>', '</h4>\n', 'text_heading_4']))
-#set($discard = $syntaxHtmlElements.add(['hr', '\n<hr/>\n', '', 'text_horizontalrule']))
-#set($discard = $syntaxHtmlElements.add(['img', '<img src="/xwiki/bin/download/Space/Page/image">', '</img>', 'image']))
-#if($syntax == 'xwiki/1.0')
-  #set($syntaxElements = $syntax10Elements)
-#elseif($syntax == "xwiki/2.0" || $syntax == "xwiki/2.1")
-  #set($syntaxElements = $syntax20Elements)
-#elseif($syntax == "xhtml/1.0" || $syntax == "html/4.01")
-  #set($syntaxElements = $syntaxHtmlElements)
-#end
-// <![CDATA[
-document.writeln("<div class='leftmenu2'>");
-#foreach($item in $syntaxElements)
-  #set($imageFile = $xwiki.getSkinFile("icons/silk/${item.get(3)}.gif"))
-  #set($speedTip = $msg.get("core.edit.wikiToolbar.${item.get(0)}").replaceAll("'", "\\'"))
-  #set($tagOpen = ${item.get(1)})
-  #set($tagClose = ${item.get(2)})
-  #set($sampleText = $msg.get("core.edit.wikiToolbar.${item.get(0)}text").replaceAll("'", "\\'"))
-  addButton('$imageFile', '$speedTip', '$tagOpen', '$tagClose', '$sampleText');
-#end
-document.writeln("<" + "/div>");
-// ]]>
-</script>
-#end
-
-#macro(wysiwyg_jsx_editProperties $editedDocument $propertyIds $full)
-#set($parameters = $util.hashMap)
-#wysiwyg_storeConfig($parameters $editedDocument '' $full)
-#wysiwyg_jsx_editPropertiesCustom($editedDocument $propertyIds $parameters)
-#end
-
-#macro(wysiwyg_jsx_editPropertiesCustom $editedDocument $propertyIds $parameters)
-#set($instanceParameters = $util.hashMap)
-#set($ok = $instanceParameters.putAll($parameters))
-#set($propertyIds = "$!propertyIds")
-#foreach($propertyId in $propertyIds.split(","))
-#set($ok = $instanceParameters.put('hookId', $propertyId))
-#wysiwyg_jsx_editPropertyCustom($editedDocument $instanceParameters)
-#end
-#end
-
-#macro(wysiwyg_jsx_editProperty $editedDocument $propertyId $full)
-#set($parameters = $util.hashMap)
-#wysiwyg_storeConfig($parameters $editedDocument $propertyId $full)
-#wysiwyg_jsx_editPropertyCustom($editedDocument $parameters)
-#end
-
-#macro(wysiwyg_jsx_hide $fieldId)
-(function() {
-  var field = document.getElementById('$!{fieldId}');
-  if (field) {
-    // Hide the element that will be wrapped by the WYSIWYG editor.
-    field.style.visibility = 'hidden';
-    // Show the loading animation.
-    var loading = document.createElement('span');
-    loading.className = 'loading';
-    loading.style.display = 'block';
-    loading.style.position = 'absolute';
-    loading.style.width = field.offsetWidth + 'px';
-    loading.style.height = field.offsetHeight + 'px';
-    field.parentNode.insertBefore(loading, field);
-    // Remove the loading animation after the WYSIWYG module has been loaded.
-    Wysiwyg.onModuleLoad(function() {
-      loading.parentNode.removeChild(loading);
-    });
-  }
-}).call();
-#end
-
-#macro(wysiwyg_jsx_createCache $parameters)
-#set($ok = $parameters.put('cacheId', "wysiwygCache$!{util.generateRandomString(4)}"))
-$("$parameters.hookId").insert({after: new Element('input', {'type': 'hidden', 'id': "$!{parameters.cacheId}"})});
-#end
-
-#macro(wysiwyg_jsx_writeConfig $jsVarName $parameters)
-var $jsVarName = {
-#set($separator = '')
-#foreach($entry in $parameters.entrySet())
-  #if($entry.value || "$!entry.value" != '')
-    ${separator}$entry.key: '$!{escapetool.javascript($entry.value)}'
-    #set($separator = ',')
-  #end
-#end
-};
-#end
-
-#macro(wysiwyg_jsx_createEditor $parameters)
-#set($jsVarName = "wysiwygConfig${util.generateRandomString(4)}")
-#wysiwyg_jsx_writeConfig($jsVarName $parameters)
-Wysiwyg.onModuleLoad(function() {
-  new WysiwygEditor($jsVarName);
-  $jsVarName = undefined;
-});
-#end
-
-#macro(wysiwyg_jsx_editPropertyCustom $editedDocument $parameters)
-## Hide the plain text area.
-#wysiwyg_jsx_hide($parameters.hookId)
-## Display conversion errors, if present.
-#wysiwyg_displayConversionError($parameters)
-## Create the cache.
-#wysiwyg_jsx_createCache($parameters)
-## Create the editor UI.
-#wysiwyg_jsx_createEditor($parameters)
-#end
-## 
-#macro (textarea_wysiwyg $textareadoc)
-#set($editors = $xcontext.getEditorWysiwyg())
-#if($editors)
-#if($textareadoc.syntax.toIdString() == "xwiki/1.0")
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
-<script type="text/javascript">
-//<![CDATA[
-    wikiEditor.init({
-        elements : "$!{escapetool.javascript($editors)}",
-        language: "en",
-        mode: "exact",
-        content_css: "$xwiki.getSkinFile("style.css")",
-        debug : false,
-        remove_linebreaks : false,
-        plugins: 'table, contextmenu, paste, searchreplace',
-        wiki_use_style: '$xwiki.useWysiwygStyleToolbar()',
-        wiki_images_path : '${textareadoc.getURL('download')}/',
-        wiki_attach_path : '${textareadoc.URL}',
-        wiki_macro_path : '${textareadoc.URL}',
-        wiki_plugins: 'core, attachments, macros'
-    });
-//]]>
-</script>
-#elseif($services.wysiwyg.isSyntaxSupported($textareadoc.syntax.toIdString()))
-## Load the rich text object properties using a compact WYSIWYG editor.
-{{html clean=false}}
-#wysiwyg_editProperties($textareadoc $editors true)
-{{/html}}
-#else
-#warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$textareadoc.syntax.toIdString()</em>.")
-#end
-#end
-#end
-##
-#macro (textarea_jsx_wysiwyg $textareadoc)
-#set($editors = $xcontext.getEditorWysiwyg())
-#if($editors)
-#if($textareadoc.syntax.toIdString() == "xwiki/1.0")
-## TODO
-#elseif($services.wysiwyg.isSyntaxSupported($textareadoc.syntax.toIdString()))
-## Load the rich text object properties using a compact WYSIWYG editor.
-#wysiwyg_jsx_editProperties($textareadoc $editors true)
-#else
-#warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$textareadoc.syntax.toIdString()</em>.")
-#end
-#end
-#end
-
-#macro (activatefullscreen) 
-$xwiki.jsfx.use('uicomponents/widgets/fullScreen.js', {'forceSkinAction' : true, 'defer' : false})
-$xwiki.ssfx.use('uicomponents/widgets/fullScreen.css', true)
-#if(!$request.viewer)
-#verbatim_start()
-#end
-<script language="javascript" type="text/javascript">
-/* <![CDATA[ */
-document.observe("dom:loaded", function() { new XWiki.widgets.FullScreen(); });
-/* ]]> */
-</script>
-#if(!$request.viewer)
-#verbatim_end()
-#end
 #end

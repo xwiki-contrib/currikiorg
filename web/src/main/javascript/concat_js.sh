@@ -34,7 +34,6 @@ CURRIKI="\
 	curriki/assets/curriki-assets.js \
 	curriki/ui/curriki-ui.js \
 	curriki/ui/curriki-login.js \
-	curriki/ui/curriki-embedded-iframes-resizer.js \
 	curriki/ui/rating.js \
 	curriki/ui/curriki-video.js\
 	"

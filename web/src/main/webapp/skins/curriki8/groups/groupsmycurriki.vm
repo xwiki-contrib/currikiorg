@@ -78,16 +78,10 @@
   ##display logo
   <div class="frame-inset-logo">
     #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
-    #if($withpre)
-        #verbatim_start
-        <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}" target="${target}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}"/>
-        </a>
-        #verbatim_end
-    #else
-        #if($viewer == "embed-teachhub")
-          <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
+      #if($withpre)
+          {pre}###verbatim_start
+          <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}" target="${target}">
+              <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}"/>
           </a>
           {/pre}###verbatim_end
       #else
@@ -95,7 +89,6 @@
               <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
           </a>
       #end
-    #end
   </div>
 #end
 
@@ -121,17 +114,11 @@
 <div class="frame-inset-titlebar">
 #if($displayType == "edit")
   #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
 #elseif($displayType == "view")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" "" "" "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
 #else
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
 </div>
 #groups_grouplogo( $s )
@@ -167,17 +154,11 @@ $s.getDescription()
 <div class="frame-inset-titlebar">
 #if($displayType == "edit")
   #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
 #elseif($displayType == "view")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" "" "" "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" "" "" "blue")
 #else
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-  #verbatim_end
+  #curriki_titlebar("{pre}$xwiki.escapeText($s.getDisplayTitle()){/pre}" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
 #end
 </div>
 #groups_grouplogo( $s )

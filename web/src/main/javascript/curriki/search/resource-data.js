@@ -4,14 +4,14 @@
 /*global _ */
 
 (function(){
-var modNames = ['outerResource', 'resource'];
-for(var i=0; i<2; i++) {
-    var modName = modNames[i];
-    Ext.ns('Curriki.module.search.data.'+modName);
+var modName = 'resource';
 
-Curriki.module.search.data[modName].init = function(modName){
-    var data = Curriki.module.search.data[modName];
-    console.log('data.'+modName+': init');
+Ext.ns('Curriki.module.search.data.'+modName);
+
+var data = Curriki.module.search.data.resource;
+
+data.init = function(){
+	console.log('data.'+modName+': init');
 
 	// Set up filters
 	data.filter = {};
@@ -178,10 +178,7 @@ Curriki.module.search.data[modName].init = function(modName){
 	});
 
 	f.data.special = {
-		list:     // not logged-in? no "own contributions" filter
-        typeof(Curriki.userinfo.userName)=='undefined' ||  Curriki.userinfo.userName=="XWiki.XWikiGuest" || modName=='outerResource' ?
-            [ 'collections', 'updated', 'info-only' ]
-            : [ 'contributions', 'collections', 'updated', 'info-only' ]
+		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
@@ -284,7 +281,7 @@ Curriki.module.search.data[modName].init = function(modName){
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
 			url: document.location.pathname.endsWith("Old") ?
-                    '/xwiki/bin/view/Search/Resources' : (modName=='outerResource'? '/outerCurrikiExtjs' : '/currikiExtjs')
+                    '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
 		,baseParams: {	xpage: "plain"
@@ -308,7 +305,7 @@ Curriki.module.search.data[modName].init = function(modName){
 
 
 
-    // Set up renderers
+	// Set up renderers
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render title " + value);
@@ -356,13 +353,8 @@ Curriki.module.search.data[modName].init = function(modName){
 			if(Curriki.module.search.util.isInEmbeddedMode()){
 				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="' + Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?'+Curriki.module.search.embedViewMode), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 				// return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
-            } else if(modName=="outerResource") {
-                var outer = Curriki.module.search.outerResources;
-                return String.format('<img class="x-tree-node-icon assettype-icon" src="{0}" ext:qtip="{1}" /><a href="{2}{3}{4}" target="{5}" class="asset-title" ext:qtip="{1}">{6}</a>',
-                    Ext.BLANK_IMAGE_URL, desc, outer.prefix, page, outer.suffix, outer.target,  value);
-            }else {
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',
-                    page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}else {
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 			}
 		}
 
@@ -395,9 +387,6 @@ Curriki.module.search.data[modName].init = function(modName){
             if(typeof("value")!="string") value="";
             if(Curriki.module.search.util.isInEmbeddedMode()){
 				return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>', page, record.data.contributorName);
-            } else if(modName=="outerResource") {
-                var outer = Curriki.module.search.outerResources;
-                return String.format('<a href="{0}{1}{2}" target="{3}">{4}</a>', outer.prefix, page, outer.suffix, outer.target, record.data.contributorName);
 			} else{
 				return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
 			}
@@ -414,11 +403,7 @@ Curriki.module.search.data[modName].init = function(modName){
 				
 				if(Curriki.module.search.util.isInEmbeddedMode()){
 					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
-                } else if(modName=="outerResource") {
-                    var outer = Curriki.module.search.outerResources;
-                    return String.format('<a "{0}{1}{2}" target="{3}"><img class="crs-icon" alt="" src="{4}" /><span class="crs-text">{5}</span></a>',
-                        outer.ratingsPrefix, page, outer.ratingsSuffix, outer.target, Ext.BLANK_IMAGE_URL, _('search.resource.review.'+value));
-                } else {
+				}else{
 					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
 				}
 			} else {
@@ -436,11 +421,7 @@ Curriki.module.search.data[modName].init = function(modName){
 					metadata.css = String.format('rating-{0}', value);
 					if(Curriki.module.search.util.isInEmbeddedMode()){
 						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" target="_blank"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
-                    } else if(modName=="outerResource") {
-                        var outer = Curriki.module.search.outerResources;
-                        return String.format('<a href="{0}{1}{2}"><img class="rating-icon" src="{3}" ext:qtip="{4}" /></a><a href="{0}{1}{2}" ext:qtip="{4}"> ({5})</a>',
-                            outer.ratingsPrefix, page, outer.ratingsSuffix, Ext.BLANK_IMAGE_URL, _('search.resource.rating.'+value), ratingCount);
-                    }else{
+					}else{
 						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
 					}
 				} else {
@@ -463,12 +444,9 @@ Curriki.module.search.data[modName].init = function(modName){
             return value;
          }
 	};
-    console.log("Finished initting data for " + modName + ".");
 };
-}
-})();
 
 Ext.onReady(function(){
-    Curriki.module.search.data.outerResource.init("outerResource");
-    Curriki.module.search.data.resource.init("resource");
+	data.init();
 });
+})();

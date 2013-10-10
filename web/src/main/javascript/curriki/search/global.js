@@ -19,13 +19,4 @@
 	Search.sessionProvider = new Ext.state.CookieProvider({
 		expires: null // Valid until end of browser session
 	});
-
-
-    Curriki.module.search.outerResources = {
-        prefix: "http://www.curriki.org/xwiki/bin/view/",
-        suffix: "?comingFrom=" + location.host,
-        target: "currikiResources",
-        ratingsPrefix: "http://www.curriki.org/xwiki/bin/view/",
-        ratingsSuffix : "?viewer=comments"
-        };
 })();

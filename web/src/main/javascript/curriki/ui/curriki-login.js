@@ -2,7 +2,7 @@
 Ext.ns('Curriki.ui.login');
 
 Curriki.ui.login.displayLoginDialog = function(url) {
-    if(Curriki.ui.login.loginDialog && window.opener != null && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
+    if(Curriki.ui.login.loginDialog && window.opener.top.Curriki.ui.login.loginDialog.isVisible())
         Curriki.ui.login.loginDialog.hide();
     var w = 630, h=400;
     //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
@@ -430,7 +430,7 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="agree") passed = fieldValue!="0";
                 if(fieldName=="member_type") passed = fieldValue!="-";
                 if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
-                if(fieldName=="password") passed = fieldValue.length>=5 && !(fieldValue.indexOf(" ")>-1);
+                if(fieldName=="password") passed = fieldValue.length>5 && !(fieldValue.indexOf(" ")>-1);
                 Curriki.console.log("passed? " + passed + ".");
                 // manual check here, just long enough
                 if(passed==false) {

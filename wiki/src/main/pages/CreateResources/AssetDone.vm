@@ -73,13 +73,11 @@
      #set( $ok = $newAsset.updateObjectFromRequest("CurrikiCode.AssetLicenseClass") )
      $newAsset.setCategory($category)
      #if($createLessonURL== $msg.get('form.html.scratch.url')) ##{
-         $newAsset.set("syntax", "xhtml/1.0")
-         #set ($content = "$!request.get('slp_text')")
+         $newAsset.set("syntax", "xhtml/1.0") ##}
      #else ##{
-         $newAsset.set("syntax", "xwiki/2.1")
-         #set ($content = "$!request.get('slp_text')")
+         $newAsset.set("syntax", "xwiki/1.0")
      #end##}
-     $newAsset.setContent("$!content")
+     $newAsset.setContent("$content")
      $newAsset.setTitle($title)
      #if( $createLessonURL== $msg.get('ace.lesson.plan.url') ) ##{
        #set( $formname = "ACELP" ) ##}

@@ -14,8 +14,7 @@ import com.xpn.xwiki.doc.XWikiAttachment
 import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
 import org.apache.commons.httpclient.HttpClient
-import org.apache.commons.httpclient.methods.GetMethod
-import com.xpn.xwiki.api.Attachment;
+import org.apache.commons.httpclient.methods.GetMethod;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -586,7 +585,6 @@ public class SocialLoginToolGroovy {
     public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
             if(url==null || url.length()==0) return;
-            // don't overwrite existing picture
             System.out.println("Defining profile picture form " + url);
             def avatar = userObj.get("avatar");
             if(avatar!=null && !"".equals(avatar)) {
@@ -602,11 +600,20 @@ public class SocialLoginToolGroovy {
                     name = name.substring(0, name.length()-1);
                 name = name.substring(name.lastIndexOf("/")+1);
             }
+            XWikiAttachment attachment = userDoc.document.getAttachment(name)
+            if (attachment == null) {
+                attachment = new XWikiAttachment();
+                userDoc.document.getAttachmentList().add(attachment);
+            }
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(u.toExternalForm());
             int result = client.executeMethod(method);
             if(result==200) {
-                userDoc.addAttachment(name, method.getResponseBodyAsStream());
+                attachment.setContent(method.getResponseBodyAsStream(), (int) method.getResponseContentLength());
+                attachment.setFilename(name)
+                attachment.setAuthor(context.user)
+                attachment.setDoc(userDoc.document)
+                userDoc.document.saveAllAttachments(context.context)
             }
             userObj.set("avatar",name)
         } catch (Exception ex) {

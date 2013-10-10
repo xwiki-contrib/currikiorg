@@ -19,15 +19,6 @@
 	Search.sessionProvider = new Ext.state.CookieProvider({
 		expires: null // Valid until end of browser session
 	});
-
-
-    Curriki.module.search.outerResources = {
-        prefix: "http://www.curriki.org/xwiki/bin/view/",
-        suffix: "?comingFrom=" + location.host,
-        target: "currikiResources",
-        ratingsPrefix: "http://www.curriki.org/xwiki/bin/view/",
-        ratingsSuffix : "?viewer=comments"
-        };
 })();
 // vim: ts=4:sw=4
 /*global Ext */
@@ -44,8 +35,7 @@ module.init = function(){
 	console.log('search util: init');
 
 	module.logFilterList = {
-        'outerResource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir'],
-        'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
+		'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
 		,'group':['subject', 'level', 'language', 'policy', 'other', 'sort', 'dir']
 		,'member':['subject', 'member_type', 'country', 'other', 'sort', 'dir']
 		,'blog':['other', 'sort', 'dir']
@@ -170,10 +160,7 @@ module.init = function(){
 				Ext.apply(filters, filterForm.getValues(false));
 			}
 		}
-        var modName2 = modName;
-        if(modName2=='outerResource') modName2='resource';
-        if(modName2=='curriki') modName2='discussions';
-		Ext.apply(filters, {module: modName2});
+		Ext.apply(filters, {module: modName});
 
 		// Module panel
 		filterPanel = Ext.getCmp('search-filterPanel-'+modName);
@@ -340,7 +327,7 @@ module.init = function(){
 					typeof Curriki.module.search.embeddingPartnerUrl === "undefined");
 	};
 
-    module.sendResizeMessageToEmbeddingWindow = function() {
+	module.sendResizeMessageToEmbeddingWindow = function() {
 		var height = document.body.scrollHeight + 25;
 		console.log("search: sending resource view height to embedding window (" + height + "px)");
 		var data = "resize:height:"+ height + "px;"
@@ -369,14 +356,14 @@ Ext.onReady(function(){
 /*global _ */
 
 (function(){
-var modNames = ['outerResource', 'resource'];
-for(var i=0; i<2; i++) {
-    var modName = modNames[i];
-    Ext.ns('Curriki.module.search.data.'+modName);
+var modName = 'resource';
 
-Curriki.module.search.data[modName].init = function(modName){
-    var data = Curriki.module.search.data[modName];
-    console.log('data.'+modName+': init');
+Ext.ns('Curriki.module.search.data.'+modName);
+
+var data = Curriki.module.search.data.resource;
+
+data.init = function(){
+	console.log('data.'+modName+': init');
 
 	// Set up filters
 	data.filter = {};
@@ -543,10 +530,7 @@ Curriki.module.search.data[modName].init = function(modName){
 	});
 
 	f.data.special = {
-		list:     // not logged-in? no "own contributions" filter
-        typeof(Curriki.userinfo.userName)=='undefined' ||  Curriki.userinfo.userName=="XWiki.XWikiGuest" || modName=='outerResource' ?
-            [ 'collections', 'updated', 'info-only' ]
-            : [ 'contributions', 'collections', 'updated', 'info-only' ]
+		list: [ 'contributions', 'collections', 'updated', 'info-only' ]
 		,data: [
 			['', _('search.resource.special.selector.UNSPECIFIED')]
 		]
@@ -649,7 +633,7 @@ Curriki.module.search.data[modName].init = function(modName){
 		storeId: 'search-store-'+modName
 		,proxy: new Ext.data.HttpProxy({
 			url: document.location.pathname.endsWith("Old") ?
-                    '/xwiki/bin/view/Search/Resources' : (modName=='outerResource'? '/outerCurrikiExtjs' : '/currikiExtjs')
+                    '/xwiki/bin/view/Search/Resources' : '/currikiExtjs'
 			,method:'GET'
 		})
 		,baseParams: {	xpage: "plain"
@@ -673,7 +657,7 @@ Curriki.module.search.data[modName].init = function(modName){
 
 
 
-    // Set up renderers
+	// Set up renderers
 	data.renderer = {
 		title: function(value, metadata, record, rowIndex, colIndex, store){
             console.log("render title " + value);
@@ -721,13 +705,8 @@ Curriki.module.search.data[modName].init = function(modName){
 			if(Curriki.module.search.util.isInEmbeddedMode()){
 				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a  target="_blank" href="' + Curriki.module.search.resourceDisplay + '?resourceurl=/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+'?'+Curriki.module.search.embedViewMode), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
 				// return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a onclick="Curriki.module.search.util.sendResourceUrlToEmbeddingWindow(\'/xwiki/bin/view/{0}\')" href="#" class="asset-title" ext:qtip="{2}">{1}</a>', escape(page+"?viewer=embed-teachhub"), Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);			
-            } else if(modName=="outerResource") {
-                var outer = Curriki.module.search.outerResources;
-                return String.format('<img class="x-tree-node-icon assettype-icon" src="{0}" ext:qtip="{1}" /><a href="{2}{3}{4}" target="{5}" class="asset-title" ext:qtip="{1}">{6}</a>',
-                    Ext.BLANK_IMAGE_URL, desc, outer.prefix, page, outer.suffix, outer.target,  value);
-            }else {
-				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>',
-                    page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
+			}else {
+				return String.format('<img class="x-tree-node-icon assettype-icon" src="{3}" ext:qtip="{4}" /><a href="/xwiki/bin/view/{0}" class="asset-title" ext:qtip="{2}">{1}</a>', page, Ext.util.Format.ellipsis(value, 80), desc, Ext.BLANK_IMAGE_URL, rollover);
 			}
 		}
 
@@ -760,9 +739,6 @@ Curriki.module.search.data[modName].init = function(modName){
             if(typeof("value")!="string") value="";
             if(Curriki.module.search.util.isInEmbeddedMode()){
 				return String.format('<a href="/xwiki/bin/view/{0}" target="_blank">{1}</a>', page, record.data.contributorName);
-            } else if(modName=="outerResource") {
-                var outer = Curriki.module.search.outerResources;
-                return String.format('<a href="{0}{1}{2}" target="{3}">{4}</a>', outer.prefix, page, outer.suffix, outer.target, record.data.contributorName);
 			} else{
 				return String.format('<a href="/xwiki/bin/view/{0}">{1}</a>', page, record.data.contributorName);
 			}
@@ -779,11 +755,7 @@ Curriki.module.search.data[modName].init = function(modName){
 				
 				if(Curriki.module.search.util.isInEmbeddedMode()){
 					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments" target="_blank"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
-                } else if(modName=="outerResource") {
-                    var outer = Curriki.module.search.outerResources;
-                    return String.format('<a "{0}{1}{2}" target="{3}"><img class="crs-icon" alt="" src="{4}" /><span class="crs-text">{5}</span></a>',
-                        outer.ratingsPrefix, page, outer.ratingsSuffix, outer.target, Ext.BLANK_IMAGE_URL, _('search.resource.review.'+value));
-                } else {
+				}else{
 					return String.format('<a href="/xwiki/bin/view/{3}?viewer=comments"><img class="crs-icon" alt="" src="{2}" /><span class="crs-text">{1}</span></a>', value, _('search.resource.review.'+value), Ext.BLANK_IMAGE_URL, page);
 				}
 			} else {
@@ -801,11 +773,7 @@ Curriki.module.search.data[modName].init = function(modName){
 					metadata.css = String.format('rating-{0}', value);
 					if(Curriki.module.search.util.isInEmbeddedMode()){
 						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments" target="_blank"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}" target="_blank"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
-                    } else if(modName=="outerResource") {
-                        var outer = Curriki.module.search.outerResources;
-                        return String.format('<a href="{0}{1}{2}"><img class="rating-icon" src="{3}" ext:qtip="{4}" /></a><a href="{0}{1}{2}" ext:qtip="{4}"> ({5})</a>',
-                            outer.ratingsPrefix, page, outer.ratingsSuffix, Ext.BLANK_IMAGE_URL, _('search.resource.rating.'+value), ratingCount);
-                    }else{
+					}else{
 						return String.format('<a href="/xwiki/bin/view/{2}?viewer=comments"><img class="rating-icon" src="{4}" ext:qtip="{3}" /></a><a href="/xwiki/bin/view/{2}?viewer=comments" ext:qtip="{3}"> ({1})</a>', value, ratingCount, page, _('search.resource.rating.'+value), Ext.BLANK_IMAGE_URL);
 					}
 				} else {
@@ -828,37 +796,29 @@ Curriki.module.search.data[modName].init = function(modName){
             return value;
          }
 	};
-    console.log("Finished initting data for " + modName + ".");
 };
-}
-})();
 
 Ext.onReady(function(){
-    Curriki.module.search.data.outerResource.init("outerResource");
-    Curriki.module.search.data.resource.init("resource");
+	data.init();
 });
+})();
 // vim: ts=4:sw=4
 /*global Ext */
 /*global Curriki */
 /*global _ */
-Ext.ns('Curriki.module.search');
-var Search = Curriki.module.search;
 
 (function(){
-
-    var modNames = ['outerResource', 'resource'];
-    for(var i=0; i<2; i++) {
-    var modName = modNames[i];
+var modName = 'resource';
 
 Ext.ns('Curriki.module.search.form.'+modName);
 
+var Search = Curriki.module.search;
 
+var form = Search.form[modName];
+var data = Search.data[modName];
 
-
-Search.form[modName].init = function(modName){
-    var form = Search.form[modName];
-    var data = Search.data[modName];
-    console.log('form.'+modName+': init');
+form.init = function(){
+	console.log('form.'+modName+': init');
 
 	var comboWidth = 140;
 	var comboListWidth = 250;
@@ -1241,7 +1201,7 @@ Search.form[modName].init = function(modName){
 				}]
 			}
 		]
-	};
+	}
 
 	form.rowExpander = new Ext.grid.RowExpander({
 
@@ -1270,7 +1230,7 @@ Search.form[modName].init = function(modName){
 					}
 				},
 				getQtip: function(values){
-					var f = Curriki.module.search.data[modName].filter;
+					var f = Curriki.module.search.data.resource.filter;
 
 					var desc = Ext.util.Format.stripTags(values.description||'');
 					desc = Ext.util.Format.ellipsis(desc, 256);
@@ -1459,20 +1419,15 @@ Search.form[modName].init = function(modName){
 
 	// Adjust title with count
 	Search.util.registerTabTitleListener(modName);
-    console.log("Finished initting form for " + modName + ".");
-    console.log("Now get: Curriki.module.search.form['otherResource']: " + Curriki.module.search.form['otherResource'])
 };
-}
-    Ext.onReady(function(){
-        for(var i=0; i<2; i++) {
-            var modName = modNames[i];
-            Search.form[modName].init(modName);
-        }
-    });
+
+Ext.onReady(function(){
+	form.init();
+});
+
+// TODO:  Register this tab somehow with the main form
 
 })();
-
-
 
 
 // vim: ts=4:sw=4
@@ -2743,7 +2698,6 @@ data.init = function(){
 //		,{ name: 'text' }
 		,{ name: 'updated' }
 		,{ name: 'url' }
-        ,{ name: 'score'}
 	]);
 
 	data.store.results = new Ext.data.Store({
@@ -2764,11 +2718,8 @@ data.init = function(){
 		// turn on remote sorting
 		,remoteSort: true
 	});
-    if(Curriki.userinfo.userGroups) data.store.results.baseParams.groupsId= Curriki.userinfo.userGroups;
-    if(Curriki.userinfo.userName) data.store.results.baseParams.userId = Curriki.userinfo.userName;
-    if(Curriki.userinfo.isAdmin) data.store.results.baseParams.isAdmin = true;
     if(Curriki.isISO8601DateParsing() ) data.store.results.baseParams.dateFormat="ISO8601";
-    data.store.results.setDefaultSort('score', 'desc');
+	data.store.results.setDefaultSort('name', 'asc');
 
 
 
@@ -2793,12 +2744,8 @@ data.init = function(){
             var dt = Ext.util.Format.date(value, 'M-d-Y');
             if(typeof(dt)!="string") return "";
 			return String.format('{0}', dt);
-		}, score: function(value, metadata, record, rowIndex, colIndex, store){
-            if(typeof(value)!="number") value=0;
-            return value;
-        }
-
-    };
+		}
+	};
 };
 
 Ext.onReady(function(){
@@ -2946,7 +2893,7 @@ Search.init = function(){
 	console.log('search: init');
 	if (Ext.isEmpty(Search.initialized)) {
 		if (Ext.isEmpty(Search.tabList)) {
-			Search.tabList = ['resource','outerResource', 'group', 'member', 'curriki']; //
+			Search.tabList = ['resource', 'group', 'member', 'curriki'];
 		}
 
 		var comboWidth = 140;
@@ -3115,9 +3062,7 @@ Curriki.numSearches = 0;
 				if (!Ext.isEmpty(module) && !Ext.isEmpty(module.mainPanel)) {
 					panel.items = [module.mainPanel];
 					Search.tabPanel.items.push(panel);
-				} else {
-                    console.log("Dropping " + tab + " (module Curriki.module.search.form[" + tab + "] is empty).")
-                }
+				}
 			}
 		);
 

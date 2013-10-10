@@ -24,7 +24,7 @@ function getActiveStyleSheet() {
 function getPreferredStyleSheet() {
   var i, a;
   for(i=0; (a = document.getElementsByTagName("link")[i]); i++) {
-    if(a.getAttribute("rel") && a.getAttribute("rel").indexOf("style") != -1
+    if(a.getAttribute("rel").indexOf("style") != -1
        && a.getAttribute("rel").indexOf("alt") == -1
        && a.getAttribute("title")
        ) return a.getAttribute("title");
