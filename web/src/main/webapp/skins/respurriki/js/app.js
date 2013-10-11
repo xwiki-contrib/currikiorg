@@ -1,26 +1,28 @@
 /* 
  * Lets automatically convert all images into responsive using jquery and bootstrap
  */
-var $j = jQuery.noConflict();
-$j(document).ready(function() {
-    $j("#mainContentArea img").each(function() {
-        $j(this).addClass("img-responsive");
+$.noConflict();
+jQuery(document).ready(function() {
+    jQuery("#mainContentArea img").each(function() {
+        jQuery(this).addClass("img-responsive");
     });
-    
-    $j("#breadcrumb-icon a").click(function(){
-        $j("#dropable-toc").slideToggle();
+
+    jQuery("#breadcrumb-icon a").click(function() {
+        jQuery("#dropable-toc").slideToggle();
         return false;
     });
-    
-    $j("body").on("click", "#dropable-toc ul li a.has-dropdown", function() {
+
+    jQuery("body").on("click", "#dropable-toc ul li a.has-dropdown", function() {
         //lets change the icon arrow
-        var item_status = $j(this).next('ul').css('display');
-        if (item_status === 'none') {
-            $j(this).find('i').removeClass().addClass('icon-caret-down');
-        } else {
-            $j(this).find('i').removeClass().addClass('icon-caret-left');
+        if (jQuery(this).hasClass('item-type-Text') === false){
+            var item_status = jQuery(this).next('ul').css('display');
+            if (item_status === 'none') {
+                jQuery(this).find('i').removeClass().addClass('icon-caret-down');
+            } else {
+                jQuery(this).find('i').removeClass().addClass('icon-caret-left');
+            }
+            jQuery(this).next('ul').slideToggle();
+            return false;
         }
-        $j(this).next('ul').slideToggle();
-        return false;
     });
 });

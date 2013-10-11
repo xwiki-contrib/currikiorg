@@ -838,9 +838,14 @@
             var json_data = JSON.stringify($lastAssetJSON);
             var json_objects = jQuery.parseJSON(json_data);
             var html_output = '';
-            var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';
             jQuery.each(json_objects.children, function(){
-                html_output += '<li><a href="' + this.href + '" class="has-dropdown">' + this.displayTitle + '<i class="icon-caret-left"></i></a>' + html_output_sub + '</li>';
+                var icon_type = 'class="icon-caret-left"';
+                var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';
+                if(this.assetType == 'Text'){
+                    html_output_sub = '';
+                    icon_type = '';
+                }
+                html_output += '<li><a href="' + this.href + '" class="has-dropdown item-type-' + this.assetType + '">' + this.displayTitle + '<i ' + icon_type + '></i></a>' + html_output_sub + '</li>';
             });
             jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
         });
@@ -855,40 +860,6 @@
         </script>
         {{/html}}
     #end
-#end
-
-#macro(ru_javascripttest )
-{{html clean="false"}}
-<script type="text/javascript">
-    /* <![CDATA[ */
-    alert('Im alive!');
-/* ]]> */
-</script>
-{{/html}}
-#end
-
-#macro(ru_showdialog )
-    {{html clean="false"}}
-    <div id="dialog-message" title="hey there!">
-        <p>
-        Hello im a dialog that you can close
-        </p>
-        <iframe src="http://www.boliviaweb.com/" width="100%"></iframe>
-    </div>
-
-    <script type="text/javascript">
-        /* <![CDATA[ */
-        jQuery.noConflict();
-        jQuery(document).ready(function() {
-            jQuery( "#dialog-message" ).dialog({
-                modal: true,
-                minWidth: 400,
-                minHeight: 300,
-              });
-        });
-    /* ]]> */
-    </script>
-    {{/html}}
 #end
 
 
