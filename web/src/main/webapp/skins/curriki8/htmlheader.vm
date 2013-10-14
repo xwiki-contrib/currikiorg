@@ -47,7 +47,7 @@
 #template("onloadunloadjs.vm")
 #set($clsPageName = 'p-'+$doc.getFullName().replaceAll('\.', '-'))
 </head>
-<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName'>
+<body $!onloadunload id="body" class='curriki#if($globalDebug) debug#end#if($hasGlobalAdmin) admin#end $clsPageName' #if($doc.space.startsWith("Coll_")) itemscope itemtype="http://schema.org/CreativeWork" #end>
 #if(!($viewer.startsWith("embed")))
 <div id="main">
 	<div id="shadow-right">
