@@ -76,10 +76,7 @@ public class LoginToViewSessionNotifier implements Notifier {
             currentAnalyticsSession.setHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY, currentAnalyticsSession.getURIWithQueryStringOfLastRequest());
         }
 
-        Cookie cookie = new Cookie(LOGIN_TO_VIEW_COOKIE_NAME, String.valueOf(numberOfMatches));
-        cookie.setMaxAge(60*60*24*30);
-        cookie.setPath("/");
-        currentAnalyticsSession.setCookie(cookie);
+        currentAnalyticsSession.setCookie(createLoginToViewCookie(numberOfMatches));
     }
 
     /**
@@ -92,8 +89,7 @@ public class LoginToViewSessionNotifier implements Notifier {
         loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY);
 
         if(delete_cookie){
-            LOG.warn("LoginToViewSessionNotifier: Delete LOGIN_TO_VIEW_COOKIE");
-            loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeCookie(LOGIN_TO_VIEW_COOKIE_NAME);
+            loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeCookie(createLoginToViewCookie(0));
         }
     }
 
@@ -119,5 +115,17 @@ public class LoginToViewSessionNotifier implements Notifier {
                 break;
         }
         return message;
+    }
+
+    /**
+     * Create a cookie for LTV with the given number of matches
+     * @param numberOfMatches the value for the cookie
+     * @return the cookie for LTV
+     */
+    private Cookie createLoginToViewCookie(int numberOfMatches){
+        Cookie cookie = new Cookie(LOGIN_TO_VIEW_COOKIE_NAME, String.valueOf(numberOfMatches));
+        cookie.setMaxAge(60*60*24*30);
+        cookie.setPath("/");
+        return cookie;
     }
 }
