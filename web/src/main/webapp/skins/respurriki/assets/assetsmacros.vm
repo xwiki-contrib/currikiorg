@@ -4,38 +4,137 @@
     #set($ok = $asset.use("CurrikiCode.AssetClass"))
     <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
         <meta itemprop="mediaType" value="#mediatype($asset)"/>
-        #asset_findmode()
-        #if(!$isEmbed)
-            #if($mode!="edit")
-                #asset_resourcefunctions($asset)
-            #end
-            #asset_icontitle($asset)
-            #asset_attribution($asset)
-            #if($mode!="edit")
-                #asset_rating($asset)
-            #end
-            #if(!$isPrint)
-                #asset_tabs($asset "view")
-            #end
-        #end
-        <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
-            #if($isEmbed)
-                #asset_icontitle($asset)
-                #asset_attribution($asset)
-                <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
-            #end
-            #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
-                #asset_links($asset)
-            #end
-            #if(!$asset.hasAccessLevel("view"))
-                #curriki_noaccess()
-            #else
-                $asset.displayAsset($modeParam)
-            #end
-            #if($isEmbed)
-                <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
-            #end
-        </div> ##asset-wrapper-inner
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                #asset_findmode()
+                #if(!$isEmbed)
+                    <div class="row">
+                        <div class="col-md-10">
+                            #ru_asset_icontitle($asset)
+                        </div>
+                        #if($mode!="edit")
+                            <div class="col-md-2">
+                                #ru_asset_resourcefunctions($asset)
+                            </div>
+                        #end
+                    </div>
+                #end
+            </div> ##end panel heading
+            <div class="panel-body" id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
+                #if(!$isEmbed)
+                    <div class="well well-sm">
+                        <div class="row">
+                            <div class="col-md-4">
+                            #ru_asset_attribution($asset)
+                            </div>
+                            #if($mode!="edit")
+                                <div class="col-md-4 col-md-offset-4">
+                                #asset_rating($asset)
+                                </div>
+                            #end
+                        </div>
+                    </div>
+                    #if(!$isPrint)
+                        #ru_asset_tabs($asset "view")
+                    #end
+                #end
+                #if($isEmbed)
+                    #ru_asset_icontitle($asset)
+                    #asset_attribution($asset)
+                    <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
+                #end
+                #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
+                    #asset_links($asset)
+                #end
+                #if(!$asset.hasAccessLevel("view"))
+                    #curriki_noaccess()
+                #else
+                    $asset.displayAsset($modeParam)
+                #end
+                #if($isEmbed)
+                    <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
+                #end
+            </div> ##asset-wrapper-inner
+        </div> ##end panel
     </div> ##asset-wrapper
     $xwiki.addTooltipJS()
 #end
+
+#macro(ru_asset_tabs $asset $viewer)
+<ul id="asset-tabs">
+    <li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
+    <li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
+    #if($!xwiki.curriki.getPublicCurrikiConfig("standardstab","0")=="1")
+        <li #if($viewer=="standards") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
+    #end
+    <li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
+</ul>
+#end
+
+#macro(ru_asset_icontitle $asset)
+    <div id="asset-header">
+        #set($mediaType="")
+        #set($assetTitle = $asset.getDisplayTitle(125))
+        <h3 class="panel-title"><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url">$assetTitle</a></h3>
+        #asset_info_rollover($asset 0)
+    </div>
+#end
+
+#macro(ru_asset_resourcefunctions $asset)
+    <ul id="function-tabs">
+	#if(!$isguest)
+            <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+	#end
+	#set($g_enable_ADDTHIS = true)
+	<li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")"><i class="icon-envelope"></i> $msg.get("rve.title.function.email")</a></li>
+	#if(!$isguest)
+            <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+	#end
+        <li id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")"><i class="icon-print"></i> $msg.get("rve.title.function.print")</a></li>
+    </ul>
+#end
+
+#macro(ru_asset_attribution $asset)
+    #set($assetAuthorDoc = $xwiki.getDocument($asset.creator))
+    #set($assetAuthorLink = "/xwiki/bin/view/MyCurriki/Profile?user=$asset.creator")
+    #set($assetAuthorDisplayName = $!xwiki.getUserName($asset.creator, false))
+    #if($asset.space.startsWith("Coll_Group_")) ## {
+	#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
+	#set($assetIsFromGroup = true)
+	#set($assetGroup = $xwiki.csm.getSpace($assetGroupName))
+	#set($assetGroupUrl = $assetGroup.getHomeURL())
+    #else
+	#set($assetIsFromGroup = false)
+    #end
+    <div class="row">
+	<div class="col-md-4">
+            ##dont see an image so for the purpose of to ilustrate this placeholder im adding a dummy image
+            <img src="http://lorempixel.com/120/80" />
+            #if($assetIsFromGroup)
+                #groups_grouplogo2($assetGroup false)
+            #else
+                #curriki_avatar_width_height($assetAuthorDoc 200 80)
+            #end
+	</div>
+        <div class="col-md-8">
+            <ul class="list-unstyled">
+                #if($assetIsFromGroup)
+                    #if($assetGroup.getDisplayTitle())
+                        #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
+                    #else
+                        #set($assetGroupDisplayName = "")
+                    #end
+                    #if($viewer == "embed-teachhub")
+                        <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                    #else
+                        <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                    #end
+                #end
+                <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+            </ul>
+        </div>
+    </div>
+#end
+
+
+
