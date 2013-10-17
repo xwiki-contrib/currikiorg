@@ -839,13 +839,13 @@
             var json_objects = jQuery.parseJSON(json_data);
             var html_output = '';
             jQuery.each(json_objects.children, function(){
-                var icon_type = 'class="icon-caret-left"';
+                var icon_type = '<a href="#" class="icon-caret-left icon-large"></a';
                 var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';
                 if(this.assetType == 'Text'){
                     html_output_sub = '';
                     icon_type = '';
                 }
-                html_output += '<li><a href="' + this.href + '" class="has-dropdown item-type-' + this.assetType + '">' + this.displayTitle + '<i ' + icon_type + '></i></a>' + html_output_sub + '</li>';
+                html_output += '<li><p class="main-item"><a href="' + this.href + '" class="item-link">' + this.displayTitle + '</a>' + icon_type + '</p>' + html_output_sub + '</li>';
             });
             jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
         });
@@ -968,36 +968,16 @@
     #set($modeParam="view")
     #set($asset=$xwiki.curriki.fetchAsset($doc.fullName))
     #set($ok = $asset.use("CurrikiCode.AssetClass"))
-    #asset_findmode()
+    #ru_asset_findmode()
     #if("$!mode"=="")#set($mode="view")#end
 ##
 <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
     <meta itemprop="mediaType" value="#mediatype($asset)"/>
     #if(!$isEmbed)
-#*        #if($mode!="edit")
-            #asset_resourcefunctions($asset)
-        #end *#
-        <!-- JORGE: please style me here -->
-        #asset_icontitle($asset)
-        <!-- JORGE: please style me here -->
-        #asset_attribution($asset)
-#*        #if($mode!="edit")
-            #asset_rating($asset)
-        #end *#
-#*        #if(!$isPrint)
-            #asset_tabs($asset "view")
-        #end *#
+        #ru_asset_icontitle($asset)
+        #ru_asset_attribution($asset)
     #end
     <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
-#*        #if($isEmbed)
-            #asset_icontitle($asset)
-        ##            #asset_attribution($asset)
-            <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
-        #end *#
-#*        #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
-            #asset_links($asset)
-        #end *#
-    <!-- category: $asset.category mode:$mode -->
         #if(!$asset.hasAccessLevel("view"))
             #curriki_noaccess()
         #else

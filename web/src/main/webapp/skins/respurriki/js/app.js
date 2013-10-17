@@ -12,17 +12,15 @@ jQuery(document).ready(function() {
         return false;
     });
 
-    jQuery("body").on("click", "#dropable-toc ul li a.has-dropdown", function() {
+    jQuery("body").on("click", "#dropable-toc ul li .main-item a.icon-large", function() {
         //lets change the icon arrow
-        if (jQuery(this).hasClass('item-type-Text') === false){
-            var item_status = jQuery(this).next('ul').css('display');
-            if (item_status === 'none') {
-                jQuery(this).find('i').removeClass().addClass('icon-caret-down');
-            } else {
-                jQuery(this).find('i').removeClass().addClass('icon-caret-left');
-            }
-            jQuery(this).next('ul').slideToggle();
-            return false;
+        var item_status = jQuery(this).parent().parent().find('ul').css('display');
+        if (item_status === 'none') {
+            jQuery(this).removeClass('icon-caret-left').addClass('icon-caret-down');
+        } else {
+            jQuery(this).removeClass('icon-caret-down').addClass('icon-caret-left');
         }
+        jQuery(this).parent().parent().find('ul').slideToggle();
+        return false;
     });
 });

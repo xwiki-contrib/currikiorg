@@ -1,0 +1,41 @@
+
+#macro(ru_asset_display $asset $mode)
+    #set($modeParam=$mode)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
+        <meta itemprop="mediaType" value="#mediatype($asset)"/>
+        #asset_findmode()
+        #if(!$isEmbed)
+            #if($mode!="edit")
+                #asset_resourcefunctions($asset)
+            #end
+            #asset_icontitle($asset)
+            #asset_attribution($asset)
+            #if($mode!="edit")
+                #asset_rating($asset)
+            #end
+            #if(!$isPrint)
+                #asset_tabs($asset "view")
+            #end
+        #end
+        <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
+            #if($isEmbed)
+                #asset_icontitle($asset)
+                #asset_attribution($asset)
+                <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
+            #end
+            #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
+                #asset_links($asset)
+            #end
+            #if(!$asset.hasAccessLevel("view"))
+                #curriki_noaccess()
+            #else
+                $asset.displayAsset($modeParam)
+            #end
+            #if($isEmbed)
+                <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
+            #end
+        </div> ##asset-wrapper-inner
+    </div> ##asset-wrapper
+    $xwiki.addTooltipJS()
+#end
