@@ -144,6 +144,7 @@ public class CurrikiAnalyticsSession {
      * @param cookie the cookie to set.
      */
     public void setCookie(Cookie cookie){
+        LOG.warn("Set Cookie: " + cookie.getName());
         this.response.addCookie(cookie);
     }
 
@@ -160,13 +161,13 @@ public class CurrikiAnalyticsSession {
     /**
      * Crawl all cookies of the current user and remove the one with the
      * given name.
-     * @param name the name of the cookie to remove
+     * @param name the cookie to remove
      * @return true if
      */
-    public boolean removeCookie(String name){
-        Cookie cookie = getCookie(name);
+    public boolean removeCookie(Cookie cookie){
         boolean removed = false;
         if(cookie != null){
+            LOG.warn("Removing Cookie: " + cookie.getName());
             cookie.setMaxAge(0);
             this.setCookie(cookie);
             removed = true;
