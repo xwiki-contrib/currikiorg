@@ -968,7 +968,7 @@
     #set($modeParam="view")
     #set($asset=$xwiki.curriki.fetchAsset($doc.fullName))
     #set($ok = $asset.use("CurrikiCode.AssetClass"))
-    #ru_asset_findmode()
+    #asset_findmode()
     #if("$!mode"=="")#set($mode="view")#end
 ##
 <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">

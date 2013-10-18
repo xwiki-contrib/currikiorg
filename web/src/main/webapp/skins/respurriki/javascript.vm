@@ -3,7 +3,7 @@
 ##
 <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.min.js"></script>
 <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-ui/js/jquery-ui.min.js")"></script>
+<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-ui/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/app.js"></script>
 ##
 ## determine language
@@ -30,9 +30,10 @@
 ##
 ## wiki editor
 ## ============
-#if($request.viewer=="assetedit" || $request.viewer && $request.viewer.startsWith("conversations"))
+#if($request.viewer=="assetedit" || $request.viewer && $request.viewer.startsWith("Conversations"))
 ## <script type="text/javascript" src="/xwiki/skins/curriki8/livetable.js"></script>
 <script src="/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
+<script type="text/javascript" src="/xwiki/skins/curriki8/1/xwiki.js"></script>
 <script type='text/javascript' src='/xwiki/bin/skin/resources/uicomponents/widgets/fullScreen.js?defer=false'></script>
 <script type='text/javascript' src='/xwiki/bin/skin/resources/js/smartclient/initsc.js?defer=false'></script>
 <script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Core.js'></script>
@@ -46,4 +47,32 @@
 <script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/xwikiexplorer/xwikiexplorer.js?defer=false'></script>
 <script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/wysiwyg/xwe/XWikiWysiwyg.js?lazy=false&amp;defer=false'></script>
 #end
-
+##
+## videos
+##
+#if($doc.getObject("CurrikiCode.VideoAssetClass",false))
+    #set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
+    #if($mediaHost!='-missing-media-host-')
+    <script src="$mediaHost/media/jwplayer6/jwplayer.js"></script>
+    <script type="text/javascript">
+        if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
+        window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
+        window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/";
+    </script>
+    <script type="text/javascript" src="/xwiki/skins/respurriki/js/ru-curriki-video.js"></script>
+    #end##
+    #else
+    <!-- no videos here -->
+#end
+##
+##
+<script type="text/javascript">
+    if(window.Curriki){} else {window.Curriki = new Object();}
+    if(Curriki.global){} else {Curriki.global = new Object();}
+    Curriki.global.username = "$!{context.user}";
+    Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
+    Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+</script>
+#if($globalDebug)##{
+<script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
+#end##}
