@@ -39,15 +39,15 @@
     </div>
 </div>
 
-<div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">
+#* <div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">
     ## will be set to displayed by the javascript, if available
     <div class="asset-display-download-inner subcategory-video_viditalk">
 	<p><strong>$msg.get("rve.content.view.download.instruction_title.single_file")</strong>
 	    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip.viditalk")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
 	</p>
-    </div>
+    </div> *#
 ##
-    <div class="asset-display-download-inner"> ## filetype-$streamFileext
+#*    <div class="asset-display-download-inner"> ## filetype-$streamFileext
         #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
         #if($loginToDownloadEscapes)#else##
             #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
@@ -76,13 +76,13 @@
 ##
 ##
 ##
-	</p>
+	</p> *#
         #* <a class="button-link button-orange button-link-download"
             title="$msg.get("rve.content.view.download.download_button")"
             onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');"
             href="${origVideo}">$msg.get("rve.content.view.download.download_button")</a>
         *#
-        <button class="button-link button-link-download" ##
+#*        <button class="button-link button-link-download" ##
            #if($requireLogin)##
                ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
                onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;"##
@@ -93,6 +93,5 @@
                    >$msg.get("rve.content.view.download.download_button")
            #end##
         </button>
-</div>
-</div>
+</div> *#
 #asset_displaycontentfooter()
