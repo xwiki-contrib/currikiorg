@@ -29,7 +29,7 @@
                             </div>
                             #if($mode!="edit")
                                 <div class="col-md-4 col-md-offset-4">
-                                #asset_rating($asset)
+                                #ru_asset_rating($asset)
                                 </div>
                             #end
                         </div>
@@ -125,16 +125,74 @@
                         #set($assetGroupDisplayName = "")
                     #end
                     #if($viewer == "embed-teachhub")
-                        <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                        <li id="asset-group"><span class="label label-info">$msg.get("rve.title.attribution.group")</span> <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
                     #else
-                        <li id="asset-group">$msg.get("rve.title.attribution.group") <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                        <li id="asset-group"><span class="label label-info">$msg.get("rve.title.attribution.group")</span> <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
                     #end
                 #end
-                <li id="asset-contributor">$msg.get("rve.title.attribution.contributor") <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+                <li id="asset-contributor"><span class="label label-info">$msg.get("rve.title.attribution.contributor")</span> <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
             </ul>
         </div>
     </div>
 #end
 
 
+#macro(ru_asset_rating $asset)
+    #ru_crs_icon($asset)
+    #ru_member_rating_icon($asset)
+#end
 
+
+#macro(ru_member_rating_icon $asset)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #set($rating = 0)
+    #set($rating = $!asset.getValue("rating"))
+    #set($rateCount = 0)
+    #set($rateCount = $!asset.getValue("rating_count"))
+    <div id="member-rating">
+        #if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
+            #if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
+                ##read only rating with jquery
+                <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+                <div class="rating-0">
+                    <a href="$asset.getURL("view", "viewer=comments&addcomment=true")">
+                        <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}" />
+                    </a>
+                    <a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
+                        (0)<span>
+                            $msg.get("rve.title.member.rating.function.add_rating")
+                        </span>
+                    </a>
+                </div>
+            #else ##}{ No rating and guest
+                ##read only rating with jquery
+                <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+                <div class="rating-0">
+                    <a href="${msg.get("rve.title.member.rating.info.url")}">
+                        <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.info")}" />
+                    </a>
+                    <a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
+                        (0)<span>
+                        $msg.get("rve.title.member.rating.info")
+                        </span>
+                    </a>
+                </div>
+            #end ##}
+            ##
+        #else ##}{ Has rating
+            ##read only rating with jquery
+            <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+            <div class="rating-${rating}">
+                <a href="$asset.getURL("view", "viewer=comments")">
+                    <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}" />
+                </a>
+                <a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
+                    (${rateCount})
+                </a>
+            </div>
+        #end
+    </div>
+#end
