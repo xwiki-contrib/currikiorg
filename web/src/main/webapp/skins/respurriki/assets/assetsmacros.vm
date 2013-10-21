@@ -9,11 +9,11 @@
                 #asset_findmode()
                 #if(!$isEmbed)
                     <div class="row">
-                        <div class="col-md-10">
+                        <div class="col-md-8">
                             #ru_asset_icontitle($asset)
                         </div>
                         #if($mode!="edit")
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 #ru_asset_resourcefunctions($asset)
                             </div>
                         #end
@@ -44,7 +44,11 @@
                     <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
                 #end
                 #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
-                    #asset_links($asset)
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            #ru_asset_links($asset)
+                        </div>
+                    </div>
                 #end
                 #if(!$asset.hasAccessLevel("view"))
                     #curriki_noaccess()
@@ -61,13 +65,13 @@
 #end
 
 #macro(ru_asset_tabs $asset $viewer)
-<ul id="asset-tabs">
-    <li #if($viewer=="view") class="current" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
-    <li #if($viewer=="info") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
+<ul class="nav nav-tabs">
+    <li data-toggle="tab" #if($viewer=="view") class="active" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
+    <li data-toggle="tab" #if($viewer=="info") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
     #if($!xwiki.curriki.getPublicCurrikiConfig("standardstab","0")=="1")
-        <li #if($viewer=="standards") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
+        <li data-toggle="tab" #if($viewer=="standards") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
     #end
-    <li #if($viewer=="comments") class="current" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
+    <li data-toggle="tab" #if($viewer=="comments") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
 </ul>
 #end
 
@@ -83,12 +87,12 @@
 #macro(ru_asset_resourcefunctions $asset)
     <ul id="function-tabs">
 	#if(!$isguest)
-            <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")">$msg.get("rve.title.function.favorite")</a></li>
+            <li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")"><i class="icon-heart"></i> $msg.get("rve.title.function.favorite")</a></li>
 	#end
 	#set($g_enable_ADDTHIS = true)
 	<li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")"><i class="icon-envelope"></i> $msg.get("rve.title.function.email")</a></li>
 	#if(!$isguest)
-            <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")">$msg.get("rve.title.function.flag")</a></li>
+            <li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")"><i class="icon-flag"></i> $msg.get("rve.title.function.flag")</a></li>
 	#end
         <li id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")"><i class="icon-print"></i> $msg.get("rve.title.function.print")</a></li>
     </ul>
@@ -193,4 +197,50 @@
             </div>
         #end
     </div>
+#end
+
+#macro(ru_asset_links $asset)
+    #checkForCollections()
+    <ul id="asset-links" class="list-inline">
+        #if(!$isguest)
+            #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
+                #asset_edit_isoriginalauthorjs($asset true)
+                ## Edit
+                <li>
+                    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')" #if(!$isOriginalAuthorOrAdmin) onclick="return checkEditOrCopy();" #end><i class="icon-edit"></i></a>
+                </li>
+            #end
+            ## Copy
+            #if($asset.category!="collection")
+                <li #if ((($asset.category!="collection")||!$asset.hasAccessLevel("edit"))&&!$g_userHasCollections) class="last-item" #end>
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')"><i class="icon-copy"></i></a>
+                </li>
+            #end
+            ## Add
+            #if($g_userHasCollections)##{
+                <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')"><i class="icon-plus"></i></a>
+                </li>
+            #end##}
+          ## Build Up
+            #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
+                ## checking if we have organize. This sets the variable $subAssetList also used in collection_view.vm
+                #set($subAssetList = $util.arrayList)
+                #asset_preparesubassetlist($asset $subAssetList)
+                <li #if($subAssetList.size()==0) class="last-item" #end >
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
+                </li>
+                ## Organize
+                #if($subAssetList.size()!=0)
+                    <li class="last-item">
+                        #escapeForJS(${xwiki.getUserName($asset.creator, false)})
+                        #set($escapedCreatorName = $ret_escaped)
+                        <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
+                    </li>
+                #end
+            #end
+        #else
+            <li class="last-item"></li>
+        #end
+    </ul>
 #end
