@@ -23,7 +23,13 @@ jQuery(document).ready(function() {
         jQuery(this).parent().parent().find('ul').slideToggle();
         return false;
     });
-    
+
     //style tables automatically
     jQuery(".asset-display-text table").addClass('table table-bordered table-hover table-striped');
+    //enable tooltips automatically
+    jQuery('.has-tooltip').tooltip({
+        placement: 'top',
+    });
+    
+
 });

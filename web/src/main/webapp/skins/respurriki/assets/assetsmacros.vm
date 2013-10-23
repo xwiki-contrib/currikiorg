@@ -79,8 +79,24 @@
     <div id="asset-header">
         #set($mediaType="")
         #set($assetTitle = $asset.getDisplayTitle(125))
-        <h3 class="panel-title"><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url">$assetTitle</a></h3>
-        #asset_info_rollover($asset 0)
+        <h3 class="panel-title">
+            <a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}">$assetTitle</a>
+        </h3>
+        #ru_asset_info_rollover($asset 0)
+    </div>
+#end
+
+#macro(ru_asset_info_rollover $asset $seccounter)
+    #set($lrmiTool=$xwiki.parseGroovyFromPage("CurrikiCode.LRMItool"))##
+    <div id="popover-main-asset-title-$seccounter" class="popover-content">
+        <p><strong>$msg.get("global.title.popup.description")</strong><span itemprop="description">$!asset.display("description")</span></p>
+        <p><strong>$msg.get("global.title.popup.last_updated")</strong><span><time datetime="$!{xwiki.formatDate($asset.contentUpdateDate,"YYYY-MM-DDThh:mm:ss'T'TZD")}">$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</time></span></p>
+        <strong>$msg.get("global.title.popup.subject")</strong>
+        #asset_info_subject($asset true)
+        <strong>$msg.get("global.title.popup.educationlevel")</strong>
+        #asset_info_edlevel($asset true)
+        <strong>$msg.get("global.title.popup.ict")</strong>
+        #asset_info_ict($asset true)
     </div>
 #end
 
@@ -228,14 +244,14 @@
                 #set($subAssetList = $util.arrayList)
                 #asset_preparesubassetlist($asset $subAssetList)
                 <li #if($subAssetList.size()==0) class="last-item" #end >
-                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')">$msg.get('rve.content.buildup_link')</a>
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')"><i class="icon-building"></i></a>
                 </li>
                 ## Organize
                 #if($subAssetList.size()!=0)
                     <li class="last-item">
                         #escapeForJS(${xwiki.getUserName($asset.creator, false)})
                         #set($escapedCreatorName = $ret_escaped)
-                        <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')">$msg.get('rve.content.organize_link')</a>
+                        <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')"><i class="icon-sort-by-attributes"></i></a>
                     </li>
                 #end
             #end
