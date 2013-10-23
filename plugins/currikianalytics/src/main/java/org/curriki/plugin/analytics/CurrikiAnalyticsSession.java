@@ -161,7 +161,7 @@ public class CurrikiAnalyticsSession {
     /**
      * Crawl all cookies of the current user and remove the one with the
      * given name.
-     * @param name the cookie to remove
+     * @param cookie the cookie to remove
      * @return true if
      */
     public boolean removeCookie(Cookie cookie){

@@ -30,6 +30,11 @@ public class LoginToViewTrigger extends Trigger {
     private int threshold;
 
     /**
+     * The number of warnings the user will see
+     */
+    private int numberOfWarnings;
+
+    /**
      * A list of patterns which are used to match the current url history
      */
     private List<Pattern> patterns;
@@ -39,9 +44,10 @@ public class LoginToViewTrigger extends Trigger {
      */
     private List<Pattern> exceptions;
 
-    public LoginToViewTrigger(int threshold, List<Notifier> notifiers, List<Pattern> patterns, List<Pattern> exceptions) {
+    public LoginToViewTrigger(int threshold, int numberOfWarnings, List<Notifier> notifiers, List<Pattern> patterns, List<Pattern> exceptions) {
         super(notifiers);
         this.threshold = threshold;
+        this.numberOfWarnings = numberOfWarnings;
         this.patterns = patterns;
         this.exceptions = exceptions;
     }
@@ -132,13 +138,13 @@ public class LoginToViewTrigger extends Trigger {
         history.removeLast();
 
         // If we come from the login page and the limit is not exceeded, we don't match the current url
-        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches < this.threshold){
+        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches <= this.threshold){
             LOG.warn("Coming from the login page, don't show the login page again");
             return false;
         }
 
         // If we come from the login page and the limit is exceeded, we match the current url
-        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches >= this.threshold){
+        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches > this.threshold){
             LOG.warn("Coming from the login page, but the threshold is exceeded. Show the login page again");
             return true;
         }
@@ -205,12 +211,10 @@ public class LoginToViewTrigger extends Trigger {
         }
         LOG.warn("Calling " + super.notifiers.size() + " Notifiers to tell them about found matches");
         for (Notifier notifier : super.notifiers) {
-            int numberOfViewsRemaining = threshold - numberOfMatches;
-            numberOfViewsRemaining = (numberOfViewsRemaining < 0) ? 0 : numberOfViewsRemaining;
             Map notificationValues = new HashMap<String, Integer>();
             notificationValues.put(LoginToViewSessionNotifier.NUMBER_OF_MATCHES_NOTIFICATION_VALUE, numberOfMatches);
-            notificationValues.put(LoginToViewSessionNotifier.NUMBER_OF_REMAINING_VIEWS_NOTIFICATIONS_VALUE, numberOfViewsRemaining);
             notificationValues.put(LoginToViewSessionNotifier.THRESHOLD_NOTIFICATION_VALUE, this.threshold);
+            notificationValues.put(LoginToViewSessionNotifier.NUMBER_OF_WARNINGS_VALUE, this.numberOfWarnings);
             notifier.setNotification(notificationValues);
         }
     }

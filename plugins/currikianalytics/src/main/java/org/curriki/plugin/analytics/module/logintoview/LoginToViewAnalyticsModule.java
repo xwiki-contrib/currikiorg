@@ -33,6 +33,21 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
     public static final String NAME = "LoginToViewAnalyticsModule";
 
     /**
+     * The key for the config value, with which this module can be turned on an off
+     */
+    public static final String POWER_SWITCH = "login_to_view";
+
+    /**
+     * The number of resources a guest is allowed to view, before he is locked out
+     */
+    public static final String NUMBER_OF_RESOURCES_TO_VIEW = "number_of_resources_to_view";
+
+    /**
+     * The number of warnings a guest should receive before he is locked out
+     */
+    public static final String NUMBER_OF_WARNINGS = "number_of_warnings";
+
+    /**
      * The configuration values of this module
      */
     private Map<String, String> config;
@@ -96,12 +111,26 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
      * @return a list of Triggers
      */
     private List<Trigger> loadTriggerList(){
-        List<Trigger> triggerList = new LinkedList<Trigger>();
         // If this module is not turned on in the configuration
         // a trigger to remove all session flags is set
-        if("on".equals(config.get("login_to_view"))){
-            int threshold = Integer.valueOf(config.get("number_of_resources_to_view"));
-            triggerList.add(new LoginToViewTrigger(threshold, notifiers, patterns, exceptions));
+        List<Trigger> triggerList = new LinkedList<Trigger>();
+        boolean moduleIsActive = false;
+        int numberOfResourceToView = 0;
+        int numberOfWarnings = 0;
+
+        try {
+            String powerSwitch = config.get(POWER_SWITCH);
+            numberOfResourceToView = Integer.valueOf(config.get(NUMBER_OF_RESOURCES_TO_VIEW));
+            numberOfWarnings = Integer.valueOf(config.get(NUMBER_OF_WARNINGS));
+            moduleIsActive = "on".equals(powerSwitch) && numberOfResourceToView >= 0 && numberOfWarnings >= 0;
+        } catch (Exception e){
+            moduleIsActive = false;
+            LOG.error("Error while loading list of triggers. Maybe numbers in the config are not formatted well.");
+            e.printStackTrace();
+        }
+
+        if(moduleIsActive){
+            triggerList.add(new LoginToViewTrigger(numberOfResourceToView, numberOfWarnings, notifiers, patterns, exceptions));
         }else{
             triggerList.add(new DisableLoginToViewTrigger(notifiers));
         }

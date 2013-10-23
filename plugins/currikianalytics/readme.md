@@ -55,12 +55,17 @@ the AnalyticsModule gets notified of the change and reloads the whole configurat
     ## log int to view functionality. Lines beginning with "##" are comments
     ## and are ignored by the system.
 
-    ## Main switch, to turn the log in to view functionality on and off
+    ##Main switch, to turn the log in to view functionality on and off
     ##login_to_view=off
     login_to_view=on
 
     ##The threshold for the number of resources users are allowed to view
+    ##E.g. 3 means that on the third view on a resource the user is locked out
     number_of_resources_to_view=3
+
+    ##The number of dialogs to show before the last dialog appears and the
+    ##user is locked out of the system, this number must be smaller than the threshold
+    number_of_warnings=1
 
 
 ####CurrikiCode/LoginToViewExceptions
