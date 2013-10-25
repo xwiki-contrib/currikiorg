@@ -1,7 +1,12 @@
 ##
 ## CSS files related to JS libraries.
 ##
-<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.min.js"></script>
+#if($globalDebug) 
+    <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.js"></script>
+    #else
+    <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.min.js"></script>
+#end
+
 <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-ui/js/jquery-ui.min.js"></script>
 ##some condition to load the rate it script only if we are on asset page its required
