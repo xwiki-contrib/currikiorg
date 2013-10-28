@@ -6,7 +6,9 @@
 ## will fail in IE with JS errors. This is not a nice hack but is necessary
 #if($doc.space!="AssetTemp")
 
-  #template("curriki-analytics.vm")
+  #if(!($viewer.startsWith("embed")))
+    #template("curriki-analytics.vm")
+  #end
 
   ## Need to do this before xwikivars is called otherwise the data might be removed
   #if($request.method=="POST") ##{
