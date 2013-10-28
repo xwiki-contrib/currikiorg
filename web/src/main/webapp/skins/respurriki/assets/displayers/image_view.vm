@@ -24,12 +24,17 @@
 #if("$!alt_text" == "")
  #set($alt_text = $!asset.title)
 #end
-<div class="asset-display-media">
-    <div class="asset-display-media-inner">
-        <a href="$url" title="$!alt_text" ><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" alt="$!alt_text" /></a>
-        <p>$caption</p>
+<div id="image-wrapper" class="row">
+    <div class="col-md-8">
+        <a href="$url" title="$!alt_text" class="image-direct-link">
+            <img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" alt="$!alt_text" />
+        </a>
+        <p class="label label-warning">$caption</p>
+    </div>
+    <div class="col-md-4">
+        #ru_asset_attachments($asset)
     </div>
 </div>
 #end
-#asset_attachments($asset)
+
 #asset_displaycontentfooter()

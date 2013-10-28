@@ -31,5 +31,8 @@ jQuery(document).ready(function() {
         placement: 'top',
     });
     
+    jQuery('.wikiexternallink a').append(' <i class="icon-external-link"></i>');
+    
+    
 
 });
