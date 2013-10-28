@@ -1,0 +1,29 @@
+#asset_displaycontentheader("")
+#if($asset.attachmentList.size() > 0)
+    #set($fileName = $asset.attachmentList.get(0).filename)
+    #set($url = $asset.getAttachmentURL("$fileName"))
+    #set($caption = "")
+    #set($alt_text = "")
+    #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+    #set($caption = $!asset.caption_text)
+    #set($alt_text = $!asset.alt_text)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #if("$!caption" == "")
+        #set($caption = $!asset.display("description"))
+    #end
+    #if("$!alt_text" == "")
+        #set($alt_text = $!asset.title)
+    #end
+<div class="asset-display-media">
+    <div class="asset-display-media-inner">
+        ## Jorge: here for pdf embed
+        <!-- here we would embed display the PDF -->
+        <a href="$url" title="$!alt_text"##
+                ><img src="$asset.getAttachmentURL("$fileName", "download","")" ##
+                align="middle" alt="$!alt_text" /></a>
+        <p>$caption</p>
+    </div>
+</div>
+#end
+#asset_attachments($asset)
+#asset_displaycontentfooter()
