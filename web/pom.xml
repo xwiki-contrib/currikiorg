@@ -617,6 +617,11 @@ practice to put them here since they are real dependencies -->
 	    <version>${project.version}</version>
             <exclusions><exclusion><groupId>javax.servlet</groupId><artifactId>servlet-api</artifactId></exclusion></exclusions>
     </dependency>
+    <dependency>
+        <groupId>org.curriki</groupId>
+        <artifactId>curriki-khan-exercises</artifactId>
+        <version>1.0</version>
+    </dependency>
 
       <dependency><groupId>jaxen</groupId><artifactId>jaxen</artifactId><version>1.1.1</version></dependency>
   <dependency>
@@ -902,6 +907,14 @@ xwiki.ratings.averagerating.stored=1
               <filtering>false</filtering>
             </resource>
           </webResources>
+          <overlays>
+            <overlay>
+                <groupId>org.curriki</groupId>
+                <artifactId>curriki-khan-exercises</artifactId> <!-- The version is taken from the <dependency> declaration, which is still required -->
+                <type>jar</type>
+                <targetPath>js/curriki-khan-exercises</targetPath> <!-- This is the path in the final webapp -->
+            </overlay>
+          </overlays>
           <!-- - Make sure we exclude JCL and LOGJ4 since we want all logging to go through SLF4J
                - Excluded to prevent conflict in the patched version of Rhino used by yuicompressor used for JSX.
                  See http://jira.xwiki.org/jira/browse/XWIKI-6151 for more details.
