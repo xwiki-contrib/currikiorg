@@ -248,7 +248,7 @@ b.mainPanel={xtype:"panel",id:"search-panel-"+d,autoHeight:true,items:[b.filterP
 b.doSearch=function(){a.util.doSearch(d)};a.util.registerTabTitleListener(d)};Ext.onReady(function(){b.init()
 })})();(function(){Ext.ns("Curriki.module.search.form");var b=Curriki.module.search;
 var a=b.form;var c="No concurrent searches on same tab.";b.init=function(){console.log("search: init");
-if(Ext.isEmpty(b.initialized)){if(Ext.isEmpty(b.tabList)){b.tabList=["resource","outerResource","group","member","curriki"]
+if(Ext.isEmpty(b.initialized)){if(Ext.isEmpty(b.tabList)){b.tabList=["resource","group","member","curriki"]
 }var e=140;b.doSearch=function(m,i,j){var g={};if(Ext.getCmp("search-termPanel")&&Ext.getCmp("search-termPanel").getForm){g.all=Ext.getCmp("search-termPanel").getForm().getValues(false)
 }var q=$("search-termPanel-"+m+"-terms").getValue();if(q==_("search.text.entry.label")){q=""
 }if(document.savedTitle&&q!=""){document.title=document.savedTitle}else{if(typeof(document.savedTitle)=="undefined"){document.savedTitle=document.title
