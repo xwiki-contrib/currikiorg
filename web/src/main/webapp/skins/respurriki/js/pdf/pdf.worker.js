@@ -20,9 +20,8 @@ if (typeof PDFJS === 'undefined') {
   (typeof window !== 'undefined' ? window : this).PDFJS = {};
 }
 
-PDFJS.version = '0.8.2';
-PDFJS.build = ''git' is not recognized as an internal or external command,operable program or batch file.
-';
+PDFJS.version = '0.8.641';
+PDFJS.build = '19485c3';
 
 (function pdfjsWrapper() {
   // Use strict in our context only - users might not want it

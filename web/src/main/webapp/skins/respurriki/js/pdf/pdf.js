@@ -20,9 +20,8 @@ if (typeof PDFJS === 'undefined') {
   (typeof window !== 'undefined' ? window : this).PDFJS = {};
 }
 
-PDFJS.version = '0.8.2';
-PDFJS.build = ''git' is not recognized as an internal or external command,operable program or batch file.
-';
+PDFJS.version = '0.8.641';
+PDFJS.build = '19485c3';
 
 (function pdfjsWrapper() {
   // Use strict in our context only - users might not want it
@@ -6576,6 +6575,11 @@ var CanvasGraphics = (function CanvasGraphicsClosure() {
       var bounds = Util.getAxialAlignedBoundingBox(
                     group.bbox,
                     currentCtx.mozCurrentTransform);
+      // Clip the bounding box to the current canvas.
+      bounds = Util.intersect(bounds, [0,
+                                       0,
+                                       currentCtx.canvas.width,
+                                       currentCtx.canvas.height]);
       // Use ceil in case we're between sizes so we don't create canvas that is
       // too small and make the canvas at least 1x1 pixels.
       var drawnWidth = Math.max(Math.ceil(bounds[2] - bounds[0]), 1);

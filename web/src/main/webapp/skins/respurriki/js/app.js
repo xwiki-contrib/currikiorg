@@ -30,9 +30,8 @@ jQuery(document).ready(function() {
     jQuery('.has-tooltip').tooltip({
         placement: 'top',
     });
-    
+
+    jQuery('.wikicreatelink a').append(' <i class="icon-external-link"></i>');
     jQuery('.wikiexternallink a').append(' <i class="icon-external-link"></i>');
-    
-    
 
 });
