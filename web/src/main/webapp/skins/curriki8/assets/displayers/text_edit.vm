@@ -13,7 +13,7 @@
     #set($useWikiMode = $asset.isAdvancedContent() && !$request.forcewysiwyg)
     <li class="input-textarea">
     #if($useWikiMode)
-      # are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch
+      ## are not setting up the wysiwyg but instead stay in wiki mode adding a message and a button to switch
       <p>$msg.get("rve.content.edit.text.instruction_text.wiki_text")</p>
     #else
       <p class="input-textarea-indication">$msg.get("rve.content.edit.text.instruction_text.wiki_wysiwyg")</p>
