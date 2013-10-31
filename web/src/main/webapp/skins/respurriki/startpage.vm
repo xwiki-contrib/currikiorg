@@ -4,7 +4,7 @@
 #if($displayMainMenu)
     #template("menuview.vm")
 #end
-#if($viewer)
+#if($viewer && $viewer!="view" && $viewer!="content")
     <!-- dedicated viewer: $viewer -->
 #else
     #template("header.vm")
