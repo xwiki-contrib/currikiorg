@@ -55,9 +55,9 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
 
         // find the sizes that's most appropriate
         var distance = 1000000, chosen = 0;
-        for(var i=0; i<sources.length; i++) {
+        for(i=0; i<sources.length; i++) {
             var d = Math.max(Math.max(Math.abs(maxWidth-sources[i].width), Math.abs(maxHeight-sources[i].height)));
-            console.log("Distance: " + d + " for position " + i, sources[i]);
+            if(console) console.log("Distance: " + d + " for position " + i, sources[i]);
             if(d<distance) {
                 distance = d; chosen = i;
             }
@@ -66,8 +66,16 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
         if(im) {
             im.width(sources[chosen].width); im.height(sources[chosen].height);
             im.attr("src",   window.videoPrefixToDownload +  sources[chosen].image);
+            if(console) console.log("resized img to that of "+chosen+" " + sources[chosen].width + ":" + sources[chosen].height );
         }
-        for(var i=0; i<sources.length; i++) {
+        var div = jQuery("#video_div_" + videoId);
+        if(div) {
+            div.width(sources[chosen].width+4);
+            div.height(sources[chosen].height+4);
+            if(console) console.log("resized div to "+ jQuery("#video_div_" + videoId).width() + ":"
+                + jQuery("#video_div_" + videoId).height() );
+        }
+        for(i=0; i<sources.length; i++) {
             var s = sources[i];
             s.file = window.videoPrefixToDownload + s.file;
         }
@@ -75,6 +83,12 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
         var sharingURL = "http://"+ location.host + "/xwiki/bin/view/" + rsrcName.replace('.','/')  +"?viewer=embed";
         var sharingCode = "<iframe width='558' height='490' \n src='"+sharingURL+"'></iframe>";
 
+        if(chosen!=0) {
+            var temp = sources[chosen];
+            sources[chosen] = sources[0];
+            sources[0] = temp;
+            window.videoSources = sources;
+        }
         jwplayer("video_div_" + videoId).setup({
             playlist: [{
                 image: window.videoPrefixToDownload + sources[chosen].image,
@@ -95,7 +109,7 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
     if(origPath) {
         jQuery("#download_original_"+videoId+"_div").show();
         var extension = origPath.substring(origPath.lastIndexOf('.')+1);
-        jQuery("#download_original_"+videoId+"_div").addClass("filetype-" + extension)
+        jQuery("#download_original_"+videoId+"_div").addClass("filetype-" + extension);
         jQuery("#video_download_link_" + videoId).attr("href",
             window.videoPrefixToDownload.replace('/deliver/', '/original/') + origPath + "?forceDownload=1");
         jQuery("video_download_link_" + videoId + "_text").attr("href",

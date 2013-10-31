@@ -4,7 +4,10 @@
 #if($displayMainMenu)
     #template("menuview.vm")
 #end
-#template("header.vm")
+#if($viewer)
+    <!-- dedicated viewer: $viewer -->
+#else
+    #template("header.vm")
 <div class="container" id="the-content">
     <div class="row" id="the-breadcrumb">
         <div class="col-md-12">
@@ -14,5 +17,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-      <div class="col-md-12" id="main-content">
+<div class="row">
+<div class="col-md-12" id="main-content">
+#end
