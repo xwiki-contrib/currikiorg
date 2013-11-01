@@ -14,18 +14,16 @@
     #if("$!alt_text" == "")
         #set($alt_text = $!asset.title)
     #end
-<div class="asset-display-media">
-    <div class="asset-display-media-inner">
+<div id="wrapper-pdf" class="row">
+    <div class="col-md-8 text-center">
         ##loading the js library
-
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/pdf.js"></script>
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/compatibility.js"></script>
         <!-- here we would embed display the PDF -->
-        <canvas id="the-canvas" style="border:1px solid black;">
+        <canvas id="the-canvas">
         </canvas>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                alert('here');
                 /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
                 /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
 
@@ -38,10 +36,10 @@
                 //
                 // Fetch the PDF document from the URL using promises
                 //
-                PDFJS.getDocument('http://mycurriki$url').then(function(pdf) {
+                PDFJS.getDocument('$url').then(function(pdf) {
                     // Using promise to fetch the page
                     pdf.getPage(1).then(function(page) {
-                        var scale = 1.5;
+                        var scale = 1;
                         var viewport = page.getViewport(scale);
 
                         //
@@ -65,13 +63,17 @@
             });
 
         </script>
-
-        <a href="$url" title="$!alt_text"##
-                ><img src="$asset.getAttachmentURL("$fileName", "download","")" ##
-                align="middle" alt="$!alt_text" /></a>
-        <p>$caption</p>
     </div>
+    <div class="col-md-4">
+        #ru_asset_attachments($asset)
+    </div>
+#*
+    <a href="$url" title="$!alt_text"##
+            ><img src="$asset.getAttachmentURL("$fileName", "download","")" ##
+            align="middle" alt="$!alt_text" /></a>
+    <p>$caption</p>
+*#
 </div>
 #end
-#asset_attachments($asset)
+
 #asset_displaycontentfooter()
