@@ -1,5 +1,6 @@
 #* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+{{velocity}}
 #set($whenLogged="/xwiki/bin/view/MyCurriki/Contributions#startAdd")##
 #if($context.user && "XWiki.XWikiGuest"!="$context.user")##
     $response.sendRedirect("/xwiki/bin/view/MyCurriki/Contributions#startAdd")##
@@ -9,3 +10,4 @@
     $session.setAttribute("xredirect",$whenLogged)##
     $xwiki.includeForm("Registration.DirectLogin")##
 #end##
+{{/velocity}}
