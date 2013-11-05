@@ -17,6 +17,8 @@
 <div id="wrapper-pdf" class="row">
     <div class="col-md-8 text-center">
         ##loading the js library
+
+    #*
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/pdf.js"></script>
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/compatibility.js"></script>
         <!-- here we would embed display the PDF -->
@@ -63,9 +65,20 @@
             });
 
         </script>
+*#  
+        <div id="the_pdf">
+            <p>It appears you don't have Adobe Reader or PDF support in this web
+            browser. <a href="sample.pdf">Click here to download the PDF</a></p>
+        </div>
+        <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdfobject.min.js"></script>
+        <script type="text/javascript">
+            window.onload = function (){
+                var myPDF = new PDFObject({ url: "$url" }).embed("the_pdf");
+            };
+        </script>
     </div>
     <div class="col-md-4">
-        #ru_asset_attachments($asset)
+        #ru_asset_attachments_pdf($asset)
     </div>
 #*
     <a href="$url" title="$!alt_text"##
