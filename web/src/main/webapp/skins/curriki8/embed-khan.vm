@@ -6,6 +6,87 @@
   <script src="/xwiki/js/curriki-khan-exercises/khan-exercise.js"></script>
 </head>
 <body>
-  $asset.content
+#if($request.showExercise==1)
+<div class="exercise">
+  <div class="vars">
+    <var id="A">randRange( 1, 10 )</var>
+    <var id="B">randRange( 1, 10 )</var>
+  </div>
+
+  <div class="problems">
+    <div>
+      <div class="question">
+        <div class="graphie">
+          init({
+          range: [ [0, 12], [-1, 1] ]
+          });
+
+          label( [0, 0],
+          "\\Huge{\\color{#6495ED}{" + A + "} + \\color{#28AE7B}{" + B + "} = {?}}",
+          "right" );
+        </div>
+      </div>
+      <div class="solution" data-forms="integer"><var>A + B</var></div>
+      <div class="hints">
+        <div class="graphie" style="float: left;">
+          drawCircles( A, "#6495ED" );
+        </div>
+        <div class="graphie" style="float: left;">
+          drawCircles( B, "#28AE7B" );
+        </div>
+        <p style="clear: left;">
+          <span data-if="isSingular(A)">There are <var>A</var> blue dot.</span><span data-else="">There are <var>A</var> blue dots.</span>
+          <span data-if="isSingular(B)">There are <var>B</var> green dot.</span><span data-else="">There are <var>B</var> green dots.</span>
+          <span>There are a total of <var>A + B</var> dots.</span>
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+#elseif($request.showExercise==2)
+<div class="exercise">
+  <div class="vars" data-ensure='SIGN === "" || INT !== 0 || FRAC !== ""'>
+    <var id="INT">rand(5) > 0 ? randRange( 1, 9 ) : 0</var>
+    <var id="FRAC">rand(3) > 0 ? "." + randRange(1, 9) : ""</var>
+    <var id="SIGN">randFromArray(["", "-"])</var>
+  </div>
+
+  <div class="problems">
+    <div>
+      <div class="question">
+        <p>What is <code>\lvert <var>SIGN + INT + FRAC</var> \rvert</code>?</p>
+      </div>
+      <div class="solution"><var>INT + FRAC</var></div>
+    </div>
+  </div>
+
+  <div class="hints">
+    <div class="graphie">
+      init({
+      range: [ [-1, 11], [-1, 1] ]
+      });
+      var start = 0;
+      var end = 10;
+      var originX = 0;
+      var x = abs( INT ) + FRAC;
+      if ( SIGN === "-" ) {
+      start = -10;
+      end = 0;
+      originX = 10;
+      x = 10 - x;
+      }
+      numberLine( start, end );
+      style({ stroke: "#6495ED", fill: "#6495ED" });
+      graph.pt = circle( [ x, 0 ], 0.15 );
+      style({ stroke: "#FFA500", fill: "#FFA500", strokeWidth: 3.5, arrows: "->" });
+      path( [ [ originX, 0 ], [ x, 0 ] ] );
+      circle( [ originX, 0 ], 0.10 );
+      graph.pt.toFront();
+    </div>
+    <p>The distance from <code>0</code> to <code><var>SIGN + INT + FRAC</var></code> is <code><var>INT + FRAC</var></code>, which equals the absolute value.</p>
+    <p data-if='SIGN !== ""'>In other words, <code><var>INT + FRAC</var></code> is the non-negative version of <code><var>SIGN + INT + FRAC</var></code>.</p>
+  </div>
+</div>
+#end
 </body>
 </html>
