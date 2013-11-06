@@ -47,13 +47,14 @@
             #end
             #if($groupName!="")
                 <div class="col-md-8 col-xs-9">
-                    <ul id="main-nav">
+                    <ul id="main-nav" class="with-teacher">
                         <li><a href="../Group_${groupName}/" ##
                             #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
                                 >Home <span>13</span></a></li>
                         <li><a href="../Coll_Group_${groupName}/Main"
                             #if($doc.space.startsWith("Coll_")) class="current" #end##
                                 >Course</a></li>
+                        <li><a href="#" class="link-green">Resources</a></li>
                         <li><a href="../Group_${groupName}/Discussions"
                             #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
                                 >Discussions</a></li>
@@ -62,12 +63,12 @@
                 </div>
             #else
                 <div class="col-md-8 col-xs-9">
-                    <ul id="main-nav">
-                        <li>Home </li>
-                        <li>Course</li>
-                        <li>Dicussions</li>
-                        <li>Projects</li>
-                        <li>Admin</li>
+                    <ul id="main-nav" class="with-admin">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Course</a></li>
+                        <li><a href="#" class="link-green">Resources</a></li>
+                        <li><a href="#">Dicussions</a></li>
+                        <li><a href="#">Projects</a></li>
                     </ul>
                 </div>
             #end

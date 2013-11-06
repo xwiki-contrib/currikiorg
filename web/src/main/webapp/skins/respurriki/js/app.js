@@ -31,7 +31,57 @@ jQuery(document).ready(function() {
         placement: 'top',
     });
 
-    jQuery('.wikicreatelink a').append(' <i class="icon-external-link"></i>');
-    jQuery('.wikiexternallink a').append(' <i class="icon-external-link"></i>');
+    /*
+     jQuery('.wikicreatelink a').append(' <i class="icon-external-link"></i>');
+     jQuery('.wikiexternallink a').append(' <i class="icon-external-link"></i>');
+     */
+
+    jQuery('.wikicreatelink a').each(function() {
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
+
+        if (typeof the_rel !== 'undefined') {
+            if (the_rel.indexOf('blank') !== -1) {
+                jQuery(this).append(' <i class="icon-external-link"></i>');
+            } else {
+                if (typeof the_target !== 'undefined') {
+                    if (the_target.indexOf('blank') !== -1) {
+                        jQuery(this).append(' <i class="icon-external-link"></i>');
+                    }
+                }
+            }
+        } else {
+            if (typeof the_target !== 'undefined') {
+                if (the_target.indexOf('blank') !== -1) {
+                    jQuery(this).append(' <i class="icon-external-link"></i>');
+                }
+            }
+        }
+    });
+
+    jQuery('.wikiexternallink a').each(function() {
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
+        
+        if (typeof the_rel !== 'undefined') {
+            if (the_rel.indexOf('blank') !== -1) {
+                jQuery(this).append(' <i class="icon-external-link"></i>');
+            } else {
+                if (typeof the_target !== 'undefined') {
+                    if (the_target.indexOf('blank') !== -1) {
+                        jQuery(this).append(' <i class="icon-external-link"></i>');
+                    }
+                }
+            }
+        } else {
+            if (typeof the_target !== 'undefined') {
+                if (the_target.indexOf('blank') !== -1) {
+                    jQuery(this).append(' <i class="icon-external-link"></i>');
+                }
+            }
+        }
+    });
+
+
 
 });
