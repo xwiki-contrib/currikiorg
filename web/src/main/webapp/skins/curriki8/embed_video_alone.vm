@@ -1,0 +1,54 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+##
+<!-- #set($asset=$xwiki.curriki.fetchAsset($doc.fullName))##
+#set($objVT = $asset.getObject("CurrikiCode.VideoAssetClass"))
+#set($video_id = $objVT.id)
+## Set $video_id if not already set
+#if("$!video_id"=="")
+    #if("$!request.vid"=="")
+    ## Just a test code for now
+        #set($video_id = "FbLBbkGm5dORWYOQ")
+    #else
+        #set($video_id = $request.vid)
+    #end
+#end
+-->
+<html>
+<head>
+    <title>Video Embed: $asset.displayTitle</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    #template("xwikivars.vm")##
+    #template("analytics.vm")##
+    #template("javascripts.vm")
+    #template("stylesheets.vm")##
+</head><body>
+<!-- we are in the video_alone template  -->
+<div class="asset-display-media">
+    <div class="asset-display-media-inner" style="width:100%; margin: 0 auto;">
+        #set($caption = "")
+        #set($caption = $!asset.caption_text)
+        #if("$!caption" == "")
+            #set($caption = $!asset.display("description"))
+        #end
+        <div style="width:100%; height:100%; margin: 0 auto; display: inline-block; " id="video_div_$video_id">
+            <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('video.player.loading'))"
+                 src="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/${video_id}-lq.jpg">
+        </div>
+        <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)", "$asset.fullName");</script>
+        ##<p style="font-size: smaller;">
+        ##    $caption
+        ##</p>
+    </div>
+</div>
+</body>
+</html>
