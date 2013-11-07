@@ -3,8 +3,8 @@
   *
   *#
 #asset_displaycontentheader("")
-<div class="asset-display-text">
-    <div class="asset-display-text-inner">
+<div id="image-wrapper" class="row">
+    <div class="col-md-12">
         #set($caption = "")
         #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
         #set($caption = $!asset.caption_text)
@@ -12,10 +12,9 @@
         #if("$!caption" == "")
             #set($caption = $!asset.display("description"))
         #end
-       <p>
-            $caption
-        </p>
+       <p>$caption</p>
+        #ru_asset_attachments($asset)
     </div>
 </div>
-#asset_attachments($asset)
+
 #asset_displaycontentfooter()
