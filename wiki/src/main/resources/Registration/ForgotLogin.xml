@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1247255732000</creationDate>
-<date>1320187169000</date>
-<contentUpdateDate>1320187169000</contentUpdateDate>
-<version>81.1</version>
+<date>1378204539000</date>
+<contentUpdateDate>1378204539000</contentUpdateDate>
+<version>83.1</version>
 <title>Forgot Login Information</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment>CURRIKI-6040.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Registration.ForgotLogin</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>72f303d0-59c6-4215-afa9-b8ab0390cbcf</guid>
 <property>
 <tags/>
 </property>
@@ -147,7 +147,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		}
 
 		var url= "/xwiki/bin/view/XWiki/CheckAccountCreation";
-		var pars = 'xpage=plain&amp;email=' + $F("email");
+		var pars = 'xpage=plain&amp;email=' + encodeURIComponent($F("email"));
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
 	}
 

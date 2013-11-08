@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1298699906000</creationDate>
-<date>1366276618000</date>
-<contentUpdateDate>1366276618000</contentUpdateDate>
-<version>38.1</version>
+<date>1379457029000</date>
+<contentUpdateDate>1379457029000</contentUpdateDate>
+<version>40.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -96,7 +96,8 @@ $xt.init($xwiki,$context,$request.getParameter("doc")) Running $xt --&gt;##
 #set($response=$xt.getNeutralizedResponse())##
     #if($request.getParameter("doc"))
         $originalResponse.setContentType("application/xml")
-        #if($xt.isApplicable())
+        #if($xt.type=="discussion")$originalResponse.sendRedirect("ShowDiscussions?xpage=plain&amp;doc=$request.getParameter('doc')")
+        #elseif($xt.isApplicable())
         &lt;!-- This rendering of $xt.getFullNameForComments() is created by ${doc.space}.${doc.name}  with type ${xt.type}.
           This view file is last modified on $doc.date --&gt;
         {pre}&lt;add&gt;&lt;doc&gt;
@@ -143,8 +144,13 @@ $xt.init($xwiki,$context,$request.getParameter("doc")) Running $xt --&gt;##
 
                 #foreach($code in $xt.getStandardsCodeX())
                     &lt;field name="standardsCode"&gt;$code&lt;/field&gt;
-                #end #foreach($label in $xt.getStandardsLabelsX())
-                &lt;field name="standardsLabel"&gt;$label&lt;/field&gt;
+                #end
+                #foreach($label in $xt.getStandardsLabelsX())
+                    &lt;field name="standardsLabel"&gt;$label&lt;/field&gt;
+                #end
+
+                #foreach($stateNum in $xt.getStandardsStateNumsX())
+                  &lt;field name="standardsStateNum"&gt;$stateNum&lt;/field&gt;
                 #end
 
                 &lt;!-- rights and licenses --&gt;

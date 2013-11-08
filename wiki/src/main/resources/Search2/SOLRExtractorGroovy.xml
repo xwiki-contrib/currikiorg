@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1298699908000</creationDate>
-<date>1366276606000</date>
-<contentUpdateDate>1366276606000</contentUpdateDate>
-<version>105.1</version>
+<date>1379458005000</date>
+<contentUpdateDate>1379458005000</contentUpdateDate>
+<version>108.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -97,6 +97,10 @@ public class SOLRExtractorGroovy {
                 excludedPages.contains(doc.fullName);
         boolean suffixExcluded = doc.name.endsWith("Class") || doc.name.endsWith("Template") || doc.name.endsWith("Templates") || doc.name.endsWith("Sheet") || doc.name.endsWith("Invitations");
         if(doc.space=="Main" || doc.space.startsWith("Coll_")) suffixExcluded = false;
+        if(doc.space=="Discussions" || doc.space.startsWith("Discussions_Group_")) {
+            //System.out.println("In Space: " + doc.space + "; doc.name=" + doc.name + ", excluded? " + (doc.name == "WebPreferences" || doc.name == "WebHome"));
+            return (doc.name == "WebPreferences" || doc.name == "WebHome");
+        }
         baseExcluded = baseExcluded || suffixExcluded;
         if(!baseExcluded) {
             for(s in excludedPrefixes) {
@@ -106,10 +110,16 @@ public class SOLRExtractorGroovy {
 
         // no title? go away!
         if(!baseExcluded &amp;&amp; doc.name!="WebHome") {
+            // a user outside XWiki? do not index
+            if(doc.getObject("XWiki.XWikiUsers")!=null &amp;&amp; !("XWiki".equals(doc.space))) return true;
+
             String title = doc.title;
             if(!"WebPreferences".equals(doc.name) &amp;&amp; doc.getObject("XWiki.XWikiUsers")==null)
                 if(title==null || title.trim().length()==0) return true;
         }
+
+        // new doc? go away
+        if(doc.isNew()) return true;
         return baseExcluded;
     }
 
@@ -133,6 +143,8 @@ public class SOLRExtractorGroovy {
             def assetObject = doc.getObject("CurrikiCode.AssetClass", false);
             def groupObject = doc.getObject("XWiki.CurrikiSpaceClass", false);
             def userObject = doc.getObject("XWiki.XWikiUsers", false);
+            def discussionsObject = doc.getObject("ConversationCode.TopicClass");
+            if(discussionsObject==null) discussionsObject = doc.getObject("ConversationCode.AnswerClass");
             if(doc.space=="XWiki" &amp;&amp; userObject==null) return; // only users in XWiki space
             if(assetObject!=null) {
                 // a resource
@@ -160,6 +172,9 @@ public class SOLRExtractorGroovy {
                 // a user
                 this.type = "user";
                 this.userObject = userObject;
+            } else if(discussionsObject!=null) {
+                this.type = "discussion";
+                initDiscussionObject();
             } else {
                 this.type = "page";
             }
@@ -205,7 +220,11 @@ public class SOLRExtractorGroovy {
 
     public String getFullNameForComments() { return docFullName.replaceAll('--','- -'); }
 
-    public String getFullNameX() { return xmlEncode(docFullName); }
+    public String getFullNameX() {
+        if(type=="discussion" &amp;&amp; discussionIndexType=="comment")
+            return xmlEncode(docFullName + "#comment" + commentNum)
+        return xmlEncode(docFullName);
+    }
     public String getNameX() { return xmlEncode(doc.name);}
     public String getWebX() { return xmlEncode(doc.space);}
 
@@ -508,6 +527,14 @@ public class SOLRExtractorGroovy {
         return l;
     }
 
+    public List getStandardsStateNumsX() {
+        if(alignments==null) return new ArrayList();
+        List l = new ArrayList(alignments.size());
+        for(alignment in alignments) {
+            l.add(xmlEncode(alignment.get("topic.state_num")));
+        }
+        return l;
+    }
 
     public Iterator getChildPagesIt() { return childPagesList.iterator(); }
 
@@ -765,7 +792,7 @@ public class SOLRExtractorGroovy {
 
     public String getGroupTitleX() { return getGroupPropertyXX("displayTitle"); }
     public String getGroupDescriptionX() {
-        return getTextOfHtml(doc.getRenderedContent(groupObjectX.getProperty("description").value.toString()));
+        return xmlEncode(getTextOfHtml(doc.getRenderedContent(groupObjectX.getProperty("description").value.toString())));
     }
     public List getGroupSubjects() {
         Property prop = groupObjectC.getProperty("topic");
@@ -807,6 +834,169 @@ public class SOLRExtractorGroovy {
 
     public String getPageTextX() {
         return xmlEncode(getTextOfHtmlTrue(doc.getRenderedContent()));
+    }
+
+    // ================= discussions functions =======================
+
+
+    private com.xpn.xwiki.api.Object discussionIndexObject = null, discussionTopicObject = null;
+    private String discussionIndexType = null;
+    private Document discussionTopicDoc = null;
+    def commentNum;
+
+    public void setCommentNum(int n) { this.commentNum = n; }
+
+    void initDiscussionObject() {
+        if(context.request.comment!=null) commentNum = Integer.parseInt(context.request.comment);
+        def comment,
+                topicObject = doc.getObject("ConversationCode.TopicClass", false),
+                answerObject = doc.getObject("ConversationCode.AnswerClass", false);
+
+        if(commentNum!=null) {
+            comment = doc.getObject("XWiki.XWikiComments", (int) commentNum);
+            discussionIndexObject = comment;
+            discussionIndexType = "comment";
+            System.out.println("Type: comment.")
+            System.out.println("Comment: "  +comment + " (commentNum: " + commentNum + ")");
+        }
+
+        if(answerObject!=null) {
+            if(comment==null) discussionIndexObject = answerObject;
+            discussionTopicDoc = xwiki.getDocument(doc.getParent());
+            discussionTopicObject = discussionTopicDoc.getObject("ConversationCode.TopicClass");
+            if(commentNum==null) discussionIndexType = "answer";
+            System.out.println("Type: answer.")
+            // also count answers and comments ??
+        } else if(topicObject!=null) {
+            if(comment==null) discussionIndexObject = topicObject;
+            discussionTopicDoc = doc;
+            discussionTopicObject = topicObject;
+            if(commentNum==null) discussionIndexType = "topic";
+            System.out.println("Type: topic.")
+            // also count answers and comments ??
+        }
+
+        System.out.println("TopicDoc: " + discussionTopicDoc);
+        System.out.println("discussionIndexObject: "  +discussionIndexObject);
+    }
+
+    public String getDiscussionTitle() {
+        String v = discussionTopicDoc.title;
+        if(v ==null) v = "";
+        if(discussionIndexType=="comment")
+            v = "Re: " + v;
+        else if(discussionIndexType=="answer")
+            v = "Re: " + v;
+        return v;
+    }
+
+    public String getDiscussionsRights() {
+        // is the group open? then "public"
+        // otherwise "private"
+        if(doc.space=="Discussions") return "public";
+        def spaceName = doc.space.substring("Discussions_Group_".length());
+        def s = xwiki.getDocument("Group_"+ spaceName +".WebPreferences");
+        if(s!=null) s = s.getObject("XWiki.SpaceClass");
+        if(s!=null) s = s.getProperty("policy");
+        if(s!=null) s = s.getValue();
+        if(s=="closed") return "private";
+        return "public";
+    }
+
+    public String getDiscussionBody() {
+        com.xpn.xwiki.api.Property prop = null;
+        if(discussionIndexType=="comment")
+            prop =discussionIndexObject.getProperty("comment");
+        else if(discussionIndexType=="answer")
+            prop = discussionIndexObject.getProperty("answer");
+        else if(discussionIndexType=="topic")
+            prop = discussionIndexObject.getProperty("description");
+        if(prop!=null) return prop.getValue();
+        else return "";
+    }
+
+    public String getDiscussionAverageRating() {
+        def v = null;
+        // only for the thread?
+        if(discussionIndexType=="topic") {
+            def average = discussionTopicDoc.getObject("XWiki.AverageRatingsClass");
+            if(average!=null) v = average.get("averagevote");
+        }
+        if(v==null || v == "") return "0";
+        else return v;
+    }
+
+    public String getDiscussionAmountRatings() {
+        // only for the thread?
+        def v=null;
+        if(discussionIndexType=="topic") {
+            def average = discussionTopicDoc.getObject("XWiki.AverageRatingsClass");
+            if(average!=null) v =average.get("nbvotes");
+        }
+        if(v!=null &amp;&amp; v!="") return v;
+        else return "0";
+    }
+
+    public List getDiscussionRatingPersonX(int level) {
+        // only for the thread?
+        List comments = discussionTopicDoc.getObjects("XWiki.RatingsClass");
+        if(comments==null || comments.isEmpty()) return Collections.EMPTY_LIST;
+        List l = new ArrayList(comments.size());
+        for (com.xpn.xwiki.api.Object comment in comments) {
+            if(level == comment.getProperty("vote").getValue())
+                l.add(comment.getProperty("author").getValue());
+        }
+        return l;
+    }
+
+    public String getDiscussionTopicType() {
+        def prop = discussionTopicObject.getProperty("type");
+        if(prop == null) return "";
+        return prop.getValue();
+    }
+
+    public String getDiscussionLanguage() {
+        String lang = discussionTopicDoc.getLanguage();
+        if(lang==null || lang.length()==0) return "en";
+    }
+
+    public String getDiscussionPrivateToGroup() {
+        if(discussionTopicDoc.space.startsWith("Discussions_Group_")) {
+            String spacename = discussionTopicDoc.space.substring("Discussions_Group_".length());
+            if("closed" == (xwiki.getDocument("Group_" + spacename + ".WebPreferences").get("XWiki.XWikiSpaceClass").getProperty("policy").getValue()))
+                return spacename;
+        }
+        return "";
+    }
+
+    public String getDiscussionPermalink() {
+        String baseName = discussionTopicDoc.fullName.replace('.','/') + "?viewer=conversationstopic";
+        if(discussionIndexType=="comment")
+            return baseName + "#xwikicomment_"+doc.name +"_" + commentNum
+            // http://dev.gpsnetwork.org/xwiki/bin/view/Discussions/WebHome?viewer=conversationstopic#xwikicomment_Topic3Answer_0
+        else if(discussionIndexType=="answer")
+            return baseName + "#" + doc.name;
+        else return baseName;
+    }
+
+    public String getDiscussionActorUsername() {
+        def r = null;
+        if(discussionIndexType=="comment") {
+            r = discussionIndexObject.getProperty("author");
+        } else if (discussionIndexType=="answer" || discussionIndexType=="topic")
+            r = doc.getAuthor();
+        if(r instanceof com.xpn.xwiki.api.Property) r = r.getValue();
+        return r;
+    }
+
+    public String getDiscussionActorName() {
+        String userName = getDiscussionActorUsername();
+        if(userName ==null || userName.length()==0) return "";
+        return xwiki.getLocalUserName(userName, false);
+    }
+
+    public String toString() {
+        return super.toString() + "(type: " + type + ", doc: " + docFullName + ", commentNum: " + commentNum + ")";
     }
 }
 

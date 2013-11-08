@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1312409679000</creationDate>
-<date>1339188605000</date>
-<contentUpdateDate>1339188605000</contentUpdateDate>
-<version>26.1</version>
+<date>1378922952000</date>
+<contentUpdateDate>1378922952000</contentUpdateDate>
+<version>150.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -176,25 +176,61 @@ public class Validation {
         }
         if(country=="US") {
             if(!(postalCode) || postalCode.length()&gt;5 || postalCode.length()&lt;2 || !isDigitsOnly(postalCode)) {
-                if(echoErrors) addWarning("postalCode");
-                addError("join.error.requireZipCode");
+                if(echoErrors)
+                    addError("join.error.requireZipCode");
+                addWarning("postalCode");
                 return false;
             }
             if(!city || !state) {
-                if(echoErrors) addWarning("postalCode");
-                addError("join.error.requireValidZipCode");
+                if(echoErrors)
+                    addError("join.error.requireValidZipCode");
+                addWarning("postalCode");
                 return false;
             }
         } else {
             if(state==null || state.length()&lt;=1) {
-                addError("join.error.region_missing");
-                addWarning("state")
+                if(echoErrors)
+                    addError("join.error.region_missing");
+                addWarning("state");
                 return false;
             };
         }
         return true;
     }
 
+    public boolean isValidNEAOccupation(String ps, boolean echoErrors) {
+        if(ps!=null &amp;&amp; ps.length()&gt;4 &amp;&amp; !ps.contains(" ")) {
+            addOk("neaoccupation");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.neaoccupation");
+        addWarning("neaoccupation");
+        return false;
+    }
+    
+    public boolean isValidNEAAffiliate(String ps, boolean echoErrors) {
+        if(ps!=null &amp;&amp; ps.trim()!="" &amp;&amp; ps!="-") {
+            addOk("neaaffiliate");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.neaaffiliate");
+        addWarning("neaaffiliate");
+        return false;
+    }
+    
+    public boolean isValidNEAProfession(String ps, boolean echoErrors) {
+        if(ps!=null &amp;&amp; ps.length()&gt;2 &amp;&amp; !ps.contains(" ")) {
+            addOk("neaprofession");
+            return true
+        };
+        if(echoErrors)
+            addError("join.error.neaprofession");
+        addWarning("neaprofession");
+        return false;
+    }
+    
     private void addWarning(String warning) {
         if(warningFields!=null) warningFields.add(warning);
     }
@@ -229,4 +265,5 @@ public class Validation {
         else System.out.println("Failed validation for user " + username + " with request " + request + " from " + request.getRemoteHost());
         return passed;
     }
-}</content></xwikidoc>
+}
+</content></xwikidoc>

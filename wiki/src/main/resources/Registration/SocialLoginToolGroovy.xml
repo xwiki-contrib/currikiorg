@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1309965594000</creationDate>
-<date>1352234564000</date>
-<contentUpdateDate>1352234564000</contentUpdateDate>
-<version>152.1</version>
+<date>1378922941000</date>
+<contentUpdateDate>1378922941000</contentUpdateDate>
+<version>297.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -22,7 +22,8 @@
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<content>import org.brickred.socialauth.AuthProvider;
+<content>import org.apache.commons.lang.RandomStringUtils
+import org.brickred.socialauth.AuthProvider;
 import org.brickred.socialauth.AuthProviderFactory;
 import com.xpn.xwiki.api.XWiki;
 import com.xpn.xwiki.api.Context
@@ -38,7 +39,8 @@ import com.xpn.xwiki.doc.XWikiAttachment
 import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
 import org.apache.commons.httpclient.HttpClient
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.GetMethod
+import com.xpn.xwiki.api.Attachment;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -61,6 +63,12 @@ public class SocialLoginToolGroovy {
     def profile = null;
     boolean hasAuthenticated = false;
 
+    /**
+     * A switch to set if the registration of a new user
+     * should skip the creationForm and try to guess values for the new
+     * user
+     */
+    boolean autoCreateUser = false
 
     MailSenderPluginApi mailsender = null;
 
@@ -115,6 +123,10 @@ public class SocialLoginToolGroovy {
         this.warningFields = other.warningFields;
         this.okFields = other.okFields;
         this.nowTarget = other.nowTarget;
+
+        this.autoCreateUser = other.autoCreateUser
+
+        System.out.println("AutoCreateUser: " + this.autoCreateUser)
         System.out.println("Errors: " + errors);
         System.out.println("WarningFields: " + warningFields);
         System.out.println("okFields: " + okFields);
@@ -126,8 +138,7 @@ public class SocialLoginToolGroovy {
             if(userDoc==null) return null;
             context.context.put("ajax",true);
             xwiki.checkAuth(userDoc.fullName, userDoc.get("XWiki.XWikiUsers").get("password").value, "false")
-            request.session.setAttribute("curriki.analytics.toLogView","/join/"+
-                    ( providerId==null ? "inCurriki" : providerId) +"/login");
+            this.toLogView("/join/"+( providerId==null ? "inCurriki" : providerId) +"/login");
             nowTarget = getRedirectTarget(true);
             this.hasAuthenticated  = true;
             //nowTarget = request.session.getAttribute("xredirect");
@@ -163,8 +174,16 @@ public class SocialLoginToolGroovy {
             String maybeXpage="";
             //if(request.framed=="true")
             maybeXpage="&amp;xpage=popup";
+
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1' +maybeXpage; //+ maybeRedirect ;
+                    request.getPathInfo()  + '?callback=1' + maybeXpage //+ maybeRedirect ;
+
+            // Keep the autoCreateUser flag even when bouncing the provider, so it comes back with the providers answer
+            if(autoCreateUser) targetUrl += "&amp;autoCreateUser=" + autoCreateUser;
+
+            // Keep the memberType request parameter over the bounce
+            memberType = request.getParameter("member_type")
+            if(memberType != null) targetUrl += ("&amp;member_type=" + memberType)
 
             provider.setPermission(Permission.AUTHENTICATE_ONLY);
             String url = provider.getLoginRedirectURL(targetUrl);
@@ -195,6 +214,9 @@ public class SocialLoginToolGroovy {
 
             // verify the authentication
             LOG.info("Verifying " + providerObj + " for provider " + providerId);
+
+            this.autoCreateUser = request.getParameter("autoCreateUser") == "true"
+
             try {
                 if(request.error!='access_denied')
                     profile = providerObj.verifyResponse(request)
@@ -244,17 +266,19 @@ public class SocialLoginToolGroovy {
                         request.session.setAttribute("header.message","login.register.header.account-is-merged." + providerId);
                         return "backFromAuthorization";
                     }
+                }else if(autoCreateUser) {
+                    // Automatically register user
+                    this.toLogView("/xwiki/bin/view/MembershipDrive/LandingPage/UserAutoRegistered")
+                    return tryCreateNewProfile();
+                } else {
+                    // take to the display of the form to create the username
+                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&amp;xaction=creationForm"
+                    return "backFromAuthorization";
                 }
 
-
-                // take to the display of the form to create the username
-                nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&amp;xaction=creationForm"
-                return "backFromAuthorization";
             } else {
                 // final step, login worked, existing user
-                def afterLogin = targets!=null?
-                    targets.afterLogin :
-                    request.getSession().getAttribute("xredirect");
+                def afterLogin = targets!=null? targets.afterLogin : request.getSession().getAttribute("xredirect");
                 nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&amp;redir=" + afterLogin;
                 System.out.println("Redirecting to " + afterLogin+ " through a redirectOnTop");
                 return "backFromAuthorization";
@@ -284,8 +308,8 @@ public class SocialLoginToolGroovy {
         if(username==null || username=='') {
             int p = email.indexOf('@');
             username = email.substring(0,p);
-            username = username.replaceAll("[^a-zA-Z0-9]","_");
-            username = username.replaceAll("__","_").replaceAll("__","_");
+            username = username.replaceAll("[^a-zA-Z0-9]","");
+            username = username.replaceAll("_","").replaceAll("__","");
             if(!validation.isValidUsername(username, false)) {
                 int i=0;
                 while(i&lt;20) {
@@ -313,13 +337,27 @@ public class SocialLoginToolGroovy {
         if(isNew) LOG.info("Trying to create new profile from provider " + provider);
         else LOG.warn("Updating doc " + preExistingUserDoc + " with info from provider " + provider);
 
-        if(isNew) username = request.username; else username = preExistingUserDoc.getName();
+
+        if(isNew) {
+            if(username==null || username=='') {
+                username = request.username;
+            }
+        } else {
+            username = preExistingUserDoc.getName();
+        }
+
         firstName = profile.firstName;
         lastName = profile.lastName;
         email = profile.email;
         city = profile.location;
         country = profile.country;
-        password = request.password;
+
+        if(isNew &amp;&amp; autoCreateUser) {
+            password = RandomStringUtils.randomAlphanumeric(8)
+        } else {
+            password = request.password;
+        }
+
         memberType = request.getParameter("member_type");
         if(memberType==null) memberType="-";
 
@@ -332,17 +370,17 @@ public class SocialLoginToolGroovy {
 
 
         boolean passed = validation.isValidEmail(email, true);
-        passed = validation.isValidUsername(username, true) &amp; passed;
-        passed = validation.isValidPassword(password, true) &amp; passed;
-        passed = validation.isValidMemberType(memberType, true) &amp; passed;
-        passed = validation.isValidAgree(request.agree, true) &amp; passed;
-        passed = validation.isValidFirstName(firstName, true) &amp; passed;
-        passed = validation.isValidLastName(lastName, true) &amp; passed;
-        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, !isMerging) &amp; passed;
+        passed = validation.isValidUsername(username, true) &amp;&amp; passed;
+        passed = validation.isValidPassword(password, true) &amp;&amp; passed;
+        passed = validation.isValidMemberType(memberType, true) &amp;&amp; passed;
+        passed = validation.isValidAgree(request.agree, true &amp;&amp; autoCreateUser != true) &amp;&amp; passed;
+        passed = validation.isValidFirstName(firstName, true) &amp;&amp; passed;
+        passed = validation.isValidLastName(lastName, true) &amp;&amp; passed;
+        passed = validation.isValidLocation(country, postalCode, city, state, longitude, latitude, ( !isMerging &amp;&amp; !autoCreateUser ) ) &amp;&amp; passed;
 
         System.out.println("Validation Passed? " + passed);
-        if(!passed) System.out.println(" Validation Errors ( Merging is "+ isMerging +"): " + validation.errors);
-        if ( passed || isMerging ) {
+        if(!passed) System.out.println(validation.errors.size() + " Validation Errors (Merging is "+ isMerging +"): " + validation.errors);
+        if ( passed || isMerging || (validation.errors.size() == 0 &amp;&amp; autoCreateUser) ) {
             // Everything clear, let's proceed
 
             /* def propMap = new HashMap();
@@ -374,16 +412,11 @@ public class SocialLoginToolGroovy {
 
             System.out.println("New profile created and saved: " + userDoc);
 
-            //Only if we don't merge a profile with an existing one we'll send the confirmation email.
-            if(!isMerging){
-                sendConfirmationEmail();
-                System.out.println("Confirmation email sent.");
-            }else{
-                System.out.println("No Confirmation email sent.");
-            }
+            // Send the correct confirmation email
+            sendCorrectConfirmationEmail(isMerging, autoCreateUser);
 
             String view = authenticateUser(userDoc);
-            if(view=="redirectOnTop") return "pleaseDonate";
+            if(view=="redirectOnTop" &amp;&amp; !autoCreateUser) return "pleaseDonate";
             else return view;
         }
         else {
@@ -609,6 +642,7 @@ public class SocialLoginToolGroovy {
     public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
             if(url==null || url.length()==0) return;
+            // don't overwrite existing picture
             System.out.println("Defining profile picture form " + url);
             def avatar = userObj.get("avatar");
             if(avatar!=null &amp;&amp; !"".equals(avatar)) {
@@ -624,20 +658,11 @@ public class SocialLoginToolGroovy {
                     name = name.substring(0, name.length()-1);
                 name = name.substring(name.lastIndexOf("/")+1);
             }
-            XWikiAttachment attachment = userDoc.document.getAttachment(name)
-            if (attachment == null) {
-                attachment = new XWikiAttachment();
-                userDoc.document.getAttachmentList().add(attachment);
-            }
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(u.toExternalForm());
             int result = client.executeMethod(method);
             if(result==200) {
-                attachment.setContent(method.getResponseBodyAsStream(), (int) method.getResponseContentLength());
-                attachment.setFilename(name)
-                attachment.setAuthor(context.user)
-                attachment.setDoc(userDoc.document)
-                userDoc.document.saveAllAttachments(context.context)
+                userDoc.addAttachment(name, method.getResponseBodyAsStream());
             }
             userObj.set("avatar",name)
         } catch (Exception ex) {
@@ -666,9 +691,30 @@ public class SocialLoginToolGroovy {
         return nowTarget;
     }
 
+    public void sendCorrectConfirmationEmail(isMerging, autoCreateUser) {
+        // The mail without password for users taking the normal registration
+        if(!isMerging &amp;&amp; !autoCreateUser) {
+            sendConfirmationEmail();
+            System.out.println("Confirmation email sent.");
+        }
+        // The mail with password for auto registered users (coming from campaign pages)
+        else if( (!isMerging &amp;&amp; autoCreateUser) ) {
+            sendAutoCreatedUserConfirmationEmail();
+            System.out.println("Confirmation email for automatic created user sent.");
+        }
+        // No mail to users using social login and filling in
+        // their username and password in the registration form
+        else{
+            System.out.println("No Confirmation email sent.");
+        }
+    }
 
     public void sendConfirmationEmail() {
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
+    }
+
+    public sendAutoCreatedUserConfirmationEmail() {
+        sendRegistrationMail("MemberAutoRegCompleteEmail", "CorporateRegCompleteEmail");
     }
 
 
@@ -784,5 +830,30 @@ public class SocialLoginToolGroovy {
         this.validKey = userObj.getProperty("validkey").value;
         this.email = userObj.get("email");
         this.memberType = userObj.getProperty("member_type").value;
+    }
+
+    public void setAutoCreateUser(boolean autoCreateUser) {
+        this.autoCreateUser = autoCreateUser
+    }
+
+    /**
+     * Add an url to the queue of the google analytics tracking code
+     * put out at analytics.vm.
+     * This method is a candidate to get pulled out here and
+     * placed into a more general location. For now it rests here.
+     *
+     * @param page the page to add the the queue
+     */
+    private void toLogView(String page){
+        def currentValue = request.getSession().getAttribute("curriki.analytics.toLogView");
+
+        if(currentValue == null) currentValue = ""
+
+        if(currentValue == "") {
+            currentValue += page
+        } else {
+            currentValue += "," + page
+        }
+        request.getSession().setAttribute("curriki.analytics.toLogView", currentValue);
     }
 }</content></xwikidoc>

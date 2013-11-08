@@ -7,22 +7,23 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1314118673000</creationDate>
-<date>1340620710000</date>
-<contentUpdateDate>1340620710000</contentUpdateDate>
-<version>54.1</version>
+<date>1380810862000</date>
+<contentUpdateDate>1380810862000</contentUpdateDate>
+<version>61.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<content>import javax.servlet.http.HttpServletRequest
+<content>import javax.servlet.http.Cookie
+import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.api.XWiki
@@ -109,7 +110,7 @@ public class TargetsGroovy {
                     afterLogin.startsWith("/xwiki/bin/login") ||
                     afterLogin.startsWith("/xwiki/bin/logout") ||
                     refererPath=="/") {
-                afterLogin = "/xwiki/bin/view/MyCurriki/";
+                afterLogin = "/xwiki/bin/view/MyCurriki/Profile";
             }
 
 
@@ -162,7 +163,9 @@ public class TargetsGroovy {
         if(from.startsWith("/xwiki/bin/view/Registration/Jump")) {
             def m=Pattern.compile(".*redir=([^?&amp;]*)\\&amp;?.*").matcher(from);
             if(m.matches()) {
-                return URLDecoder.decode(m.group(1));
+                String t= m.group(1);
+                t = t.replace("xpage=popup","");
+                return URLDecoder.decode(t);
             }
         }
         return from;
@@ -264,6 +267,8 @@ public class TargetsGroovy {
             return "false";
         };
     }
+
+    public void log(String s)  { System.out.println("LOG: "+s); }
 }
 
 
