@@ -7,7 +7,7 @@
 <div class="container" id="the-header">
     #if($isInServletMode) ## Visible only in a page
         <div class="row">
-            <div class="col-md-3 col-xs-2" onmouseover="jQuery(jQuery('#menuview')[0]).show();"
+            <div class="col-md-3 col-xs-6" onmouseover="jQuery(jQuery('#menuview')[0]).show();"
                  onmouseout="if(window.hider){window.clearInterval(window.hider);}; window.hider = window.setTimeout('jQuery(jQuery(\'#menuview\')[0]).hide();', 3000);">
                 <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home" id="main-logo">
                     #if("$!{themeDocFullName}" == '')
@@ -45,39 +45,51 @@
             #else
                 #set($groupName="")<!-- no group recognized -->
             #end
-            #if($groupName!="")
-                <div class="col-md-8 col-xs-9">
-                    <ul id="main-nav" class="with-teacher">
-                        <li><a href="../Group_${groupName}/" ##
-                            #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
-                                >Home <span>13</span></a></li>
-                        <li><a href="../Coll_Group_${groupName}/Main"
-                            #if($doc.space.startsWith("Coll_")) class="current" #end##
-                                >Course</a></li>
-                        <li><a href="#" class="link-green">Resources</a></li>
-                        <li><a href="../Group_${groupName}/Discussions"
-                            #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
-                                >Discussions</a></li>
-                        <li><a href="#">Projects</a></li>
-                    </ul>
+            <div class="col-md-1 col-md-push-8 col-xs-6">
+                #ru_loginLogout()
+            </div>
+            <div class="clearfix visible-xs"></div>
+            
+                <div class="col-md-8 col-md-pull-1 col-xs-12">
+                    <div class="clearfix"></div>
+                    <nav class="navbar navbar-default" role="navigation">
+                    <div class="navbar-header">
+                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                      </button>
+                      <a class="navbar-brand visible-xs" href="#">Menu</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                      <ul id="main-nav" class="nav nav-pills nav-justified">
+                        #if($groupName!="")
+                            <li><a href="../Group_${groupName}/" ##
+                                #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
+                                    >Home</a></li>
+                            <li><a href="../Coll_Group_${groupName}/Main"
+                                #if($doc.space.startsWith("Coll_")) class="current" #end##
+                                    >Course</a></li>
+                            <li><a href="#" class="link-green">Resources</a></li>
+                            <li><a href="../Group_${groupName}/Discussions"
+                                #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
+                                    >Discussions</a></li>
+                            <li><a href="#">Projects</a></li>
+                        #else
+                            <li><a href="#">Home</a></li>
+                            <li><a href="#">Course</a></li>
+                            <li><a href="#">Resources</a></li>
+                            <li><a href="#">Dicussions</a></li>
+                            <li><a href="#">Projects</a></li>
+                        #end
+                      </ul>
+                    </div><!-- /.navbar-collapse -->
+                  </nav>
+
                 </div>
-            #else
-                <div class="col-md-8 col-xs-9">
-                    <ul id="main-nav" class="with-admin">
-                        <li><a href="#">Home</a></li>
-                        <li><a href="#">Course</a></li>
-                        <li><a href="#" class="link-green">Resources</a></li>
-                        <li><a href="#">Dicussions</a></li>
-                        <li><a href="#">Projects</a></li>
-                    </ul>
-                </div>
-            #end
-            #ru_loginLogout()
-                ## Icon
-### login
-
-
-
             </div>
         </div>
     #end

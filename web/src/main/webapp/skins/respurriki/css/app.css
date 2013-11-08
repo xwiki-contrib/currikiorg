@@ -11,64 +11,6 @@
   0400 | Main Navigation
 ================================================================================================== 
 */
-#main-nav{
-    float: left;
-    width: 100%;
-    list-style: none;
-    margin-bottom: 0px;
-}
-
-.default li{
-    float: left;
-    width: 25%;
-}
-.with-teacher li{
-    float: left;
-    width: 20%;
-}
-.with-admin li{
-    float: left;
-    width: 20%;
-}
-#main-nav a{
-    background-color: #29a3ce;
-    display: block;
-    color: #fff;
-    text-transform: uppercase;
-    text-align: center;
-    border: 1px #fff solid;
-
-    position: relative;
-    border-right: none;
-}
-.default a{
-    padding: 12% 0%;
-}
-.with-admin a{
-    padding: 13% 0%;
-}
-.with-teacher a{
-    padding: 13% 0%;
-}
-#main-nav a.link-green{
-    background-color: #5D8D39;
-}
-#main-nav a:hover{
-    text-decoration: none;
-}
-#main-nav a.current{
-    border-bottom: 1px solid #29a3ce;
-}
-#main-nav a span{
-    background-color: #19647F;
-    border-radius: 15px;
-    color: #FFFFFF;
-    font-size: 10px;
-    padding: 2px 4px;
-    position: absolute;
-    right: 10px;
-    top: 7px;
-}
 #the-content{}
 
 /*
@@ -222,6 +164,9 @@ Content
     list-style: none;
     margin-bottom: 0;
     margin-top: 10px;
+    padding-left: 0px;
+    float: right;
+    margin-right: 10px;
 }
 #wrapper-account li{
     list-style: none;
@@ -319,6 +264,97 @@ Content
 #the-pagination li a.btn{
     border-radius: 6px;
 }
+#header-member{
+    margin-right: 10px;
+}
+/* responsive behaviour */
+@media(max-width:767px){
+    #main-nav li a{
+        text-transform: uppercase;
+    }
+    #main-nav li a:hover{
+    }
+    #the-header .navbar{
+        margin-top: 10px;
+    }
+}
+@media(min-width:768px){
+    #main-nav li a{
+        line-height: 39px;
+        border-radius: 0px;
+        border: solid 1px #fff;
+        border-top: none;
+        border-right: 0px;
+        background-color: #29A3CE;
+        color: #fff;
+        text-transform: uppercase;
+    }
+    #main-nav li a:hover{
+        background-color: #1E7B98;
+    }
+    #main-nav li a.active{
+        border-bottom: solid 1px #29A3CE;
+    }
+    #the-header .navbar{
+        margin-bottom: 0px;
+        background: none;
+        border: none;
+
+    }
+}
+@media(min-width:992px){
+    #main-nav li a{
+        line-height: 39px;
+        border-radius: 0px;
+        border: solid 1px #fff;
+        border-top: none;
+        border-right: 0px;
+        background-color: #29A3CE;
+        color: #fff;
+        text-transform: uppercase;
+    }
+    #main-nav li a:hover{
+        background-color: #1E7B98;
+    }
+    #main-nav li a.active{
+        border-bottom: solid 1px #29A3CE;
+    }
+    #wrapper-account{
+        margin-top: 0px;
+    }
+    #the-header .navbar{
+        margin-bottom: 0px;
+        background: none;
+        border: none;
+    }
+}
+@media(min-width:1200px){
+    #main-nav li a{
+        line-height: 39px;
+        border-radius: 0px;
+        border: solid 1px #fff;
+        border-top: none;
+        border-right: 0px;
+        background-color: #29A3CE;
+        color: #fff;
+        text-transform: uppercase;
+    }
+    #main-nav li a.active{
+        border-bottom: solid 1px #29A3CE;
+    }
+    #main-nav li a:hover{
+        background-color: #1E7B98;
+    }
+    #wrapper-account{
+        margin-top: 10px;
+    }
+    #the-header .navbar{
+        margin-bottom: 0px;
+        background: none;
+        border: none;
+    }
+}
+
 /*
 ==================================================================================================
   8000 | CUSTOM JIRAS
