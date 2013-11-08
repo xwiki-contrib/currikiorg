@@ -10,11 +10,17 @@
     #template("header.vm")
 <div class="container" id="the-content">
     <div class="row" id="the-breadcrumb">
-        <div class="col-md-12">
+        <div class="col-md-8 col-xs-7">
             #ru_breadcrumb()
             #ru_getTOC()
             <div id="dropable-toc">
             </div>
+        </div>
+        <div class="col-md-4 col-xs-5">
+            <ul class="list-inline text-right" id="the-pagination">
+                <li><a href="#" class="btn btn-default btn-xs">&larr; Previous</a></li>
+                <li><a href="#" class="btn btn-default btn-xs">Next &rarr;</a></li>
+            </ul>
         </div>
     </div>
 <div class="row">
