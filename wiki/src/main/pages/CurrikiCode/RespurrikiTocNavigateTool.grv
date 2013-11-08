@@ -1,0 +1,166 @@
+import javax.servlet.http.HttpServletResponse
+import javax.servlet.http.HttpServletRequest
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.doc.XWikiDocument
+import com.xpn.xwiki.XWikiContext
+import com.xpn.xwiki.XWiki
+import com.xpn.xwiki.objects.BaseObject
+import org.curriki.xwiki.plugin.asset.Asset
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import com.xpn.xwiki.api.Document
+
+public class RespurrikiTocNavigateTool {
+
+    Log LOG = LogFactory.getLog("groovyPages.RespurrikiTocNavigateTool");
+
+
+    public void init(HttpServletRequest request, HttpServletResponse response, Context context, com.xpn.xwiki.api.XWiki xwiki) {
+        this.request = request;
+        this.response = response;
+        this.context = context.context;
+        this.xwiki = xwiki.getXWiki();
+        this.currentPath = request.current;
+        this.originalCurrentPath = request.current;
+        this.targetPath = request.target;
+        this.tocPath = request.toc
+        if(tocPath==null)
+            tocPath = getDefaultParent(currentPath);
+        currentToc = loadToc(tocPath);
+
+
+        LOG.info("targetPath: " + targetPath);
+        LOG.info("toc: " + tocPath);
+        LOG.info("contents: " + currentToc);
+    }
+
+    private XWiki xwiki;
+    private HttpServletRequest request;
+    private HttpServletResponse response;
+    private XWikiContext context;
+
+    private String currentPath, targetPath, tocPath, originalCurrentPath;
+    private boolean forward = true;
+    private List currentToc;
+    private int sourceIndex;
+
+    public String getDestination() {
+        while(true) {
+
+            LOG.info("Inspecting TOC: " + tocPath);
+            sourceIndex = currentToc.indexOf(currentPath);
+            if(sourceIndex==-1) throw new IllegalArgumentException("currentPath '${currentPath}' not in collection ${tocPath}");
+            if(targetPath==null || targetPath=="") {
+                LOG.info("Reading from dir: " + request.dir + " from (" + sourceIndex + ").");
+                if(request.dir=="next" && sourceIndex+1<currentToc.size()) {
+                    targetPath = currentToc.get(sourceIndex+1);
+                } else if(request.dir == "prev" && sourceIndex>0) {
+                    targetPath = currentToc.get(sourceIndex-1);
+                }// else throw new IllegalArgumentException("Direction '${request.dir}' unknown.");
+            }
+
+            LOG.info("Target Path: " + targetPath);
+            String result = getDestinationInThisCollection();
+            if(result!=null) return result;
+            // need to pop-out:
+            // - collection is currentDoc
+            currentPath = tocPath;
+            // - its parent is the collection
+            tocPath = getDefaultParent(currentPath);
+            if(tocPath==null) return null;
+            // no change in direction
+            currentToc = loadToc(tocPath);
+
+        }
+    }
+
+    public String getOriginDocumentPath() {
+        return originalCurrentPath;
+    }
+
+
+    private String getDestinationInThisCollection() {
+
+
+        // easy case: it's all there, just use it
+        if(isAtomicResource(targetPath)) return targetPath;
+
+        // targetPath is a collection
+
+        // detect forward or backward
+        int targetIndex = currentToc.indexOf(targetPath);
+        forward = targetIndex>sourceIndex;
+
+        LOG.info("Searching in " + tocPath + " for " +  (targetIndex));
+
+        String result;
+        if(forward) {
+            while(targetIndex<currentToc.size()) {
+                targetPath = currentToc.get(targetIndex);
+                if(isAtomicResource(targetPath)) return targetPath;
+                result = findFirstIn(targetPath);
+                if(result!=null) return result;
+                targetIndex++;
+            }
+        } else {
+            while(targetIndex>=0) {
+                targetPath = currentToc.get(targetIndex);
+                if(isAtomicResource(targetPath)) return targetPath;
+                result = findLastIn(targetPath);
+                if(result!=null) return result;
+                targetIndex--;
+            }
+        }
+        // nothing more to give, just return the empty string
+        return "";
+    }
+
+    private String getDefaultParent(String currentPath) {
+        String hql = "select doc.fullName from XWikiDocument as doc, BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${currentPath}' AND doc.space !='Coll_Group_CRSCollaboration' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate";
+        List list = xwiki.search(hql, 2, 0, context);
+        if(list==null || list.size()==0) return null;
+        return list.get(0);
+    }
+
+    private List loadToc(String path) {
+        if(path==null) {
+            LOG.warn("loadToc called with null path.");
+            return new ArrayList();
+        }
+        XWikiDocument doc = xwiki.getDocument(path, context);
+        int l = doc.getObjectNumbers("CurrikiCode.SubAssetClass");
+        List t = new ArrayList(l);
+        for(int i in 0..(l-1)) {
+           BaseObject b = doc.getObject("CurrikiCode.SubAssetClass",i);
+            //LOG.info("i: ${i}, b: ${b}");;
+            if(b!=null) t.add(b.getStringValue("assetpage"));
+        }
+        return t;
+    }
+
+    private boolean isAtomicResource(String path) {
+        if(path==null) return false;
+        XWikiDocument d = xwiki.getDocument(path, context);
+        BaseObject b = d.getObject("CurrikiCode.CompositeAssetClass");
+        return b==null;
+    }
+
+    private String findFirstIn(String path) {
+        // TODO: check rights
+        List subs = loadToc(path);
+        for(String s: subs) {
+            if(isAtomicResource(s) && xwiki.checkAccess("view", xwiki.getDocument(s, context), context)) return s;
+        }
+        return null;
+    }
+
+    private String findLastIn(String path) {
+        // TODO: check rights
+        List subs = loadToc(path);
+        subs = subs.reverse();
+        for(String s: subs) {
+            if(isAtomicResource(s) && xwiki.checkAccess("view", xwiki.getDocument(s, context), context)) return s;
+        }
+        return null;
+    }
+}

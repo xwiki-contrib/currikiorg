@@ -35,11 +35,10 @@
 <script src="/xwiki/gen/js/${gVersion}/lang_${lang}.js"></script>
 <script src="/xwiki/skins/respurriki/${gVersion}/js/i18n.js"></script>
 
-#*
 ##
 ## wiki editor
 ## ============
-#if($request.viewer=="assetedit" || $request.viewer && $request.viewer.startsWith("Conversations"))
+#if(($request.viewer=="assetedit" && $doc.getObject("CurrikiCode.TextAssetClass",false)) || ($request.viewer && $request.viewer.startsWith("Conversations")))
 ## <script type="text/javascript" src="/xwiki/skins/curriki8/livetable.js"></script>
 <script src="/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
 <script type="text/javascript" src="/xwiki/skins/curriki8/1/xwiki.js"></script>
@@ -56,8 +55,7 @@
 <script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/xwikiexplorer/xwikiexplorer.js?defer=false'></script>
 <script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/wysiwyg/xwe/XWikiWysiwyg.js?lazy=false&amp;defer=false'></script>
 #end
-*#
-
+##
 ##
 ## videos
 ##

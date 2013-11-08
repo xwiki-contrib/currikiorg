@@ -15,11 +15,16 @@
             #ru_getTOC()
             <div id="dropable-toc">
             </div>
+            <ul class="pager">
+            </ul>
         </div>
         <div class="col-md-4 col-xs-5">
             <ul class="list-inline text-right" id="the-pagination">
-                <li><a href="#" class="btn btn-default btn-xs">&larr; Previous</a></li>
-                <li><a href="#" class="btn btn-default btn-xs">Next &rarr;</a></li>
+                #set($collPath="$!request.bc")##
+                <li class="previous"><a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=prev#if($collPath!="")&collPath=$collPath#end"
+                                        class="btn btn-default btn-xs paginate-next">&larr; Previous</a></li>
+                <li class="next"><a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=next#if($collPath!="")&collPath=$collPath#end"
+                                    class="btn btn-default btn-xs paginate-next">Next &rarr;</a></li>
             </ul>
         </div>
     </div>
