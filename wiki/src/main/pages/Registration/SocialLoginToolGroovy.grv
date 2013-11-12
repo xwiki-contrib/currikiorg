@@ -149,7 +149,7 @@ public class SocialLoginToolGroovy {
             else maybeRedirect = "";
             String maybeXpage="";
             //if(request.framed=="true")
-            maybeXpage="&xpage=popup";
+            maybeXpage="&xpage=popup&tempskin=curriki8";
 
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' + maybeXpage //+ maybeRedirect ;
@@ -248,7 +248,7 @@ public class SocialLoginToolGroovy {
                     return tryCreateNewProfile();
                 } else {
                     // take to the display of the form to create the username
-                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
+                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&tempskin=curriki8&xaction=creationForm"
                     return "backFromAuthorization";
                 }
 

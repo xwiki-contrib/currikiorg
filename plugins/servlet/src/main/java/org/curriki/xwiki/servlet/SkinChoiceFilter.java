@@ -27,6 +27,7 @@ public class SkinChoiceFilter implements Filter {
         if(request instanceof HttpServletRequest) {
             HttpServletRequest hrq = (HttpServletRequest) request;
             String skinFromParameter = hrq.getParameter("skin");
+            String tempSkin = hrq.getParameter("tempskin");
             HttpSession session = hrq.getSession(false);
             if(session!=null) {
                 if(skinFromParameter !=null) {
@@ -34,6 +35,7 @@ public class SkinChoiceFilter implements Filter {
                     session.setAttribute("skin", skinFromParameter);
                 } else { // no skinFromParameter
                     String mySkin = (String) session.getAttribute("skin");
+                    if(tempSkin!=null) mySkin = tempSkin;
                     /* String path = hrq.getRequestURL().toString();
                 String referer = hrq.getHeader("Referer");
                 if(referer==null) referer = ""; */
@@ -55,7 +57,7 @@ public class SkinChoiceFilter implements Filter {
                         }
                     }
                     final String theSkin = mySkin;
-                    System.out.println("Skin should be: " + mySkin);
+                    // System.out.println("Skin should be: " + mySkin);
                     if(mySkin!=null) {
                         // rework params so that the skin is included
                         HttpServletRequestWrapper hrq2 = new HttpServletRequestWrapper(hrq) {

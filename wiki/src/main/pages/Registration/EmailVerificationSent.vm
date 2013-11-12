@@ -4,7 +4,7 @@
 <div id="email-verification2">
  <h1>$msg.get('emailValidation.sent.title')</h1>
  $msg.get('emailValidation.sent.text')
- #set($xpage="")#if($!request.xpage!="")#set($xpage="xpage=$request.xpage")#end
+ #set($xpage="")#if($!request.xpage!="")#set($xpage="xpage=$request.xpage&tempskin=curriki8")#end
  <strong>$msg.get('emailValidation.sent.notreceived',["/xwiki/bin/view/Registration/EmailNotReceived?${xpage}"])</strong>
  <p style="text-align:right"><button onclick="window.top.location.href='/xwiki/bin/logout/XWiki/XWikiLogout'; return false;" class="button-grey">$msg.get("join.login.cancel")</button></p>
 </div>

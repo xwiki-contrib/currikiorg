@@ -663,6 +663,8 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
                     winH + " to accomodate " + docH);
                 if (dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                     dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
+                } else if(dialogWindow.parent.jQuery) {
+                    dialogWindow.parent.jQuery("#" + iframeName).height(20+docH);
                 }
             }
             // there was a similar part for the width but this is given up
