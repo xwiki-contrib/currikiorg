@@ -145,8 +145,10 @@ public class LoginToViewTrigger extends Trigger {
 
         // If we come from the login page and the limit is exceeded, we match the current url
         if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches > this.threshold){
-            LOG.warn("Coming from the login page, but the threshold is exceeded. Show the login page again");
-            return true;
+            if(!currentUrl.contains("/xwiki/bin/view/Main/")){ //Only if we go to the homepage from a link in the pop up
+                LOG.warn("Coming from the login page, but the threshold is exceeded. Show the login page again");
+                return true;
+            }
         }
 
         // If the url history contains the current url we don't match it again because
