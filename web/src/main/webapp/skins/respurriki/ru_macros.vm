@@ -375,7 +375,7 @@
             #set($logredir = "srid=$request.srid")
         #end ##}
         #set($escapedURL=$escapetool.url($request.getRequestURI()))##
-        #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&xredirect=$escapedURL")
+        #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?tempskin=curriki8&xpage=popup&xredirect=$escapedURL")
         #set($anchorAtts="href='$targetURL' onclick='displayLoginDialogAlt(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
         ##<p><a $anchorAtts>login</a></p>
         #if($!request.getHeader("User-Agent").contains("MSIE 7"))
@@ -395,7 +395,7 @@
                     <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
                     #set($xredirect="${request.getRequestURI()}")##
                     <!-- xredirect is $xredirect -->
-                    #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
+                    #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&tempskin=curriki8&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
 
                     <li><a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
                        onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
