@@ -4,94 +4,59 @@
 ### The uppermost area of each page
 ### Contains the company logo, links to global actions and the search facility
 ###
-<div class="container" id="the-header">
+        <div class="container" id="the-header">
     #if($isInServletMode) ## Visible only in a page
-        <div class="row">
-            <div class="col-md-3 col-xs-6" onmouseover="jQuery(jQuery('#menuview')[0]).show();"
-                 onmouseout="if(window.hider){window.clearInterval(window.hider);}; window.hider = window.setTimeout('jQuery(jQuery(\'#menuview\')[0]).hide();', 3000);">
-                <a href="$!xwiki.getURL('Main.WebHome')" title="Home" rel="home" id="main-logo">
-                    #if("$!{themeDocFullName}" == '')
-                        #set($themeDocFullName = "$!xwiki.getUserPreference('colorTheme')")
-                    #end
-                    #if($themeDocFullName == '')
-                        #set($themeDocFullName = 'ColorThemes.DefaultColorTheme')
-                    #end
-                    #set($themeDoc = $xwiki.getDocument($themeDocFullName))
-                    #set($themeObj = $themeDoc.getObject('ColorThemes.ColorThemeClass'))
-                    #set($logoname = $themeObj.getProperty('logoImage').value)
-                    #if("$!{logoname}" != '')
-                        #set($logourl = $themeDoc.getAttachmentURL($logoname))
-                        #else
-                            #set($logoname = $xwiki.getSkinPreference('logo', 'logo.png'))
-                            #set($logo = $!prefdoc.getAttachment($logoname))
-                        #if(!$logo)
-                            #set($logourl = $xwiki.getSkinFile($logoname))
-                        #else
-                            #set($logourl = $prefdoc.getAttachmentURL($logo.filename))
-                        #end
-                    #end
-                    <img src="$!logourl" alt="Wiki Logo"/>
-                </a>
+        #template("top_nav.vm")
+        <!-- doc.space: $doc.space of class $doc.space.getClass() -->
+        #if($doc.space.startsWith("Group_"))
+            #set($groupName=$doc.space.substring(6))<!-- Group_  -->##
+        #elseif($doc.space.startsWith("Coll_Group_"))
+            #set($groupName=$doc.space.substring(11))<!-- Coll_Group $doc.space.substring(10) -->##
+        #elseif($doc.space.startsWith("Discussions_Group_"))<!-- Discussions_Group_ -->##
+            #set($groupName=$doc.space.substring(18))##
+        #elseif($doc.space.startsWith("Messages_Group_"))<!-- Messages_Group_ -->
+            #set($groupName=$doc.space.substring(14))##
+        #else
+            #set($groupName="")<!-- no group recognized -->
+        #end
+        <nav class="navbar navbar-default row" id="curriki-primary-menu" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#curriki-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand visible-xs" href="#">Menu</a>
             </div>
-            <!-- doc.space: $doc.space of class $doc.space.getClass() -->
-            #if($doc.space.startsWith("Group_"))
-                #set($groupName=$doc.space.substring(6))<!-- Group_  -->##
-            #elseif($doc.space.startsWith("Coll_Group_"))
-                #set($groupName=$doc.space.substring(11))<!-- Coll_Group $doc.space.substring(10) -->##
-            #elseif($doc.space.startsWith("Discussions_Group_"))<!-- Discussions_Group_ -->##
-                #set($groupName=$doc.space.substring(18))##
-            #elseif($doc.space.startsWith("Messages_Group_"))<!-- Messages_Group_ -->
-                #set($groupName=$doc.space.substring(14))##
-            #else
-                #set($groupName="")<!-- no group recognized -->
-            #end
-            <div class="col-md-1 col-md-push-8 col-xs-6">
-                #ru_loginLogout()
-            </div>
-            <div class="clearfix visible-xs"></div>
-            
-                <div class="col-md-8 col-md-pull-1 col-xs-12">
-                    <div class="clearfix"></div>
-                    <nav class="navbar navbar-default" role="navigation">
-                    <div class="navbar-header">
-                      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
-                        <span class="sr-only">Toggle navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                      </button>
-                      <a class="navbar-brand visible-xs" href="#">Menu</a>
-                    </div>
 
-                    <!-- Collect the nav links, forms, and other content for toggling -->
-                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                      <ul id="main-nav" class="nav nav-pills nav-justified">
-                        #if($groupName!="")
-                            <li><a href="../Group_${groupName}/" ##
-                                #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
-                                    >Home</a></li>
-                            <li><a href="../Coll_Group_${groupName}/Main"
-                                #if($doc.space.startsWith("Coll_")) class="current" #end##
-                                    >Course</a></li>
-                            <li><a href="#" class="link-green">Resources</a></li>
-                            <li><a href="../Group_${groupName}/Discussions"
-                                #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
-                                    >Discussions</a></li>
-                            <li><a href="#">Projects</a></li>
-                        #else
-                            <li><a href="#">Home</a></li>
-                            <li><a href="#">Course</a></li>
-                            <li><a href="#">Resources</a></li>
-                            <li><a href="#">Dicussions</a></li>
-                            <li><a href="#">Projects</a></li>
-                        #end
-                      </ul>
-                    </div><!-- /.navbar-collapse -->
-                  </nav>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="curriki-navbar-collapse-1">
+                <ul id="main-nav" class="nav nav-pills nav-justified">
+                    #if($groupName!="")
+                        <li><a href="../Group_${groupName}/" ##
+                            #if($doc.name=="WebHome" && $doc.space=="Group_${groupName}") class="current" #end##
+                                >Home</a></li>
+                        <li><a href="../Coll_Group_${groupName}/Main"
+                            #if($doc.space.startsWith("Coll_")) class="current" #end##
+                                >Course</a></li>
+                        <li><a href="#" class="link-green">Resources</a></li>
+                        <li><a href="../Group_${groupName}/Discussions"
+                            #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
+                                >Discussions</a></li>
+                        <li><a href="#">Projects</a></li>
 
-                </div>
-            </div>
-        </div>
+                    #else
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Course</a></li>
+                        <li><a href="#">Resources</a></li>
+                        <li><a href="#">Dicussions</a></li>
+                        <li><a href="#">Projects</a></li>
+                        <li id="menu-item-user">#ru_loginLogout()</li>
+                    #end
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
     #end
     ### TODO: Format the header for pdf output
 </div>

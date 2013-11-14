@@ -62,7 +62,7 @@ jQuery(document).ready(function() {
     jQuery('.wikiexternallink a').each(function() {
         var the_rel = jQuery(this).attr('rel');
         var the_target = jQuery(this).attr('target');
-        
+
         if (typeof the_rel !== 'undefined') {
             if (the_rel.indexOf('blank') !== -1) {
                 jQuery(this).append(' <i class="icon-external-link"></i>');
@@ -81,7 +81,6 @@ jQuery(document).ready(function() {
             }
         }
     });
-
 
 
 });
