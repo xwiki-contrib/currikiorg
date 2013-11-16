@@ -80,7 +80,7 @@
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdfobject.min.js"></script>
         <script type="text/javascript">
                 window.onload = function (){
-                    var myPDF = new PDFObject({ url: "$url" }).embed("the_pdf");
+                    var myPDF = new PDFObject({ url: decodeURIComponent("$url") }).embed("the_pdf");
                     if(!myPDF){
                         jQuery('#the_pdf').hide();
                         jQuery('.alt-download-pdf').show();

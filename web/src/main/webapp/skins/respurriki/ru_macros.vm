@@ -298,24 +298,23 @@
     #end ## end check null bcName
 #end ## end macro
 
+#macro(ru_modal_for_login)
+    ## the dialog to be popped-up
+    <div id="loginPopup"></div>
 
+    <div class="modal fade" id="my-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+#end
 ##
 ## login/logout witness
 ##
 #macro(ru_loginLogout)
-## the dialog to be popped-up
-<div id="loginPopup"></div>
-
-<div class="modal fade" id="my-modal">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-body">
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
-
-
 <script type="text/javascript">
     /* <![CDATA[ */
     function displayLoginDialogAlt(url) {
@@ -384,7 +383,7 @@
         
 
         <div class="btn-group">
-            <a $anchorAtts><i class="icon-user icon-large"></i> Login</a>
+            <a $anchorAtts class="navbar-link"><i class="icon-user icon-large"></i> Login</a>
             <a class="dropdown-toggle" data-toggle="dropdown">
                 <i class="icon-sort-down icon-large"></i>
             </a>
@@ -409,11 +408,10 @@
     #else ## }{ ## is logged in
         #set($fname = $crtUserDoc.display("first_name","view"))
         <div class="btn-group">
-            <button type="button" class="btn btn-default"><i class="icon-user icon-large"></i> $fname</button>
-            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
-              <span class="caret"></span>
-              <span class="sr-only">Toggle Dropdown</span>
-            </button>
+            <a href="#" class="navbar-link">$fname</a>
+            <a class="dropdown-toggle" data-toggle="dropdown">
+                <i class="icon-sort-down icon-large"></i>
+            </a>
             <ul class="dropdown-menu" role="menu">
                 <li><a href='$crtUserDoc.getURL()'>My curriki</a></li>
                 #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
@@ -423,7 +421,8 @@
     #end ##}
     #set($headerMsg="$!request.session.getAttribute('header.message')")##
     #if("$!headerMsg"!="")
-        <p>##
+        <div class="alert alert-warning" id="logged-out-message">
+            <strong>Notice:</strong> 
             #if($headerMsg=="logout-ok")##
                 $request.session.removeAttribute("header.message")##
                     $msg.get("logout.ok-you-left")<!-- logout message here -->##
@@ -441,7 +440,12 @@
                     #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
                     <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
             #else$msg.get($headerMsg,[$context.user.substring(6)])#end## "XWiki.".length() = 6
-        </p>
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('#logged-out-message').show(5000).delay(2000).fadeOut('slow');
+            });
+        </script>
     #end##
 ##
 </div> ##} ##header-member
@@ -1000,3 +1004,4 @@
     </div> ##asset-wrapper-inner
 </div> ##asset-wrapper
 #end
+

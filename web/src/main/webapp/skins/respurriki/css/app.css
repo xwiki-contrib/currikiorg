@@ -322,12 +322,34 @@ h2#course-title{
     text-transform: uppercase;
     letter-spacing: 10px;
 }
-    #main-nav li#menu-item-user a{
-        background-color: #fff;
-        text-transform: capitalize;
-        color: #6e6e6e;
-    }
-    
+#main-nav li#menu-item-user a{
+    /*background-color: #fff;*/
+    text-transform: capitalize;
+    color: #6e6e6e;
+}
+#main-nav li#menu-item-user a:hover{
+    text-decoration: none;
+    cursor: pointer;
+}
+#main-nav li#menu-item-user a.dropdown-toggle{
+    position: relative;
+    top: -4px;
+}
+#main-nav li#menu-item-user .dropdown-menu a:hover{
+    background-color: #f5f5f5;
+}
+#logged-out-message{
+    position:fixed;
+    z-index: 100;  
+    top:30%;  
+    left:50%;  
+    margin:-100px 0 0 -100px;  
+    width: 400px;  
+    height: 50px;
+    display: none;
+    text-align: left;
+}
+
 /* responsive behaviour */
 @media(max-width:500px){
     h2#course-title{
@@ -351,6 +373,47 @@ h2#course-title{
         margin-left: 5px;
         text-transform: uppercase;
         letter-spacing: 0px;
+    }
+    /* speciall code to transform login buttons */
+    #header-member{
+        text-align: left;
+    }
+    #header-member a i.icon-user{
+        display: none;
+    }
+    #main-nav li a{
+        color: #6E6E6E;
+        text-align: left;
+    }
+    #main-nav li#menu-item-user #header-member a.navbar-link{
+        text-transform: uppercase;
+        margin-left: 15px;
+        margin-right: 15px;
+    }
+    #main-nav li#menu-item-user{
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    #main-nav li#menu-item-user:hover{
+        background-color: #eeeeee;
+    }
+    #main-nav li#menu-item-user #header-member .dropdown-menu{
+        text-align: left;
+        left: 0px;
+        text-transform: uppercase;
+        border: none;
+        background: none;
+        box-shadow: none;
+    }
+    #main-nav li#menu-item-user #header-member .btn-group{
+        width: 100%;
+    }
+    #main-nav li#menu-item-user #header-member .dropdown-menu a{
+        display: block;
+        text-transform: uppercase;
+    }
+    #main-nav li#menu-item-user #header-member .dropdown-menu a img{
+        display: none;
     }
 }
 @media(min-width:768px){
@@ -378,6 +441,12 @@ h2#course-title{
     }
     #the-dropdowns{
         margin-bottom: 10px;
+    }
+    #main-nav li .btn-group a{
+        background-color: #fff;
+    }
+    #main-nav li .btn-group a:hover{
+        background-color: #f5f5f5;
     }
 }
 @media(min-width:992px){
