@@ -418,6 +418,7 @@ document.observe('dom:loaded', function(){
         inputElt.observe("change",toggleCorporateFieldsVisible);
         toggleCorporateFieldsVisible();
     });
+  Ext.removeNode(Ext.query('option[value="corporation"]').first()) // CURRIKI-6408
 });
 ## 
 function toggleCorporateFieldsVisible() {
@@ -461,31 +462,40 @@ function toggleCorporateFieldsVisible() {
 #end ##}
 
 #macro(registrationformtextfieldfull $pfx $fld $req $dup $ro) ##{
-#set($field = $fld)
-#if($fld != 'xwikiname') ##{
-#set($field = "XWiki-XWikiUsers_0_${fld}")
-#end ##}
-#if($dup!='0') ##{
-#set($field = "${dup}${field}")
-#end ##}
-	<li id="block-${field}">
-		<span>#if($req)$g_RegReq#end<label for="${field}">#set($title = $pfx+'.title')$msg.get($title)</label>#set($tt = $pfx+'.tooltip')<img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get($tt)"/></span>
-		<p class="instructions">#set($desc = $pfx+'.description')$msg.get($desc)</p>
-#if($field == 'xwikiname') ##{
-	#if($ro!='0') ##{
-		$msg.get($title): $userdoc.name
-		<input type="hidden" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off" />
-	#else ##}{
-		<input type="text" class="input-text" value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end" id="${field}" name="${field}" autocomplete="off"#if($ro!='0') READONLY#{end}/>
-	#end ##}
-#else ##}{
-	#if($dup!='0') ##{
-		$userdoc.display($fld, "edit", "2")
-	#else ##}{
-		$userdoc.display($fld, "edit")
-	#end ##}
-#end ##}
-	</li>
+  #set($field = $fld)
+  #if($fld != 'xwikiname') ##{
+    #set($field = "XWiki-XWikiUsers_0_${fld}")
+  #end ##}
+  #if($dup!='0') ##{
+    #set($field = "${dup}${field}")
+  #end ##}
+<li id="block-${field}">
+  <span>#if($req)$g_RegReq#end<label
+    for="${field}">#set($title = $pfx+'.title')$msg.get($title)</label>#set($tt = $pfx+'.tooltip')<img class="tooltip"
+                                                                                                       alt=""
+                                                                                                       src="$g_ClearPx"
+                                                                                                       ext:qtip="$msg.get($tt)"/></span>
+
+  <p class="instructions">#set($desc = $pfx+'.description')$msg.get($desc)</p>
+  #if($field == 'xwikiname') ##{
+    #if($ro!='0') ##{
+      $msg.get($title): $userdoc.name
+      <input type="hidden"
+             value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end"
+             id="${field}" name="${field}" autocomplete="off"/>
+    #else ##}{
+      <input type="text" class="input-text"
+             value="#if($g_RegType == 'edit_profile')$userdoc.name#elseif("$!request.xwikiname" != "")$request.xwikiname#end"
+             id="${field}" name="${field}" autocomplete="off"#if($ro!='0') READONLY#{end}/>
+    #end ##}
+  #else ##}{
+    #if($dup!='0') ##{
+      $userdoc.display($fld, "edit", "2")
+    #else ##}{
+      $userdoc.display($fld, "edit")
+    #end ##}
+  #end ##}
+</li>
 #end ##}
 
 #macro(registrationaccountinfo) ##{
