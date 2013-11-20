@@ -82,5 +82,43 @@ jQuery(document).ready(function() {
         }
     });
 
+    jQuery('.wikilink a').each(function() {
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
 
+        if (typeof the_rel !== 'undefined') {
+            if (the_rel.indexOf('blank') !== -1) {
+                jQuery(this).append(' <i class="icon-external-link"></i>');
+            } else {
+                if (typeof the_target !== 'undefined') {
+                    if (the_target.indexOf('blank') !== -1) {
+                        jQuery(this).append(' <i class="icon-external-link"></i>');
+                    }
+                }
+            }
+        } else {
+            if (typeof the_target !== 'undefined') {
+                if (the_target.indexOf('blank') !== -1) {
+                    jQuery(this).append(' <i class="icon-external-link"></i>');
+                }
+            }
+        }
+    });
+
+    //now the click events
+    jQuery('.wikicreatelink a').click(function() {
+        var url = jQuery(this).attr('href');
+        window.open(url, '_blank');
+        return false;
+    });
+    jQuery('.wikiexternallink a').click(function() {
+        var url = jQuery(this).attr('href');
+        window.open(url, '_blank');
+        return false;
+    });
+    jQuery('.wikilink a').click(function() {
+        var url = jQuery(this).attr('href');
+        window.open(url, '_blank');
+        return false;
+    });
 });

@@ -1,15 +1,3 @@
-##
-##
-## My Curriki Groups Macros
-##
-##
-
-#**
-  * Displays the group list of the user in mycurriki
-  *
-  * @param $userdoc Document of the user
-  * @param $userobj Object of the user
-  *#
 #macro(ru_groups_mycurriki_grouplist $userdoc $userobj)
     #set($nbToDisplay = 5)
     #set($sm = $xwiki.csm)
@@ -26,7 +14,6 @@
     #if($endIndex > ($spaceList.size() - 1))
         #set($endIndex = $spaceList.size() - 1)
     #end
-    #set($first_frame_done = "yes")
     #set($showcount = 0)
     #foreach($space in $spaceList)
         #set($showcount = 1 + $showcount)
@@ -34,121 +21,9 @@
             #ru_groups_groupinfomessages($space "")
         #end
     #end
-    #if($showcount != 0)
-        #set($sortArgs = "")
-        <div class="frame">
-        #curriki_paginatorargs($msg.get("mycurriki.tab.groups.label") $startIndex $nbToDisplay $spaceList.size() $sortArgs)
-    #end
 #end
 
 
-#**
-  * Display a Group logo for a space
-  *
-  * @param $space Space/Group to display the logo of
-  * @author dward@curriki.org
-  *#
-#macro(ru_groups_grouplogo $space)
-    #groups_grouplogo2($space true)
-#end
-
-#**
-  * Display a Group logo for a space
-  *
-  * @param $space Space/Group to display the logo of
-  * @author dward@curriki.org
-  *#
-#macro(ru_groups_grouplogo2 $space $withpre)
-  #set($logofilename = $space.display("logo","view"))
-  #set($attachLogo = "")
-  #if("$!logofilename" != "")
-   #set($spacehome = $space.getSpaceName()+".WebHome")
-   #set($srcdoc = $xwiki.getDocument($spacehome))
-   #set($attachLogo = $srcdoc.getAttachment($logofilename))
-  #end
-  #if("$!logofilename"!="" && "$!attachLogo"!="")
-    #set($m_logo = $srcdoc.getAttachmentURL($logofilename))
-  #else
-    #set($m_logo = $xwiki.getSkinFile("groups_default_logo.gif"))
-  #end
-#set( $image_resize = "?width=120&height=82&keepAspectRatio=true" )
-  ##display logo
-  <div class="frame-inset-logo">
-    #set($jstitle = $xwiki.curriki.escapeForJS($space.getDisplayTitle()))
-    #if($withpre)
-        #verbatim_start
-        <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}" target="${target}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}"/>
-        </a>
-        #verbatim_end
-    #else
-        #if($viewer == "embed-teachhub")
-          <a target="_blank" href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}">
-            <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
-          </a>
-          {/pre}###verbatim_end
-      #else
-          <a href="$space.getHomeURL()" title="${jstitle}" alt="${jstitle}" target="${target}">
-              <img src="${m_logo}${image_resize}" title="${jstitle}" alt="${jstitle}" width="120"/>
-          </a>
-      #end
-    #end
-  </div>
-#end
-
-#**
-  * Group masthead showing the group information for my curriki
-  *
-  * @param m_groupName group name to display messages for
-  * @param displayType display in view or edit mode
-  * @author dward@curriki.org
-  *#
-#macro(ru_groups_groupinfo $m_groupName $displayType) ## {
-#if(!$g_rowCount) ## {
-#set($g_rowCount = 0)
-#end ## }
-#set($g_rowCount = $g_rowCount + 1)
-#set($m_sm = $xwiki.csm)
-#set($s = $m_sm.getSpace($m_groupName))
-#if("$!first_frame_done" == "") ## {
-<div class="frame">
-#else ## } {
-#set($first_frame_done = "")
-#end ## }
-<div class="frame-inset-titlebar">
-#if($displayType == "edit")
-  #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-  #verbatim_end
-#elseif($displayType == "view")
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" "" "" "blue")
-  #verbatim_end
-#else
-  #verbatim_start
-  #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-  #verbatim_end
-#end
-</div>
-#groups_grouplogo( $s )
-<div class="frame-inset-description">
-<p>
-$s.getDescription()
-</p>
-</div>
-</div>
-#end ## }
-
-
-
-#**
-  * Group masthead showing messages viewable by the user for my curriki
-  *
-  * @param m_groupName group name to display messages for
-  * @param displayType display in view or edit mode
-  * @author dward@curriki.org
-  *#
 #macro(ru_groups_groupinfomessages $m_groupName $displayType)
     #if(!$g_rowCount)
         #set($g_rowCount = 0)
@@ -156,67 +31,34 @@ $s.getDescription()
     #set($g_rowCount = $g_rowCount + 1)
     #set($m_sm = $xwiki.csm)
     #set($s = $m_sm.getSpace($m_groupName))
-    #if("$!first_frame_done" == "")
-        <div class="frame">
-    #else
-        #set($first_frame_done = "")
-    #end
-    <div class="frame-inset-titlebar">
-    #if($displayType == "edit")
-        #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-        #verbatim_start
-        #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('groups_home_masthead_link') $editmastheadurl "blue")
-        #verbatim_end
-    #elseif($displayType == "view")
-        #verbatim_start
-        #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" "" "" "blue")
-        #verbatim_end
-    #else
-        #verbatim_start
-        #curriki_titlebar("$xwiki.escapeText($s.getDisplayTitle())" $msg.get('mycurriki.groups.visit') $s.getHomeURL() "blue")
-        #verbatim_end
-    #end
-    </div>
-    #groups_grouplogo( $s )
-    <div class="frame-inset-description">
-        <p>
-            $s.getDescription()
-        </p>
-    </div>
-    #if("$context.user" == "$!userdoc.fullName" )
-        #set($sql = ", BaseObject as obj where obj.name=doc.fullName and obj.className='XWiki.ArticleClass' and doc.web='Messages_${m_groupName}' order by doc.creationDate desc")
-        #set($messages = $xwiki.searchDocuments($sql, 100, 0))
-        #if($messages.size() > 0)
-            <div id="mycurriki-groups-message-container">
-            <div id="mycurriki-group-mymessages-${m_groupName}" class="lefttext xwikicomment">
-            <div class="righttext floatright">
-            <a href="$xwiki.getURL("${m_groupName}.Messages", "view")">$msg.get("mycurriki.groups.viewmessages")</a>
-            </div>
-            <b>$msg.get("mycurriki.groups.mymessages")</b>
-            </div>
-            #set($showCount = 0)
-            #foreach($messageName in $messages)
-                #if($showCount < 3)
-                    #if($xwiki.hasAccessLevel("view", $context.user, $messageName))
-                        #set($showCount = 1 + $showCount)
-                        #set($message = $xwiki.getDocument($messageName))
-                        #set($msgContent = $message.getObject("XWiki.ArticleClass"))
-                        <div id="mycurriki-group-mymessages-${message.fullName}" class="lefttext xwikicomment">
-                        <div class="righttext floatright">
-                        $xwiki.formatDate($message.creationDate, $msg.get("mycurriki.datetimeFormat"))
-                        $msg.get("mycurriki.groups.message.by") <a href="$xwiki.getURL("${message.creator}", "view")">$xwiki.getUserName($message.creator)</a>
-                        </div>
-                        #set($showTitle = $msgContent.title)
-                        #if($showTitle.length() > 32)
-                            #set($showTitle = $showTitle.substring(0, 32)+"...")
-                        #end
-                        <a href="$xwiki.getURL($message.fullName, "view")"><b>$showTitle</b></a>
-                        </div>
-                    #end
-                #end
-            #end
-            </div>
+    <ul class="dropdown-menu" role="menu">
+        #if($displayType == "edit")
+            #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
+            ##verbatim_start
+            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $editmastheadurl)
+            ##verbatim_end
+        #elseif($displayType == "view")
+            ##verbatim_start
+            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" "")
+            ##verbatim_end
+        #else
+            ##verbatim_start
+            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $s.getHomeURL())
+            ##verbatim_end
         #end
+    </ul>
+#end
+
+
+#macro(ru_class_dropdown_item $class_name $link)
+    #if("$!link" != "")
+        #normalizelink($link)
     #end
-    </div>
+    <li>
+    #if("$!link"!="")
+        <a  href="$link">$class_name</a>
+    #else
+        $class_name
+    #end
+    </li>
 #end
