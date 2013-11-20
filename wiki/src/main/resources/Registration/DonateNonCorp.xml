@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.ShermanTank</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1314655180000</creationDate>
-<date>1351901788000</date>
-<contentUpdateDate>1351901788000</contentUpdateDate>
-<version>66.1</version>
+<date>1384461966000</date>
+<contentUpdateDate>1384461966000</contentUpdateDate>
+<version>73.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment>Commented out Google Checkout choices.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -91,9 +91,12 @@
     &lt;h2&gt;$msg.get('join.complete.donate.title')&lt;/h2&gt;
 ##
     &lt;p&gt; $msg.get('join.complete.donate.text')&lt;/p&gt;
-    &lt;p&gt;&lt;b&gt;$msg.get('join.complete.donate.header'):&lt;/b&gt;&lt;/p&gt;
+    &lt;p&gt;&lt;b&gt;$msg.get('join.complete.donate.header')&lt;/b&gt;&lt;/p&gt;
+
+
+ &lt;!-- Removing Google Donate Buttons
     &lt;div id="box-wrapper" style="margin: 30px auto 0; padding:0; width: 450px"&gt;
-    ##
+   ##
     ##
         #set($amount="25")##
         &lt;a href="$baseUrlPopup$amount"&gt;&lt;button class="box" style="border-color: #99CB25" ##
@@ -142,9 +145,10 @@
             &lt;span  class="dollar_sign"&gt;$&lt;/span&gt;1,000&amp;nbsp;&lt;br/&gt;
             &lt;img width="90" src="https://checkout.google.com/buttons/donateNow.gif?merchant_id=910568156269958&amp;w=115&amp;h=50&amp;style=white&amp;variant=text&amp;loc=${context.language}"/&gt;&lt;/button&gt;
         &lt;/a&gt;
+--&gt;
         &lt;div style="clear: both"&gt;&lt;/div&gt;
-        $msg.get('join.complete.donate.other_method')
-        ##Please see the &lt;a href="../Main/Donate" target="_top"&gt;Donate page&lt;/a&gt; for other payment ways.
+$msg.get('join.complete.donate.other_method')
+##Please seeeee the &lt;a href="../Main/Donate" target="_top"&gt;Donate page&lt;/a&gt; for other payment ways.
     &lt;/div&gt;
 &lt;/div&gt;
 &lt;script type="text/javascript"&gt;
@@ -173,5 +177,4 @@
     scheduleDialogRescale(window, document, "loginIframe", 750,0);
     Curriki.ui.login.hideLoginLoading();
 &lt;/script&gt;
-{/pre}
-</content></xwikidoc>
+{/pre}</content></xwikidoc>

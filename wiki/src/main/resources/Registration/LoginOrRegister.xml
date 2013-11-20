@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1309965605000</creationDate>
-<date>1354130338000</date>
-<contentUpdateDate>1354130338000</contentUpdateDate>
-<version>150.1</version>
+<date>1384902493000</date>
+<contentUpdateDate>1384902493000</contentUpdateDate>
+<version>151.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>missed a period</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -83,9 +83,9 @@
         #template("stylesheets.vm")
         #template("analytics.vm")
     ## #template("analytics.vm")
-        &lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%}&lt;/style&gt;
+        &lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%; overflow: hidden}&lt;/style&gt;
         {/pre}
-    &lt;body style="background-color:white" class="iframeInside" style="min-width: 0; margin-right:1em; width:90%"&gt;##
+    &lt;body style="background-color:white;" class="iframeInside"&gt;##
     #else
     {pre}
         #template("xwikivars.vm")
@@ -94,7 +94,7 @@
     &lt;script type="text/javascript"&gt;
         document.body.className = document.body.className + " iframeInside";
     &lt;/script&gt;
-    &lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%}&lt;/style&gt;
+    &lt;style type="text/css"&gt;body { min-width: 0; margin-right:1em; width:90%; overflow: hidden}&lt;/style&gt;
     {/pre}
     #end#else#set($framed="false")##
 {pre}#template("startpage.vm"){/pre}##
@@ -102,7 +102,7 @@
 &lt;style type="text/css"&gt;
         /*  join popup styles */
     body{background-color: #ffffff;}
-    #mainContentArea {margin-top: 5em;}
+    #mainContentArea {margin-top: 4em;}
     #join_form_contents.fields_wrp { width: 500px; margin: 20px auto }
     #joinformleftblock{float: left; width: 250px; text-align: right; border-right:  2px solid #ccc; padding-right: 20px;padding: 0 20px  10px 0;}
     div#joinformrightblock {float: left; width: 190px; text-align: left; border-left:  2px solid #ccc; margin-left: -2px;padding: 0 0 10px 20px;}
@@ -227,7 +227,7 @@
                     href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&amp;xpage=popup"
                     title="$msg.get('join.login.forgot_tooltip')"&gt;$msg.get('join.login.forgot')&lt;/a&gt;&lt;/span&gt;
                 &lt;br/&gt;&lt;br/&gt;
-	&lt;span id="alternative_login"&gt;&lt;a href="/xwiki/bin/view/Registration/ManualLogin" target="_top"&gt;$msg.get('join.login.alternative.login')&lt;/a&gt;&lt;/span&gt;
+                &lt;span id="alternative_login"&gt;&lt;a href="/xwiki/bin/view/Registration/ManualLogin" target="_top"&gt;$msg.get('join.login.alternative.login')&lt;/a&gt;&lt;/span&gt;
             &lt;span id="login_cancel"&gt;&lt;br/&gt;&lt;br/&gt;
             &lt;span id="login_cancel"&gt;
                       &lt;input type="button" class="button-grey" value="$msg.get('join.login.cancel')" ##
