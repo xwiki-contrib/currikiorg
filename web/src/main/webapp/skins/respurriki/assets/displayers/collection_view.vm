@@ -13,9 +13,14 @@
 #if(!$asset.hasAccessLevel("view"))
 #asset_collectionemptyornorights()
 #else
- ## The subAssetList property has already been prepared
+<div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
+<div class="sub-asset-wrapper-inner">
+   $asset.display("description","view",true)
+</div></div>
+## The subAssetList property has already been prepared
  ## in asset_tabs so that we can determine if we need an organize link
-#if(!$subAssetList)
+#*
+    #if(!$subAssetList)
 #set($subAssetList = $util.arrayList)
 #asset_preparesubassetlist($asset $subAssetList)
 #end
@@ -43,5 +48,5 @@
   #end ## foreach
 #else
 #asset_collectionemptyornorights()
-#end
+*#
 #end
