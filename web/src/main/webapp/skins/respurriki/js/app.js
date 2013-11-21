@@ -107,18 +107,30 @@ jQuery(document).ready(function() {
 
     //now the click events
     jQuery('.wikicreatelink a').click(function() {
-        var url = jQuery(this).attr('href');
-        window.open(url, '_blank');
-        return false;
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
+        if (typeof the_rel !== 'undefined' || typeof the_target !== 'undefined') {
+            var url = jQuery(this).attr('href');
+            window.open(url, '_blank');
+            return false;
+        }
     });
     jQuery('.wikiexternallink a').click(function() {
-        var url = jQuery(this).attr('href');
-        window.open(url, '_blank');
-        return false;
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
+        if (typeof the_rel !== 'undefined' || typeof the_target !== 'undefined') {
+            var url = jQuery(this).attr('href');
+            window.open(url, '_blank');
+            return false;
+        }
     });
     jQuery('.wikilink a').click(function() {
-        var url = jQuery(this).attr('href');
-        window.open(url, '_blank');
-        return false;
+        var the_rel = jQuery(this).attr('rel');
+        var the_target = jQuery(this).attr('target');
+        if (typeof the_rel !== 'undefined' || typeof the_target !== 'undefined') {
+            var url = jQuery(this).attr('href');
+            window.open(url, '_blank');
+            return false;
+        }
     });
 });
