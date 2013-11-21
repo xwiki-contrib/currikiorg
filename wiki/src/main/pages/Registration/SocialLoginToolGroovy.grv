@@ -170,6 +170,16 @@ public class SocialLoginToolGroovy {
             request.session.setAttribute("org.brickred.socialauth.AuthProvider.hint", request.provider);
             response.sendRedirect(url);
             return "nothing";
+
+
+            def space = xwiki.getDocument("Group_SampleCurrikiGeometryCourse.WebPreferences");
+            println("Space found: " + space);
+            println("* topic: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value);
+            println("* topic class " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value.getClass());
+            println("* level: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("educationLevel").value);
+
+
+
         } catch (Exception ex) {
             LOG.warn("Generic error at bounce to provider.", ex);
             errors.add(msg.get('registration.genericError', [ex.message]));

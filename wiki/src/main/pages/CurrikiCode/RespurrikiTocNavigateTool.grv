@@ -118,7 +118,9 @@ public class RespurrikiTocNavigateTool {
     private String getDefaultParent(String currentPath) {
         String hql = "select doc.fullName from XWikiDocument as doc, BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${currentPath}' AND doc.space !='Coll_Group_CRSCollaboration' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate";
         List list = xwiki.search(hql, 2, 0, context);
-        if(list==null || list.size()==0) return null;
+        if(list==null || list.size()==0 || list.get(0)==null) {
+            return xwiki.getDocument(currentPath, context).getParent();
+        }
         return list.get(0);
     }
 
