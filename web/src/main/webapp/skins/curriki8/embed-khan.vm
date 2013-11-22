@@ -6,86 +6,1858 @@
   <script src="/xwiki/js/curriki-khan-exercises/khan-exercise.js"></script>
 </head>
 <body>
+################################################
+## Exercise 1
+## https://www.khanacademy.org/math/geometry/segments-and-angles/measuring-segments-tutorial/e/measuring_segments
+##
 #if($request.showExercise==1)
 <div class="exercise">
-  <div class="vars">
-    <var id="A">randRange( 1, 10 )</var>
-    <var id="B">randRange( 1, 10 )</var>
-  </div>
-
   <div class="problems">
-    <div>
-      <div class="question">
-        <div class="graphie">
-          init({
-          range: [ [0, 12], [-1, 1] ]
-          });
+      <div>
+          <div class="vars">
+              <var id="POINTS">sortNumbers( randRangeUnique( -5, 5, 4 ) )</var>
+              <var id="COLORS">[ BLUE, GREEN, PINK, ORANGE ]</var>
+              <var id="IDX_1,IDX_2">randRangeUnique( 0, 3, 2 )</var>
+              <var id="POINT_1">[ "A", "B", "C", "D" ][ IDX_1 ]</var>
+              <var id="POINT_2">[ "A", "B", "C", "D" ][ IDX_2 ]</var>
+              <var id="SEGMENT">POINT_1 + POINT_2</var>
+              <var id="SOLUTION">abs( POINTS[ IDX_1 ] - POINTS[ IDX_2 ] )</var>
+          </div>
+          <p class="question">What is <code><var>SEGMENT</var></code>?</p>
+          <div class="problem">
+              <div class="graphie" id="number-line">
+                  init({
+                      range: [ [ -6, 6 ], [ -1, 1 ] ]
+                  });
+                  style({ stroke: "#999" });
+                  line( [ -5, 0 ], [ 5, 0 ] );
+                  for ( var x = -5; x &lt;= 5; x++ ) {
+                      line( [ x, -0.2 ], [ x, 0.2 ] );
+                      label( [ x, -0.53 ],  String( x ).replace( /-(\d)/g, "\\llap{-}$1" ), "center", { color: "#999" } );
+                  }
+                  style({ strokeWidth: 3.5 });
+                  line( [ 0, -0.2], [0, 0.2]);
 
-          label( [0, 0],
-          "\\Huge{\\color{#6495ED}{" + A + "} + \\color{#28AE7B}{" + B + "} = {?}}",
-          "right" );
-        </div>
-      </div>
-      <div class="solution" data-forms="integer"><var>A + B</var></div>
-      <div class="hints">
-        <div class="graphie" style="float: left;">
-          drawCircles( A, "#6495ED" );
-        </div>
-        <div class="graphie" style="float: left;">
-          drawCircles( B, "#28AE7B" );
-        </div>
-        <p style="clear: left;">
-          <span data-if="isSingular(A)">There are <var>A</var> blue dot.</span><span data-else="">There are <var>A</var> blue dots.</span>
-          <span data-if="isSingular(B)">There are <var>B</var> green dot.</span><span data-else="">There are <var>B</var> green dots.</span>
-          <span>There are a total of <var>A + B</var> dots.</span>
-        </p>
+                  style({ stroke: COLORS[ 0 ], fill: COLORS[ 0 ] });
+                  circle( [ POINTS[ 0 ], 0 ], 0.10 );
+                  style({ stroke: COLORS[ 1 ], fill: COLORS[ 1 ] });
+                  circle( [ POINTS[ 1 ], 0 ], 0.10 );
+                  style({ stroke: COLORS[ 2 ], fill: COLORS[ 2 ] });
+                  circle( [ POINTS[ 2 ], 0 ], 0.10 );
+                  style({ stroke: COLORS[ 3 ], fill: COLORS[ 3 ] });
+                  circle( [ POINTS[ 3 ], 0 ], 0.10 );
+                  label( [ POINTS[ 0 ], 0 ], "A", "above", { color: COLORS[ 0 ] } );
+                  label( [ POINTS[ 1 ], 0 ], "B", "above", { color: COLORS[ 1 ] } );
+                  label( [ POINTS[ 2 ], 0 ], "C", "above", { color: COLORS[ 2 ] } );
+                  label( [ POINTS[ 3 ], 0 ], "D", "above", { color: COLORS[ 3 ] } );
+              </div>
+          </div>
+          <div class="solution" data-forms="integer"><var>SOLUTION</var></div>
+          <div class="hints">
+              <p>
+                  <code><var>SEGMENT</var></code> means the distance from <code>\color{<var>COLORS[ IDX_1 ]</var>}{<var>POINT_1</var>}</code> to
+                  <code>\color{<var>COLORS[ IDX_2 ]</var>}{<var>POINT_2</var>}</code>.
+              </p>
+              <p><code><var>SEGMENT</var> = |\color{<var>COLORS[ IDX_1 ]</var>}{<var>POINTS[ IDX_1 ]</var>} - \color{<var>COLORS[ IDX_2 ]</var>}{<var>POINTS[ IDX_2 ]</var>}|</code></p>
+              <p><code><var>SEGMENT</var> = |<var>POINTS[ IDX_1 ] - POINTS[ IDX_2 ]</var>|</code></p>
+              <p><code><var>SEGMENT</var> = <var>SOLUTION</var></code></p>
+          </div>
       </div>
     </div>
-  </div>
 </div>
+################################################
+## Exercise 2
+## https://www.khanacademy.org/math/geometry/congruent-triangles/cong_triangle/e/congruent_triangles_1
+##
 #elseif($request.showExercise==2)
 <div class="exercise">
-  <div class="vars" data-ensure='SIGN === "" || INT !== 0 || FRAC !== ""'>
-    <var id="INT">rand(5) > 0 ? randRange( 1, 9 ) : 0</var>
-    <var id="FRAC">rand(3) > 0 ? "." + randRange(1, 9) : ""</var>
-    <var id="SIGN">randFromArray(["", "-"])</var>
-  </div>
-
-  <div class="problems">
-    <div>
-      <div class="question">
-        <p>What is <code>\lvert <var>SIGN + INT + FRAC</var> \rvert</code>?</p>
-      </div>
-      <div class="solution"><var>INT + FRAC</var></div>
+    <div class="vars">
+        <var id="MAIN">randomTriangleAngles.triangle()</var>
+        <var id="MAIN_SIZE">5 + random() * 2</var>
+        <var id="IS_B">randRange( 0, 1 ) === 1</var>
+        <var id="B">IS_B ? MAIN : randomTriangleAngles.triangle()</var>
+        <var id="B_SIZE">IS_B ? MAIN_SIZE : 2 + random() * 2</var>
+        <var id="CHOICES">[$._("Yes"), $._("No"), $._("There is not enough information to say")]</var>
+        <var id="ANSWER">IS_B ? 0 : 1</var>
+        <var id="A_ANGLES">[ 0, 1, 2 ]</var>
+        <var id="B_ANGLES">A_ANGLES</var>
+        <var id="A_SIDES">[ 0, 1, 2 ]</var>
+        <var id="B_SIDES">A_SIDES</var>
+        <var id="TR_A">
+            function(){
+                var t = new Triangle( [ 3, -2 ], MAIN, MAIN_SIZE, {} );
+                t.labels =  { "name": "A", "angles" : clearArray( t.niceAngles, A_ANGLES ),  "sides" : clearArray( t.niceSideLengths, A_SIDES ) };
+                return t;
+            }()
+        </var>
+        <var id="TR_B">
+            function(){
+                var t = new Triangle( [ 7, -6 ], B, B_SIZE, {} );
+                t.labels =  { "name": "B", "angles" : clearArray( t.niceAngles, B_ANGLES ),  "sides" : clearArray( t.niceSideLengths, B_SIDES ) };
+                return t;
+            }()
+        </var>
     </div>
-  </div>
-
-  <div class="hints">
-    <div class="graphie">
-      init({
-      range: [ [-1, 11], [-1, 1] ]
-      });
-      var start = 0;
-      var end = 10;
-      var originX = 0;
-      var x = abs( INT ) + FRAC;
-      if ( SIGN === "-" ) {
-      start = -10;
-      end = 0;
-      originX = 10;
-      x = 10 - x;
-      }
-      numberLine( start, end );
-      style({ stroke: "#6495ED", fill: "#6495ED" });
-      graph.pt = circle( [ x, 0 ], 0.15 );
-      style({ stroke: "#FFA500", fill: "#FFA500", strokeWidth: 3.5, arrows: "->" });
-      path( [ [ originX, 0 ], [ x, 0 ] ] );
-      circle( [ originX, 0 ], 0.10 );
-      graph.pt.toFront();
+    <div class="hints">
+            <p>Triangles are congruent when all corresponding sides and interior angles are congruent. </p>
+            <p>However, we do not need to know all the values in order to determine whether two triangles are congruent. </p>
+            <p>The rules we use for determining congruency are SSS, ASA, SAS and AAS</p>
     </div>
-    <p>The distance from <code>0</code> to <code><var>SIGN + INT + FRAC</var></code> is <code><var>INT + FRAC</var></code>, which equals the absolute value.</p>
-    <p data-if='SIGN !== ""'>In other words, <code><var>INT + FRAC</var></code> is the non-negative version of <code><var>SIGN + INT + FRAC</var></code>.</p>
-  </div>
+    <div class="problem">
+        Are these two triangles congruent?
+    </div>
+    <div class="question">
+        <div class="graphie">
+            TR_A.rotate( randRange( 0, 360 ) );
+            TR_B.rotate( randRange( 0, 360 ) );
+            var aBounding = TR_A.boundingRange(1);
+            var bBounding = TR_B.boundingRange(1);
+            var minX = Math.min(aBounding[0][0], bBounding[0][0]);
+            var maxX = Math.max(aBounding[0][1], bBounding[0][1]);
+            var minY = Math.min(aBounding[1][0], bBounding[1][0]);
+            var maxY = Math.max(aBounding[1][1], bBounding[1][1]);
+            init({
+                range: [ [minX, maxX ], [ minY, maxY ] ]
+            })
+            TR_A.draw();
+            TR_A.drawLabels();
+            TR_B.draw();
+            TR_B.drawLabels();
+        </div>
+    </div>
+    <div class="solution"><var>CHOICES[ANSWER]</var></div>
+    <ul class="choices" data-category="true">
+        <li data-each="CHOICES as choice">
+            <var>choice</var>
+        </li>
+    </ul>
+    <div class="problems">
+        <div id="SSS">
+            <div class="vars">
+                <var id="A_ANGLES">[]</var>
+                <var id="A_SIDES">[ 0, 1, 2 ]</var>
+            </div>
+            <div class="hints" data-apply="appendContents">
+                <p>In this problem we are given the sides of the triangles, so we can compare them easily.</p>
+                <p data-if="IS_B">Triangle B has 3 sides the same as triangle A, so they are congruent.</p>
+                <p data-else="">Because the sides do not match, triangle B is not congruent with triangle A.</p>
+            </div>
+        </div>
+        <div id="SAS">
+            <div class="vars">
+                <var id="A_ANGLES">[ 1 ]</var>
+                <var id="A_SIDES">[ 0, 1 ]</var>
+            </div>
+            <div class="hints" data-apply="appendContents">
+                <p>In this problem we are given two sides and an angle between them, so we can use the SAS rule.</p>
+                <p data-if="IS_B">Triangle B has those two sides and the angle the same as triangle A, so they are congruent.</p>
+                <p data-else="">Because the sides and the angle do not match, triangle A is not congruent with triangle B.</p>
+            </div>
+        </div>
+        <div id="ASA">
+            <div class="vars">
+                <var id="A_ANGLES">[ 0, 1 ]</var>
+                <var id="A_SIDES">[ 0 ]</var>
+            </div>
+            <div class="hints" data-apply="appendContents">
+                <p>In this problem we are given two angles and as side between them, so we can use the ASA rule.</p>
+                <p data-if="IS_B">Triangle B has those two angles and the side the same as triangle A, so they are congruent.</p>
+                <p data-else="">Because the angles and the side do not match, triangle A is not congruent with triangle B.</p>
+            </div>
+        </div>
+        <div id="AAS">
+            <div class="vars">
+                <var id="A_ANGLES">[ 0, 1 ]</var>
+                <var id="A_SIDES">randRange( 0, 1 ) === 1 ? [ 2 ] : [ 1 ]</var>
+            </div>
+            <div class="hints" data-apply="appendContents">
+                <p>In this problem we are given two angles and another side so we can use the AAS rule.</p>
+                <p data-if="IS_B">Triangle B has those two angles and the side the same as triangle A, so they are congruent.</p>
+                <p data-else="">Because the angles and the side do not match, triangle A is not congruent with triangle B.</p>
+            </div>
+        </div>
+        <div id="AAA">
+            <div class="vars">
+                <var id="A_ANGLES">[ 0, 1, 2 ]</var>
+                <var id="A_SIDES">[ ]</var>
+                <var id="ANSWER">IS_B ? 2 : 1</var>
+            </div>
+            <div class="hints" data-apply="appendContents">
+                <p>In this problem we know all three triangle angles.</p>
+                <p data-if="IS_B">However, having all three angles the same is not a property we can use to conclude that two triangles are congruent. We can only say that they are similar. They are not congruent because they might be different size, yet have same angles.</p>
+                <p data-else="">Because the angles do not match, triangle A is not congruent with triangle B.</p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 3
+## https://www.khanacademy.org/math/trigonometry/graphs/parallel_perpendicular/e/line_relationships
+##
+#elseif($request.showExercise==3)
+<div class="exercise">
+    <div class="vars"></div>
+    <div class="problems">
+        <div id="perpendicular-graph" data-weight="2">
+            <div class="vars">
+                <var id="M">randRangeNonZero( -3, 3 ) / randRange( 1, 3 )</var>
+                <var id="M_SIGN">M &gt; 0 ? "" : "-"</var>
+                <var id="M_PERP_SIGN">M &gt; 0 ? "-" : ""</var>
+                <var id="M_FRAC">decimalFraction( M, "true", "true" )</var>
+                <var id="M_PERP_FRAC">decimalFraction( -1 / M, "true", "true" )</var>
+                <var id="B">randRange( -5, 5 )</var>
+                <var id="X" data-ensure="abs( ( -1 / M ) * X ) &lt;= 12">randRange( 2, 8 ) * randRangeNonZero( -1, 1 )</var>
+                <var id="Y" data-ensure="abs( Y - ( -1 / M ) * X ) &lt; 10">randRange( 2, 8 ) * randRangeNonZero( -1, 1 )</var>
+                <var id="LINE_TYPE">"perpendicular"</var>
+            </div>
+            <div class="question">
+                <p><b>Find the slope and y-intercept of the line that is <code>\color{<var>GREEN</var>}{\text{<var>LINE_TYPE</var>}}</code> to <code>\enspace \color{<var>BLUE</var>}{y = <span data-if="abs( M_FRAC ) !== 1"><var>M_FRAC</var></span><span data-else=""><var>M_SIGN</var></span>x <span data-if="B !== 0">+ <var>B</var></span>}\enspace</code> and passes through the point <code>\color{red}{(<var>X</var>, <var>Y</var>)}</code>.</b></p>
+                <div class="graphie" id="grid">
+                        graphInit({
+                            range: [[-10, 10], [-10, 10]],
+                            scale: [18, 18],
+                            tickStep: 1,
+                            labelStep: 1,
+                            unityLabels: false,
+                            labelFormat: function( s ) { return "\\small{" + s + "}"; },
+                            axisArrows: "&lt;-&gt;"
+                        });
+
+                        plot(function( x ) {
+                            return ( M * x + B );
+                        }, [-10, 10], {
+                            stroke: BLUE
+                        });
+
+                        circle( [X, Y], 1/4, {
+                        stroke: "none",
+                        fill: "#ff0000"
+                    } );
+
+                </div>
+            </div>
+            <div class="solution" data-type="multiple">
+                <p><code>m</code> = <span class="sol short40"><var>-1 / M</var></span></p>
+                <p><code>b</code> = <span class="sol short40"><var>Y - ( -1 / M * X )</var></span></p>
+            </div>
+            <div class="hints">
+                <p>Lines are considered perpendicular if their slopes are negative reciprocals of each other.
+                </p><div>
+                    <p>The slope of the blue line is <code>\color{<var>BLUE</var>}{<var>M_FRAC</var>}</code>, and its negative reciprocal is <code>\color{<var>GREEN</var>}{<var>M_PERP_FRAC</var>}</code>.</p>
+                    <p>Thus, the equation of our perpendicular line will be of the form <code>\enspace \color{<var>GREEN</var>}{y = <span data-if="abs( M_PERP_FRAC ) !== 1"><var>M_PERP_FRAC</var></span><span data-else=""><var>M_PERP_SIGN</var></span>x + b}\enspace</code>.</p>
+                </div>
+                <div>
+                    <p>We can plug our point, <code>(<var>X</var>, <var>Y</var>)</code>, into this equation to solve for <code>\color{<var>GREEN</var>}{b}</code>, the y-intercept.</p>
+                    <p data-if="M !== -1"><code><var>Y</var> = \color{<var>GREEN</var>}{<span data-if="abs( M_PERP_FRAC ) !== 1"><var>M_PERP_FRAC</var></span><span data-else=""><var>M_PERP_SIGN</var></span>}(<var>X</var>) + \color{<var>GREEN</var>}{b}</code></p>
+                </div>
+                <div>
+                    <p><code><var>Y</var> = <var>decimalFraction( -1 / M * X, "true", "true" )</var> + \color{<var>GREEN</var>}{b}</code></p>
+                    <p><code><var>Y</var> - <var>decimalFraction( -1 / M * X, "true", "true" )</var> = \color{<var>GREEN</var>}{b} = <var>decimalFraction( Y - ( -1 / M * X ), "true", "true" )</var></code></p>
+                </div>
+                <div>
+                    <p>The equation of the perpendicular line is <code>\enspace \color{<var>GREEN</var>}{y = <span data-if="abs( M_PERP_FRAC ) !== 1"><var>M_PERP_FRAC</var></span><span data-else=""><var>M_PERP_SIGN</var></span>x<span data-if="Y - ( -1 / M * X ) !== 0"> + <var>decimalFraction( Y - ( -1 / M * X ), "true", "true" )</var></span>}\enspace</code>.</p>
+                    <p><code>\color{<var>GREEN</var>}{m = <var>decimalFraction( -1 / M, "true", "true" )</var>, \enspace b = <var>decimalFraction( Y - ( -1 / M * X ), "true", "true" )</var>}</code></p>
+                    <div class="graphie" data-update="grid">
+                        plot(function( x ) {
+                            return ( -1 / M * x + ( Y - ( -1 / M * X ) ) );
+                        }, [-10, 10], {
+                            stroke: GREEN
+                        });
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="parallel-graph" data-type="perpendicular-graph" data-weight="2">
+            <div class="vars">
+                <var id="LINE_TYPE">"parallel"</var>
+                <var id="X" data-ensure="abs( M * X ) &lt;= 12">randRange( 2, 8 ) * randRangeNonZero( -1, 1 )</var>
+                <var id="Y" data-ensure="abs( Y - M * X ) &lt; 10 &amp;&amp; abs( Y - M * X - B ) &gt;= 1">randRange( 2, 8 ) * randRangeNonZero( -1, 1 )</var>
+            </div>
+            <div class="solution" data-type="multiple">
+                <p><code>m</code> = <span class="sol short40"><var>M</var></span></p>
+                <p><code>b</code> = <span class="sol short40"><var>Y - M * X </var></span></p>
+            </div>
+            <div class="hints">
+                <div>
+                    <p>Parallel lines have the same slope.</p>
+                    <p>The slope of the blue line is <code>\color{<var>BLUE</var>}{<var>M_FRAC</var>}</code>, so the equation of our parallel line will be of the form <code>\enspace \color{<var>GREEN</var>}{y = <span data-if="abs( M_FRAC ) !== 1"><var>M_FRAC</var></span><span data-else=""><var>M_SIGN</var></span>x + b}\enspace</code>.</p>
+                </div>
+                <div>
+                    <p>We can plug our point, <code>(<var>X</var>, <var>Y</var>)</code>, into this equation to solve for <code>\color{<var>GREEN</var>}{b}</code>, the y-intercept.</p>
+                    <p data-if="M !== 1"><code><var>Y</var> = \color{<var>GREEN</var>}{<span data-if="abs( M_FRAC ) !== 1"><var>M_FRAC</var></span><span data-else=""><var>M_SIGN</var></span>}(<var>X</var>) + \color{<var>GREEN</var>}{b}</code></p>
+                </div>
+                <div>
+                    <p><code><var>Y</var> = <var>decimalFraction( M * X, "true", "true" )</var> + \color{<var>GREEN</var>}{b}</code></p>
+                    <p><code><var>Y</var> - <var>decimalFraction( M * X, "true", "true" )</var> = \color{<var>GREEN</var>}{b} = <var>decimalFraction( Y - M * X, "true", "true" )</var></code></p>
+                </div>
+                <div>
+                    <p>The equation of the parallel line is <code>\enspace \color{<var>GREEN</var>}{y = <span data-if="abs( M_FRAC ) !== 1"><var>M_FRAC</var></span><span data-else=""><var>M_SIGN</var></span>x<span data-if="Y - ( M * X ) !== 0"> + <var>decimalFraction( Y - M * X, "true", "true" )</var>}</span>\enspace</code>.</p>
+                    <p><code>\color{<var>GREEN</var>}{m = <var>decimalFraction( M, "true", "true" )</var>, \enspace b = <var>decimalFraction( Y - M * X, "true", "true" )</var>}</code></p>
+                    <div class="graphie" data-update="grid">
+                        plot(function( x ) {
+                            return ( M * x + ( Y - M * X ) );
+                        }, [-10, 10], {
+                            stroke: GREEN
+                        });
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="compare-lines" data-ensure="abs( A1 ) !== abs( B1 ) &amp;&amp; abs( A2 ) !== abs( B2 )" data-weight="0">
+            <div class="vars">
+                <var id="A1">randRangeNonZero( -5, 5 )</var>
+                <var id="B1">randRangeNonZero( -5, 5 )</var>
+                <var id="C1">randRangeNonZero( -5, 5 )</var>
+                <var id="F">randRangeNonZero( -5, 5 )</var>
+                <var id="A2">A1 * F</var>
+                <var id="B2">B1 * F</var>
+                <var id="C2">C1 * F</var>
+                <var id="EQ1">expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var>
+                <var id="EQ2">expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var>
+            </div>
+            <div class="question">
+                <p>What do the following two equations represent?</p>
+                <p><code><var>EQ1</var></code></p>
+                <p><code><var>EQ2</var></code></p>
+            </div>
+            <div class="solution">Equivalent lines</div>
+            <ul class="choices" data-category="true">
+                <li>Equivalent lines</li>
+                <li>Parallel lines</li>
+                <li>Perpendicular lines</li>
+                <li>None of the above</li>
+            </ul>
+            <div class="hints">
+                <div>
+                    <div class="graphie" id="grid">
+                        init({
+                            range: [[-10, 10], [-10, 10]],
+                            scale: [20, 20]
+                        });
+
+                        grid( [-10, 10], [-10, 10], {
+                            stroke: "#ccc"
+                        });
+
+                        style({
+                            stroke: "#888",
+                            strokeWidth: 2,
+                            arrows: "-&gt;"
+                        });
+                        path( [ [-10, 0], [10, 0] ] );
+                        path( [ [0, -10], [0, 10] ] );
+
+                        style({
+                            stroke: "#6495ED",
+                            arrows: null
+                        });
+
+                        plot( function( x ) {
+                            return ( C1 / B1 ) - ( A1 / B1 ) * x;
+                        }, [-10, 10]);
+                    </div>
+                    <p>Putting the first equation in <code>y = mx + b</code> form gives:</p>
+                    <p><code><var>expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var></code></p>
+                    <p><code><var>expr(["*", B1, "y"]) + " = " + expr(["+", ["*", (-1 * A1), "x"], C1])</var></code></p>
+                    <p data-if="B1 !== 1"><code><var>"y = " + fractionReduce( -A1, B1 ) + "x + " + fractionReduce( C1, B1 )</var></code></p>
+                </div>
+                <div>
+                    <div class="graphie" data-update="grid">
+                        plot( function( x ) {
+                            return ( C2 / B2 ) - ( A2 / B2 ) * x;
+                        }, [-10, 10]);
+                    </div>
+                    <p>Putting the second equation in <code>y = mx + b</code> form gives:</p>
+                    <p><code><var>expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var></code></p>
+                    <p><code><var>expr(["*", B2, "y"]) + " = " + expr(["+", ["*", (-1 * A2), "x"], C2])</var></code></p>
+                    <p data-if="B2 !== 1"><code><var>"y = " + fractionReduce( -A2, B2 ) + "x + " + fractionReduce( C2, B2 )</var></code></p>
+                </div>
+            </div>
+        </div>
+
+        <div id="different-lines" data-type="compare-lines">
+            <div class="vars" data-ensure="A1 / B1 !== A2 / B2 &amp;&amp; A1 / B1 !== -B2 / A2">
+                <var id="A1">randRangeNonZero( -5, 5 )</var>
+                <var id="A2">randRangeNonZero( -5, 5 )</var>
+                <var id="B1">randRangeNonZero( -5, 5 )</var>
+                <var id="B2">randRangeNonZero( -5, 5 )</var>
+                <var id="C1">randRangeNonZero( -5, 5 )</var>
+                <var id="C2">randRangeNonZero( -5, 5 )</var>
+                <var id="EQ1">expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var>
+                <var id="EQ2">expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var>
+            </div>
+            <div class="solution">None of the above</div>
+            <div class="hints" data-apply="appendContents">
+                <p>The slopes are not the same, so the lines are not equivalent or parallel. The slopes are not negative inverses of each other, so the lines are not perpendicular. The correct answer is none of the above.</p>
+            </div>
+        </div>
+
+        <div id="same-line" data-type="compare-lines">
+            <div class="vars">
+                <var id="A1">randRangeNonZero( -5, 5 )</var>
+                <var id="B1">randRangeNonZero( -5, 5 )</var>
+                <var id="C1">randRangeNonZero( -5, 5 )</var>
+                <var id="F">randRangeNonZero( -5, 5 )</var>
+                <var id="A2">A1 * F</var>
+                <var id="B2">B1 * F</var>
+                <var id="C2">C1 * F</var>
+                <var id="EQ1">expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var>
+                <var id="EQ2">expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var>
+            </div>
+            <div class="solution">Equivalent lines</div>
+            <div class="hints" data-apply="appendContents">
+                <p>The above equations turn into the same equation, so they represent equivalent lines.</p>
+            </div>
+        </div>
+
+        <div id="parallel" data-type="compare-lines">
+            <div class="vars" data-ensure="C1 * F !== C2 &amp;&amp; C1 * B2 !== C2 * B1">
+                <var id="A1">randRangeNonZero( -5, 5 )</var>
+                <var id="B1">randRangeNonZero( -5, 5 )</var>
+                <var id="C1">randRangeNonZero( -5, 5 )</var>
+                <var id="F">randRangeNonZero( -5, 5 )</var>
+                <var id="A2">A1 * F</var>
+                <var id="B2">B1 * F</var>
+                <var id="C2">randRange( -5, 5 )</var>
+                <var id="EQ1">expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var>
+                <var id="EQ2">expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var>
+            </div>
+            <div class="solution">Parallel lines</div>
+            <div class="hints" data-apply="appendContents">
+                <p>The slopes are equal, and the y-intercepts are different, so the lines are parallel.</p>
+            </div>
+        </div>
+
+        <div id="perpendicular" data-type="compare-lines">
+            <div class="vars">
+                <var id="A1">randRangeNonZero( -5, 5 )</var>
+                <var id="B1">randRangeNonZero( -5, 5 )</var>
+                <var id="C1">randRangeNonZero( -5, 5 )</var>
+                <var id="F">randRange( 1, 5 )</var>
+                <var id="A2"> -1 * B1 * F</var>
+                <var id="B2">A1 * F</var>
+                <var id="C2">randRangeNonZero( -5, 5 )</var>
+                <var id="EQ1">expr(["+", ["*", A1, "x"], ["*", B1, "y"]]) + " = " + C1</var>
+                <var id="EQ2">expr(["+", ["*", A2, "x"], ["*", B2, "y"]]) + " = " + C2</var>
+            </div>
+            <div class="solution">Perpendicular lines</div>
+            <div class="hints" data-apply="appendContents">
+                <p>The slopes are negative inverses of each other, so the lines are perpendicular.</p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 4
+## https://www.khanacademy.org/math/geometry/parallel-and-perpendicular-lines/triang_prop_tut/e/angles_of_a_polygon
+##
+#elseif($request.showExercise==4)
+
+<div class="exercise">
+    <div class="vars">
+        <var id="SIDES">randRange( 5, 7 )</var>
+    </div>
+    <div class="problems">
+        <div id="interior">
+            <div class="vars">
+                <var id="ANSWER">180 * ( SIDES - 2 )</var>
+                <var id="CLONE">{}</var>
+            </div>
+            <p class="question">What is the sum of this polygon's interior angles?</p>
+            <div class="graphie" id="circle">
+                init({
+                    range: [ [ -5, 5 ], [ -1, 5 ] ],
+                    scale: [ 40, 40 ]
+                });
+                graph.polygon = new Polygon( SIDES );
+                graph.polygon.draw();
+                CLONE = graph.polygon.clone();
+            </div>
+            <div class="solution" data-type="multiple">
+                <span class="sol" data-forms="integer"><var>ANSWER</var></span> degrees
+            </div>
+            <div class="hints">
+                <p>There are a couple ways to approach this problem.</p>
+                <p>Does it help to remember that there are 180 degrees in a triangle?</p>
+                <div>
+                    <p>Since this polygon has <var>SIDES</var> sides, we can draw <var>SIDES</var> triangles that all meet in the center.</p>
+                    <div class="graphie" data-update="circle">
+                        graph.polygon.drawRadialDiagonals();
+                    </div>
+                </div>
+                <p>We can combine all the triangles' angles, and then we must subtract 360 degrees because the circle in the middle is extra.</p>
+                <p><code>\begin{align*}&amp;<var>SIDES</var> \times 180^{\circ} - 360^{\circ} \\
+                    &amp;= <var>SIDES * 180</var>^{\circ} - 360^{\circ} \\
+                    &amp;= <var>ANSWER</var>^{\circ}\end{align*}</code></p>
+
+                <div>
+                    <p>An alternative approach is shown below.</p>
+                    <p>We can use four of the <var>cardinal( SIDES )</var> sides to make 2 triangles, as shown in orange.</p>
+                    <div class="graphie" data-id="other">
+                        init({
+                             range: [ [ -5, 5 ], [ -1, 5 ] ]
+                        });
+                        graph.polygon = CLONE;
+                        graph.polygon.draw();
+                        graph.polygon.drawDiagonals( randRange( 0, SIDES - 1 ) );
+                    </div>
+                </div>
+                <p data-if="isSingular(SIDES - 4)">There is <var>SIDES - 4</var> side between the orange triangles, to make <var>SIDES - 4</var> additional triangle.</p><p data-else="">There are <var>SIDES - 4</var> sides between the orange triangles, to make <var>SIDES - 4</var> additional triangles.</p>
+                <p>We chopped this polygon into <var>SIDES - 2</var> triangles, and each triangle's angles sum to 180 degrees.</p>
+                <p><code><var>SIDES - 2</var> \times 180^{\circ} = <var>ANSWER</var>^{\circ}</code></p>
+                <p>The sum of the polygon's interior angles is <var>ANSWER</var> degrees.</p>
+            </div>
+        </div>
+        <div id="exterior">
+            <p class="question">What is the sum of this polygon's exterior angles?</p>
+            <div class="graphie" id="polygon">
+                init({
+                     range: [ [ -6, 6 ], [ -2, 7 ] ]
+                });
+                graph.polygon = new Polygon( SIDES );
+                graph.polygon.draw();
+            </div>
+            <div class="solution" data-type="multiple">
+                <span class="sol" data-forms="integer"><var>360</var></span> degrees
+            </div>
+
+            <div class="hints">
+                <div>
+                    <p>The exterior angles are shown above.</p>
+                    <div class="graphie" data-update="polygon">
+                        graph.polygon.drawExteriorAngles();
+                    </div>
+                </div>
+                <div class="graphie" data-update="polygon">
+                    graph.polygon.animateExteriorAngles( randRange( 0, SIDES - 1 ) );
+                </div>
+                <p>The exterior angles fit together to form a circle</p>
+        <p>Therefore, the sum of the exterior angles is 360 degrees.</p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 5
+## https://www.khanacademy.org/math/geometry/right_triangles_topic/pyth_theor/e/pythagorean_theorem_1
+##
+#elseif($request.showExercise==5)
+<div class="exercise">
+    <div class="problems">
+        <div id="find-hypotenuse">
+            <div class="vars">
+                <var id="AC">randRange(3, 8)</var>
+                <var id="BC">randRange(3, 8)</var>
+                <var id="AB2">AC * AC + BC * BC</var>
+            </div>
+
+            <div class="question">
+                <p>In the right triangle shown, <code>AC = <var>AC</var></code> and
+                <code>BC = <var>BC</var></code>. What is <code>AB</code>?</p>
+
+                <div class="graphie">
+                    betterTriangle( BC, AC, "A", "B", "C", BC, AC, "?" );
+                </div>
+            </div>
+
+            <div class="solution" data-type="radical"><var>AB2</var></div>
+
+            <div class="hints" data-apply="appendContents">
+                <p>We want to find <code>c</code>; let <code>a = <var>BC</var></code> and <code>b = <var>AC</var></code>.</p>
+                <p>So <code>c^2 = <var>BC</var>^2 + <var>AC</var>^2 = <var>AB2</var></code>.</p>
+                <p>Then, <code>c = \sqrt{<var>AB2</var>}</code>.</p>
+                <p data-if="squareRootCanSimplify(AB2)">Simplifying the radical gives <code>c = <var>formattedSquareRootOf(AB2)</var>.</code></p>
+            </div>
+        </div>
+
+        <div id="find-a-leg">
+            <div class="vars">
+                <var id="AC">randRange(3, 5)</var>
+                <var id="AB">randRange(6, 10)</var>
+                <var id="BC2">AB * AB - AC * AC</var>
+
+                <var id="legs">shuffle([["a", "?", "BC", sqrt(BC2)], ["b", AC, "AC", AC]])</var>
+
+                <var id="a, alabel, aside, alen">legs[0]</var>
+                <var id="b, blabel, bside, blen">legs[1]</var>
+            </div>
+
+            <div class="question">
+                <p>In the right triangle shown, <code><var>bside</var> = <var>AC</var></code> and
+                <code>AB = <var>AB</var></code>. What is <code><var>aside</var></code>?</p>
+
+                <div class="graphie">
+                    betterTriangle( alen, blen, "A", "B", "C", alabel, blabel, AB );
+                </div>
+            </div>
+
+            <div class="solution" data-type="radical"><var>BC2</var></div>
+
+            <div class="hints" data-apply="appendContents">
+                <p>We want to find <code><var>a</var></code>; let <code><var>b</var> = <var>AC</var></code> and <code>c = <var>AB</var></code>.</p>
+                <p>So <code><var>a</var>^2 = c^2 - <var>b</var>^2 = <var>AB</var>^2 - <var>AC</var>^2 = <var>BC2</var></code>.</p>
+                <p>Then, <code><var>a</var> = \sqrt{<var>BC2</var>}</code>.</p>
+                <p data-if="squareRootCanSimplify(BC2)">Simplifying the radical gives <code><var>a</var> = <var>formattedSquareRootOf(BC2)</var>.</code></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="hints">
+        <p>We know <code>a^2 + b^2 = c^2</code>.</p>
+    </div>
+</div>
+################################################
+## Exercise 6
+## https://www.khanacademy.org/math/trigonometry/graphs/graphing_coordinates/e/graphing_points
+##
+#elseif($request.showExercise==6)
+<div class="exercise">
+    <div class="vars" data-ensure="X !== 0 || Y !== 0">
+        <var id="X">randRange( 0, 10 )</var>
+        <var id="Y">randRange( 0, 10 )</var>
+    </div>
+    <div class="problems">
+        <div>
+            <p class="question">
+                Plot <code>(<var>X</var>, <var>Y</var>)</code>
+            </p>
+            <div class="problem">
+                <br>
+                <div class="graphie" id="grid">
+                    graphInit({
+                        range: [ [-1, 11], [-1, 11] ],
+                        scale: 30,
+                        axisArrows: "&lt;-&gt;",
+                        tickStep: 1,
+                        labelStep: 1,
+                        gridOpacity: 0.05,
+                        axisOpacity: 0.2,
+                        tickOpacity: 0.4,
+                        labelOpacity: 0.5
+                    });
+
+                    label( [ 0, 11 ], "y", "above" );
+                    label( [ 11, 0 ], "x", "right" );
+
+                    addMouseLayer();
+                    graph.movablePoint = addMovablePoint({coord: [0,0], snapY: 1, snapX: 1 });
+
+                    graph.movablePoint.onMove = function( x, y ) {
+                        return [ max( 0, min( x, 10 ) ), max( 0, min( y, 10 ) ) ];
+                    };
+                </div>
+            </div>
+            <div class="solution" data-type="custom">
+                <div class="instruction">
+                    Drag the orange dot to graph the point.
+                </div>
+                <div class="guess">graph.movablePoint.coord</div>
+                <div class="validator-function">
+                    if ( guess[0] === 0 &amp;&amp; guess[1] === 0 ) {
+                        return "";
+                    }
+                    return ( guess[0] === X &amp;&amp; guess[1] === Y );
+                </div>
+                <div class="show-guess">
+                    graph.movablePoint.setCoord( guess );
+                </div>
+            </div>
+
+
+
+            <div class="hints">
+                <p>Coordinates are listed as <code>(\blue{x},\green{y})</code>. </p>
+                <p>
+                    So, for <code>( \blue{<var>X</var>}, \green{<var>Y</var>} )</code> our
+                    <span class="hint_blue"><code>x</code>-coordinate</span> is <code class="hint_blue"><var>X</var></code> and our
+                    <span class="hint_green"><code>y</code>-coordinate</span> is <code class="hint_green"><var>Y</var></code>.</p>
+
+                <p>
+                    The <span class="hint_blue"><code>x</code>-coordinate</span> tells how far we move to the right from the origin and the
+                    <span class="hint_green"><code>y</code>-coordinate</span> tells us how far we move up from the origin.
+                </p>
+
+                <div>
+                    <div data-if="X === 0">
+                        Since our <span class="hint_blue"><code>x</code>-coordinate</span> is equal to <code class="hint_blue">0</code>, we don't need to move to the right of the origin.
+                    </div>
+                    <div data-else="">
+                        <p>
+                            Since our <span class="hint_blue"><code>x</code>-coordinate</span> is equal to <code class="hint_blue"><var>X</var></code>,
+                            we move <code class="hint_blue"><var>X</var></code> to the right of the origin.
+                        </p>
+                        <div class="graphie" data-update="grid">
+                            style({
+                                stroke: BLUE,
+                                strokeWidth: 3,
+                                arrows: "-&gt;"
+                            }, function() {
+                                line( [ 0, 0 ], [ X, 0 ]);
+                            });
+                            graph.movablePoint.toFront();
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <div data-if="Y === 0">
+                        Since our <span class="hint_green"><code>y</code>-coordinate</span> is equal to <code class="hint_green">0</code>, we don't need to move up from the origin.
+                    </div>
+                    <div data-else="">
+                        <p>
+                            Since our <span class="hint_green"><code>y</code>-coordinate</span> is equal to <code class="hint_green"><var>Y</var></code>,
+                            we move up <code class="hint_green"><var>Y</var></code> from the origin.
+                        </p>
+                        <div class="graphie" data-update="grid">
+                            style({
+                                stroke: GREEN,
+                                strokeWidth: 3,
+                                arrows: "-&gt;"
+                            }, function() {
+                                line( [ X, 0 ], [ X, Y ] );
+                            });
+                            graph.movablePoint.toFront();
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <p class="final_answer">
+                        Move the point to <code>( \blue{<var>X</var>}, \green{<var>Y</var>} )</code> at the marked point above.
+                        <input onclick="javascript:KhanUtil.currentGraph.graph.movablePoint.moveTo( KhanUtil.tmpl.getVAR('X'), KhanUtil.tmpl.getVAR('Y') );" type="button" value="Show me">
+                    </p>
+                    <div class="graphie" data-update="grid">
+                        style({
+                            stroke: PINK,
+                            strokeWidth: 3
+                        }, function() {
+                            line( [ X - 0.25, Y - 0.25 ], [ X + 0.25, Y + 0.25 ] );
+                            line( [ X + 0.25, Y - 0.25 ], [ X - 0.25, Y + 0.25 ] );
+                        });
+                        graph.movablePoint.toFront();
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 7
+## https://www.khanacademy.org/math/geometry/basic-geometry/volume_tutorial/e/solid_geometry
+##
+#elseif($request.showExercise==7)
+<div class="exercise">
+    <div class="problems">
+        <div id="int-tripri-V">
+            <div class="vars">
+                <var id="COLOR1">"#D7ED3A"</var>
+                <var id="COLOR2">"#38C77F"</var>
+                <var id="COLOR3">"#78D0EF"</var>
+                <var id="COLOR4">"#F0B63A"</var>
+                <var id="HEIGHT">randRange(2, 5)</var>
+                <var id="BASE">HEIGHT * 2</var>
+                <var id="SIDE">"" + HEIGHT + "\\sqrt{2}"</var>
+                <var id="DEPTH">randRange(3, 7)</var>
+                <var id="XANGLE">PI / 15</var>
+                <var id="YANGLE">-PI / 8</var>
+                <var id="SCALE">5.0</var>
+                <var id="VERTICES">[
+                    [-1, 0.5, 1],
+                    [1, 0.5, 1],
+                    [0, -0.5, 1],
+                    [-1, 0.5, -1],
+                    [1, 0.5, -1],
+                    [0, -0.5, -1]
+                ]</var>
+                <var id="FACES">[
+                    {
+                        verts: [0, 2, 1],
+                        color: COLOR3,
+                        lines: [[[0, -0.5, 1], [0, 0.5, 1]]],
+                        labels: [[[0, 0, 1], HEIGHT]]
+                    }, {
+                        verts: [3, 4, 5],
+                        color: COLOR3,
+                        lines: [[[-0.03, -0.47, -1], [0.95, 0.5, -1]]],
+                        labels: [[[0.2, -0.08, -1], SIDE]]
+                    }, {
+                        verts: [0, 1, 4, 3],
+                        color: COLOR4,
+                        lines: [[[1, 0.5, 0], [-1, 0.5, 0]]],
+                        labels: [[[0, 0.5, 0], BASE]]
+                    }, {
+                        verts: [1, 2, 5, 4],
+                        color: COLOR1,
+                        lines: [[[0.5, 0, 1], [0.5, 0, -1]]],
+                        labels: [[[0.5, 0, 0], DEPTH]]
+                    }, {
+                        verts: [0, 3, 5, 2],
+                        color: COLOR2,
+                        lines: [[[-1, 0.5, 0], [0, -0.5, 0]]],
+                        labels: [[[-0.5, 0, 0], SIDE]]
+                    }
+                ]</var>
+                <var id="GRAPH">{}</var>
+                <var id="UNWRAPGRAPH">{}</var>
+
+                <var id="BASE_TEXT">$._("base")</var>
+                <var id="HEIGHT_TEXT">$._("height")</var>
+            </div>
+
+            <p class="question">
+                What is the volume of this object?
+                Drag on the object to rotate it.
+            </p>
+            <div class="problem">
+                <div class="graphie">
+                    init({range: [[-2, 2], [-2, 2]], scale: [100, 100]});
+                    addMouseLayer();
+
+                    graph.obj = make3dObject(VERTICES, { scale: SCALE });
+                    _.each(FACES, function(face) {
+                        graph.obj.addFace(face);
+                    });
+
+                    graph.obj.setPos([0, 0, 5]);
+
+                    graph.obj.rotate(1, 0, 0, YANGLE);
+                    graph.obj.rotate(0, 1, 0, XANGLE);
+
+                    graph.obj.doDraw();
+
+                    GRAPH = graph;
+
+                    var spinner;
+                    setTimeout(function() {
+                        spinner = setInterval(function() {
+                            GRAPH.obj.rotate(0, 1, 0, 0.01);
+                            GRAPH.obj.doDraw();
+                        }, 50);
+                    }, 300);
+
+                    var mouseTarget = mouselayer.rect(0, 0, 400, 400).attr({
+                        fill: "#000", opacity: 0.0
+                    });
+                    $(mouseTarget[0]).bind("vmousedown", function(event) {
+                        GRAPH.lastX = event.pageX;
+                        GRAPH.lastY = event.pageY;
+
+                        clearInterval(spinner);
+
+                        $(document).bind("vmousemove vmouseup", function(event) {
+                            event.preventDefault();
+
+                            var dx = (event.pageX - GRAPH.lastX) / 200 * PI;
+                            var dy = (event.pageY - GRAPH.lastY) / 200 * PI;
+
+                            GRAPH.lastX = event.pageX;
+                            GRAPH.lastY = event.pageY;
+
+                            var xAxis = normalize(GRAPH.obj.perspective[1]);
+                            var yAxis = normalize(GRAPH.obj.perspective[0]);
+
+                            GRAPH.obj.rotate(xAxis[0], xAxis[1], xAxis[2], -dx / 2);
+                            GRAPH.obj.rotate(yAxis[0], yAxis[1], yAxis[2], -dy / 2);
+
+                            GRAPH.obj.doDraw();
+
+                            if (event.type === "vmouseup") {
+                                $(document).unbind("vmousemove vmouseup");
+                            }
+                        })
+                    });
+
+                </div>
+            </div>
+
+            <div class="solution" data-type="decimal">
+                <var>DEPTH * BASE * HEIGHT / 2</var>
+            </div>
+
+            <div class="hints">
+                <p>The volume of a prism is the area of the base
+                    <code>\times</code> depth.</p>
+                <p>In this object, one of the triangles is the base.</p>
+                <p>We know the area of a triangle is
+                    <code>\frac{1}{2}\ \text{<var>BASE_TEXT</var>} \times \text{<var>HEIGHT_TEXT</var>}</code>.
+                </p>
+                <div>
+                    <p>Orient the triangle like this, and find the
+                        base and height from the object:</p>
+                    <div class="graphie" id="triangle">
+                        init({ range: [[-2, 2], [-1.2, 1.2]], scale: [100, 100] });
+
+                        path([[-1.5, -0.75], [1.5, -0.75], [0, 0.75], true],
+                            { stroke: "black", strokeWidth: 1, fill: COLOR3 });
+
+                        path([[0, -0.75], [0, 0.75]],
+                            { stroke: "black", strokeDasharray: ". " });
+
+                        graph.label1 = label([0, 0], "?", "right");
+                        graph.label2 = label([-0.4, -0.75], "?", "below");
+                    </div>
+                </div>
+                <div>
+                    <p>
+                        From the object, we find that the base of the triangle
+                        is <code><var>BASE</var></code> and the height is
+                        <code><var>HEIGHT</var></code>.
+                    </p>
+                    <div class="graphie" data-update="triangle">
+                        graph.label1.remove();
+                        graph.label2.remove();
+
+                        label([0, 0], HEIGHT, "right");
+                        label([-0.4, -0.75], BASE, "below");
+                    </div>
+                </div>
+                <p>
+                    The area of the triangle is then
+                    <code>\frac{1}{2}<var>BASE</var> \times <var>HEIGHT</var>
+                        = <var>BASE * HEIGHT / 2</var></code>.
+                </p>
+                <p>
+                    From the object, we can then find that the depth is
+                    <code><var>DEPTH</var></code>.
+                </p>
+                <p>
+                    Then, the final volume is
+                    <code><var>BASE * HEIGHT / 2</var> \times <var>DEPTH</var>
+                        = <var>BASE * HEIGHT * DEPTH / 2</var>.</code>
+                </p>
+            </div>
+        </div>
+
+        <div id="int-box-V" data-type="int-tripri-V">
+            <div class="vars" data-apply="prependContents">
+                <var id="LENGTH">randRange(2, 7)</var>
+                <var id="WIDTH">randRange(2, 7)</var>
+                <var id="HEIGHT">randRange(2, 7)</var>
+                <var id="MAX">max(max(LENGTH, WIDTH), HEIGHT)</var>
+                <var id="XBORD">LENGTH/MAX</var>
+                <var id="YBORD">WIDTH/MAX</var>
+                <var id="ZBORD">HEIGHT/MAX</var>
+            </div>
+            <div class="vars">
+                <var id="YANGLE">-PI / 8</var>
+                <var id="XANGLE">0</var>
+                <var id="VERTICES">[
+                    [LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                    [LENGTH/MAX, WIDTH/MAX, -HEIGHT/MAX],
+                    [LENGTH/MAX, -WIDTH/MAX, -HEIGHT/MAX],
+                    [LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX],
+                    [-LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                    [-LENGTH/MAX, WIDTH/MAX, -HEIGHT/MAX],
+                    [-LENGTH/MAX, -WIDTH/MAX, -HEIGHT/MAX],
+                    [-LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX]
+                ]</var>
+                <var id="SCALE">4.0</var>
+                <var id="FACES">[
+                    {
+                        verts: [3, 2, 1, 0],
+                        color: COLOR1,
+                        labels: [[[XBORD, 0, ZBORD], WIDTH]]
+                    }, {
+                        verts: [4, 5, 6, 7],
+                        color: COLOR1,
+                        labels: [[[-XBORD, 0, -ZBORD], WIDTH]]
+                    }, {
+                        verts: [0, 1, 5, 4],
+                        color: COLOR3,
+                        labels: [[[-XBORD, YBORD, 0], HEIGHT]]
+                    }, {
+                        verts: [2, 3, 7, 6],
+                        color: COLOR3,
+                        labels: [[[-XBORD, -YBORD, 0], HEIGHT]]
+                    }, {
+                        verts: [1, 2, 6, 5],
+                        color: COLOR2,
+                        labels: [[[0, -YBORD, -ZBORD], LENGTH]]
+                    }, {
+                        verts: [3, 0, 4, 7],
+                        color: COLOR2,
+                        labels: [[[0, YBORD, ZBORD], LENGTH]]
+                    }
+                ]</var>
+            </div>
+
+            <p class="question">
+                What is the volume of this box? Drag on the box to rotate it.
+            </p>
+
+            <div class="solution" data-forms="integer">
+                <var>LENGTH * WIDTH * HEIGHT</var>
+            </div>
+
+            <div class="hints">
+                <p>The volume of a box is the
+                    length <code>\times</code>
+                    width <code>\times</code>
+                    height.</p>
+                <p>From the figure, we can find that the
+                    lengths of the sides are
+                    <code><var>LENGTH</var></code>,
+                    <code><var>WIDTH</var></code>,
+                    and <code><var>HEIGHT</var></code>.</p>
+                <p>To find the volume, we just multiply
+                    these side lengths together.</p>
+                <p>
+                    <code><var>LENGTH</var> \times
+                        <var>WIDTH</var> \times
+                        <var>HEIGHT</var></code>
+                </p>
+                <p>
+                    <code>\qquad= <var>LENGTH * WIDTH * HEIGHT</var></code>
+                </p>
+                <p>Thus, the volume of the box is
+                    <code><var>LENGTH * WIDTH * HEIGHT</var></code>.</p>
+            </div>
+        </div>
+
+        <div id="int-box-T" data-type="int-box-V">
+            <p class="question">
+                What is the surface area of this box?
+                Drag on the box to rotate it.
+            </p>
+
+            <div class="solution" data-forms="integer">
+                <var>2 * LENGTH * WIDTH +
+                    2 * LENGTH * HEIGHT +
+                    2 * WIDTH * HEIGHT</var>
+            </div>
+
+            <div class="hints">
+                <p>To find the surface area, find the areas
+                of each of the faces, and add all the areas up.</p>
+                <div>
+                    <p>To see this better, let's try unwrapping the box:
+                    <input onclick="KhanUtil.tmpl.getVAR('UNWRAPGRAPH.unwrap()')" type="submit" value="Unwrap!"/></p>
+                    <div class="graphie">
+                        var verts = [
+                            [LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                            [LENGTH/MAX, WIDTH/MAX, -HEIGHT/MAX],
+                            [LENGTH/MAX, -WIDTH/MAX, -HEIGHT/MAX],
+                            [LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX],
+                            [-LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                            [-LENGTH/MAX, WIDTH/MAX, -HEIGHT/MAX],
+                            [-LENGTH/MAX, -WIDTH/MAX, -HEIGHT/MAX],
+                            [-LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX],
+                            [LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                            [LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX],
+                            [-LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                            [-LENGTH/MAX, -WIDTH/MAX, HEIGHT/MAX],
+                            [LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX],
+                            [-LENGTH/MAX, WIDTH/MAX, HEIGHT/MAX]
+                        ];
+
+                        var faces = [
+                            {
+                                verts: [5, 6, 2, 1],
+                                color: COLOR2
+                            }, {
+                                verts: [4, 5, 1, 0],
+                                color: COLOR3
+                            }, {
+                                verts: [6, 7, 3, 2],
+                                color: COLOR3
+                            }, {
+                                verts: [1, 2, 9, 8],
+                                color: COLOR1
+                            }, {
+                                verts: [6, 5, 10, 11],
+                                color: COLOR1
+                            }, {
+                                verts: [13, 12, 3, 7],
+                                color: COLOR2
+                            }, {
+                                verts: [0, 1, 5, 4],
+                                color: COLOR3
+                            }, {
+                                verts: [11, 10, 5, 6],
+                                color: COLOR1
+                            }, {
+                                verts: [7, 3, 12, 13],
+                                color: COLOR2
+                            }
+                        ];
+
+                        var size = 2 * WIDTH / MAX + 2 * HEIGHT / MAX;
+                        init({range: [[-2, 2], [-2, 2]], scale: [100, 100]});
+
+                        graph.obj = make3dObject(verts);
+                        _.each(faces, function(face) {
+                            graph.obj.addFace(face);
+                        });
+
+                        graph.obj.setPos([0, -0.6, 5]);
+
+                        graph.obj.rotate(1, 0, 0, PI / 8);
+                        graph.obj.rotate(0, 1, 0, PI / 10);
+
+                        graph.obj.setScale(8 / size);
+
+                        graph.obj.doDraw();
+
+                        UNWRAPGRAPH = graph;
+                        UNWRAPGRAPH.unwrapped = false;
+
+                        graph.unwrap = function() {
+                            if (UNWRAPGRAPH.unwrapped) {
+                                return;
+                            }
+
+                            UNWRAPGRAPH.unwrapped = true;
+
+                            var last = 0;
+
+                            $({ t: 0 }).animate({ t: PI },
+                            {
+                                duration: 3000,
+                                easing: "linear",
+                                step: function(now, fx) {
+                                    verts[4][2] = verts[0][2] =
+                                        cos(now) * HEIGHT / MAX;
+
+                                    verts[4][1] = verts[0][1] =
+                                        WIDTH / MAX +
+                                        2 * cos((PI - now) / 2) * HEIGHT / MAX;
+
+                                    verts[3][2] = verts[7][2] =
+                                        cos(now) * HEIGHT / MAX;
+
+                                    verts[3][1] = verts[7][1] =
+                                        -WIDTH / MAX -
+                                        2 * cos((PI - now) / 2) * HEIGHT / MAX;
+
+                                    verts[8][2] = verts[9][2] =
+                                        cos(now) * HEIGHT / MAX;
+
+                                    verts[8][0] = verts[9][0] =
+                                        LENGTH / MAX +
+                                        2 * cos((PI - now) / 2) * HEIGHT / MAX;
+
+                                    verts[10][2] = verts[11][2] =
+                                        cos(now) * HEIGHT / MAX;
+
+                                    verts[10][0] = verts[11][0] =
+                                        -LENGTH / MAX -
+                                        2 * cos((PI - now) / 2) * HEIGHT / MAX;
+
+                                    verts[12][2] = verts[13][2] =
+                                        cos(now) * HEIGHT / MAX +
+                                        2 * sin(now) * WIDTH / MAX;
+
+                                    verts[12][1] = verts[13][1] =
+                                        -WIDTH / MAX -
+                                        2 * cos(PI / 2 -
+                                        now / 2) * HEIGHT / MAX +
+                                        2 * cos(now) * WIDTH / MAX;
+
+                                    if (now &lt; PI / 2) {
+                                        UNWRAPGRAPH.obj.rotate(0, 1, 0,
+                                            -2 / 10 * (now - last));
+                                    } else {
+                                        UNWRAPGRAPH.obj.rotate(1, 0, 0,
+                                            -2 / 8 * (now - last));
+                                    }
+
+                                    last = now;
+
+                                    UNWRAPGRAPH.obj.doDraw();
+                                }
+                            });
+                        };
+                    </div>
+                </div>
+                <div id="unwrapped" data-unwrap="">
+                    <div>
+                        <p>We can group the faces together
+                            based on size and color:</p>
+                        <div class="graphie">
+                            var width = WIDTH + 2 + LENGTH + 2 + HEIGHT + 2;
+                            var height = max(max(WIDTH, LENGTH), HEIGHT) + 1;
+                            init({range: [[-1, width + 1], [-1, height + 1]],
+                                scale: [400 / width, 400 / width]});
+
+                            makeSquare(0, HEIGHT, 0, WIDTH, COLOR1);
+                            makeSquare(1, HEIGHT, 1, WIDTH, COLOR1);
+                            label([0.8 + HEIGHT / 2, WIDTH + 1.2],
+                                HEIGHT, "below");
+                            label([1.1 + HEIGHT, 1 + WIDTH / 2],
+                                WIDTH, "left");
+
+                            makeSquare(HEIGHT + 2, WIDTH, 0, LENGTH, COLOR2);
+                            makeSquare(HEIGHT + 3, WIDTH, 1, LENGTH, COLOR2);
+                            label([2.8 + HEIGHT + WIDTH / 2, 1.2 + LENGTH],
+                                WIDTH, "below");
+                            label([3.1 + HEIGHT + WIDTH, 1 + LENGTH / 2],
+                                LENGTH, "left");
+
+                            makeSquare(HEIGHT + WIDTH + 4, LENGTH, 0, HEIGHT, COLOR3);
+                            makeSquare(HEIGHT + WIDTH + 5, LENGTH, 1, HEIGHT, COLOR3);
+                            label([4.8 + HEIGHT + WIDTH + LENGTH / 2, 1.2 + HEIGHT],
+                                LENGTH, "below");
+                            label([5.1 + HEIGHT + WIDTH + LENGTH, 1 + HEIGHT / 2],
+                                HEIGHT, "left");
+                        </div>
+                    </div>
+                    <div>
+                        <p>We can calculate the area of each
+                            of the pieces now:</p>
+                        <code>
+                            2 \left(<var>WIDTH</var> \times
+                                <var>HEIGHT</var>\right) +
+                            2 \left(<var>LENGTH</var> \times
+                                <var>WIDTH</var>\right) +
+                            2 \left(<var>HEIGHT</var> \times
+                            <var>LENGTH</var>\right)
+                        </code>
+                    </div>
+                    <p>
+                        <code>\qquad= <var>2 * WIDTH * HEIGHT</var> +
+                                <var>2 * LENGTH * WIDTH</var> +
+                                <var>2 * HEIGHT * LENGTH</var></code>
+                    </p>
+                    <p>
+                    <code>
+                        \qquad=
+                        <var>2 * WIDTH * HEIGHT +
+                        2 * LENGTH * WIDTH +
+                        2 * HEIGHT * LENGTH</var>
+                    </code>
+                    </p>
+                    <p>
+                        Thus, the total surface area of the box is
+                        <code><var>2 * WIDTH * HEIGHT +
+                                2 * LENGTH * WIDTH +
+                                2 * HEIGHT * LENGTH</var></code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="int-cube-V" data-type="int-box-V">
+            <div class="vars" data-apply="appendContents">
+                <var id="LENGTH">randRange(2, 7)</var>
+                <var id="WIDTH">LENGTH</var>
+                <var id="HEIGHT">LENGTH</var>
+            </div>
+
+            <p class="question">
+                What is the volume of this cube? Drag on the cube to rotate it.
+            </p>
+
+            <div class="hints">
+                <p>The volume of a box is the
+                    length <code>\times</code>
+                    width <code>\times</code>
+                    height.</p>
+                <p>Since this is a cube, all the sides are the same length.</p>
+                <p>From the figure, we can find that the side length is
+                    <code><var>WIDTH</var></code>.</p>
+                <p>To find the volume, we just cube this side length.</p>
+                <p>
+                    <code><var>WIDTH</var>^3 =
+                        <var>WIDTH</var> \times
+                        <var>WIDTH</var> \times
+                        <var>WIDTH</var></code>
+                </p>
+                <p>
+                    <code>\qquad= <var>WIDTH * WIDTH * WIDTH</var></code>
+                </p>
+                <p>Thus, the volume of the cube is
+                    <code><var>WIDTH * WIDTH * WIDTH</var></code>.</p>
+            </div>
+        </div>
+
+        <div id="int-cube-T" data-type="int-box-T">
+            <div class="vars" data-apply="appendContents">
+                <var id="LENGTH">randRange(2, 7)</var>
+                <var id="WIDTH">LENGTH</var>
+                <var id="HEIGHT">LENGTH</var>
+            </div>
+
+            <p class="question">
+                What is the surface area of this cube?
+                Drag on the cube to rotate it.
+            </p>
+
+            <div class="hints" data-apply="appendContents">
+                <div id="unwrapped" data-unwrap="">
+                    <p>Here, we can see that all of the
+                        six sides have the same size.</p>
+                    <div>
+                        <div class="graphie">
+                            var width = WIDTH + 5;
+                            var height = WIDTH + 2;
+                            init({range: [[-1, width + 1], [-1, height + 1]],
+                                scale: [300 / width, 300 / width]});
+
+                            var colors = [COLOR3, COLOR3, COLOR1, COLOR1, COLOR2, COLOR2];
+
+                            for (var i = 0; i &lt; 6; ++i) {
+                                makeSquare(i, HEIGHT, i / 3, WIDTH, colors[i]);
+                            }
+                            label([4.8 + WIDTH / 2, 1.76 + WIDTH], WIDTH, "below");
+                            label([5 + WIDTH, 1.66 + WIDTH / 2], WIDTH, "left");
+                        </div>
+                    </div>
+                    <div>
+                        <p>We can now calculate the total area:</p>
+                        <code>6 \left(<var>WIDTH</var> \times
+                            <var>WIDTH</var>\right)</code>
+                    </div>
+                    <p>
+                        <code>\qquad= 6 \times <var>WIDTH * WIDTH</var></code>
+                    </p>
+                    <p>
+                        <code>\qquad= <var>6 * WIDTH * WIDTH</var></code>
+                    </p>
+                    <p>
+                        Thus, the total surface area of the cube is
+                        <code><var>6 * WIDTH * WIDTH</var></code>.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="cylinder-V">
+            <div class="vars">
+                <var id="r">randRange(2, 4)</var>
+                <var id="h">randRange(5, 9)</var>
+            </div>
+
+            <div class="question">
+                <p>What is the volume of a cylinder with base radius
+                    <code><var>r</var></code> and height
+                    <code><var>h</var></code>?</p>
+
+                <div class="graphie">
+                    init({
+                        range: [[-1, 4], [-2, 4]]
+                    });
+
+                    arc([1.5, 3], [1.5, 0.4], 0, 48 );
+                    arc([1.5, 3], [1.5, 0.4], 70, 360 );
+                    path([[0, -1], [0, 3]]);
+                    path([[3, -1], [3, 3]]);
+                    arc([1.5, -1], [1.5, 0.4], 0, 180, {
+                        strokeDasharray: "- "
+                    });
+                    arc([1.5, -1], [1.5, 0.4], 180, 360);
+
+                    path([[1.5, 3], [3, 3]]);
+                    label([2.25, 3], r, "above");
+                    label([3, 1], h, "right");
+                </div>
+            </div>
+
+            <div class="solution" data-forms="pi">
+                <var>Math.PI * r * r * h</var>
+            </div>
+
+            <div class="hints">
+                <p>
+                    The area of the base is simply the area of a circle:
+                    <code>\pi r^2 = \pi \cdot <var>r</var>^2 =
+                        <var>r * r</var> \pi</code>.
+                </p>
+                <p>
+                    The volume of the cylinder is the area of the base
+                    times the height:
+                    <code>B \cdot h = <var>r * r</var>\pi \cdot <var>h</var>
+                        = <var>r * r * h</var>\pi</code>.
+                </p>
+            </div>
+        </div>
+
+        <div id="cylinder-T">
+            <div class="vars">
+                <var id="r">randRange( 2, 4 )</var>
+                <var id="h">randRange( 5, 9 )</var>
+            </div>
+
+            <div class="question">
+                <p>What is the surface area of a cylinder with
+                    base radius <code><var>r</var></code> and
+                    height <code><var>h</var></code>?</p>
+
+                <div class="graphie">
+                    init({
+                        range: [[-1, 4], [-2, 4]]
+                    });
+
+                    arc([1.5, 3], [1.5, 0.4], 0, 48);
+                    arc([1.5, 3], [1.5, 0.4], 70, 360);
+                    path([[0, -1], [0, 3]]);
+                    path([[3, -1], [3, 3]]);
+                    arc([1.5, -1], [1.5, 0.4], 0, 180, {
+                        strokeDasharray: "- "
+                    });
+                    arc([1.5, -1], [1.5, 0.4], 180, 360);
+
+                    path([[1.5, 3], [3, 3]]);
+                    label([2.25, 3], r, "above");
+                    label([3, 1], h, "right");
+                </div>
+            </div>
+
+            <div class="solution" data-forms="pi">
+                <var>Math.PI * 2 * r * ( r + h )</var>
+            </div>
+
+            <div class="hints">
+                <p>
+                    The areas of the top and the base are simply the
+                    area of a circle:
+                    <code>\pi r^2 = \pi \cdot <var>r</var>^2 =
+                        <var>r * r</var> \pi</code>.
+                </p>
+                <p>
+                    The lateral surface area is the same as the
+                    area of a rectangle with height
+                    <code><var>h</var></code>
+                    and width equal to the circumference of the base.
+                </p>
+                <p>
+                    That circumference is
+                    <code>2 \pi r = 2\pi \cdot <var>r</var> =
+                        <var>2 * r</var>\pi</code>.
+                </p>
+                <p>
+                    Thus, the lateral surface area is
+                    <code>wh = <var>2 * r</var> \pi \cdot <var>h</var> =
+                        <var>2 * r * h</var> \pi</code>.
+                </p>
+                <p>
+                    The total surface area is
+                    <code><var>r * r</var> \pi + <var>r * r</var> \pi +
+                        <var>2 * r * h</var> \pi =
+                        <var>2 * r * ( r + h )</var>\pi</code>.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 8
+## https://www.khanacademy.org/math/geometry/segments-and-angles/intro_euclid/e/points_lines_and_planes
+##
+#elseif($request.showExercise==8)
+<div class="exercise">
+
+    <div class="vars">
+        <var id="TILT">randRange(-100, 100) / 150</var>
+        <var id="TILT2">randRange(-100, 100) / 500</var>
+        <var id="A">randFromArray(["A", "F", "K", "U"])</var>
+        <var id="B">randFromArray(["B", "G", "L", "V"])</var>
+        <var id="C">randFromArray(["C", "H", "M", "W"])</var>
+        <var id="D">randFromArray(["D", "I", "N", "X"])</var>
+        <var id="E">randFromArray(["E", "J", "O", "Y"])</var>
+        <var id="R">randFromArray(["R", "S", "T", "P"])</var>
+    </div>
+
+    <p class="question"></p>
+
+    <div class="problem">
+        <div class="graphie">
+            init({
+                range: [ [-1, 15], [-5, 8] ],
+                scale: [ 30, 30 ]
+            });
+            // plane
+            path([
+                [6 + (0 - 6) * cos(TILT) - (0 - 2) * sin(TILT), 2 + (0 - 6) * sin(TILT) + (0 - 2) * cos(TILT)],
+                [6 + (10 - 6) * cos(TILT) - (0 - 2) * sin(TILT), 2 + (10 - 6) * sin(TILT) + (0 - 2) * cos(TILT)],
+                [6 + (12 - 6) * cos(TILT) - (4 - 2) * sin(TILT), 2 + (12 - 6) * sin(TILT) + (4 - 2) * cos(TILT)],
+                [6 + (2 - 6) * cos(TILT) - (4 - 2) * sin(TILT), 2 + (2 - 6) * sin(TILT) + (4 - 2) * cos(TILT)],
+                true
+            ]);
+
+            style({ arrows: "-&gt;" }, function() {
+
+                // line in the plane
+                line([6 + (3 - 6)* cos(TILT+TILT2) - (3 - 2)* sin(TILT+TILT2), 2 + ( 3 - 6 ) * sin(TILT+TILT2) + ( 3 - 2 ) * cos(TILT+TILT2)],
+                     [6 + (9 - 6)* cos(TILT+TILT2) - (1 - 2)* sin(TILT+TILT2), 2 + ( 9 - 6 ) * sin(TILT+TILT2) + ( 1 - 2 ) * cos(TILT+TILT2)]);
+
+                // line in the plane (opposite direction hack to get double-headed arrow)
+                line([6 + (9 - 6)* cos(TILT+TILT2) - (1 - 2)* sin(TILT+TILT2), 2 + ( 9 - 6 ) * sin(TILT+TILT2) + ( 1 - 2 ) * cos(TILT+TILT2)],
+                     [6 + (3 - 6)* cos(TILT+TILT2) - (3 - 2)* sin(TILT+TILT2), 2 + ( 3 - 6 ) * sin(TILT+TILT2) + ( 3 - 2 ) * cos(TILT+TILT2)]);
+
+                // perpendicular line (top)
+                line([6 + (6 - 6)* cos(TILT) - (2 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( 2 - 2 ) * cos(TILT)],
+                     [6 + (6 - 6)* cos(TILT) - (6 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( 6 - 2 ) * cos(TILT)]);
+
+                // Perpendicular line (bottom)
+                line([6 + (6 - 6)* cos(TILT) - (0 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( 0 - 2 ) * cos(TILT)],
+                     [6 + (6 - 6)* cos(TILT) - (-3 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( -3 - 2 ) * cos(TILT)]);
+            });
+
+            // dashed line behind the plane
+            style({ strokeDasharray: "- " }, function() {
+                line([6 + (6 - 6)* cos(TILT) - (2 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( 2 - 2 ) * cos(TILT)],
+                     [6 + (6 - 6)* cos(TILT) - (0 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( 0 - 2 ) * cos(TILT)]);
+            });
+
+            var r = randRange(0, 100) / 150;
+            var theta = randRange(-314, 314) / 100;
+
+            // points
+            style({ r: 0.15, stroke: "none" }, function() {
+                circle([6 + (4 - 6)* cos(TILT+TILT2) - (8/3 - 2)* sin(TILT+TILT2), 2 + ( 4 - 6 ) * sin(TILT+TILT2) + ( 8/3 - 2 ) * cos(TILT+TILT2)], { fill: PINK });
+                circle([6, 2], { fill: BLUE });
+                circle([6 + (8 - 6)* cos(TILT+TILT2) - (4/3 - 2)* sin(TILT+TILT2), 2 + ( 8 - 6 ) * sin(TILT+TILT2) + ( 4/3 - 2 ) * cos(TILT+TILT2)], { fill: GREEN });
+                circle([6 + (6 - 6)* cos(TILT) - (-2 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( -2 - 2 ) * cos(TILT)], { fill: ORANGE });
+                circle([6 + (17/6 + r*cos(theta) - 6)* cos(TILT) - (1.4 + r*sin(theta) - 2)* sin(TILT), 2 + ( 17/6 + r*cos(theta) - 6 ) * sin(TILT) + ( 1.4 + r*sin(theta) - 2 ) * cos(TILT)], { fill: "purple" });
+            });
+
+            label([6 + (4 - 6)* cos(TILT+TILT2) - (8/3 - 2)* sin(TILT+TILT2), 2 + ( 4 - 6 ) * sin(TILT+TILT2) + ( 8/3 - 2 ) * cos(TILT+TILT2)], A, "above right" );
+            label([6.1, 2], B, "above right");
+            label([6 + (8 - 6)* cos(TILT+TILT2) - (4/3 - 2)* sin(TILT+TILT2), 2 + ( 8 - 6 ) * sin(TILT+TILT2) + ( 4/3 - 2 ) * cos(TILT+TILT2)], C, "above right" );
+            label([6 + (6 - 6)* cos(TILT) - (-2 - 2)* sin(TILT), 2 + ( 6 - 6 ) * sin(TILT) + ( -2 - 2 ) * cos(TILT)], D, "right" );
+            label([6 + (17/6 + r*cos(theta) - 6)* cos(TILT) - (1.4 + r*sin(theta) - 2)* sin(TILT), 2 + ( 17/6 + r*cos(theta) - 6 ) * sin(TILT) + ( 1.4 + r*sin(theta) - 2 ) * cos(TILT)], E, "below" );
+
+            label([6 + (9.2 - 6)* cos(TILT+TILT2) - (1 - 2)* sin(TILT+TILT2), 2 + ( 9.2 - 6 ) * sin(TILT+TILT2) + ( 1 - 2 ) * cos(TILT+TILT2)], "\\ell", "right");
+            label([6 + (12.1 - 6)* cos(TILT) - (4 - 2)* sin(TILT), 2 + ( 12.1 - 6 ) * sin(TILT) + ( 4 - 2 ) * cos(TILT)], "\\mathcal{" + R + "}", "right");
+        </div>
+    </div>
+
+    <div class="problems">
+        <div id="name-plane">
+            <p class="question">
+                What is another way to name plane <code>\mathcal{<var>R</var>}</code>?
+            </p>
+
+            <div class="solution" data-type="set">
+                <div class="set-sol" data-type="text"><var>A + B + E</var></div>
+                <div class="set-sol" data-type="text"><var>A + C + E</var></div>
+                <div class="set-sol" data-type="text"><var>A + E + B</var></div>
+                <div class="set-sol" data-type="text"><var>A + E + C</var></div>
+                <div class="set-sol" data-type="text"><var>B + A + E</var></div>
+                <div class="set-sol" data-type="text"><var>B + C + E</var></div>
+                <div class="set-sol" data-type="text"><var>B + E + A</var></div>
+                <div class="set-sol" data-type="text"><var>B + E + C</var></div>
+                <div class="set-sol" data-type="text"><var>C + A + E</var></div>
+                <div class="set-sol" data-type="text"><var>C + B + E</var></div>
+                <div class="set-sol" data-type="text"><var>C + E + A</var></div>
+                <div class="set-sol" data-type="text"><var>C + E + B</var></div>
+                <div class="set-sol" data-type="text"><var>E + A + B</var></div>
+                <div class="set-sol" data-type="text"><var>E + A + C</var></div>
+                <div class="set-sol" data-type="text"><var>E + B + A</var></div>
+                <div class="set-sol" data-type="text"><var>E + B + C</var></div>
+                <div class="set-sol" data-type="text"><var>E + C + A</var></div>
+                <div class="set-sol" data-type="text"><var>E + C + B</var></div>
+
+                <div class="input-format">
+                    <p>Plane <span class="entry"></span></p>
+                </div>
+            </div>
+            <div class="hints">
+                <div>
+                    <p>Planes can be named with three <a href="#" class="show-definition" data-definition="noncollinear">noncollinear</a> points.</p>
+                    <div class="definition" id="noncollinear">
+                        Noncollinear points are points that are not on the same line.
+                    </div>
+                </div>
+                <p>
+                    Find any three points in the plane <code>\mathcal{<var>R</var>}</code> that are
+                    not on the same line and list them in any order.
+                </p>
+                <p>
+                    For example, we can write <code>\mathcal{<var>R</var>}</code> as plane
+                    <code><var>A + B + E</var></code>, plane <code><var>A + C + E</var></code>,
+                    or plane <code><var>B + E + C</var></code>.
+                </p>
+            </div>
+        </div>
+
+        <div id="line-name">
+            <div class="vars">
+                <var id="SOLUTION">randFromArray([
+                    "\\overleftrightarrow{" + A + B + "}",
+                    "\\overleftrightarrow{" + A + C + "}",
+                    "\\overleftrightarrow{" + B + A + "}",
+                    "\\overleftrightarrow{" + B + C + "}",
+                    "\\overleftrightarrow{" + C + A + "}",
+                    "\\overleftrightarrow{" + C + B + "}"
+                ])</var>
+                <var id="INCORRECT_1">randFromArray([
+                    "\\overleftrightarrow{" + A + "}",
+                    "\\overleftrightarrow{" + B + "}",
+                    "\\overleftrightarrow{" + C + "}"
+                ])</var>
+                <var id="INCORRECT_2">randFromArray([
+                    "\\overline{" + A + B + "}",
+                    "\\overline{" + B + A + "}",
+                    "\\overline{" + C + B + "}",
+                    "\\overline{" + B + C + "}",
+                    "\\overline{" + C + A + "}",
+                    "\\overline{" + A + C + "}"
+                ])</var>
+                <var id="INCORRECT_3">randFromArray([
+                    "\\overleftrightarrow{" + E + C + "}",
+                    "\\overleftrightarrow{" + C + E + "}",
+                    "\\overleftrightarrow{" + D + A + "}",
+                    "\\overleftrightarrow{" + D + B + "}",
+                    "\\overleftrightarrow{" + D + C + "}",
+                    "\\overleftrightarrow{" + A + D + "}"
+                ])</var>
+            </div>
+
+            <p class="question">What is another way to name line <code>\ell</code>?</p>
+
+            <div class="solution"><code><var>SOLUTION</var></code></div>
+
+            <ul class="choices">
+                <li><code><var>INCORRECT_1</var></code></li>
+                <li><code><var>INCORRECT_2</var></code></li>
+                <li><code><var>INCORRECT_3</var></code></li>
+                <li><code>\overleftrightarrow{<var>A + B + C</var>}</code></li>
+            </ul>
+
+            <div class="hints">
+                <p>Lines are named using any two points on the line. The order doesn't matter.</p>
+                <p>The points must have the <code>\leftrightarrow</code> above because we're
+                naming a line, not a ray or a segment.</p>
+                <p>Another way to name line <code>\ell</code> is <code><var>SOLUTION</var></code>.</p>
+            </div>
+        </div>
+
+
+        <div id="collinear-3">
+            <div class="vars">
+                <var id="YES">$._("Yes")</var>
+                <var id="NO">$._("No")</var>
+                <var id="POINTS,SOLUTION">randFromArray([
+                    [[A, B, C], true],
+                    [[A, B, D], false],
+                    [[A, C, B], true],
+                    [[A, C, E], false],
+                    [[B, A, C], true],
+                    [[B, C, A], true],
+                    [[B, E, C], false],
+                    [[C, A, B], true],
+                    [[C, A, D], false],
+                    [[C, B, A], true],
+                    [[C, B, E], false],
+                    [[E, C, A], false]
+                ])</var>
+            </div>
+
+            <p class="question">Are the points <var>toSentence(POINTS)</var> collinear?</p>
+
+            <div class="solution"><var>SOLUTION ? YES : NO</var></div>
+            <ul class="choices" data-category="true">
+                <li><var>YES</var></li>
+                <li><var>NO</var></li>
+            </ul>
+
+            <div class="hints">
+                <p>Collinear means that they lie on the same line.</p>
+                <p>Can you draw a straight line through points <var>toSentence(POINTS)</var>?</p>
+                <p data-if="SOLUTION">Yes, points <var>toSentence(POINTS)</var> are collinear.</p>
+                <p data-else="">No, points <var>toSentence(POINTS)</var> are not collinear.</p>
+            </div>
+        </div>
+
+
+        <div id="collinear-2">
+            <div class="vars">
+                <var id="YES">$._("Yes")</var>
+                <var id="NO">$._("No")</var>
+                <var id="POINTS">shuffle([A, B, C, D, E], 2)</var>
+            </div>
+
+            <p class="question">Are the points <var>toSentence(POINTS)</var> collinear?</p>
+
+            <div class="solution"><var>YES</var></div>
+            <ul class="choices" data-category="true">
+                <li><var>YES</var></li>
+                <li><var>NO</var></li>
+            </ul>
+
+            <div class="hints">
+                <p>Through any two points, there is exactly one line.</p>
+                <p>Points can be collinear even if the line isn't drawn in the figure.</p>
+                <p>Can you draw a straight line through points <var>toSentence(POINTS)</var>?
+                Actually, can you draw a straight line through any two points?</p>
+                <p>Yes, points <var>toSentence(POINTS)</var> are collinear.</p>
+            </div>
+        </div>
+
+
+        <div id="coplanar">
+            <div class="vars">
+                <var id="YES">$._("Yes")</var>
+                <var id="NO">$._("No")</var>
+                <var id="POINTS,SOLUTION,COPLANAR">randFromArray([
+                    [[A, B, C, E], true, []],
+                    [[A, B, D, E], false,  [A, B, E]],
+                    [[A, C, D],    true, []],
+                    [[A, C, D, E], false,  [A, C, E]],
+                    [[B, A, C],    true, []],
+                    [[B, C, A, E], true, []],
+                    [[E, C, D, A], false,  [E, C, A]],
+                    [[B, E, D, C], false,  [B, E, C]],
+                    [[C, B, D, E], false,  [C, B, E]],
+                    [[C, D, A],    true, []],
+                    [[E, D, A],    true, []]
+                ])</var>
+            </div>
+
+            <p class="question">Are the points <var>toSentence(POINTS)</var> coplanar?</p>
+
+            <p class="solution"><var>SOLUTION ? YES : NO</var></p>
+
+            <ul class="choices" data-category="true">
+                <li><var>YES</var></li>
+                <li><var>NO</var></li>
+            </ul>
+
+            <div class="hints">
+                <p>Coplanar points are points that all lie on the same plane.</p>
+                <p>Can a flat surface pass through all the points without bending?</p>
+                <p data-if="!SOLUTION">
+                    No, any flat surface that includes three of the points won't include the fourth.
+                    For example, points <var>toSentence(COPLANAR)</var> are in plane
+                    <code>\mathcal{<var>R</var>}</code>, but point <var>D</var> is not.
+                </p>
+                <p data-else-if="POINTS.length === 4">
+                    Yes, points <var>toSentence(POINTS)</var> all lie within a single
+                    flat surface. In this case, plane <code>\mathcal{<var>R</var>}</code>.
+                </p>
+                <p data-else="">
+                    Yes, there is always at least one flat surface that passes through
+                    any three points.
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 9
+## https://www.khanacademy.org/math/geometry/parallel-and-perpendicular-lines/complementary-supplementary-angl/e/complementary_and_supplementary_angles
+##
+#elseif($request.showExercise==9)
+<div class="exercise">
+    <div class="problems">
+        <div id="find-hypotenuse">
+            <div class="vars">
+                <var id="O, A, B, C">randFromArray([
+                    ["O", "A", "B", "C"],
+                    ["O", "L", "M", "N"],
+                    ["P", "Q", "R", "S"]
+                ])</var>
+                <var id="ANGLE">randRange(1, 89)</var>
+
+                <var id="ANGLE_BOT">"\\angle " + A + O + B</var>
+                <var id="ANGLE_TOP">"\\angle " + B + O + C</var>
+
+                <var id="ANGLE_ONE, ANGLE_TWO">shuffle([ ANGLE_BOT, ANGLE_TOP ])</var>
+            </div>
+
+            <div class="question">
+                <p>If <code>\angle <var>A + O + C</var></code> is a right angle and <code>m <var>ANGLE_ONE</var> = <var>ANGLE</var>^\circ</code>, what is <code>m <var>ANGLE_TWO</var></code>, in degrees?</p>
+
+                <div class="graphie">
+                    init({
+                        range: [ [-2, 7], [-2, 6] ],
+                        scale: 40
+                    });
+
+                    var DISP_ANGLE = Math.min( Math.max( 10, ANGLE ), 80 );
+                    if ( ANGLE_ONE !== ANGLE_BOT ) {
+                        DISP_ANGLE = 90 - DISP_ANGLE;
+                        arc( [ 0, 0 ], 1, DISP_ANGLE, 90 );
+                        DISP_ANGLE *= PI / 180;
+                        label( [ 2 * cos( DISP_ANGLE + ( PI / 2 - DISP_ANGLE) / 2 ) + 0.125, 2 * sin( DISP_ANGLE + ( PI / 2 - DISP_ANGLE) / 2  ) + 0.5 ], ANGLE + "^\\circ" );
+                    } else {
+                        arc( [ 0, 0 ], 1, 0, DISP_ANGLE );
+                        DISP_ANGLE *= PI / 180;
+                        label( [ 2 * cos( DISP_ANGLE / 2 ) + 0.65 , 2 * sin( DISP_ANGLE / 2 )], ANGLE + "^\\circ" );
+                    }
+
+                    path([ [0, 5], [0, 0], [5, 0] ]);
+                    path([ [0, 0], [5 * cos( DISP_ANGLE ), 5 * sin( DISP_ANGLE )] ]);
+
+                    label( [0, 0], O, "below left" );
+                    label( [5, 0], A, "right" );
+                    label( [0, 5], C, "above" );
+                    // somewhat ick to make it look nice
+                    label( [5.4 * cos( DISP_ANGLE ), 5.4 * sin( DISP_ANGLE )], B );
+                </div>
+            </div>
+
+            <div class="solution" data-forms="integer"><var>90 - ANGLE</var></div>
+
+            <div class="hints">
+                <p>From the diagram, we see that <code><var>ANGLE_BOT</var></code> and <code><var>ANGLE_TOP</var></code> are complementary angles.</p>
+                <p>Therefore, <code>m <var>ANGLE_BOT</var> + m <var>ANGLE_TOP</var> = 90^\circ</code>.</p>
+                <p>Thus, <code>m <var>ANGLE_TWO</var> = 90^\circ - m <var>ANGLE_ONE</var> = 90^\circ - <var>ANGLE</var>^\circ = <var>90 - ANGLE</var>^\circ</code>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+################################################
+## Exercise 10
+## https://www.khanacademy.org/math/geometry/transformations/e/axis_of_symmetry
+##
+#elseif($request.showExercise==10)
+ <div class="exercise">
+    <div class="vars">
+        <var id="SYM">randRange( 0, 1 )</var>
+        <var id="SIDES">randRange( 3, 8 )</var>
+        <var id="SIDE">randRange( 0, SIDES - 1 )</var>
+        <var id="YES,NO">[$._("Yes"), $._("No")]</var>
+        <var id="ANSWER">SYM ? YES : NO</var>
+    </div>
+
+    <div class="problems">
+        <div>
+            <p class="question">Is the blue line an axis of symmetry?</p>
+            <div class="graphie" id="main">
+                init({
+                     range: [ [ -5, 5 ], [ -5, 5 ] ]
+                });
+                graph.polygon = new RegularPolygon( [ 0, 0 ] , SIDES , 3 );
+
+                if ( SYM ){
+                    graph.split = graph.polygon.drawLineOfSymmetry( SIDE );
+                } else {
+                    graph.split = graph.polygon.drawFakeLineOfSymmetry( SIDE );
+                }
+            </div>
+            <div class="solution"><var>ANSWER</var></div>
+            <ul class="choices" data-category="true">
+                <li><var>YES</var></li>
+                <li><var>NO</var></li>
+            </ul>
+            <div class="hints">
+                <p>Does the blue line split the shape into two parts which look like reflections of each other?</p>
+                <div>
+                    <p>The orange line is one of two parts made by the blue line.</p>
+                    <div class="graphie" data-update="main">
+                        graph.half = graph.polygon.splitPath( graph.split ).graphiePath;
+                    </div>
+                </div>
+                <p>If the blue line were a mirror, what would the orange line's reflection look like?</p>
+                <div>
+                    <p>The pink line is the orange line's reflection.</p>
+                    <div class="graphie" data-update="main">
+                        var temp = [];
+                        var i = 0;
+                        for( i = 0; i != graph.half.length; i++ ){
+                            temp.push( reflectPoint( graph.split.graphiePath, graph.half[ i ] ) );
+                        }
+                        path( temp, { "stroke-width": 5, stroke: KhanUtil.PINK } )
+                    </div>
+                </div>
+                <p data-if="SYM">The blue line splits the shape into two equal halves, so it is an axis of symmetry.</p>
+                <p data-else="">The blue line did not split the shape into two equal halves, so it is not an axis of symmetry.</p>
+            </div>
+        </div>
+    </div>
 </div>
 #end
 </body>
