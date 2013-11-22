@@ -15,12 +15,14 @@
         #set($endIndex = $spaceList.size() - 1)
     #end
     #set($showcount = 0)
-    #foreach($space in $spaceList)
-        #set($showcount = 1 + $showcount)
-        #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
-            #ru_groups_groupinfomessages($space "")
+    <ul class="dropdown-menu" role="menu">
+        #foreach($space in $spaceList)
+            #set($showcount = 1 + $showcount)
+            #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+                #ru_groups_groupinfomessages($space "")
+            #end
         #end
-    #end
+    </ul>
 #end
 
 
@@ -31,22 +33,22 @@
     #set($g_rowCount = $g_rowCount + 1)
     #set($m_sm = $xwiki.csm)
     #set($s = $m_sm.getSpace($m_groupName))
-    <ul class="dropdown-menu" role="menu">
-        #if($displayType == "edit")
-            #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
-            ##verbatim_start
-            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $editmastheadurl)
-            ##verbatim_end
-        #elseif($displayType == "view")
-            ##verbatim_start
-            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" "")
-            ##verbatim_end
-        #else
-            ##verbatim_start
-            #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $s.getHomeURL())
-            ##verbatim_end
-        #end
-    </ul>
+    
+    #if($displayType == "edit")
+        #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $editmastheadurl)
+        ##verbatim_end
+    #elseif($displayType == "view")
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" "")
+        ##verbatim_end
+    #else
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $s.getHomeURL())
+        ##verbatim_end
+    #end
+    
 #end
 
 
