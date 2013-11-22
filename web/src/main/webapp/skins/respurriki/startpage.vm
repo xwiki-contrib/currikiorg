@@ -9,6 +9,7 @@
 #else
     #template("header.vm")
 <div class="container" id="the-content">
+    #if($request.bc || $doc.getObject("CurrikiCode.AssetClass") && $doc.parent || $doc.getObject("CurrikiCode.CompositeAssetClass"))
     <div class="row" id="the-breadcrumb">
         <div class="col-md-8 col-xs-7">
             #ru_breadcrumb()
@@ -26,6 +27,7 @@
             </ul>
         </div>
     </div>
+    #end
 <div class="row">
 <div class="col-md-12" id="main-content">
 #end
