@@ -40,7 +40,10 @@
                         <li><a href="../Coll_Group_${groupName}/Main"
                             #if($doc.space.startsWith("Coll_")) class="current" #end##
                                 >Course</a></li>
-                        <li><a href="#" class="link-green">Resources</a></li>
+                        #groupinit()
+                        #if($isGroupAdmin)
+                            <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial" class="link-green">Resources</a></li>
+                        #end
                         <li><a href="../Group_${groupName}/Discussions"
                             #if($doc.fullName=="Group_${groupName}.Discussions" || $doc.space=="Discussions_Group_${groupName}") class="current" #end##
                                 >Discussions</a></li>
@@ -49,7 +52,10 @@
                     #else
                         <li><a href="#">Home</a></li>
                         <li><a href="#">Course</a></li>
-                        <li><a href="#">Resources</a></li>
+                        #groupinit()
+                        #if($isGroupAdmin)
+                        <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial">Resources</a></li>
+                        #end
                         <li><a href="#">Discussions</a></li>
                         <li><a href="#">Projects</a></li>
                         <li id="menu-item-user" class="dropdown">#ru_loginLogout()</li>
