@@ -1,8 +1,4 @@
-{{velocity}}
-##
-##
-##
-## Class Groups Macros
+## Classroom Groups Macros
 ##
 ##
 #* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
@@ -239,19 +235,228 @@
 
 
 
+###
+###
+### ---------- Members ------------------------------------------------
+###
+###
+###
+#**
+ * Group Members
+ * -- for use in all Members pages
+ *#
+#macro(ru_groups_members)
+{{html clean=false}}<!-- init -->
+    #groupinit()
+<!-- header -->
+<h1>Classroom Members for $s.displayTitle</h1>
+<!-- end header -->
+    #if(!$isGroupMember && ($s.policy=="closed") && !$hasGlobalAdmin)
+        $msg.get("classroom_members_onlyaccessibletomembers")
+    #else
+    <!-- membershipinfo -->
+    ## was: #groupsmembershipinfo($spaceName)
+        #begingroupsection($msg.get("classrooms_home_membership_title"),"","", "blue", false)
+        #if($isGroupAdmin)
+            $msg.get("classrooms_home_membership_group_infotxt")
+        <div id="groups-members-invite-button" class="groups-members-button">
+            <a href="$xwiki.getURL("${spaceName}.InviteMembers")" class="button-orange"##
+                    >$msg.get("classrooms_home_membership_group_btt")</a>
+        </div>
+        #else
+            #set($gpolicy = $sm.getSpace($spaceName).policy)
+            #if($gpolicy=="open")
+                $msg.get("classrooms_home_membership_open_visitor_infotxt")
+            <div id="groups-members-join-button" class="groups-members-button">
+                <a href="$xwiki.getURL("${spaceName}.JoinGroup")" class="button-orange">$msg.get("classrooms_home_membership_open_visitor_btt")</a>
+            </div>
+            #else
+                $msg.get("classrooms_home_membership_closed_visitor_infotxt")
+            <div id="groups-members-request-button" class="groups-members-button">
+                <a href="$xwiki.getURL("${spaceName}.RequestMembership")" class="button-orange">$msg.get("classrooms_home_membership_closed_visitor_btt")</a>
+            </div>
+            #end
+        #end
+        #endgroupsection()
+
+    #* #if(!$xwiki.exists("${spaceName}.ManageRoles")) ## {
+       #set($discard = $xwiki.copyDocument("Groups_TemplateSpace.ManageRoles", "${spaceName}.ManageRoles"))
+   #end *# ## }
+    <!-- groupsection -->
+        #begingroupsection($msg.get("classroom_members_list_title"),$msg.get("classroom_members_manage_roles"), $xwiki.getURL("${spaceName}.ManageRoles", "view"), "blue", $isGroupAdmin)
+        #if(!$request.type)
+            #set($type = "0")
+        #else
+            #set($type = $request.type)
+        #end
+        #if(!$isGroupAdmin)
+        <div id="groups-members-list-$type" class="groups-members-list">
+            <!-- groupsdisplaymembers -->
+            #classroomsdisplaymembers($spaceName)
+        </div>
+        #else
+        <!-- groupsdisplaymembersfilters -->
+            #classroomsdisplaymembersfilters ($type)
+        <div id="groups-members-list-$type" class="groups-members-list">
+        ## show members
+            #if($type=="0")
+                <!-- groupsdisplaymembers-->
+                #classroomsdisplaymembers($spaceName)
+            ## show membershiprequests
+            #elseif($type=="1")
+                <!-- groupsdisplayopenmembershiprequests -->
+                #groupsdisplayopenmembershiprequests($spaceName)
+            ## show denied membershiprequests
+            #elseif($type=="2")
+                <!-- groupsdisplaydeniedmembershiprequests -->
+                #groupsdisplaydeniedmembershiprequests($spaceName)
+            #elseif($type=="3")
+                <!-- groupsdisplayinvitations -->
+                #groupsdisplayinvitations($spaceName)
+            #end
+        ##
+        </div>
+        #end
+        #endgroupsection()
+    #end
+    #groupsfooter()
+{{/html}}
+#end
+
+##
+##
+## Macro to display the members lists
+##
+#macro(classroomsdisplaymembers $spaceName)
+## <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
+<!-- fixme: groupsdisplayeditmemberjs was here -->## #groupsdisplayeditmemberjs()
+    #set($members = $sm.getMembers($spaceName))
+## pagination parameters
+    #set($itemsPerPage=10)
+    #if($request.ipp)
+        #set($itemsPerPage=$xwiki.parseInt($request.ipp))
+    #end
+    #set($startIndex=0)
+    #if($request.startIndex)
+        #set($startIndex=$xwiki.parseInt($request.startIndex))
+    #end
+    #set($totalCount=$members.size())
+## end pagination parameters
+    #if($members.size()==0)
+        $msg.get("classroom_members_admin_current_members_nomembers")
+    #else
+        $msg.get("classroom_members_admin_current_members_infotxt")
+        #set($endIndex = $startIndex + $itemsPerPage - 1)
+        #if($endIndex >= $totalCount)
+            #set($endIndex = $totalCount - 1)
+        #end
+        #foreach($mid in [$startIndex..$endIndex])
+            #classroomdisplaymember($members.get($mid) $spaceName $mid)
+        #end ## foreach
+    #end ## if
+    #curriki_paginatorargs($msg.get("classroom_members_page"),$startIndex,$itemsPerPage,$totalCount,"type=0")
+#end
+
+
+##
+#macro(classroomsdisplaymembersfilters $type)
+<div id="groups-members-filter">
+    $msg.get("classroom_members_admin_list_instruction")
+    <form action="">
+<span><input type="radio" name="type" value="0" #if($type=="0") checked #end onclick="this.form.submit()" />
+    $msg.get("classroom_members_admin_list_togglecurrent")</span>
+        #if($spacePolicy=="closed")
+            #set($mreqs = $im.getMembershipRequests($spaceName, 2))
+            #set($nbmreqs = $!mreqs.size())
+            <span><input type="radio" name="type" value="1" #if($type=="1") checked #end onclick="this.form.submit()" />
+                $msg.get("classroom_members_admin_list_togglepending", [ "$!nbmreqs" ])</span>
+<span><input type="radio" name="type" value="2" #if($type=="2") checked #end onclick="this.form.submit()" />
+    $msg.get("classrooms_members_admin_list_toggledenied")</span>
+        #end
+        <span><input type="radio" name="type" value="3" #if($type=="3") checked #end onclick="this.form.submit()" />
+            $msg.get("classrooms_members_admin_list_toggleinvitations")</span>
+    </form>
+</div>
+#end
+
+
+##
+##
+## PAGE: Groups.MembersSheet
+## Macro to display a member block in the members list
+##
+#macro(classroomdisplaymember $memberName $spaceName $divid)
+    #set($mdoc = $xwiki.getDocument($memberName))
+    #if(!$mdoc.isNew())
+    <div class="groups-members-member">
+        <div id="groups-members-memberinfo-$divid" class="groups-members-memberinfo">
+            #classroomdisplaymemberinfo("$memberName" "$spaceName" "groups-members-memberinfo-$divid")
+        </div>
+    #else
+        $msg.get("classroom_members_admin_current_membersettings_error")
+    #end
+</div>
+#end
 
 
 
-
-
-
-
-
-
-
-
-
-
-{{/velocity}}
-
+#macro(classroomdisplaymemberinfo $memberName $spaceName $divid) ## {
+    #set($mdoc = $xwiki.getDocument($memberName))
+    #if(!$mdoc.isNew())
+    <div class="groups-members-memberpic userpic">
+        #if($mdoc.attachmentList.size()==0)
+            <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
+        #else
+            #foreach ($attach in $mdoc.attachmentList)
+                <a href="$mdoc.getURL("view")" >
+                    <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
+            #end
+        #end
+    </div>
+    #end
+    #set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
+    #if($isGroupAdmin||$memberName==$context.user)
+    <div class="groups-members-membereditlink">
+        <a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("classroom_members_admin_current_members_editsettings_link")</a>
+    </div>
+    #end
+    #set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
+    #if($isGroupAdmin)
+        #set($adminCount = $sm.getAdmins($spaceName).size())
+        #if($memberIsAdmin)
+            #if($adminCount>1)
+            <div class="groups-members-addadmin">
+                <a href="javascript:void()" onclick="if (window.confirm('$msg.get("classrooms_admin_current_membersettings_removeadmin_confirm")')) {removeAdmin('$memberName','$spaceName');};return false;">$msg.get("classroom_members_admin_current_membersettings_removeadmin_link")</a>
+            </div>
+            #end
+        #else
+        <div class="groups-members-addadmin">
+            <a href="javascript:void()" onclick="if (window.confirm('$msg.get("classrooms_members_admin_current_membersettings_addadmin_confirm")')) {addAdmin('$memberName','$spaceName');};return false;">$msg.get("classroom_members_admin_current_membersettings_addadmin_link")</a>
+        </div>
+        #end
+        #if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+        <div class="groups-members-remove">
+            <a href="javascript:void()" onclick="if (window.confirm('$msg.get("classrooms_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("classroom_members_admin_current_membersettings_remove_link")</a>
+        </div>
+        #end
+    #else
+        #if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
+            #if($memberName==$context.user)
+            <div class="groups-members-remove">
+                <a href="javascript:void()" onclick="if (window.confirm('$msg.get("classrooms_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("classroom_members_admin_current_membersettings_remove_link")</a>
+            </div>
+            #end
+        #end
+    #end
+<div class="groups-members-membername">
+    <a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
+</div>
+<div class="groups-members-memberprofile">
+    #set($profile = $uprofile.profile)
+#if($profile)
+    $profile
+#end
+</div>
+#end
+##
 
