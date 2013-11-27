@@ -1,7 +1,7 @@
 #**
-  * View entry point. This is the main entry point of most of the Curriki site pages
-  * @author XWiki
-  *#
+ * View entry point. This is the main entry point of most of the Curriki site pages
+ * @author XWiki
+ *#
 ## We need to no display content for AssetTemp otherwise posting in the CB GWT Editor
 ## will fail in IE with JS errors. This is not a nice hack but is necessary
 #if($doc.space!="AssetTemp")
@@ -26,9 +26,13 @@
 #else ##}{
   #template("${viewer}.vm")
 #end ##}
-<div class="clearfloats"></div>
-</div>## main
-#if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
+#if(!($viewer.startsWith("embed")))
+  <div class="clearfloats"></div>
+  </div>## main
+#end
+#if($viewer.equals("embed-khan"))
+  ## Do nothing
+#elseif(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
   #template("endpage.vm")
 #else ##}{
   </div>## contentcolumn

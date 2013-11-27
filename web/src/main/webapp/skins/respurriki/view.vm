@@ -13,14 +13,16 @@
   #if("$!viewer" == '')
     #set($viewer = 'content')
   #end
+  #if(!($viewer.startsWith("embed")))
     #template("startpage.vm")
-<div id="inner-content">
-##  #if($displayContentMenu)
-##    <div id="contentmenu" class="actionmenu">
-##    #template("contentmenu.vm")
-##    </div>
-##  #end
-  <div id="mainContentArea">
+    <div id="inner-content">
+    ##  #if($displayContentMenu)
+    ##    <div id="contentmenu" class="actionmenu">
+    ##    #template("contentmenu.vm")
+    ##    </div>
+    ##  #end
+    <div id="mainContentArea">
+  #end
 ##  #template("hierarchy.vm")
   #if($viewer == 'content')
     #template("contentview.vm")
