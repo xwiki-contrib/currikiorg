@@ -353,8 +353,7 @@
     }
     /* ]]> */
 </script>
-<!-- member area -->
-<div id="header-member" xmlns:fb="http://www.facebook.com/2008/fbml"> ##{
+<ul class="dropdown-menu">
     #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
     ##{
         #if ($request.xredirect) ##{
@@ -381,43 +380,32 @@
             &nbsp;
         #end
         
+        <li><a $anchorAtts><i class="icon-user icon-large"></i> Login</a></li>
+        <li class="divider"></li>
+        <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
+        <!-- $msg.get('join.header.title.3') -->##
+        #foreach($provider in ["Facebook","Google"])
+            <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
+            #set($xredirect="${request.getRequestURI()}")##
+            <!-- xredirect is $xredirect -->
+            #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&tempskin=curriki8&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
 
-        <div class="btn-group">
-            <a $anchorAtts class="navbar-link"><i class="icon-user icon-large"></i> Login</a>
-            <a class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-sort-down icon-large"></i>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-                <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
-                <!-- $msg.get('join.header.title.3') -->##
-                #foreach($provider in ["Facebook","Google"])
-                    <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
-                    #set($xredirect="${request.getRequestURI()}")##
-                    <!-- xredirect is $xredirect -->
-                    #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&tempskin=curriki8&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
-
-                    <li><a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
-                       onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
-                         <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="18"
-                             title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /> $provider</a></li>
-                #end
-            </ul>
-        </div>
+            <li><a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
+               onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
+                 <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="18"
+                     title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /> $provider</a></li>
+        #end
         
     #end
     #else ## }{ ## is logged in
         #set($fname = $crtUserDoc.display("first_name","view"))
-        <div class="btn-group">
-            <a href="#" class="navbar-link">$fname</a>
-            <a class="dropdown-toggle" data-toggle="dropdown">
-                <i class="icon-sort-down icon-large"></i>
-            </a>
-            <ul class="dropdown-menu" role="menu">
-                <li><a href='$crtUserDoc.getURL()'>My curriki</a></li>
-                #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
-                <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
-            </ul>
-        </div>
+        <li><a href="#">$fname</a></li>
+        <li class="divider"></li>
+        <li><a href='$crtUserDoc.getURL()'>My curriki</a></li>
+        <li class="divider"></li>
+        #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+        <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
+
     #end ##}
     #set($headerMsg="$!request.session.getAttribute('header.message')")##
     #if("$!headerMsg"!="")
@@ -447,10 +435,7 @@
             });
         </script>
     #end##
-##
-</div> ##} ##header-member
-<!-- end of member area -->
-
+</ul>
 #end
 
 

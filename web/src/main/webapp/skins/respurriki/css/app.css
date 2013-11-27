@@ -76,9 +76,7 @@ Content
 #sidebar a{
     color: #fff;
 }
-#main-logo img{
-    height: 50px;
-}
+
 #dropable-toc{
     background-color: #399abd;
     display: none;
@@ -262,10 +260,7 @@ Content
     margin-bottom: 0px;
     margin-top: 7px;
 }
-#wrapper-logo{
-    background-color: #ff5e00;
-    text-align: center;
-}
+
 #header-member{
     margin-right: 0px;
     width: 100%;
@@ -278,68 +273,21 @@ Content
     left: auto;
     text-align: left;
 }
-#main-logo{
-    position: relative;
-    z-index: 100;
-}
-/*
-.navbar{
-    z-index: 50;
-}
-*/
-#top-header{
-    background-color: #29a3ce;
-    border-bottom: 1px solid #fff;
-    z-index: 970;
-    position: relative;
+#the-header{
+    /*background-color: #29a3ce;*/
 }
 #the-header .navbar #curriki-navbar-collapse-1{
     padding-left: 0px;
     padding-right: 0px;
 }
-#select-class{
-    float: right;
-    margin-top: 5px;
+
+#curriki-navbar-collapse-1 #main-nav li:last-child{
+    border-right: #fff solid 1px;
 }
-#select-class a{
-    color: #fff;
-    text-decoration: none;
+#curriki-navbar-collapse-1 #action-nav{
+    background-color: #29a3ce;
 }
-#select-class .dropdown-menu a{
-    color: #000;
-}
-#select-class .dropdown-menu a:hover{
-    background-color: #f5f5f5;
-}
-#anchor-align{
-    position: relative;
-    top: 4px;
-    text-transform: uppercase;
-    margin-right: 2px;
-}
-h2#course-title{
-    color: #FFFFFF;
-    margin-bottom: 0;
-    margin-top: 5px;
-    text-transform: uppercase;
-    letter-spacing: 10px;
-}
-#main-nav li#menu-item-user a{
-    /*background-color: #fff;*/
-    text-transform: capitalize;
-    color: #6e6e6e;
-}
-#main-nav li#menu-item-user a:hover{
-    text-decoration: none;
-    cursor: pointer;
-}
-#main-nav li#menu-item-user a.dropdown-toggle{
-    position: relative;
-    top: -4px;
-}
-#main-nav li#menu-item-user .dropdown-menu a:hover{
-    background-color: #f5f5f5;
-}
+
 #logged-out-message{
     position:fixed;
     z-index: 100;  
@@ -355,13 +303,25 @@ h2#course-title{
 #curriki-primary-menu{
     z-index: 900;
 }
+#curriki-navbar-collapse-1{
+    background-color: #29a3ce;
+}
+#curriki-navbar-collapse-1 p.navbar-text{
+    border-bottom: 1px solid #FFFFFF;
+    color: #FFFFFF;
+    font-size: 20px;
+    margin: 0;
+    padding: 11px 30px 10px;
+}
+#curriki-primary-menu .navbar-brand{
+    padding-top: 13px;
+    padding-bottom: 13px;
+    background-color: #fa6000;
+}
 #menuview{
     z-index: 980;
 }
-#select-class ul{
-    left: auto;
-    right: 0;
-}
+
 
 .btn-custom-nav {
     background-color: #29a3ce;
@@ -385,12 +345,14 @@ h2#course-title{
 */
 /* responsive behaviour */
 @media(max-width:500px){
-    h2#course-title{
-        font-size: 20px;
-        padding-top: 8px;
+    #breadcrumb-wrapper .breadcrumb{
+        display: none;
     }
 }
 @media(max-width:767px){
+    .navbar-nav{
+        margin: 7.5px 0;
+    }
     #main-nav li a{
         text-transform: uppercase;
     }
@@ -399,13 +361,11 @@ h2#course-title{
     #the-header .navbar{
         margin-top: 10px;
     }
-    h2#course-title{
-        color: #FFFFFF;
-        margin-bottom: 0;
-        margin-top: 5px;
-        margin-left: 5px;
-        text-transform: uppercase;
-        letter-spacing: 0px;
+    #curriki-navbar-collapse-1{
+        background: none;
+    }
+    #curriki-navbar-collapse-1 #action-nav{
+        background: none;
     }
     /* speciall code to transform login buttons */
     #header-member{
@@ -450,8 +410,32 @@ h2#course-title{
     }
 }
 @media(min-width:768px){
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
+        margin-right: 0px;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right a{
+        border-radius: 0px;
+        /*border: solid 1px #fff;*/
+        border-top: none;
+        border-right: 0px;
+        color: #fff;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav > .dropdown > a .caret{
+        border-bottom-color: #fff;
+        border-top-color: #fff;
+    }
+    #curriki-primary-menu .navbar-nav > .open > a,
+    #curriki-primary-menu .navbar-nav > .open > a:hover,
+    #curriki-primary-menu .navbar-nav > .open > a:focus{
+        background-color: #1e7b98;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a{
+        color: #000;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a:hover{
+        background-color: #f5f5f5;
+    }
     #main-nav li a{
-        line-height: 39px;
         border-radius: 0px;
         border: solid 1px #fff;
         border-top: none;
@@ -483,8 +467,32 @@ h2#course-title{
     }
 }
 @media(min-width:992px){
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
+        margin-right: 0px;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right a{
+        border-radius: 0px;
+        /*border: solid 1px #fff;*/
+        border-top: none;
+        border-right: 0px;
+        color: #fff;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav > .dropdown > a .caret{
+        border-bottom-color: #fff;
+        border-top-color: #fff;
+    }
+    #curriki-primary-menu .navbar-nav > .open > a,
+    #curriki-primary-menu .navbar-nav > .open > a:hover,
+    #curriki-primary-menu .navbar-nav > .open > a:focus{
+        background-color: #1e7b98;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a{
+        color: #000;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a:hover{
+        background-color: #f5f5f5;
+    }
     #main-nav li a{
-        line-height: 39px;
         border-radius: 0px;
         border: solid 1px #fff;
         border-top: none;
@@ -512,8 +520,32 @@ h2#course-title{
     }
 }
 @media(min-width:1200px){
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
+        margin-right: 0px;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right a{
+        border-radius: 0px;
+        /*border: solid 1px #fff;*/
+        border-top: none;
+        border-right: 0px;
+        color: #fff;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav > .dropdown > a .caret{
+        border-bottom-color: #fff;
+        border-top-color: #fff;
+    }
+    #curriki-primary-menu .navbar-nav > .open > a,
+    #curriki-primary-menu .navbar-nav > .open > a:hover,
+    #curriki-primary-menu .navbar-nav > .open > a:focus{
+        background-color: #1e7b98;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a{
+        color: #000;
+    }
+    #curriki-navbar-collapse-1 .navbar-nav.navbar-right ul a:hover{
+        background-color: #f5f5f5;
+    }
     #main-nav li a{
-        line-height: 39px;
         border-radius: 0px;
         border: solid 1px #fff;
         border-top: none;

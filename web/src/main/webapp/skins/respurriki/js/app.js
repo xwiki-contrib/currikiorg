@@ -3,6 +3,17 @@
  */
 $.noConflict();
 jQuery(document).ready(function() {
+    jQuery("#show-admin-menu").mouseover(function() {
+        jQuery('#menuview').slideDown('slow');
+    });
+    jQuery("#show-admin-menu").mouseout(function() {
+        if(window.hider){
+            window.clearInterval(window.hider);
+        };
+        window.hider = window.setTimeout('jQuery(jQuery("#menuview")[0]).slideUp("slow");', 4000);
+        
+    });
+    
     jQuery("#mainContentArea img").each(function() {
         jQuery(this).addClass("img-responsive");
     });
