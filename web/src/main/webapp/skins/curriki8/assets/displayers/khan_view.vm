@@ -1,1 +1,2 @@
-<iframe style="border:none;width:100%; height:600px; overflow:hidden; scroll:auto;" src="${request.getRequestURL()}?showExercise=${asset.content}&viewer=embed-khan"></iframe>
+#set($iframeId = "khanExercise${asset.content}")
+<iframe id="${iframeId}" style="border:none;width:100%;" scrolling="no" src="${request.getRequestURL()}?showExercise=${asset.content}&iframeId=${iframeId}&viewer=embed-khan"></iframe>
