@@ -916,11 +916,18 @@
 
             $msg.get("colls.infos")
 
-            #* #if($collectionsList.size() >0)
+            #if($collectionsList.size() >0)<!-- now listing collections' children --><ul>
                 #foreach ($index in [$startIndex..$endIndex])
-                    #asset_displaycollection($collectionsList.get($index))
-                #end
-            #end *#
+                    ## #asset_displaycollection($collectionsList.get($index))
+                    #set($item=$xwiki.curriki.fetchItem($collectionsList.get($index)))
+                    #if($item)
+                        <li>$item.displayTitle</li>
+                    #else<!-- missing item $collectionsList.get($index) -->
+                    #end
+                #end</ul>
+            #else
+                <p>No content in this collection.</p>
+            #end
         <hr class="my-curriki-hr">
 
             #if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())

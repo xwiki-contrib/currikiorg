@@ -6,6 +6,7 @@
 #* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
 #* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
 ## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="item" type="org.curriki.xwiki.plugin.asset.Asset"
 ## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
 ## @vtlvariable name="embeddedDoc" type="org.curriki.xwiki.plugin.asset.Asset"
 #* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
@@ -15,7 +16,24 @@
 #else
 <div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
 <div class="sub-asset-wrapper-inner">
-   $asset.display("description","view",true)
+    #set($collectionsList=$asset.getObjects("CurrikiCode.SubAssetClass"))
+        #if($collectionsList.size() >0)<!-- now listing collections' children --><ul>
+        #foreach ($itemObject in $collectionsList)
+        ## #asset_displaycollection($collectionsList.get($index))
+            #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
+            #set($item=$xwiki.curriki.fetchAsset($itemFullname))
+            #if($item)
+                <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
+                #else<!-- missing item $itemFullname  -->
+            #end
+        #end</ul>
+    #else
+        <p>No content in this collection.</p>
+    #end
+
+    <div class="collection-view-description">
+    $asset.display("description","view",true)
+    </div>
 </div></div>
 ## The subAssetList property has already been prepared
  ## in asset_tabs so that we can determine if we need an organize link
