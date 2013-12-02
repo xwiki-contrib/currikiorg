@@ -27,7 +27,13 @@ public class LoginToViewSessionNotifier implements Notifier {
      * The key of the session attributes that is needed to set to steer where a click of the
      * cancel button of the login dialogs goes.
      */
-    public final static String AFTER_LOGIN_SESSION_KEY = "nologin";
+    public final static String AFTER_NO_LOGIN_SESSION_KEY = "nologin";
+
+    /**
+     * The key of the session attributes that is needed to set to steer where the user is
+     * redirected after a successful login.
+     */
+    public final static String AFTER_LOGIN_SESSION_KEY = "xredirect";
 
     /**
      * The key for the NUMBER_OF_MATCHES_NOTIFICATION_VALUE in the notificationValues object (map)
@@ -74,6 +80,7 @@ public class LoginToViewSessionNotifier implements Notifier {
         + " threshold=" + String.valueOf(threshold) + " numberOfWarnigns=" + numberOfWarnings);
         if(numberOfMatches >= (threshold-numberOfWarnings)) {
             currentAnalyticsSession.setHttpSessionAttribute(LOGIN_TO_VIEW_SESSION_FLAG, getNotificationMessage(notificationValues));
+            currentAnalyticsSession.setHttpSessionAttribute(AFTER_NO_LOGIN_SESSION_KEY, currentAnalyticsSession.getURIWithQueryStringOfLastRequest());
             currentAnalyticsSession.setHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY, currentAnalyticsSession.getURIWithQueryStringOfLastRequest());
         }
 
@@ -87,6 +94,7 @@ public class LoginToViewSessionNotifier implements Notifier {
         boolean delete_cookie = ((Map<String, Boolean>) notification).get(DELETE_COOKIE_VALUE);
         LOG.warn("LoginToViewSessionNotifier: " + "Remove all existing notifications");
         loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(LOGIN_TO_VIEW_SESSION_FLAG);
+        loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(AFTER_NO_LOGIN_SESSION_KEY);
         loginToViewAnalyticsModule.getCurrentAnalyticsSession().removeHttpSessionAttribute(AFTER_LOGIN_SESSION_KEY);
 
         if(delete_cookie){
