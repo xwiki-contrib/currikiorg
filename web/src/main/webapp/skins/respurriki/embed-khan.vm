@@ -1,9 +1,51 @@
 <!DOCTYPE html>
-<html data-require="math graphie graphie-helpers">
+<html data-require="math interactive angles graphie graphie-helpers graphie-geometry graphie-3d math-format graphie-polygon word-problems">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Finding absolute values</title>
+  <title></title>
   <script src="/xwiki/js/curriki-khan-exercises/khan-exercise.js"></script>
+  <script>
+        function betterTriangle(width, height, A, B, C, a, b, c) {
+            var scale = 5 / Math.sqrt(width * width + height * height);
+            width *= scale;
+            height *= scale;
+
+            with ( KhanUtil.currentGraph ) {
+                // Leave some space for the labels
+                init({ range: [[-1.5, width + 1], [-1, height + 1]] });
+
+                path([ [0, 0], [width, 0], [0, height], true ]);
+
+                label( [0, height], A, "above left" );
+                label( [0, 0], C, "below left" );
+                label( [width, 0], B, "below right" );
+
+                label( [0, height/2], b, "left" );
+                label( [width/2, 0], a, "below" );
+                label( [width/2, height/2], c, "above right", {
+                    labelDistance: 3
+                } );
+            }
+        }
+        var makeSquare = function(left, width, bottom, height, color) {
+            KhanUtil.currentGraph.path([
+                    [left, bottom],
+                    [left, bottom + height],
+                    [left + width, bottom + height],
+                    [left + width, bottom],
+                    true
+                ],
+                { stroke: "black", strokeWidth: 1, fill: color }
+            );
+        };
+
+        var normalize = function(vect) {
+            var length = Math.sqrt(vect[0] * vect[0] +
+                                   vect[1] * vect[1] +
+                                   vect[2] * vect[2]);
+            return _.map(vect, function(e) { return e / length; });
+        };
+    </script>
 </head>
 <body>
 ################################################
