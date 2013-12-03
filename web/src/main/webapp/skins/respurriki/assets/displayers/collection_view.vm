@@ -17,19 +17,54 @@
 <div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
 <div class="sub-asset-wrapper-inner">
     #set($collectionsList=$asset.getObjects("CurrikiCode.SubAssetClass"))
-        #if($collectionsList.size() >0)<!-- now listing collections' children --><ul>
-        #foreach ($itemObject in $collectionsList)
-        ## #asset_displaycollection($collectionsList.get($index))
-            #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
-            #set($item=$xwiki.curriki.fetchAsset($itemFullname))
-            #if($item)
-                <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
-                #else<!-- missing item $itemFullname  -->
+    ##modal for content in smaller devices
+    #if($collectionsList.size() >0)
+        <div class="modal fade" id="mobile-toc">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <h4 class="modal-title">Navigate From Here</h4>
+            </div>
+            <div class="modal-body">
+                <ol class="secondary-toc">
+                    #foreach ($itemObject in $collectionsList)
+                    ## #asset_displaycollection($collectionsList.get($index))
+                        #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
+                        #set($item=$xwiki.curriki.fetchAsset($itemFullname))
+                        #if($item)
+                            <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
+                            #else<!-- missing item $itemFullname  -->
+                        #end
+                    #end
+                </ol>
+            </div>
+          </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+      </div><!-- /.modal -->
+      <p>
+        <button class="btn btn-primary btn-xs visible-xs visible-sm" data-toggle="modal" data-target="#mobile-toc">show index</button>
+      </p>
+    #end
+
+    #if($collectionsList.size() >0)<!-- now listing collections' children -->
+    <div id="large-toc" class="hidden-xs hidden-sm">
+        <button class="btn btn-custom-toc btn-xs" id="toggle-secondary-toc">navigate from here</button>
+        <ol class="secondary-toc">
+            #foreach ($itemObject in $collectionsList)
+            ## #asset_displaycollection($collectionsList.get($index))
+                #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
+                #set($item=$xwiki.curriki.fetchAsset($itemFullname))
+                #if($item)
+                    <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
+                    #else<!-- missing item $itemFullname  -->
+                #end
             #end
-        #end</ul>
+        </ol>
     #else
         <p>No content in this collection.</p>
     #end
+    </div>
 
     <div class="collection-view-description">
     $asset.display("description","view",true)

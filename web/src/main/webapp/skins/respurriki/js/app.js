@@ -7,13 +7,14 @@ jQuery(document).ready(function() {
         jQuery('#menuview').slideDown('slow');
     });
     jQuery("#show-admin-menu").mouseout(function() {
-        if(window.hider){
+        if (window.hider) {
             window.clearInterval(window.hider);
-        };
+        }
+        ;
         window.hider = window.setTimeout('jQuery(jQuery("#menuview")[0]).slideUp("slow");', 4000);
-        
+
     });
-    
+
     jQuery("#mainContentArea img").each(function() {
         jQuery(this).addClass("img-responsive");
     });
@@ -142,6 +143,17 @@ jQuery(document).ready(function() {
             var url = jQuery(this).attr('href');
             window.open(url, '_blank');
             return false;
+        }
+    });
+
+    jQuery('#large-toc #toggle-secondary-toc').click(function() {
+        var toc_visible = jQuery('#large-toc .secondary-toc').css('display');
+        if (toc_visible == 'none') {
+            jQuery('#large-toc .secondary-toc').slideDown('slow');
+            jQuery(this).css('border-radius', '5px 5px 0px 0px');
+        } else {
+            jQuery('#large-toc .secondary-toc').slideUp('slow');
+            jQuery(this).css('border-radius', '5px 5px 5px 5px');
         }
     });
 });
