@@ -1,0 +1,66 @@
+#macro(ru_groups_mycurriki_grouplist $userdoc $userobj)
+    #set($nbToDisplay = 5)
+    #set($sm = $xwiki.csm)
+    #set($spaceList = $sm.getSpaceNames($userdoc.fullName, $util.null))
+    #set($startIndex = 0)
+    #set($Integer = 0)
+    #if($request.startIndex)
+        #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+    #end
+    #if($startIndex > ($spaceList.size() - 1))
+        #set($startIndex = $spaceList.size() - 1)
+    #end
+    #set($endIndex = $startIndex - 1 + $nbToDisplay)
+    #if($endIndex > ($spaceList.size() - 1))
+        #set($endIndex = $spaceList.size() - 1)
+    #end
+    #set($showcount = 0)
+    <ul class="dropdown-menu" role="menu">
+        #foreach($space in $spaceList)
+            #set($showcount = 1 + $showcount)
+            #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+                #ru_groups_groupinfomessages($space "")
+            #end
+        #end
+    </ul>
+#end
+
+
+#macro(ru_groups_groupinfomessages $m_groupName $displayType)
+    #if(!$g_rowCount)
+        #set($g_rowCount = 0)
+    #end
+    #set($g_rowCount = $g_rowCount + 1)
+    #set($m_sm = $xwiki.csm)
+    #set($s = $m_sm.getSpace($m_groupName))
+    
+    #if($displayType == "edit")
+        #set($editmastheadurl = $s.getHomeURL()+"?action=editmasthead")
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $editmastheadurl)
+        ##verbatim_end
+    #elseif($displayType == "view")
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" "")
+        ##verbatim_end
+    #else
+        ##verbatim_start
+        #ru_class_dropdown_item("$xwiki.escapeText($s.getDisplayTitle())" $s.getHomeURL())
+        ##verbatim_end
+    #end
+    
+#end
+
+
+#macro(ru_class_dropdown_item $class_name $link)
+    #if("$!link" != "")
+        #normalizelink($link)
+    #end
+    <li>
+    #if("$!link"!="")
+        <a  href="$link">$class_name</a>
+    #else
+        $class_name
+    #end
+    </li>
+#end

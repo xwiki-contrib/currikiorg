@@ -1,0 +1,39 @@
+###
+### Main "view" template
+###
+### General wrapper for view actions
+###
+#template("ru_xwikivars.vm")
+#if ($request.getParameter("raw").equals("1"))
+  #template("code.vm")
+#else
+  #if("$!viewer" == '')
+    #set($viewer = $request.getParameter('viewer'))
+  #end
+  #if("$!viewer" == '')
+    #set($viewer = 'content')
+  #end
+  #if(!($viewer.startsWith("embed")))
+    #template("startpage.vm")
+    <div id="inner-content">
+    ##  #if($displayContentMenu)
+    ##    <div id="contentmenu" class="actionmenu">
+    ##    #template("contentmenu.vm")
+    ##    </div>
+    ##  #end
+    <div id="mainContentArea">
+  #end
+##  #template("hierarchy.vm")
+  #if($viewer == 'content')
+    #template("contentview.vm")
+  #else
+    #template("${viewer}.vm")
+  #end
+##  #if($viewer == 'content' && $displayDocExtra)
+##    #template("docextra.vm")
+##  #end
+#if($viewer)
+#else
+    #template("endpage.vm")
+#end
+#end

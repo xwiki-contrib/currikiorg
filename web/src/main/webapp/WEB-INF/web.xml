@@ -39,10 +39,17 @@
     </init-param>
   </filter>
 
-  <!-- A filter that allows requests to be saved and reused later. For example when the current request contains an expired
-       authentication token, and the authorization module redirects to the login page, all the information sent by the
-       client would be lost; this filter allows to save all that information, and after a successful login, injects the
-       saved data in the new request. -->
+  <!-- a filter to choose ammong the possible skins based on session or user-agent-strings information -->
+    <filter>
+        <filter-name>SkinChoiceFilter</filter-name>
+        <filter-class>org.curriki.xwiki.servlet.SkinChoiceFilter</filter-class>
+    </filter>
+
+
+    <!-- A filter that allows requests to be saved and reused later. For example when the current request contains an expired
+authentication token, and the authorization module redirects to the login page, all the information sent by the
+client would be lost; this filter allows to save all that information, and after a successful login, injects the
+saved data in the new request. -->
   <filter>
     <filter-name>RequestRestorer</filter-name>
     <filter-class>org.xwiki.container.servlet.filters.internal.SavedRequestRestorerFilter</filter-class>
@@ -118,6 +125,14 @@
 
   <filter-mapping>
     <filter-name>ActionDispatcher</filter-name>
+    <servlet-name>action</servlet-name>
+    <dispatcher>REQUEST</dispatcher>
+    <dispatcher>INCLUDE</dispatcher>
+    <dispatcher>FORWARD</dispatcher>
+  </filter-mapping>
+
+  <filter-mapping>
+    <filter-name>SkinChoiceFilter</filter-name>
     <servlet-name>action</servlet-name>
     <dispatcher>REQUEST</dispatcher>
     <dispatcher>INCLUDE</dispatcher>

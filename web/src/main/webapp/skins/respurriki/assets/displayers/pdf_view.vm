@@ -1,0 +1,102 @@
+#asset_displaycontentheader("")
+#if($asset.attachmentList.size() > 0)
+    #set($fileName = $asset.attachmentList.get(0).filename)
+    #set($url = $asset.getAttachmentURL("$fileName"))
+    #set($caption = "")
+    #set($alt_text = "")
+    #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+    #set($caption = $!asset.caption_text)
+    #set($alt_text = $!asset.alt_text)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #if("$!caption" == "")
+        #set($caption = $!asset.display("description"))
+    #end
+    #if("$!alt_text" == "")
+        #set($alt_text = $!asset.title)
+    #end
+<div id="wrapper-pdf" class="row">
+    <div class="col-md-12 text-center">
+        ##loading the js library
+
+    #*
+        <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/pdf.js"></script>
+        <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdf/compatibility.js"></script>
+        <!-- here we would embed display the PDF -->
+        <canvas id="the-canvas">
+        </canvas>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                /* -*- Mode: Java; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2 -*- */
+                /* vim: set shiftwidth=2 tabstop=2 autoindent cindent expandtab: */
+
+                //
+                // See README for overview
+                //
+
+                'use strict';
+
+                //
+                // Fetch the PDF document from the URL using promises
+                //
+                PDFJS.getDocument('$url').then(function(pdf) {
+                    // Using promise to fetch the page
+                    pdf.getPage(1).then(function(page) {
+                        var scale = 1;
+                        var viewport = page.getViewport(scale);
+
+                        //
+                        // Prepare canvas using PDF page dimensions
+                        //
+                        var canvas = document.getElementById('the-canvas');
+                        var context = canvas.getContext('2d');
+                        canvas.height = viewport.height;
+                        canvas.width = viewport.width;
+
+                        //
+                        // Render PDF page into canvas context
+                        //
+                        var renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        page.render(renderContext);
+                    });
+                });
+            });
+
+        </script>
+*#  
+        <div id="the_pdf">
+            
+        </div>
+        
+        <div class="main-download-pdf">
+        <p>
+        #ru_asset_attachments_pdf($asset)
+        </p>
+        </div>
+        <a href="$assetAttachmentURL" class="btn btn-default btn-xs alt-download-pdf"><i class="icon-download-alt"></i> Download</a>
+
+        <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdfobject.min.js"></script>
+        <script type="text/javascript">
+                window.onload = function (){
+                    var myPDF = new PDFObject({ url: decodeURIComponent("$url") }).embed("the_pdf");
+                    if(!myPDF){
+                        jQuery('#the_pdf').hide();
+                        jQuery('.alt-download-pdf').show();
+                        jQuery('.main-download-pdf').hide();
+                    }
+                };
+        </script>
+        
+    </div>
+#*
+    <a href="$url" title="$!alt_text"##
+            ><img src="$asset.getAttachmentURL("$fileName", "download","")" ##
+            align="middle" alt="$!alt_text" /></a>
+    <p>$caption</p>
+*#
+</div>
+#end
+
+#asset_displaycontentfooter()

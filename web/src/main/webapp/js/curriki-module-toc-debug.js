@@ -24,7 +24,7 @@ Toc.init = function(){
 		if (results == null) {
 			return "";
 		} else {
-			return results[1];
+                    return results[1];
 		}
 	};
 
@@ -47,7 +47,7 @@ Toc.init = function(){
 		this.indentMarkup = n.parentNode ? n.parentNode.ui.getChildIndent() : '';
 
 		var cb = typeof a.checked == 'boolean';
-
+                
 		var href = a.href ? a.href : Ext.isGecko ? "" : "#";
 		var buf = ['<li class="x-tree-node"><div ext:tree-node-id="',n.id,'" class="x-tree-node-el x-tree-node-leaf x-unselectable ', a.cls,'" unselectable="on">',
 			'<span class="x-tree-node-indent">',this.indentMarkup,"</span>",
@@ -128,7 +128,6 @@ Toc.init = function(){
 
 	Toc.buildTree = function(){
 		var root = Data.tocData;
-
 		if (!Ext.isEmpty(root.addCls)) {
 			root.addCls = root.addCls+' toc-top';
 		} else {
@@ -146,7 +145,6 @@ Toc.init = function(){
 		//root = new Ext.tree.AsyncTreeNode(root);
 		var tl = new Curriki.ui.treeLoader.TOC();
 		root = tl.createNode(root);
-
 		return root;
 	}
 

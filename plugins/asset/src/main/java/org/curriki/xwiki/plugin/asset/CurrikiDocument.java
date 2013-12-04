@@ -111,5 +111,5 @@ public class CurrikiDocument extends Document {
 
         return rightsInfo;
     }
-    
+
 }

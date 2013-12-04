@@ -1,0 +1,89 @@
+#**
+  * General variables used in most templates
+  * @author XWiki
+  *#
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+#* @vtlvariable name="bcCurrentDoc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+## Rights vars
+#set($isGuest = $context.getUser().equals("XWiki.XWikiGuest"))
+#set($hasEdit = $xwiki.hasAccessLevel("edit"))
+#set($hasAdmin = $xwiki.hasAccessLevel("admin"))
+#set($hasGlobalAdmin = $xwiki.hasAccessLevel("admin", $context.user, "XWiki.XWikiPreferences"))
+#set($hasSpaceAdmin = $xwiki.hasAccessLevel("admin", $context.user, "${doc.space}.WebPreferences"))
+#set($isReadOnly = $xwiki.isReadOnly())
+## no real need $xwiki.curriki.ensureUsernameCookie($request, $response, $context.user)
+#set($debugCookie = "$!xwiki.getUserPreferenceFromCookie('cdbg')")
+#if("$!debugCookie" == "" && "$!xwiki.curriki.getPublicCurrikiConfig('globalDebug','-missing-config-')"=="")##{
+    #set($globalDebug = false)##
+#else##}{
+    #set($globalDebug = true)##
+#end##}
+## <!-- globalDebug is $globalDebug debugCookie is "$debugCookie", config is $!xwiki.curriki.getPublicCurrikiConfig('globalDebug', '-missing-config-') -->
+#set($gVersion = $xwiki.version.replaceAll('.*\.', ''))
+#set($spaceViewUrl = $spaceDoc.getURL("view"))
+#set($viewUrl = $doc.getURL("view"))
+#set($userObj = $!crtUserDoc.getObject("XWiki.XWikiUsers",0))
+#if($context.user == "XWiki.superadmin")
+#set($isAdvancedUser = true)
+#elseif(!$objuser.getProperty("usertype").value)
+#set($isAdvancedUser = false)
+#else
+#set($isAdvancedUser = ($objuser.getProperty("usertype").value == "Advanced"))
+#end
+#set($parent ="<a href='$doc.getParentURL()'>${xwiki.getDocument($doc.parent).displayTitle}</a>")
+#if($tdoc)
+#set($headertitle = "<a href='$viewurl'>${tdoc.displayTitle}</a>")
+#else
+#set($headertitle = "<a href='$viewurl'>${doc.displayTitle}</a>")
+#end
+#set($skin=$xwiki.getSkin())
+#set($copyright=$xwiki.getSpaceCopyright())
+#set($xwikimode=$context.getMode())
+#set($logredir = $escapetool.url($xwiki.getRequestURL()))
+## Check language option
+#set($languageparams = "")
+#if(($xwiki.isMultiLingual()==true)&&("$!tdoc.realLanguage"!=""))
+#set($languageparams="language=${tdoc.realLanguage}")
+#end
+## Check revision option
+#if ($request.rev)
+#set($revparams="rev=${request.rev}")
+#else
+#set($revparams = "")
+#end
+#set($docvariant = "")
+#if("$!revparams" != "")
+#if("$!languageparams" != "")
+#set($docvariant = "$languageparams&amp;$revparams")
+#else
+#set($docvariant = "$revparams")
+#end
+#elseif("$!languageparams" != "")
+#set($docvariant = "$languageparams")
+#end
+## #template("deprecatedVars.vm")
+#set($hostname=$xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config'))
+#set($GA_uacct=$xwiki.curriki.getPublicCurrikiConfig('GA', "-missing-curriki.system.GA"))
+#set($ADDTHIS_acct=$xwiki.curriki.getPublicCurrikiConfig('addthis',"0"))
+##
+##
+#set ($isInServletMode = $xwikimode == 0)
+#set ($isInPortletMode = $xwikimode == 1)
+##
+#set($viewer="$!request.viewer")
+## -- this line creates an Empty stack if commented-in; go figure!
+## #if("$viewer"=="")#set($viewer="view")#end
+#set($target="_self")##

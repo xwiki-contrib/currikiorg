@@ -1,0 +1,20 @@
+#**
+  * Asset Archive Displayer in View mode
+  *
+  *#
+#asset_displaycontentheader("")
+<div id="image-wrapper" class="row">
+    <div class="col-md-12">
+        #set($caption = "")
+        #set($ok = $asset.use("CurrikiCode.AttachmentAssetClass"))
+        #set($caption = $!asset.caption_text)
+        #set($ok = $asset.use("CurrikiCode.AssetClass"))
+        #if("$!caption" == "")
+            #set($caption = $!asset.display("description"))
+        #end
+       <p>$caption</p>
+        #ru_asset_attachments($asset)
+    </div>
+</div>
+
+#asset_displaycontentfooter()

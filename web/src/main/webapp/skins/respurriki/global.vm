@@ -1,0 +1,67 @@
+###
+### Global header
+###
+### The uppermost area of each page
+### Contains the company logo, links to global actions and the search facility
+###
+    <div class="container" id="the-header">
+    #if($isInServletMode) ## Visible only in a page
+        #ru_modal_for_login()
+        <!-- doc.space: $doc.space of class $doc.space.getClass() -->
+        #if($doc.space.startsWith("Group_"))
+            #set($groupName=$doc.space.substring(6))<!-- Group_  -->##
+        #elseif($doc.space.startsWith("Coll_Group_"))
+            #set($groupName=$doc.space.substring(11))<!-- Coll_Group $doc.space.substring(10) -->##
+        #elseif($doc.space.startsWith("Discussions_Group_"))<!-- Discussions_Group_ -->##
+            #set($groupName=$doc.space.substring(18))##
+        #elseif($doc.space.startsWith("Messages_Group_"))<!-- Messages_Group_ -->
+            #set($groupName=$doc.space.substring(14))##
+        #else
+            #set($groupName="")<!-- no group recognized -->
+        #end
+        <div class="row">
+        <nav class="navbar navbar-default" id="curriki-primary-menu" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#curriki-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="$xwiki.getDocument("Courses.Geometry").getURL()">
+                    <img src="/xwiki/skins/respurriki/img/logo-curriki-orange.png" alt="Wiki Logo" id="show-admin-menu"/>
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="curriki-navbar-collapse-1">
+                <ul id="main-nav" class="nav navbar-nav">
+                        <p class="navbar-text hidden-xs hidden-sm">GEOMETRY</p>
+                    #if($groupName!="")
+                        <li><a href="../Coll_Group_${groupName}/CourseTeacherView"
+                            #if($doc.space.startsWith("Coll_")) class="current" #end##
+                                >Course</a></li>
+                        #groupinit()
+                        #if($isGroupAdmin)
+                            <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial" class="link-green">Resources</a></li>
+                        #end
+                    #else
+                        <li><a href="#">Course</a></li>
+                        #groupinit()
+                        #if($isGroupAdmin)
+                        <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial">Resources</a></li>
+                        #end
+                    #end
+                </ul>
+                <ul id="action-nav" class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Actions<b class="caret"></b></a>
+                        #ru_loginLogout()
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </nav>
+        </div>
+    #end
+    ### TODO: Format the header for pdf output
+</div>

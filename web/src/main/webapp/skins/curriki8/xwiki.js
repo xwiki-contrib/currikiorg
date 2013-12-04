@@ -127,6 +127,7 @@ function openHelp() {
 
 var XWiki = {
   Version: '0.8_pre1',
+  constants: {},
   require: function(libraryName) {
     // inserting via DOM fails in Safari 2.0, so brute force approach
     document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
@@ -662,6 +663,8 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
                     winH + " to accomodate " + docH);
                 if (dialogWindow.parent && dialogWindow.parent.Ext && dialogWindow.parent.Ext.get(iframeName)) {
                     dialogWindow.parent.Ext.get(iframeName).dom.height = 20 + docH;
+                } else if(dialogWindow.parent.jQuery) {
+                    dialogWindow.parent.jQuery("#" + iframeName).height(20+docH);
                 }
             }
             // there was a similar part for the width but this is given up

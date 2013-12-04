@@ -1,0 +1,93 @@
+{{velocity}}
+{{html wiki=true clean=false}}
+#**
+ * MyCurriki Contact-Me Page
+ *
+ *#
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="as" type="org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+#* @vtlvariable name="event" type="com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent" *# ##
+#* @vtlvariable name="userName" type="java.lang.String" *###
+#* @vtlvariable name="mailsender" type="com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi" *###
+##
+##
+## réglages
+#set($prefix="[contact scouts.forbach.fr]")
+##
+## ##
+#set($haveSent=false)
+## #set($userName="$!request.user")
+#if($userName && $userName.startsWith("XWiki."))#else#set($userName="XWiki.$userName")#end
+#set($from="$!request.from")
+#set($fromName="$!request.fromName")
+#set($tel="$!request.tel")
+#set($subject="$!request.subject")
+#set($body="$!request.body")
+#if($subject!="" && $from!="" && $body!="" && $request.method=="POST" && $xwiki.getUser($userName))
+## verify captcha
+###set($verifier = $services.captcha)##
+###if($verifier.isAnswerCorrect($verifier.getUserId($request), $userSuppliedAnswer))
+    #set($user=$xwiki.getUser($userName))##
+    #set($mailsender=$xwiki.mailsender)##
+    #set($nl=$util.getNewline())##
+    #set($body="-- Message envoyé apparemment par $fromName à l'adresse $request.getRemoteHost() accédant ${doc.getURL()}.${nl}-- Téléphone $tel${nl}-- ${nl}${nl}$body")
+    #set($result=$mailsender.sendTextMessage($from, $user.getEmail(), $util.null, $util.null, "$prefix $subject", $body,[]))
+    #if($result==0)
+        #set($haveSent=true)
+    Merci, votre message a été envoyé à ${xwiki.getLocalUserName($userName,false)}.
+    ###end
+    #end
+#else
+    #if($request.method=="POST")
+    Il manque une information ou elle est incorrecte.
+    #end
+#end
+#if($haveSent)#else
+## Contact-me form
+<form action="$doc.name" method="POST">
+    <h2>Envoyer un Email à $xwiki.getLocalUserName($userName,false)</h2>
+    <table width="95%">
+        <tr>
+            <td><b>Votre nom:</b></td>
+            <td><input type="text" name="fromName" value="$escapetool.html($fromName)"></td>
+        </tr>
+        <tr>
+            <td><b>Téléphone:</b></td>
+            <td><input type="text" name="tel" value="$escapetool.html($tel)"></td>
+        </tr>
+        <tr>
+            <td><b>Votre email:</b></td>
+            <td><input type="text" name="from" value="$escapetool.html($from)"></td>
+        </tr>
+
+        <tr><td colspan="2"><hr/></td></tr>
+        <tr>
+            <td><b>Objet:</b></td>
+            <td><input type="text" name="subject" value="$escapetool.html($subject)"></td>
+        </tr>
+        <tr>
+            <td colspan="2"><b>Votre message:</b><br/>
+                <textarea style="width:95%; height:10em" name="body">$escapetool.html($subject)</textarea>
+            </td>
+        </tr>
+        <tr>
+            <td>## <img src="$xwiki.getURL($doc.getFullName(), "imagecaptcha")"/>
+            </td>
+            <td align="right"><button name="send" value="1" type="submit">envoyer</td>
+        </tr>
+    </table>
+    <input type="hidden" name="user" value="$userName"/>
+</form>
+#end
+{{/html}}
+{{/velocity}}

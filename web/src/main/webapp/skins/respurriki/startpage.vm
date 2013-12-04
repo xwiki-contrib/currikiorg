@@ -1,0 +1,33 @@
+#template("xwikivars.vm")
+#template("layoutvars.vm")
+#template("htmlheader.vm")
+#if($displayMainMenu)
+    #template("menuview.vm")
+#end
+#if($viewer && $viewer!="view" && $viewer!="content")
+    <!-- dedicated viewer: $viewer -->
+#else
+    #template("header.vm")
+<div class="container" id="the-content">
+    #if($request.bc || $doc.getObject("CurrikiCode.AssetClass") && $doc.parent || $doc.getObject("CurrikiCode.CompositeAssetClass"))
+    <div class="row" id="the-breadcrumb">
+        <div class="col-xs-6">
+            #ru_breadcrumb()
+            #ru_getTOC()
+            <div id="dropable-toc">
+            </div>
+        </div>
+        <div class="col-xs-6 text-right">
+            <div class="btn-group" id="the-pagination">
+                #set($collPath="$!request.bc")##
+                <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=prev#if($collPath!="")&collPath=$collPath#end"
+                                        class="btn btn-custom-nav btn-xs">&larr; Previous</a>
+                <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=next#if($collPath!="")&collPath=$collPath#end"
+                                    class="btn btn-custom-nav btn-xs">Next &rarr;</a>
+            </div>
+        </div>
+    </div>
+    #end
+<div class="row">
+<div class="col-md-12" id="main-content">
+#end

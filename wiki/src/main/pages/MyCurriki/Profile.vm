@@ -1,0 +1,25 @@
+{{velocity}}
+{{html wiki=true clean=false}}
+#**
+  * MyCurriki Profile Page
+  *
+  *#
+#**
+  * MyCurriki Profile Page Content Call Back function
+  * @param $userdoc Document of the user
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagecontent $userdoc $userobj) ##{
+  #mycurriki_viewprofilebox($userdoc $userobj)
+#end ##} content macro
+#**
+  * MyCurriki Profile Page Button Call Back function
+  * @param $userobj Object of the user
+  *#
+#macro(mycurriki_pagebutton $userobj)
+  #mycurriki_editprofilebutton($userdoc)
+#end ## button macro
+## Actual page display
+#mycurriki_pagewithbutton("profile")
+{{/html}}
+{{/velocity}}

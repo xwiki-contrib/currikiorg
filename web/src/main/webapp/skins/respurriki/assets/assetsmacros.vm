@@ -1,0 +1,393 @@
+
+#macro(ru_asset_display $asset $mode)
+    #set($modeParam=$mode)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    <div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
+        <meta itemprop="mediaType" value="#mediatype($asset)"/>
+        <div class="panel panel-success">
+            <div class="panel-heading">
+                #asset_findmode()
+                #if(!$isEmbed)
+                    <div class="row">
+                        <div class="col-md-8">
+                            #ru_asset_icontitle($asset)
+                        </div>
+                        #if($mode!="edit")
+                            <div class="col-md-4">
+                                #ru_asset_resourcefunctions($asset)
+                            </div>
+                        #end
+                    </div>
+                #end
+            </div> ##end panel heading
+            <div class="panel-body" id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
+                #if(!$isEmbed)
+                    
+                    #if(!$isPrint)
+                        ##ru_asset_tabs($asset "view")
+                    #end
+                #end
+                #if($isEmbed)
+                    #ru_asset_icontitle($asset)
+                    #asset_attribution($asset)
+                    <a id="powered-by-curriki" href="${hostname}" target="${target}">$msg.get("mode.embed.powered_txt")</a>
+                #end
+                #if(!$isPrint&&!$isEmbed&&"$mode"!="edit")
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            #ru_asset_links($asset)
+                        </div>
+                    </div>
+                #end
+                #if(!$asset.hasAccessLevel("view"))
+                    #curriki_noaccess()
+                #else
+                    $asset.displayAsset($modeParam)
+                #end
+                #if($isEmbed)
+                    <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
+                #end
+            </div> ##asset-wrapper-inner
+        </div> ##end panel
+    </div> ##asset-wrapper
+    $xwiki.addTooltipJS()
+#end
+
+#macro(ru_asset_tabs $asset $viewer)
+<ul class="nav nav-tabs">
+    <li data-toggle="tab" #if($viewer=="view") class="active" #end><a href="$asset.getURL("view", "bc=$!{request.bc}")">$msg.get("rve.tab.Content")</a></li>
+    <li data-toggle="tab" #if($viewer=="info") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=info")">$msg.get("rve.tab.Information")</a></li>
+    #if($!xwiki.curriki.getPublicCurrikiConfig("standardstab","0")=="1")
+        <li data-toggle="tab" #if($viewer=="standards") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=standards")">$msg.get("rve.tab.Standards")</a></li>
+    #end
+    <li data-toggle="tab" #if($viewer=="comments") class="active" #end><a href="$asset.getURL("view","bc=$!{request.bc}&viewer=comments")">$msg.get("rve.tab.Comments")#if($asset.commentNumbers>0) ($asset.commentNumbers)#end</a></li>
+</ul>
+#end
+
+#macro(ru_asset_icontitle $asset)
+    <div id="asset-header">
+        #set($mediaType="")
+        #set($assetTitle = $asset.getDisplayTitle(125))
+        <h3 class="panel-title">
+            <a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}">$assetTitle</a>
+        </h3>
+        #ru_asset_info_rollover($asset 0)
+    </div>
+#end
+
+#macro(ru_asset_info_rollover $asset $seccounter)
+    #set($lrmiTool=$xwiki.parseGroovyFromPage("CurrikiCode.LRMItool"))##
+    <div id="popover-main-asset-title-$seccounter" class="popover-content">
+        <p><strong>$msg.get("global.title.popup.description")</strong><span itemprop="description">$!asset.display("description")</span></p>
+        <p><strong>$msg.get("global.title.popup.last_updated")</strong><span><time datetime="$!{xwiki.formatDate($asset.contentUpdateDate,"YYYY-MM-DDThh:mm:ss'T'TZD")}">$!xwiki.formatDate($asset.contentUpdateDate, $msg.get("mycurriki.dateFormat"))</time></span></p>
+        <strong>$msg.get("global.title.popup.subject")</strong>
+        #asset_info_subject($asset true)
+        <strong>$msg.get("global.title.popup.educationlevel")</strong>
+        #asset_info_edlevel($asset true)
+        <strong>$msg.get("global.title.popup.ict")</strong>
+        #asset_info_ict($asset true)
+    </div>
+#end
+
+#macro(ru_asset_resourcefunctions $asset)
+    <ul id="function-tabs" class="list-inline text-right">
+	#if(!$isguest)
+            ##<li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")"><i class="icon-heart"></i> $msg.get("rve.title.function.favorite")</a></li>
+	#end
+	#set($g_enable_ADDTHIS = true)
+	<li id="tab-email"><a href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '[URL]', '[TITLE]')" onmouseout="addthis_close()" onclick="return addthis_sendto()" title="$msg.get("rve.title.function.email.icon.rollover")"><i class="icon-envelope"></i> $msg.get("rve.title.function.email")</a></li>
+	#if(!$isguest)
+            ##<li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")"><i class="icon-flag"></i> $msg.get("rve.title.function.flag")</a></li>
+	#end
+        <li id="tab-print"><a href="$asset.getURL("view","viewer=print")" target="_blank" title="$msg.get("rve.title.function.print.icon.rollover")"><i class="icon-print"></i> $msg.get("rve.title.function.print")</a></li>
+    </ul>
+#end
+
+#macro(ru_asset_attribution $asset)
+    #set($assetAuthorDoc = $xwiki.getDocument($asset.creator))
+    #set($assetAuthorLink = "/xwiki/bin/view/MyCurriki/Profile?user=$asset.creator")
+    #set($assetAuthorDisplayName = $!xwiki.getUserName($asset.creator, false))
+    #if($asset.space.startsWith("Coll_Group_")) ## {
+	#set($assetGroupName = $asset.space.replaceFirst("Coll_", ""))
+	#set($assetIsFromGroup = true)
+	#set($assetGroup = $xwiki.csm.getSpace($assetGroupName))
+	#set($assetGroupUrl = $assetGroup.getHomeURL())
+    #else
+	#set($assetIsFromGroup = false)
+    #end
+    <div class="row">
+	<div class="col-md-4">
+            #if($assetIsFromGroup)
+                #groups_grouplogo2($assetGroup false)
+            #else
+                #curriki_avatar_width_height($assetAuthorDoc 200 80)
+            #end
+	</div>
+        <div class="col-md-8">
+            <ul class="list-unstyled">
+                #if($assetIsFromGroup)
+                    #if($assetGroup.getDisplayTitle())
+                        #set($assetGroupDisplayName = $xwiki.curriki.escapeForJS($assetGroup.getDisplayTitle()))
+                    #else
+                        #set($assetGroupDisplayName = "")
+                    #end
+                    #if($viewer == "embed-teachhub")
+                        <li id="asset-group"><span class="label label-info">$msg.get("rve.title.attribution.group")</span> <a target="_blank" href="$assetGroupUrl" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                    #else
+                        <li id="asset-group"><span class="label label-info">$msg.get("rve.title.attribution.group")</span> <a target="${target}" href="$assetGroupUrl" class="fn org url" title="$msg.get("rve.title.attribution.group") $assetGroupDisplayName">$assetGroup.getDisplayTitle()</a></li>
+                    #end
+                #end
+                <li id="asset-contributor"><span class="label label-info">$msg.get("rve.title.attribution.contributor")</span> <a itemprop="author" target="${target}" href="$assetAuthorLink" rel="author" class="fn url" title="$msg.get("rve.title.attribution.contributor") $xwiki.curriki.escapeForJS($assetAuthorDisplayName)">$assetAuthorDisplayName</a></li>
+            </ul>
+        </div>
+    </div>
+#end
+
+
+#macro(ru_asset_rating $asset)
+    #ru_crs_icon($asset)
+    #ru_member_rating_icon($asset)
+#end
+
+
+#macro(ru_member_rating_icon $asset)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #set($rating = 0)
+    #set($rating = $!asset.getValue("rating"))
+    #set($rateCount = 0)
+    #set($rateCount = $!asset.getValue("rating_count"))
+    <div id="member-rating">
+        #if("$!rateCount" == "" || "$!rateCount" == "0" || "$!rating" == "" || "$!rating" == "0") ##{
+            #if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
+                ##read only rating with jquery
+                <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+                <div class="rating-0">
+                    <a href="$asset.getURL("view", "viewer=comments&addcomment=true")">
+                        <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}" />
+                    </a>
+                    <a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
+                        (0)<span>
+                            $msg.get("rve.title.member.rating.function.add_rating")
+                        </span>
+                    </a>
+                </div>
+            #else ##}{ No rating and guest
+                ##read only rating with jquery
+                <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+                <div class="rating-0">
+                    <a href="${msg.get("rve.title.member.rating.info.url")}">
+                        <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.info")}" />
+                    </a>
+                    <a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
+                        (0)<span>
+                        $msg.get("rve.title.member.rating.info")
+                        </span>
+                    </a>
+                </div>
+            #end ##}
+            ##
+        #else ##}{ Has rating
+            ##read only rating with jquery
+            <div class="rateit" data-rateit-value="2.5" data-rateit-ispreset="true" data-rateit-readonly="true"></div>
+            
+            <div class="rating-${rating}">
+                <a href="$asset.getURL("view", "viewer=comments")">
+                    <img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}" />
+                </a>
+                <a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
+                    (${rateCount})
+                </a>
+            </div>
+        #end
+    </div>
+#end
+
+#macro(ru_asset_links $asset)
+    #checkForCollections()
+    <ul id="asset-links" class="list-inline">
+        #if(!$isguest)
+            #if($asset.hasAccessLevel("edit")&&($asset.category!="collection"))
+                #asset_edit_isoriginalauthorjs($asset true)
+                ## Edit
+                <li>
+                    <a href="$asset.getURL("view", "viewer=assetedit&bc=$!{request.bc}")" title="$msg.get('rve.content.edit_rollover')" #if(!$isOriginalAuthorOrAdmin) onclick="return checkEditOrCopy();" #end><i class="icon-edit"></i></a>
+                </li>
+            #end
+            ## Copy
+            #if($asset.category!="collection")
+                <li #if ((($asset.category!="collection")||!$asset.hasAccessLevel("edit"))&&!$g_userHasCollections) class="last-item" #end>
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('Copy', {copyOf:'${asset.getJSFullName()}'}); return false;" title="$msg.get('rve.content.copy_rollover')"><i class="icon-copy"></i></a>
+                </li>
+            #end
+            ## Add
+            #if($g_userHasCollections)##{
+                <li #if(($asset.category!="collection")||!$asset.hasAccessLevel("edit")) class="last-item" #end >
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('E', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.add_rollover')"><i class="icon-plus"></i></a>
+                </li>
+            #end##}
+          ## Build Up
+            #if($asset.hasAccessLevel("edit")&&($asset.category=="collection"))
+                ## checking if we have organize. This sets the variable $subAssetList also used in collection_view.vm
+                #set($subAssetList = $util.arrayList)
+                #asset_preparesubassetlist($asset $subAssetList)
+                <li #if($subAssetList.size()==0) class="last-item" #end >
+                    <a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('F', {parentAsset:'${asset.getJSFullName()}', parentTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get('rve.content.buildup_rollover')"><i class="icon-building"></i></a>
+                </li>
+                ## Organize
+                #if($subAssetList.size()!=0)
+                    <li class="last-item">
+                        #escapeForJS(${xwiki.getUserName($asset.creator, false)})
+                        #set($escapedCreatorName = $ret_escaped)
+                        <a href="javascript:void(0)" onclick="Curriki.module.organize.start({assetPage:'${asset.getJSFullName()}', title:'${asset.getJSTitle()}', creator:'${asset.creator}', creatorName:'$escapedCreatorName'}); return false;" title="$msg.get('rve.content.organize_rollover')"><i class="icon-sort-by-attributes"></i></a>
+                    </li>
+                #end
+            #end
+        #else
+            
+        #end
+    </ul>
+#end
+
+
+#macro(ru_asset_attachments $asset)
+    <div class="asset-display-download">
+        <div class="asset-display-download-inner">
+            #if($asset.getAttachmentList().size()==1)
+                #set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
+            #elseif($asset.getAttachmentList().size()>1)
+                #set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files"))
+            #end
+            #if($msgtext)
+                <p>
+                    <strong>$msgtext</strong>
+                    <a href="#" class="has-tooltip" title="$msg.get("rve.content.view.download.instruction_tooltip")">
+                        <i class="icon-info-sign"></i>
+                    </a>
+                </p>
+            #end      
+            #foreach($attachment in $asset.getAttachmentList())
+                #ru_asset_attachment($asset $attachment)
+            #end
+        </div>
+    </div>
+#end
+
+
+#macro(ru_asset_attachment $asset $attachment)
+    #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
+    #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
+    #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #if($loginToDownloadEscapes)#else##
+        #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
+        #set($junk=$processor.init($xwiki, $context, $request))##
+        #set($junk=$processor.seedLoginToDownloadEscapes())##
+        #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #end##
+    #set($requireLogin= (!$viewer.startsWith("embed-") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($asset.space)))##
+    <!-- require login: $requireLogin
+    loginToDownloadEscapes is $loginToDownloadEscapes
+     parts: !request.viewer"!="embed" #if("$!request.viewer"!="embed") true #else false #end
+     parts: context.user=="XWiki.XWikiGuest" #if($context.user=="XWiki.XWikiGuest") true #else false #end
+     parts: !loginToDownloadEscapes.contains(asset.space) #if(!$loginToDownloadEscapes.contains($asset.space)) true #else false #end
+    -->
+    <p>
+     <a class="btn btn-default btn-xs"
+        #if($requireLogin) ##
+          #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+          #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos());")##
+          onclick="$scriptBit return false;" ##
+          href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
+        #else
+          onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
+          href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
+        #end ##
+    </p>
+     <p class="text-link">
+         #if($attachment.filesize)
+         #set($filesize = $attachment.filesize / 1024)
+         ##set($filesize = $attachment.filesize)
+         #else
+         #set($filesize = 0)
+         #end
+         <a
+        #if($requireLogin)##
+            onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;" ##
+            href="javascript:$escapetool.url($scriptBit)" ##
+        #else##
+            href="$assetAttachmentURL" ##
+            target="_blank"
+            onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+        #end##
+                 >$assetAttachmentFilename <i class="icon-external-link"></i></a> (${filesize}kb)
+     </p>
+     <button class="btn btn-primary btn-lg" ##
+        #if($requireLogin)##
+            #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+            ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
+            onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;"##
+                >$msg.get("login.button_login_to_download")
+        #else##
+            ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
+            onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+                >$msg.get("rve.content.view.download.download_button")
+        #end##
+     </button>
+#end
+
+
+#macro(ru_asset_attachments_pdf $asset)
+    <div class="asset-display-download">
+        <div class="asset-display-download-inner">
+            #if($asset.getAttachmentList().size()==1)
+                #set($msgtext = $msg.get("rve.content.view.download.instruction_title.single_file"))
+            #elseif($asset.getAttachmentList().size()>1)
+                #set($msgtext = $msg.get("rve.content.view.download.instruction_title.multiple_files"))
+            #end
+            #if($msgtext)
+                #*<p>
+                    <strong>$msgtext</strong>
+                    <a href="#" class="has-tooltip" title="$msg.get("rve.content.view.download.instruction_tooltip")">
+                        <i class="icon-info-sign"></i>
+                    </a>
+                </p>
+                *#
+            #end      
+            #foreach($attachment in $asset.getAttachmentList())
+                #ru_asset_attachment_pdf($asset $attachment)
+            #end
+        </div>
+    </div>
+#end
+
+#macro(ru_asset_attachment_pdf $asset $attachment)
+    #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
+    #set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
+    #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #if($loginToDownloadEscapes)#else##
+        #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
+        #set($junk=$processor.init($xwiki, $context, $request))##
+        #set($junk=$processor.seedLoginToDownloadEscapes())##
+        #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
+    #end##
+    #set($requireLogin= (!$viewer.startsWith("embed-") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($asset.space)))##
+    <!-- require login: $requireLogin
+    loginToDownloadEscapes is $loginToDownloadEscapes
+     parts: !request.viewer"!="embed" #if("$!request.viewer"!="embed") true #else false #end
+     parts: context.user=="XWiki.XWikiGuest" #if($context.user=="XWiki.XWikiGuest") true #else false #end
+     parts: !loginToDownloadEscapes.contains(asset.space) #if(!$loginToDownloadEscapes.contains($asset.space)) true #else false #end
+    -->
+    <p>
+     <a class="btn btn-default btn-xs"
+        #if($requireLogin) ##
+          #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
+          #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos());")##
+          onclick="$scriptBit return false;" ##
+          href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
+        #else
+          onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
+          href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
+        #end ##
+    </p>
+#end

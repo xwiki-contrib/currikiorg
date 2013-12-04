@@ -1,41 +1,42 @@
 #**
-  * View entry point. This is the main entry point of most of the Curriki site pages
-  * @author XWiki
-  *#
+ * View entry point. This is the main entry point of most of the Curriki site pages
+ * @author XWiki
+ *#
 ## We need to no display content for AssetTemp otherwise posting in the CB GWT Editor
 ## will fail in IE with JS errors. This is not a nice hack but is necessary
 #if($doc.space!="AssetTemp")
-
-  #if(!($viewer.startsWith("embed")))
-    #template("curriki-analytics.vm")
-  #end
-
-  ## Need to do this before xwikivars is called otherwise the data might be removed
-  #if($request.method=="POST") ##{
-    #set($fileuploadlist = $xwiki.fileupload.getFileItems())
-  #end ##}
-
-  #if("$!viewer" == "") ##{
-    #set($viewer = $request.getParameter("viewer"))
-  #end ##}
-
-  #if("$!viewer" == "") ##{
-    #set($viewer = "view")
-  #end ##}
-
-  ## In Print Mode we don't want the standard header
-  #if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
-    #template("startpage.vm")
-  #end
-
-  #if($viewer == "view")##{
-    #template("contentview.vm")
-  #elseif($viewer == "edit")##{
-    #template("assetedit.vm")
-  #else ##}{
-    #template("${viewer}.vm")
-  #end ##}
-
+## Need to do this before xwikivars is called otherwise the data might be removed
+#if($request.method=="POST") ##{
+  #set($fileuploadlist = $xwiki.fileupload.getFileItems())
+#end ##}
+#if("$!viewer" == "") ##{
+  #set($viewer = $request.getParameter("viewer"))
+#end ##}
+#if("$!viewer" == "") ##{
+  #set($viewer = "view")
+#end ##}
+## In Print Mode we don't want the standard header
+#if(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
+  #template("startpage.vm")
+#end
+#if($viewer == "view")##{
+  #template("contentview.vm")
+#elseif($viewer == "edit")##{
+  #template("assetedit.vm")
+#else ##}{
+  #template("${viewer}.vm")
+#end ##}
+#if(!($viewer.startsWith("embed")))
+  <div class="clearfloats"></div>
+  </div>## main
+#end
+#if($viewer.equals("embed-khan"))
+  ## Do nothing
+#elseif(($viewer!="print")&&!($viewer.startsWith("embed"))&&($viewer!="viewrev")) ##{
+  #template("endpage.vm")
+#else ##}{
+  </div>## contentcolumn
+  </div>## leftsidecolumns
   <div class="clearfloats"></div>
   </div>## main
 

@@ -1,0 +1,80 @@
+#if($hasEdit && !$isReadOnly)
+  ## Compute the default edit mode
+  #set($editaction = $doc.getDefaultEditMode())
+  ##
+  ## Edit menu
+  ##
+  #if($isAdvancedUser)
+    <div class="btn-group">
+        #ru_button($msg.get('core.menu.edit') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
+        <ul class="dropdown-menu" role="menu">
+          #ru_dropdown_item($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wiki") $msg.get('core.menu.edit.wiki'))
+          #ru_dropdown_item($doc.getURL('edit', "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=wysiwyg") $msg.get('core.menu.edit.wysiwyg'))
+          #ru_dropdown_item($doc.getURL($editaction, "$!{languageparams}#if ($languageparams != '')&amp;#{end}editor=inline") $msg.get('core.menu.edit.inline'))
+          <li class="divider"></li>
+          #ru_dropdown_item($doc.getURL('edit', 'editor=rights') $msg.get('core.menu.edit.rights'))
+          #ru_dropdown_item($doc.getURL('edit', 'editor=object') $msg.get('core.menu.edit.object'))
+          #if($hasAdmin)
+          #ru_dropdown_item($doc.getURL('edit', 'editor=class') $msg.get('core.menu.edit.class'))
+          #end
+        </ul>
+    </div><!-- /btn-group -->
+
+  #else ## !isAdvanced
+    <div class="btn-group">
+        #ru_anchor($msg.get('core.menu.edit') $doc.getURL($editaction, $!languageparams) 'class="btn btn-info"')
+        ##<button type="button" class="btn btn-info"><a href="$doc.getURL($editaction, $!languageparams)">$msg.get('core.menu.edit')</a></button>
+    </div><!-- /btn-group -->
+  #end
+  #if($keyboardShortcutsEnabled)
+    <script type="text/javascript">
+    //<![CDATA[
+      shortcut.add("$msg.get('core.shortcuts.view.edit')",function() { location.href=$('tmEdit').down('a').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+      #if($isAdvancedUser)
+        shortcut.add("$msg.get('core.shortcuts.view.wiki')",function() { location.href=$('tmEditWiki').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        shortcut.add("$msg.get('core.shortcuts.view.wysiwyg')",function() { location.href=$('tmEditWysiwyg').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        shortcut.add("$msg.get('core.shortcuts.view.inline')",function() { location.href=$('tmEditInline').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        shortcut.add("$msg.get('core.shortcuts.view.rights')",function() { location.href=$('tmEditRights').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        shortcut.add("$msg.get('core.shortcuts.view.objects')",function() { location.href=$('tmEditObject').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        #if($hasAdmin)
+          shortcut.add("$msg.get('core.shortcuts.view.class')",function() { location.href=$('tmEditClass').href; }, { 'type':'keypress', 'propagate':false, 'disable_in_input':true });
+        #end
+      #end
+    //]]>
+    </script>
+  #end
+#end
+##
+## Export menu
+##
+#if(!$doc.isNew())
+    <div class="btn-group">
+        #ru_button($msg.get('core.menu.export') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
+        <ul class="dropdown-menu" role="menu">
+          #ru_dropdown_item($doc.getURL('view', "xpage=pdfoptions&amp;$!docvariant") $msg.get('core.menu.export.pdf'))
+          #if("$!{oomanager.serverState}" == "Connected")
+          #ru_dropdown_item($doc.getURL('export', "format=odt&amp;$!docvariant") $msg.get('core.menu.export.odt'))
+          #end
+          #ru_dropdown_item($doc.getURL('export', "format=rtf&amp;$!docvariant") $msg.get('core.menu.export.rtf'))
+          #ru_dropdown_item($doc.getURL('export', "format=html&amp;$!docvariant") $msg.get('core.menu.export.html'))
+          #if($hasAdmin)
+          #ru_dropdown_item($doc.getURL('export', "format=xar&amp;name=$escapetool.url($doc.fullName)&amp;pages=$escapetool.url($doc.fullName)&amp;$!docvariant") $msg.get('core.menu.export.xar'))
+          #end
+        </ul>
+    </div><!-- /btn-group -->
+#end
+##
+## Actions menu
+##
+#if(!$doc.isNew())
+    <div class="btn-group">
+        #ru_button($msg.get('core.menu.moreactions') 'class="btn btn-info"')
+        #ru_button('<span class="caret"></span>' 'class="btn btn-info dropdown-toggle" data-toggle="dropdown"')
+        <ul class="dropdown-menu" role="menu">
+          #ru_dropdown_item($doc.getURL('view', "xpage=print&amp;$!docvariant") $msg.get('core.menu.preview'))
+          #ru_dropdown_item($doc.getURL('view', "viewer=code") $msg.get('core.menu.view.source'))
+        </ul>
+    </div><!-- /btn-group -->
+#end

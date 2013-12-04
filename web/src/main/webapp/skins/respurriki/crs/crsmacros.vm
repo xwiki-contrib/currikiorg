@@ -1,0 +1,74 @@
+
+
+#**
+  * Macro to display the CRS rating image
+  *#
+#macro(ru_crs_icon $asset)
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #set($rights = $!asset.getValue("rights"))
+    #if($asset.getObject("CRS.CurrikiReviewStatusClass"))
+        #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+        #set($status = $asset.getValue("status"))
+    #else
+        #set($status = "")
+    #end
+    #set($ok = $asset.use("CRS.CurrikiReviewStatusClass"))
+    #set($nomination = $!asset.getValue("reviewpending"))
+    #set($crsTarget = "")
+    #set($crsIconTarget = "")
+    #set($crsClass = "")
+    #set($crsIconText = $msg.get("curriki.crs.rating${status}"))
+    #if("$!nomination"=="1")
+        ## asset is in review pending status. we override the text
+        #set($crsText = $msg.get("curriki.crs.reviewpending"))
+        #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+        #set($crsIconText = $msg.get("curriki.crs.rating.pending"))
+    #elseif((!$status)||($status=="100")||("$!status"==""))
+        ## no crs rating has been set
+        #if($isguest || "$!rights" == "private")
+            #set($crsText = $msg.get("rve.title.rating.crs.info"))
+            #set($crsTextUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+            #set($crsTarget = "target='_blank'")
+        #else
+            #set($crsText = $msg.get("rve.title.rating.function.nominate"))
+            #set($crsTextUrl = "javascript:Curriki.module.nominate.nominateResource({assetName:'$asset.getJSFullName()', assetTitle:'$asset.getJSTitle()'});")
+        #end
+    #else
+        #set($crsText = $msg.get("curriki.crs.rating${status}"))
+        #set($crsTextUrl = $asset.getURL("view", "viewer=comments"))
+    #end
+    #if((!$status)||($status=="100")||("$!status"==""))
+        #set($crsIconUrl = $msg.get("curriki.crs.review.CRSJumpPage.url"))
+        #set($crsIconTarget = "target='_blank'")
+        #set($crsClass = "crs-rating-unrated")
+        #set($crsIconText = $msg.get("curriki.crs.rating.unrated"))
+    #elseif($status=="200")
+        #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
+        #set($crsIconTarget = "target='_blank'")
+        #set($crsClass = "crs-rating-crsp")
+    #else
+        #set($crsIconUrl = $asset.getURL("view", "viewer=comments"))
+        #if($status=="400")
+            #set($crsClass = "crs-rating-crs1")
+        #elseif($status=="600")
+            #set($crsClass = "crs-rating-crs2")
+        #elseif($status=="800")
+            #set($crsClass = "crs-rating-crs3")
+        #elseif($status=="300")
+            #set($crsClass = "crs-rating-crs1-star")
+        #elseif($status=="500")
+            #set($crsClass = "crs-rating-crs2-star")
+        #elseif($status=="700")
+            #set($crsClass = "crs-rating-crs3-star")
+        #else
+            ## compatiblity with previous behavior of crs 1 2 3
+            #set($crsClass = "crs-rating-crs${status}")
+        #end
+    #end
+    <div id="asset-rating">
+        <a class="icon-large icon-sun has-tooltip ${crsClass}" href="$crsIconUrl" $!crsIconTarget data-toggle="tooltip" title="$crsIconText"></a>
+        <a class="text-link has-tooltip" data-toggle="tooltip" href="$crsTextUrl" $!crsTarget title="$crsText">$crsText</a>
+    </div>
+#end
+
+

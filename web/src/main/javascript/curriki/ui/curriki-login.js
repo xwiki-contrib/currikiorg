@@ -430,7 +430,7 @@ Curriki.ui.login.liveValidation = function() {
                 if(fieldName=="agree") passed = fieldValue!="0";
                 if(fieldName=="member_type") passed = fieldValue!="-";
                 if(fieldName=="firstName" || fieldName=="lastName") passed = fieldValue.length>=1;
-                if(fieldName=="password") passed = fieldValue.length>5 && !(fieldValue.indexOf(" ")>-1);
+                if(fieldName=="password") passed = fieldValue.length>=5 && !(fieldValue.indexOf(" ")>-1);
                 Curriki.console.log("passed? " + passed + ".");
                 // manual check here, just long enough
                 if(passed==false) {

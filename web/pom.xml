@@ -495,7 +495,7 @@ practice to put them here since they are real dependencies -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
       <artifactId>xwiki-platform-activitystream</artifactId>
-      <version>3.5-SNAPSHOT</version>
+      <version>${platform.version}</version>
       <scope>runtime</scope>
     </dependency>
     <!-- Event & Message Stream Modules -->
@@ -539,13 +539,6 @@ practice to put them here since they are real dependencies -->
       <version>${platform.version}</version>
       <scope>runtime</scope>
     </dependency>
-    <!-- Search -->
-    <!-- <dependency>
-      <groupId>org.xwiki.platform</groupId>
-      <artifactId>xwiki-platform-search-lucene</artifactId>
-      <version>${platform.version}</version>
-      <scope>runtime</scope>
-    </dependency> -->
     <!-- JODA Time -->
     <dependency>
       <groupId>org.xwiki.platform</groupId>
@@ -598,11 +591,6 @@ practice to put them here since they are real dependencies -->
 	    <artifactId>xwiki-plugin-invitationmanager</artifactId>
   	  <version>${platform.plugins.invitationmanager.version}</version>
     </dependency> 
-    <dependency>
-      <groupId>org.curriki</groupId>
-      <artifactId>curriki-plugin-lucene</artifactId>
-      <version>${project.version}</version>
-    </dependency>
       <dependency>
           <groupId>org.curriki</groupId>
           <artifactId>curriki-plugin-googlecheckout</artifactId>
@@ -631,8 +619,13 @@ practice to put them here since they are real dependencies -->
     </dependency>
     <dependency>
         <groupId>org.curriki</groupId>
-        <artifactId>curriki-plugin-analytics</artifactId>
-        <version>${project.version}</version>
+        <artifactId>curriki-khan-exercises</artifactId>
+        <version>1.1-SNAPSHOT</version>
+    </dependency>
+    <dependency>
+        <groupId>org.curriki</groupId>
+        <artifactId>curriki-khan-exercises</artifactId>
+        <version>1.1-SNAPSHOT</version>
     </dependency>
 
       <dependency><groupId>jaxen</groupId><artifactId>jaxen</artifactId><version>1.1.1</version></dependency>
@@ -666,6 +659,28 @@ practice to put them here since they are real dependencies -->
       <version>2.3</version>
   </dependency>
 
+  <!-- GitHubApp dependencies -->
+  <dependency>
+   <groupId>com.google.code.gson</groupId>
+   <artifactId>gson</artifactId>
+   <version>2.0</version>
+  </dependency>
+  <dependency>
+    <groupId>org.apache.httpcomponents</groupId>
+    <artifactId>httpmime</artifactId>
+    <version>4.1.2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.eclipse.mylyn.github</groupId>
+    <artifactId>org.eclipse.egit.github.core</artifactId>
+    <version>1.1.2</version>
+  </dependency>
+  <dependency>
+    <groupId>org.xwiki.contrib</groupId>
+    <artifactId>xwiki-plugin-ratings</artifactId>
+    <version>1.2</version>
+  </dependency>
+ 
   </dependencies>
   <build>
       <finalName>xwiki</finalName>
@@ -718,7 +733,6 @@ practice to put them here since they are real dependencies -->
                     com.xpn.xwiki.plugin.usertools.XWikiUserManagementToolsImpl,\
                     com.xpn.xwiki.plugin.zipexplorer.ZipExplorerPlugin,\
                     com.xpn.xwiki.plugin.autotag.AutoTagPlugin,\
-                    com.xpn.xwiki.plugin.lucene.LucenePlugin,\
                     com.xpn.xwiki.plugin.diff.DiffPlugin,\
                     com.xpn.xwiki.plugin.rightsmanager.RightsManagerPlugin,\
                     com.xpn.xwiki.plugin.jodatime.JodaTimePlugin,\
@@ -732,7 +746,8 @@ practice to put them here since they are real dependencies -->
                     org.curriki.xwiki.plugin.mimetype.MimeTypePlugin,\
                     org.curriki.xwiki.plugin.curriki.CurrikiPlugin,\
                     org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager,\
-                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin
+                    org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPlugin,\
+                    com.xpn.xwiki.plugin.ratings.RatingsPlugin
                 </xwikiCfgPlugins>
                 <xwikiCfgDefaultSkin>curriki20</xwikiCfgDefaultSkin>
                 <xwikiCfgDefaultBaseSkin>colibri</xwikiCfgDefaultBaseSkin>
@@ -792,6 +807,8 @@ xwiki.render.velocity.macrolist=\
 xwiki.authentication.group.allgroupimplicit=1
 
 curriki.system.hostname=next.dev.curriki.org
+xwiki.ratings.ratingsmanager=com.xpn.xwiki.plugin.ratings.internal.DefaultRatingsManager
+xwiki.ratings.averagerating.stored=1
 
 
                 </xwikiCfgAdditionalProperties>
@@ -893,6 +910,14 @@ curriki.system.hostname=next.dev.curriki.org
               <filtering>false</filtering>
             </resource>
           </webResources>
+          <overlays>
+            <overlay>
+                <groupId>org.curriki</groupId>
+                <artifactId>curriki-khan-exercises</artifactId> <!-- The version is taken from the <dependency> declaration, which is still required -->
+                <type>jar</type>
+                <targetPath>js/curriki-khan-exercises</targetPath> <!-- This is the path in the final webapp -->
+            </overlay>
+          </overlays>
           <!-- - Make sure we exclude JCL and LOGJ4 since we want all logging to go through SLF4J
                - Excluded to prevent conflict in the patched version of Rhino used by yuicompressor used for JSX.
                  See http://jira.xwiki.org/jira/browse/XWIKI-6151 for more details.

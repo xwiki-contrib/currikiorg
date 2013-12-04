@@ -15,7 +15,8 @@ import com.xpn.xwiki.doc.XWikiAttachment
 import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
 import org.apache.commons.httpclient.HttpClient
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.commons.httpclient.methods.GetMethod
+import com.xpn.xwiki.api.Attachment;
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -148,7 +149,7 @@ public class SocialLoginToolGroovy {
             else maybeRedirect = "";
             String maybeXpage="";
             //if(request.framed=="true")
-            maybeXpage="&xpage=popup";
+            maybeXpage="&xpage=popup&tempskin=curriki8";
 
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callback=1' + maybeXpage //+ maybeRedirect ;
@@ -169,6 +170,16 @@ public class SocialLoginToolGroovy {
             request.session.setAttribute("org.brickred.socialauth.AuthProvider.hint", request.provider);
             response.sendRedirect(url);
             return "nothing";
+
+
+            def space = xwiki.getDocument("Group_SampleCurrikiGeometryCourse.WebPreferences");
+            println("Space found: " + space);
+            println("* topic: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value);
+            println("* topic class " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value.getClass());
+            println("* level: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("educationLevel").value);
+
+
+
         } catch (Exception ex) {
             LOG.warn("Generic error at bounce to provider.", ex);
             errors.add(msg.get('registration.genericError', [ex.message]));
@@ -247,7 +258,7 @@ public class SocialLoginToolGroovy {
                     return tryCreateNewProfile();
                 } else {
                     // take to the display of the form to create the username
-                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&xaction=creationForm"
+                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&tempskin=curriki8&xaction=creationForm"
                     return "backFromAuthorization";
                 }
 
@@ -617,6 +628,7 @@ public class SocialLoginToolGroovy {
     public void tryToAddProfilePictureFromProfile(String url, Document userDoc, com.xpn.xwiki.api.Object userObj) {
         try {
             if(url==null || url.length()==0) return;
+            // don't overwrite existing picture
             System.out.println("Defining profile picture form " + url);
             def avatar = userObj.get("avatar");
             if(avatar!=null && !"".equals(avatar)) {
@@ -632,20 +644,11 @@ public class SocialLoginToolGroovy {
                     name = name.substring(0, name.length()-1);
                 name = name.substring(name.lastIndexOf("/")+1);
             }
-            XWikiAttachment attachment = userDoc.document.getAttachment(name)
-            if (attachment == null) {
-                attachment = new XWikiAttachment();
-                userDoc.document.getAttachmentList().add(attachment);
-            }
             HttpClient client = new HttpClient();
             GetMethod method = new GetMethod(u.toExternalForm());
             int result = client.executeMethod(method);
             if(result==200) {
-                attachment.setContent(method.getResponseBodyAsStream(), (int) method.getResponseContentLength());
-                attachment.setFilename(name)
-                attachment.setAuthor(context.user)
-                attachment.setDoc(userDoc.document)
-                userDoc.document.saveAllAttachments(context.context)
+                userDoc.addAttachment(name, method.getResponseBodyAsStream());
             }
             userObj.set("avatar",name)
         } catch (Exception ex) {

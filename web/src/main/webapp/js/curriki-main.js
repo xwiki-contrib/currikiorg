@@ -555,7 +555,7 @@ var f=window.setInterval(function(){clearInterval(f);Curriki.ui.login.liveValida
 },50)})})},queueQueryNow:function(f){var h=f.dom.name;var d=f.dom.value;Curriki.console.log("Validation on field "+h+" with value '"+d+"'.");
 if(h!="email"&&h!="username"&&h!="postalCode"){var g=false;var b=h=="firstName"||h=="lastName"||h=="password";
 if(h=="agree"){g=d!="0"}if(h=="member_type"){g=d!="-"}if(h=="firstName"||h=="lastName"){g=d.length>=1
-}if(h=="password"){g=d.length>5&&!(d.indexOf(" ")>-1)}Curriki.console.log("passed? "+g+".");
+}if(h=="password"){g=d.length>=5&&!(d.indexOf(" ")>-1)}Curriki.console.log("passed? "+g+".");
 if(g==false){if(b){Curriki.ui.login.liveValidation.notifyValidationResult(f,null)
 }else{Curriki.ui.login.liveValidation.notifyValidationResult(f,false)}}if(g==true){Curriki.ui.login.liveValidation.notifyValidationResult(f,true)
 }return}var e=new Object();e.value=f.getValue();Curriki.ui.login.liveValidation.queriedValue=f.getValue();
@@ -576,7 +576,16 @@ if(b){}else{return}var c=new Date().getTime();if(d.startedPollingTime&&d.started
 }var e=b.dom.value;if(typeof(e)!="undefined"){if(typeof(d.lastValue)!="undefined"){if(!(e==d.lastValue)){d.lastChanged=c;
 d.lastValue=e}else{if(d.lastChanged&&c-d.lastChanged>200&&(d.lastChanged>d.lastChecked||d.lastChecked===undefined)&&(typeof(d.queriedValue)=="undefined"||d.queriedValue!=e)){d.lastChecked=c;
 d.queueQueryNow(b)}}}else{d.lastValue=e;d.lastChanged=c}}else{Curriki.console.log("Giving up value undefined.")
-}}}}();(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
+}}}}();function postMessageHandler(c){console.log("postMessage: ",c);var b=c.data;
+var a=b.substring(0,b.indexOf(":"));var g=b.indexOf(":");var e=b.indexOf(":",g+1);
+var f=b.substring(g+1,e);var d=b.substring(e+1);switch(a){case"resize":console.log("received resize event (resize "+f+" to "+d+")");
+window.resizeThatCurrikiIframe(f,d);break}}function resizeThatCurrikiIframe(c,b){var a="currikiIFrame_"+c;
+if(c.startsWith("currikiIFrame")){a=c}var d=document.getElementById(a);if(d){d.setAttribute("style",b);
+d.parentNode.setAttribute("style",b)}else{console.log("No frame found for "+a)}}if(typeof window.attachEvent==="function"||typeof window.attachEvent==="object"){console.log("attached Listener to event via window.attachEvent");
+window.attachEvent("onmessage",postMessageHandler)}else{if(typeof window.addEventListener==="function"){console.log("attached Listener to event via window.addEvenListener");
+window.addEventListener("message",postMessageHandler,false)}else{if(typeof document.attachEvent==="function"){console.log("cors iframe communication is not possible");
+document.attachEvent("onmessage",postMessageHandler)}else{console.log("Frame communication not possible")
+}}}(function(){Ext.ns("Curriki.ui.Rating");var b=[];for(var a=0;a<5;a++){b.push(_("CurrikiCode.AssetClass_member_rating_"+(a+1)))
 }Curriki.ui.Rating=Ext.extend(Ext.form.NumberField,{fieldClass:"x-form-field x-form-rating-field",allowDecimals:false,allowNegative:false,minValue:0,maxValue:5,unit:17,wrapClass:"ux-form-rater-wrap",starsClass:"ux-form-rater-stars",hoverClass:"ux-form-rater-hover",voteClass:"ux-form-rater-vote",votedClass:"ux-form-rater-voted",textRightClass:"ux-form-rater-text-right",hoverText:b,displayValue:undefined,ratedValue:undefined,hoverValue:undefined,rated:false,initComponent:function(){Curriki.ui.Rating.superclass.initComponent.call(this);
 this.addEvents("beforerating","rate")},onRender:function(d,c){Curriki.ui.Rating.superclass.onRender.apply(this,arguments);
 this.wrap=this.el.wrap({cls:this.wrapClass});if(Ext.isIE){this.wrap.setHeight(this.unit)

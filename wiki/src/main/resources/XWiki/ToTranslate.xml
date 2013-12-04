@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.ShermanTank</contentAuthor>
 <creationDate>1171877089000</creationDate>
-<date>1330548528000</date>
-<contentUpdateDate>1330548528000</contentUpdateDate>
-<version>34.1</version>
+<date>1229983106000</date>
+<contentUpdateDate>1266877070000</contentUpdateDate>
+<version>1.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>tweaking format</comment>
+<comment>Importé depuis un le XAR</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,58 +52,83 @@
 <name>XWiki.ToTranslate</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>378808c9-b62b-4cc8-b910-8e0b06ff4ea5</guid>
 <property>
 <tags/>
 </property>
 </object>
-<content>*DO NOT TRANSLATE THIS PAGE - KEPT FOR HISTORICAL REASONS 02/29/12*
-#
-# Phrase file for Curriki for language en
-# ---- please do not edit here
-# ---- please edit at http://demo:gelc@current.dev.curriki.org//xwiki/bin/view/Translations/XWiki/ToTranslate?language=en
-# 
+<content># header texts
+## I don't think this is used anywhere anymore. 
+headerMyCurriki=My Curriki
 
-#Todd 02/29/12 - Unknown if these are used anywhere. I will hide them and see what happens.
-## headerMyCurriki=My Curriki
-##docs.privacyPolicy=Privacy Policy
-##dateFormat=MM/dd/yy
-##dateFormatLong=MMMM d, yyyy
-##publishedby=Published by {0}
-##createdby=Created by
+
+# general
+## Is this actually used by any pages?
+docs.privacyPolicy=Privacy Policy
+dateFormat=MM/dd/yy
+dateFormatLong=MMMM d, yyyy
+publishedby=Published by {0}
+createdby=Created by
 
 
 #Main.BlogRss
-#Todd 02/29/12 - Jira created asking Paul if BlogRss can be deleted. The BlogRss page appears to be broken. &lt;br&gt;
+## Joshua do you know if this is being used?
+blogRss.title=RSS Feed of the Wiki Blog
+blogRss.description=RSS Feed of the Wiki Blog
 
-## blogRss.title=RSS Feed of the Wiki Blog
-## blogRss.description=RSS Feed of the Wiki Blog
+
+#Main.EventCalendar
+## Joshua, do we need this? it is not being used on the EventCalendar page. Probably can be deleted.
+eventCalendar.title=Event Calendar
+eventCalendar.previous=Previous Month
+eventCalendar.next=Next Month
+
+eventCalendar.eventList=Event List
+eventCalendar.eventList.useEditObject=Use [edit object&gt;{0}] to modify or remove existing events.
+eventCalendar.newEvent=New Event
+eventCalendar.newEvent.location=Location:
+eventCalendar.newEvent.startDate=Start date inclusive (dd/mm/yyyy):
+eventCalendar.newEvent.endDate=End date inclusive (dd/mm/yyyy):
+eventCalendar.newEvent.decription=Description:
+eventCalendar.newEvent.button=Add this event
+
+#Main.OpenSource
+## This is not being used on the OpenSource page, probably can be deleted.
+opensource.currikiDef=Curriki Open Source Definition
+opensource.currikiExplanation=Curriki Open Source Explanation
+opensource.licenceExplanation=Simple Curriki License Explanation
+
+
+##David, I do not think any of the below is actually being used. If it is, it should be moved to the Browse Translation page and the Seach Translation page.
 
 #Main.BrowseSearch
-#Todd 02/29/12 - BrowseSearch still exists and is using these trans. But the page is no longer used and has been replaced with Browse by Subject. I will keep these trans around for now.&lt;br&gt;
-
 browseSearch.rebuilding=Started index rebuild with {0} documents. Will take some time depending on the number of pages/attachments.
+
 browseSearch.bySubject=Browse by Subject
 browseSearch.info=Click a subject to see a list of all the learning resources in that category. The number in parentheses shows how many matching results are on the site
 right now.
+
 browseSearch.noResult=You search did not return matching resources
 
 
 #Main.Search
-#Todd 02/29/12 - Main.Search still exists and is using trans but a new Advanced Search page replaced it. Main.Search is no longer used. I will keep for now.&lt;br&gt;
 
 search.overload=Search is not available at this point due to the success of the Curriki Web site overloading our servers.
 
 
 #Main.SearchResources
-#Todd 02/29/12 - SearchResources page does not appear to work anymore. I will leave these trans for now.&lt;br&gt;
 
 searchResources.rebuilding=Started index rebuild with {0} documents. Will take some time depending on the number of pages/attachments.
 searchResources.rebuildFailed=Index rebuild failed.
+
 searchResources.searchTable.course=Course
 searchResources.searchTable.publishedDate=Published Date
 searchResources.searchTable.contributor=Contributor
 searchResources.searchTable.actions=Actions
+
 searchResources.noResult=You search did not return matching resources.
 searchResources.error=Error loading search
+
+
+
 </content></xwikidoc>

@@ -1,0 +1,93 @@
+##
+## CSS files related to JS libraries.
+##
+#if($globalDebug) 
+    <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.js"></script>
+    #else
+    <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-2.0.3.min.js"></script>
+#end
+
+<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/jquery-ui/js/jquery-ui.min.js"></script>
+##some condition to load the rate it script only if we are on asset page its required
+<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/rateit/jquery.rateit.min.js"></script>
+<script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/app.js"></script>
+##
+## determine language
+##
+#if("$!request.lang" != "")##{
+    #set($lang = $request.lang)
+#else##}{
+    #set($lang = $xwiki.getLanguagePreference())
+#end##}
+#if("$!lang" == "")##{
+    #set($lang = "en")
+#end##}
+##
+## translation messages
+## ======================
+## The xwiki translation files are converted for use with javascript
+## and loaded via the /xwiki/gen/js/0/lang_${lang}.js URL using an apache rewrite rule
+##
+## If using xwiki standalone you need to uncomment the line
+##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&language=${lang}"></script>
+## and comment the next one out instead
+<script src="/xwiki/gen/js/${gVersion}/lang_${lang}.js"></script>
+<script src="/xwiki/skins/respurriki/${gVersion}/js/i18n.js"></script>
+
+##
+## wiki editor
+## ============
+#if(($request.viewer=="assetedit" && $doc.getObject("CurrikiCode.TextAssetClass",false)) || ($request.viewer && $request.viewer.startsWith("Conversations")))
+## <script type="text/javascript" src="/xwiki/skins/curriki8/livetable.js"></script>
+<script src="/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
+<script type="text/javascript" src="/xwiki/skins/curriki8/1/xwiki.js"></script>
+<script type='text/javascript' src='/xwiki/bin/skin/resources/uicomponents/widgets/fullScreen.js?defer=false'></script>
+<script type='text/javascript' src='/xwiki/bin/skin/resources/js/smartclient/initsc.js?defer=false'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Core.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/overwritesc.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Foundation.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Containers.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Grids.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_Forms.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/modules/ISC_DataBinding.js'></script>
+<script type='text/javascript' src='/xwiki/resources/js/smartclient/skins/Enterprise/load_skin.js'></script>
+<script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/xwikiexplorer/xwikiexplorer.js?defer=false'></script>
+<script type='text/javascript' src='/xwiki/bin/skin/resources/js/xwiki/wysiwyg/xwe/XWikiWysiwyg.js?lazy=false&amp;defer=false'></script>
+#end
+##
+##
+## videos
+##
+#if($doc.getObject("CurrikiCode.VideoAssetClass",false))
+    #set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
+    #if($mediaHost!='-missing-media-host-')
+    <script src="$mediaHost/media/jwplayer6/jwplayer.js"></script>
+    <script type="text/javascript">
+        if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
+        window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
+        window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/";
+    </script>
+    <script type="text/javascript" src="/xwiki/skins/respurriki/js/ru-curriki-video.js"></script>
+    #end##
+    #else
+    <!-- no videos here -->
+#end
+##
+##
+
+<script type="text/javascript">
+    if(window.Curriki){} else {window.Curriki = new Object();}
+    if(Curriki.global){} else {Curriki.global = new Object();}
+    Curriki.global.username = "$!{context.user}";
+    Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
+    Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+</script>
+
+#if($globalDebug)##{
+<script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
+#end##}
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin -->
+## Use $xwiki.jsfx.use("jsfile.js", true)
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
+## the HTML comment there actually inserts it!

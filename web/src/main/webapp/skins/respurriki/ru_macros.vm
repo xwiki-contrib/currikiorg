@@ -1,0 +1,1000 @@
+### Generate a dropdown item for button
+###
+### @param actionurl The URL this entry points to
+### @param linktext The menu item text
+###
+#macro(ru_dropdown_item $actionurl $linktext)
+<li><a href="$actionurl">$linktext</a></li>
+#end
+
+### Generate button input
+###
+### @param linktext the button text
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_button $linktext $attributes)
+<button type="button" $attributes>$linktext</button>
+#end
+
+### Generate anchor
+###
+### @param linktext the button text
+### @param linkurl the url for the anchor
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_anchor $linktext $linkurl $attributes)
+<a href="$linkurl" $attributes>$linktext</a>
+#end
+
+### Generate breadcrumb
+###
+### @param linktext the button text
+### @param linkurl the url for the anchor
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_breadcrumb )
+    #*<ol class="breadcrumb">
+        <li><a href="#">GWF</a></li>
+        <li><a href="#">Selling Geometry</a></li>
+        <li><a href="#">Introduction</a></li>
+        <li class="active">Introduction to Geometry</li>
+    </ol> *#
+    #ru_curriki_breadcrumb()
+#end
+
+## ==================== breadcrumbs, copied from curiki =====================================
+#**
+ * Curriki breadcrumb entry point
+ *#
+#macro(ru_curriki_breadcrumb)
+    #ru_curriki_breadcrumb_bc($request.bc $doc)
+#end
+
+#**
+ * Parents Breadcrumb
+ *#
+#macro(ru_curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
+    ## prepare group data
+    #set($sm = $xwiki.csm)
+    #set($spaceName = $bcCurrentDoc.getSpace())
+    #set($s = "$!sm.getSpace($spaceName)")
+    #if( $s!="") #if( $s.isNew() || $s.isDeleted() )
+        #set( $s = "")
+    #end #end
+
+    #if("Groups.CreateNewGroup"=="$!bcDoc.fullName")
+    ## special breadcrumb parent for groups creation page
+        #set($usr = $context.user)
+        $xwiki.getUserName($usr,true) &gt;
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #elseif($bcCurrentDoc.space.startsWith("Documentation_"))
+    ## special breadcrumb parent for groups documentation space
+        #set($grName = $bcCurrentDoc.space.substring( 14 ))
+        #set($s = $sm.getSpace($grName))
+        #if( $s )
+            #if( $s.isNew() || $s.isDeleted() )
+                #set( $s = "" )
+            #end
+        #end
+        #if("$!s"!="")<!-- s is $s -->
+        <a href="$s.getHomeURL()">$s.getDisplayTitle()</a>
+            #set($docPageName = $grName+".Documentation")
+            #set($docPage = $xwiki.getDocument( $docPageName ) )
+        <a href="$docPage.getURL()">${docPage.displayTitle}</a>
+        #end
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #elseif ("$!s" != "" && !$s.endsWith("WebPreferences") )
+    ## special breadcrumb parent for groups space
+    <!-- s is $s -->
+    <a href="$s.getHomeURL()">$s.getDisplayTitle()</a>
+
+        #if($bcCurrentDoc.name == "Contributions" || $bcCurrentDoc.name == "ContributionsSearch")
+        <a href="${s.getHomeURL()}Curriculum">$msg.get("groups_curriculum_tabname")</a>
+        #end
+        #set($bcLocal = $bcCurrentDoc.fullName)
+    #else
+    ## prepare bcParent breadcrumb info of the parent page
+    ## prepare bcLocal breadcrum info of the current page
+        #set($bcParent = $bcParam)
+        #if("$!bcParam" != "")
+            #if($bcParam.endsWith($bcCurrentDoc.fullName))
+                #set($bcLocal = $bcParam)
+            #else
+                #set($bcLocal = "${bcParam};${bcCurrentDoc.fullName}")
+            #end
+        #else
+            #set($bcLocal = $bcCurrentDoc.fullName)
+        #end
+
+    ## find the top parent in the bcParam that is valid
+        #set($topParentDoc = $bcCurrentDoc)
+        #if("$!bcParam" != "")
+            #set($topParentDone = false)
+            #foreach($bcItem in $bcLocal.split(";"))
+            ## ignoring empty elements and the XWiki.XWikiUsers parent page
+                #if(!$topParentDone && "$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+                    #set($topParentDone = true)
+                    #set($topParentDoc = $xwiki.getDocument($bcItem))
+                #end
+            #end
+        #end
+
+    ## enhance bcLocal from this top Parent
+        #ru_curriki_breadcrumb_parent($topParentDoc, 0)
+    #end
+    ## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
+    #set($isFirst = true)
+    #set($previousBc = "")
+    <div id="breadcrumb-icon">
+        <a class="icon-list-ul" href="#"></a>
+    </div>
+    <div id="breadcrumb-wrapper">
+        <ol class="breadcrumb">## loop on each element of the breadcrumb
+            #foreach($bcItem in $bcLocal.split(";"))
+            ## ignoring empty elements and the XWiki.XWikiUsers parent page
+                #if("$!bcItem" != "" && $bcItem != "XWiki.XWikiUsers" && $bcItem != "XWiki.XWikiGuest")
+                    #set($isFirst = false)
+                    #ru_curriki_breadcrumb_display($bcItem.replace('/', '.') $previousBc)
+                #end
+            #end
+        </ol>
+    </div>
+#end
+
+#**
+ * Breadcrumb display of a page
+ *#
+#macro(ru_curriki_breadcrumb_display $bcItem $previousBc)
+    #set($bcDoc = $xwiki.getDocument($bcItem))
+    ## custom handling of EditArticle action
+    #if("XWiki.EditArticle"==$bcDoc.fullName && $request.editArticle)
+        #set($bcDoc = $xwiki.getDocument($request.editArticle))
+    #end
+    ## find the page title
+    #asset_findtitle($bcDoc)
+    ## custom title for groups
+    #ru_curriki_breadcrumb_groups_fixtitle()
+    ## custom arguments for My Curriki
+    #set($userArg = "")
+    #if($bcDoc.space=="MyCurriki" && "$!request.user" != "")
+        #set($userArg="&user=$request.user")
+    #end
+    #if(($currikiTitle.length()>125) && ($bcDoc.name!="Documentation") && ($bcDoc.name!=$msg.groups_home_page))
+        #set($currikiTitle = $currikiTitle.substring(0,125))
+        #set($currikiTitle = "${currikiTitle}...")
+    #end
+    ## Display the breacrumb
+    <li><a href="$bcDoc.getURL("view", "bc=${previousBc}${userArg}")">$currikiTitle</a></li>
+    #set($previousBc = "${previousBc};${bcItem}")
+    ## Display additional groups breadcrumb
+    #ru_curriki_breadcrumb_groups_addbrowseinfo()
+#end
+
+#**
+ * Breadcrumb title change for groups features
+ *#
+#macro(ru_curriki_breadcrumb_groups_fixtitle)
+## groups specific rules
+    #if("$!s"=="")
+    ##don't fix anything
+    #else
+        #if($bcDoc.name==$msg.groups_home_page) ##home page
+            #set($currikiTitle = $msg.groups_home_tabname)
+            #if($request.action)
+                #if($request.action=="editmasthead")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editmasthead'>${msg.groups_home_editmasthead_bc}</a>")
+                #end
+                #if($request.action=="editinfo")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=editinformation'>${msg.groups_home_editinformation_bc}</a>")
+                #end
+            #end
+        #end ##end home page
+        #if($bcDoc.name=="Documentation") ##documentation page
+            #if(	$request.action)
+                #if($request.action == "newdoc" && $request.method != "POST" )
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_create_wiki_page_title}</a>")
+                #end
+                #if($request.action == "editdoc" && $request.method != "POST" )
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_edit_wiki_title}</a>")
+                #end
+                #if($request.action == "history")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_history_title}</a>")
+                #end
+                #if($request.action == "compare")
+                    #set($currikiTitle = $currikiTitle + "</a> &gt; <a href='${bcDoc.getURL()}?action=newdoc'>${msg.groups_documentation_compare_title}</a>")
+                #end
+            #end
+        #end  ##end documentation page
+    ###else
+    ##  #if($bcDoc.fullName == "Groups.CreateNewGroup")
+    ##    #set($currikiTitle = $msg.get("groups_creategroup_pagename"))
+    ##  #end
+    #end
+##end of groups specific rules
+#end
+
+#**
+ * This method adds one more level of breadcrumb for the browse groups page
+ * depending on which category is browsed
+ *#
+#macro(ru_curriki_breadcrumb_groups_addbrowseinfo)
+    #set($more = "")
+    #if("Groups.Browse"==$bcDoc.fullName)
+        #if( $request.subject )
+            #set($sdoc = $xwiki.getDocument($request.subject))
+            #set($more = "${sdoc.title} ${msg.get('browseGroups.groups')}")
+            #set($more_href = "${doc.getURL()}?subject=${request.subject}")
+        #end
+    #end
+    #if("$!more" != "")
+    &gt; <a href="$more_href">$more</a>
+    #end
+#end
+
+
+
+#**
+ * Builds the Parents Breadcrumb in bcLocal
+ *#
+#macro(ru_curriki_breadcrumb_parent $bcDoc $level)
+    #if("$!bcDoc"!="")
+    ## prepare group info
+        #set($sm = $xwiki.csm)
+        #set($spaceName = $bcDoc.getSpace())
+        #set($s = $sm.getSpace($spaceName))
+        #if( $s ) #if( $s.isNew() || $s.isDeleted() )
+            #set( $s = "" )
+        #end #end
+
+        #if("$!s"=="")
+            #set($collType = "")
+            #set($category = $bcDoc.getValue("category"))
+            #if("collection"=="$!category")
+                #set($ok = $bcDoc.use("CurrikiCode.CompositeAssetClass"))
+                #set($collType = $bcDoc.getValue("type"))
+            #end
+            #if("$!collType"!="" && "$!collType" != "folder")
+            ## do nothing because we have a collection or root collection
+            #else
+            ## handling breadcrumb if it is not a group
+                #set($parentList = $util.arrayList)
+                #set($parent = "")
+                #if($bcDoc.getObject("CurrikiCode.AssetClass"))
+                ## handling of breadcrumb for an Asset. Taking the first one.
+                ## TODO: setup a cache
+                    #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' AND doc.space !='Coll_Group_CRSCollaboration' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate")
+                    #set($parentList = $xwiki.searchDocuments($hql, 2, 0))
+                #end
+
+            ## if the parent list has more than 1 then we should
+            ## not follow the parent path
+                #if("$!parentList"!=""|| $parentList.size() < 2)
+                    #if("$!parentList"!="" && $parentList.size()>0)
+                        #foreach($par in $parentList)
+                            #set($parent = $par)
+                        #end
+                    #end
+                #else
+                    #if("$!parent" == "")
+                        #set($parent = $bcDoc.parent)
+                    #end
+                #end
+
+                #if("$!parentList"!="" || $parentList.size() == 0)
+                    #if("$!parent" == "")
+                        #set($parent = $bcDoc.parent)
+                    #else
+                    #end
+                #end
+
+                #if($parent && ("$!parent" != "") && $xwiki.checkAccess("$parent","view") && $level < 6 && ($bcLocal.indexOf($parent) == -1))
+                    #set($bcLocal = "${parent};${bcLocal}")
+                    #set($level = $level + 1)
+                    #set($parentDoc = $xwiki.getDocument($parent))
+                    #ru_curriki_breadcrumb_parent($parentDoc,$level)
+                #end
+            #end ## end check collection or root collection
+        #end ## end check groups
+    #end ## end check null bcName
+#end ## end macro
+
+#macro(ru_modal_for_login)
+    ## the dialog to be popped-up
+    <div id="loginPopup"></div>
+
+    <div class="modal fade" id="my-modal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-body">
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+#end
+##
+## login/logout witness
+##
+#macro(ru_loginLogout)
+<script type="text/javascript">
+    /* <![CDATA[ */
+    function displayLoginDialogAlt(url) {
+        var w = 620, h=400;
+        if(window.innerWidth && window.innerWidth<w){
+            w = Math.round(window.innerWidth*0.95);
+        }
+        if(url.indexOf('?')>=0){
+            url = url + "&framed=true";
+        }else{
+            url = url + "?framed=true";
+        }
+        var html_content = "<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='" + url + "' width='" + (w-5) + "' height='" + (h-31) + "'/>";
+        jQuery('#my-modal .modal-body').html(html_content);
+        jQuery('#my-modal').modal('show');
+    }
+    function displayLoginDialog(url) {
+        var w = 630, h=400;
+        //if(window.innerHeight && window.innerHeight <h) h = Math.round(window.innerHeight*0.9);
+        if(window.innerWidth && window.innerWidth<w)   w = Math.round(window.innerWidth*0.95);
+        if(url.indexOf('?')>=0) url = url+"&framed=true"; else url=url+"?framed=true";
+        // the default header should be blue, not green as it is in AddPath, adjust the CSS live
+        jQuery( "#loginPopup" ).dialog({
+            dialogClass: "dialog-login",
+            buttons: [ { text: "Close", click: function() { jQuery( this ).dialog( "close" ); } } ],
+            modal: true,
+            width: w,
+            height: h
+                ,minWidth:400
+                ,minHeight:100
+                ,maxHeight:575
+            ,resizable:false
+                ,title:"login"
+            });
+        jQuery("#loginPopup").html("<iframe style='border:none' frameBorder='0' name='curriki-login-dialog' id='loginIframe' src='"+url+"' width='"+(w-5)+"' height='"+(h-31)+"'/>");
+    }
+    /* ]]> */
+</script>
+<ul class="dropdown-menu">
+    #if($isguest) <!-- request.pathInfo is $request.pathInfo --> #if(!$request.pathInfo.startsWith('/login/'))
+    ##{
+        #if ($request.xredirect) ##{
+            #set($logredir = $request.xredirect)
+        #elseif($doc.space == "Registration") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.WebHome") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($doc.fullName == "Main.JoinCurriki") ##}{
+            #set($logredir = $xwiki.getURL("MyCurriki.Profile"))
+        #elseif($logredir.contains("/login")) ##}{
+            #set($logredir = "")
+        #end ##}
+        #if("$!logredir"!="") ##{
+            #set($logredir = "xredirect=$logredir")
+        #elseif($request.srid) ##}{
+            #set($logredir = "srid=$request.srid")
+        #end ##}
+        #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+        #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?tempskin=curriki8&xpage=popup&xredirect=$escapedURL")
+        #set($anchorAtts="href='$targetURL' onclick='displayLoginDialogAlt(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
+        ##<p><a $anchorAtts>login</a></p>
+        #if($!request.getHeader("User-Agent").contains("MSIE 7"))
+            &nbsp;
+        #end
+        
+        <li><a $anchorAtts><i class="icon-user icon-large"></i> Login</a></li>
+        <li class="divider"></li>
+        <!-- xwiki is $xwiki.getXWiki() xredirect is $xredirect -->
+        <!-- $msg.get('join.header.title.3') -->##
+        #foreach($provider in ["Facebook","Google"])
+            <!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = ${socialLoginConfigurationDocument} -->
+            #set($xredirect="${request.getRequestURI()}")##
+            <!-- xredirect is $xredirect -->
+            #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&tempskin=curriki8&xredirect=$escapetool.url($xredirect)#if($framed)&xpage=popup#end")
+
+            <li><a target="_top" href="${link}" title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" width="32" ##
+               onclick="Curriki.ui.login.popupPopupAndIdentityAuthorization('${provider}','${link}','${xredirect}'); return false;">##
+                 <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="18"
+                     title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /> $provider</a></li>
+        #end
+        
+    #end
+    #else ## }{ ## is logged in
+        #set($fname = $crtUserDoc.display("first_name","view"))
+        <li><a href="#">$fname</a></li>
+        <li class="divider"></li>
+        <li><a href='$crtUserDoc.getURL()'>My curriki</a></li>
+        <li class="divider"></li>
+        #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
+        <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
+
+    #end ##}
+    #set($headerMsg="$!request.session.getAttribute('header.message')")##
+    #if("$!headerMsg"!="")
+        <div class="alert alert-warning" id="logged-out-message">
+            <strong>Notice:</strong> 
+            #if($headerMsg=="logout-ok")##
+                $request.session.removeAttribute("header.message")##
+                    $msg.get("logout.ok-you-left")<!-- logout message here -->##
+                #set($idProviderName=$request.session.getAttribute("header.idProviderName"))##
+                    #if($idProviderName)<!-- idProviderName: "$idProviderName" -->##
+                    #if($idProviderName.equalsIgnoreCase("facebook"))
+                        <a href="http://www.facebook.com/logout.php" target="_facebook_window"
+                                >$msg.get("logout.offer-logout.facebook")</a>
+                    #elseif($idProviderName.equalsIgnoreCase("google"))
+                        <a href="http://www.google.com/"
+                           target="_google_logout_window"
+                                >$msg.get("logout.offer-logout.google")</a>
+                    #end##
+                #end##
+                    #if($idProviderLogoutUrl)<!-- idProviderLogoutUrl: $idProviderLogoutUrl -->
+                    <a href="$idProviderLogoutUrl">$msg.get("logout.offer-logout.${idProviderName}")</a>#end
+            #else$msg.get($headerMsg,[$context.user.substring(6)])#end## "XWiki.".length() = 6
+        </div>
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                jQuery('#logged-out-message').show(5000).delay(2000).fadeOut('slow');
+            });
+        </script>
+    #end##
+</ul>
+#end
+
+
+
+
+#**
+  * Macro for verifying if an entry in the nav panel is active
+  *
+  *#
+#macro(ru_checkActive $docname $result)
+    #if($doc.fullName == $docname)
+        #set ($result = $util.null)
+        #if($doc.space == "MyCurriki" && "$!request.user" != "")
+            #ru_setVariable ("$result" false)
+        #else
+            #ru_setVariable ("$result" true)
+        #end
+    #end
+#end
+
+#** Hack to restore the parameter-by-reference pattern that was possible
+    in velocity 1.6. Pulled from XWiki 3.3
+* Assign a value to a variable, given by its name. The purpose of this macro is to emulate call by macro expansion,
+* which was available in velocity versions up to 1.6, but was removed in 1.7.
+*
+* @param variableName the name of the variable to set, a String; when the macro returns, a variable named that way will be created with the output value
+* @param value the value to assign
+*###
+#macro(ru_setVariable $variableName $value)
+## Only do this if the variable name is really a valid variable name
+    #if ($variableName.matches('[a-zA-Z_][a-zA-Z0-9_-]*'))
+        #evaluate("${escapetool.h}set(${escapetool.d}${variableName}=${escapetool.d}value)")
+    #elseif ($variableName.matches('\$[a-zA-Z_][a-zA-Z0-9_-]*'))
+        #evaluate("${escapetool.h}set(${variableName}=${escapetool.d}value)")
+    #end
+#end
+
+#**
+ * Begin the navigation panel
+ *
+*#
+#macro(ru_beginNavigationPanel $homerollovertext)
+    <div id="wrapper-sidebar">
+        #set($active = false)
+        #ru_checkActive("Main.WebHome" $active)
+        <div class="panel panel-primary">
+            <div class="panel-heading">Panel heading</div>
+            <div class="list-group">
+                <a title="" class="list-group-item href="$xwiki.getURL("Main.WebHome")">$msg.get("panel.navigation.home")</a>
+            </div>
+        </div>
+#end
+
+#**
+  * End the navigation panel
+  *
+  *#
+#macro(ru_endNavigationPanel) 
+  </div>
+#end ##}
+
+
+#**
+  * Displays a navigation category, with sub-elements
+  *
+  *#
+#macro(ru_navigationCategory $text $rollovertext $link $expanded $items) 
+  #set($iniexp = $expanded)
+  #if($doc.space.startsWith("Coll_")) 
+      #set ($expanded = $util.null)#setVariable ("$expanded" false)#set($expanded=false) 
+    #set($cookiebase = "${context.user}_asset_")
+  #else ##}{
+    #set($cookiebase = "${context.user}_")
+  #end ##}  
+  #if(!$navcatcounter)  
+    #set($navcatcounter = 1)
+  #else ##}{
+    #set($navcatcounter = $navcatcounter + 1)
+  #end ##}	  
+  #set($id = "currikinavcategory_${navcatcounter}")
+  #if($expanded == true) 
+    #set($cookiemagic = "if(expanded) createCookie('${cookiebase}${id}','false', ''); else eraseCookie('${cookiebase}${id}');")
+  #else ##}{
+    #set($cookiemagic = "if(expanded) eraseCookie('${cookiebase}${id}'); else createCookie('${cookiebase}${id}', 'true', '');")
+  #end ##}	  
+  #set($exp2 = "")
+  #set($exp2 = $xwiki.getUserPreferenceFromCookie("${cookiebase}$id"))
+  #if(!$exp2.equals("")) 
+    #if($exp2 == 'true') 
+      #set($expanded = true)
+    #else ##}{
+      #set($expanded = false)
+    #end ##}
+  #end ##}	  
+  #set($active = false)
+  #foreach($item in $items) 
+    #checkActive($item.get(1) $active)
+  #end ##}	  
+  #set($theCategLink = $link)
+  #normalizelink($theCategLink)
+<div class="panel panel-primary" id="${id}">
+    <div class="panel-heading">$text</div>
+  <div class="list-group">
+  #foreach($item in $items) 
+    #set($active = false)
+    #checkActive($item.get(1) $active)
+    #set($theItemLink = $item.get(1))
+    #normalizelink($theItemLink)
+    #set($linktitle = "")
+    #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
+    <a class="list-group-item #if($active)selected#end" href="{pre}${theItemLink}{/pre}">$item.get(0)</a>
+    #set($linktitle = "")
+  #end ##}
+  </div>
+  </div> ##}
+  #set($expanded=$iniexp) ##rolling back the parameter to initial value so it won't affect future calls to this macro
+#end  ##}
+
+
+#**
+ * Displays a navigation entry (without sub-elements)
+ *#
+#macro(ru_navigationTopLevelEntry $text $link)
+#set($active = false)
+#checkActive($link $active)
+<div class="curriki-nav-tlentry#if($active)active selected#end" #if(!$active) onmouseover="addClass(this, 'curriki-nav-tlentryactive')" onmouseout="rmClass(this, 'curriki-nav-tlentryactive')" #end>
+<div class="curriki-nav-header"><h4>[$text>$link]</h4></div>
+</div>
+#end
+
+#macro(ru_submitButton $name $shortcut $value)
+<input class="btn btn-default" type="submit" name="$name"#if($keyboardShortcutsEnabled) title="$shortcut"#end value="$value"/>
+#end
+
+#**
+ * Displays a submit button for the editor. This macro calls submitButton,
+ * composing all its parameters based on the action's identifier and the
+ * identifier of the corresponding localized resources.
+ * @param action The identifier of the button's action.
+ * @param resourceIdentifier The key used to identify the localized resources.
+ *#
+#macro(ru_editActionButton $action $resourceIdentifier)
+#submitButton("action_${action}", $msg.get("core.shortcuts.edit.${resourceIdentifier}"), $msg.get($resourceIdentifier))
+#end
+
+#macro(ru_listMessages)
+#set($the_space = "Messages_${doc.space}")
+#set($messages = $xwiki.getSpaceDocsName($the_space))
+#set($options = ["success", "info", "warning", "danger"])
+#set($counter = 0)
+#foreach($message_row in $messages)
+#set($message_doc = $xwiki.getDocument($the_space, $message_row))
+#set($messageObj = $message_doc.getObject("XWiki.ArticleClass"))
+#if("$!messageObj" != "")
+#if($counter == 3)
+ #set($counter = 0)
+#end
+{{html clean="false"}}
+<div class="alert alert-$options[$counter]">
+<h4>{{/html}} $messageObj.getProperty("title").value {{html clean="false"}}</h4>
+{{/html}} $messageObj.get("content") {{html clean="false"}}
+</div>
+{{/html}}
+#set($counter = $counter + 1)
+#end
+#end
+#end
+
+### Code from table of contents panel
+###
+###
+#macro(ru_tocAssetSubtype $assetDoc)
+    #set($rType = $assetDoc.getAssetClass().name.replaceAll("^.*\056", "").replaceAll("Asset$", ""))
+    #if("$!rType" == "")
+        #set($rType = "Unknown")
+    #end
+#end
+##
+#macro(ru_tocToJSON $curDoc $lastAssetName $lastAssetJSON) 
+    ## set Current asset information
+    #set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+    #set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
+    #set($curDate = $!xwiki.formatDate($curDoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
+    #set($curHref = $xwiki.getURL($curDoc.fullName, 'view'))
+    #set($curSelected = "")
+    #if($curDoc.fullName == $doc.fullName)
+        #set($curSelected = " toc-selected")
+    #end
+    #ru_tocAssetSubtype($curDoc)
+    #set($curType = $rType)
+    ## Get Framework items
+    #set($curFW = "")
+    #set($subj = $!curDoc.getValue('fw_items'))
+    #set($isFirst = true)
+    #foreach($item in $subj)
+        #if($item != "FW_masterFramework.WebHome")
+            #if($isFirst)
+                #set($isFirst = false)
+            #else
+                #set($curFW = "$curFW, ")
+            #end
+            #set($curFW = "$curFW'$item'")
+        #end
+    #end 
+    #set($curFW = "[ $curFW ]")
+    ## Get educational levels
+    #set($curLvl = "")
+    #set($levl = $!curDoc.getValue('educational_level'))
+    #set($isFirst = true)
+    #foreach($item in $levl) 
+        #if($isFirst) 
+            #set($isFirst = false)
+        #else 
+            #set($curLvl = "$curLvl, ")
+        #end 
+        #set($curLvl = "$curLvl'$item'")
+    #end
+    #set($curLvl = "[ $curLvl ]")
+    ## Get icts
+    #set($curICT = "")
+    #set($ict = $!curDoc.getValue('instructional_component'))
+    #set($isFirst = true)
+    #foreach($item in $ict)
+        #if($isFirst)
+            #set($isFirst = false)
+        #else
+            #set($curICT = "$curICT, ")
+        #end
+        #set($curICT = "$curICT'$item'")
+    #end
+    #set($curICT = "[ $curICT ]")
+    ##
+    ## Create json
+    #if($curDoc.isFolder())
+        ## Current item is a composite -- so need to get children
+        #set($curSubJSON = "")
+        #set($curSublist = $curDoc.getSubassetList())
+        #foreach($subItem in $curSublist)
+            #if($subItem == $lastAssetName)
+                    #set($curSubJSON = "$curSubJSON,$lastAssetJSON")
+            #else
+                #set($subAsset = $!xwiki.curriki.fetchAssetOrNull($subItem))
+                #if($subAsset)
+                    #set($subSelected = "")
+                    #if($subAsset.fullName == $doc.fullName)
+                        #set($subSelected = " toc-selected")
+                    #end
+                    #ru_tocAssetSubtype($subAsset)
+                    #set($subTitle = $subAsset.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+                    #set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
+                    #set($subDate = $!xwiki.formatDate($subAsset.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
+                    #set($subHref = "$xwiki.getURL($subAsset.fullName, 'view')") ## /xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&target=${subAsset.fullName}
+                    ## Get Framework items
+                    #set($subFW = "")
+                    #set($subj = $!subAsset.getValue('fw_items'))
+                    #set($isFirst = true)
+                    #foreach($item in $subj)
+                        #if($item != "FW_masterFramework.WebHome")
+                            #if($isFirst) 
+                                #set($isFirst = false)
+                            #else
+                                #set($subFW = "$subFW, ")
+                            #end
+                            #set($subFW = "$subFW'$item'")
+                        #end
+                    #end
+                    #set($subFW = "[ $subFW ]")
+                    ## Get educational levels
+                    #set($subLvl = "")
+                    #set($levl = $!subAsset.getValue('educational_level'))
+                    #set($isFirst = true)
+                    #foreach($item in $levl)
+                        #if($isFirst) 
+                            #set($isFirst = false)
+                        #else
+                            #set($subLvl = "$subLvl, ")
+                        #end
+                        #set($subLvl = "$subLvl'$item'")
+                    #end
+                    #set($subLvl = "[ $subLvl ]")
+                    ## Get icts
+                    #set($subICT = "")
+                    #set($ict = $!subAsset.getValue('instructional_component'))
+                    #set($isFirst = true)
+                    #foreach($item in $ict)
+                        #if($isFirst) 
+                            #set($isFirst = false)
+                        #else
+                            #set($subICT = "$subICT, ")
+                        #end
+                        #set($subICT = "$subICT'$item'")
+                    #end
+                    #set($subICT = "[ $subICT ]")
+                    ##
+                    #set($subSubCategory = "")
+                    #set($subSubCategory = $subAsset.categorySubtype)
+                    #if("$!subSubCategory" == "") 
+                        #set($subSubCategory = "unknown")
+                    #end
+                    ##
+                    #if($subAsset.isFolder()) 
+                        #set($curSubJSON = "$curSubJSON,{collectionPage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', lastUpdated:'$!{subDate}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:false}")
+                    #else ## Not isFolder()
+                        #set($curSubJSON = "$curSubJSON,{assetpage:'$!{subAsset.fullName}', displayTitle: '$!{subTitle}', description:'$!{subDesc}', lastUpdated:'$!{subDate}', fwItems:$!{subFW}, levels:$!subLvl, ict:$!subICT, assetType:'$!{rType}', category:'$!{subAsset.category}', subcategory:'$!{subSubCategory}', addCls:'$!{subSelected}', href:'$!{subHref}', leaf:true}")
+                    #end
+                #end
+            #end
+        #end ##end foreach
+        #set($curSubJSON = $curSubJSON.replaceAll("^,", ""))
+        ##
+        #set($curSubCategory = "")
+        #set($curSubCategory = $curDoc.categorySubtype)
+        #if("$!curSubCategory" == "") 
+            #set($curSubCategory = "unknown")
+        #end
+        ##
+        #set($curJSON = "{collectionPage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', lastUpdated:'$!{curDate}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', expanded: true, children:[$!{curSubJSON}]}")
+    #else ##  Not isFolder()
+        #set($curSubCategory = "")
+        #set($curSubCategory = $curDoc.categorySubtype)
+        #if("$!curSubCategory" == "") 
+            #set($curSubCategory = "unknown")
+        #end
+        #set($curJSON = "{assetpage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', lastUpdated:'$!{curDate}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', leaf: true}")
+    #end
+#end
+## End macro
+
+#macro(ru_getTOC )
+    #if($doc.space.startsWith("Coll_") && $doc.hasAccessLevel("view") && !$doc.isNew())
+        ## Reverse breadcrumb (we need to work bottom to top)
+        #set($bc = "")
+        #set($emptyBC = false)
+        #foreach($bcItem in $request.bc.split(";")) 
+            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}") 
+                #set($bc = "$bcItem;$bc")
+            #end
+        #end
+        #set($bc = $bc.replaceAll(";$", ""))
+        #if($bc == "") 
+            #set($emptyBC = true)
+        #end
+        #set($bc = "${doc.fullName};$bc")
+
+        #set($lastAssetName = "X")
+        #set($lastAssetJSON = "")
+        #set($lastAssetIsCollection = false)
+
+        #foreach($bcItem in $bc.split(";")) 
+            #set($curDoc = $xwiki.curriki.fetchAssetOrNull($bcItem))
+            #if($curDoc) 
+                #ru_tocToJSON($curDoc $lastAssetName $lastAssetJSON)
+                #set($lastAssetName = $curDoc.fullName)
+                #set($lastAssetJSON = $curJSON)
+                #set($lastAssetIsCollection = $curDoc.isCollection())
+            #end
+        #end
+
+        #if($emptyBC) 
+            ## Here we need to see if there are any more parents we can add
+            #foreach($i in [1..50])  ## There is no while loop in velocity (nor break)
+                #if($lastAssetName != "" && !$lastAssetIsCollection) 
+                    #set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${lastAssetName}' order by doc.name")
+                    #set($parentList = $xwiki.searchDocuments($sql))
+                    #if($parentList.size() == 1) 
+                        #foreach($parentPage in $parentList) 
+                            #set($curDoc = $!xwiki.curriki.fetchAssetOrNull($parentPage))
+                            #if($curDoc) 
+                                #ru_tocToJSON($curDoc $lastAssetName $lastAssetJSON)
+                                #set($lastAssetName = $curDoc.fullName)
+                                #set($lastAssetJSON = $curJSON)
+                                #set($lastAssetIsCollection = $curDoc.isCollection())
+                                #set($bc = "$bc;$parentPage")
+                            #else
+                                #set($lastAssetName = "")
+                            #end
+                        #end
+                    #else
+                        #set($lastAssetName = "")
+                    #end
+                #end
+            #end
+        #end
+        #if("$lastAssetJSON" == "") 
+            #set($lastAssetJSON = "{}")
+        #end
+        ##{{html clean="false"}}
+        <script type="text/javascript">
+        /* <![CDATA[ */
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+            var json_data = JSON.stringify($lastAssetJSON);
+            var json_objects = jQuery.parseJSON(json_data);
+            var html_output = '';
+            jQuery.each(json_objects.children, function(){
+                var icon_type = '<a href="#" class="icon-caret-left icon-large"></a';
+                /*var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';*/
+                var html_output_sub = '';
+                if(this.assetType == 'Text'){
+                    html_output_sub = '';
+                    icon_type = '';
+                }
+                html_output += '<li><p class="main-item"><a href="' + this.href + '" class="item-link">' + this.displayTitle + '</a>' + icon_type + '</p>' + html_output_sub + '</li>';
+            });
+            jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
+        });
+
+        /*
+        Ext.ns('Curriki.data.toc');
+        Curriki.data.toc.bc = "$bc";
+        Curriki.data.toc.tocData = $lastAssetJSON;
+        Curriki.data.toc.selected = "$doc.fullName";
+        */
+        /* ]]> */
+        </script>
+        ##{{/html}}
+    #end
+#end
+
+
+#macro(ru_compositeasset_display)
+#**
+ *  Macro to display root collections
+ *#
+    #macro(compositeasset_display $doc)
+        #if($doc.space.startsWith("Coll_") && $doc.name == "WebHome") ## {
+            #set($user = $context.user)
+            #if($user.startsWith("XWiki.")) ## {
+                #set($user = $user.substring(6))
+            #end ## }
+            #if($doc.space.startsWith("Coll_")) ## {
+                #set($shortname = $doc.space.substring(5))
+            #else ## } {
+                #set($shortname = $user)
+            #end ## }
+            #if($user == $shortname) ## {
+                $response.sendRedirect($xwiki.getURL('MyCurriki.Collections'))
+            #else ## } {
+                #set($userarg = "user=${shortname}")
+                $response.sendRedirect($xwiki.getURL('MyCurriki.Collections', 'view', "$userarg"))
+            #end ## }
+        #else ## } {
+            #if($doc.space.startsWith("Coll_") && $doc.name == "WebHome")
+                #set($user=$doc.space.substring(5))
+            #elseif($request.user)
+                #set($user = $request.user)
+            #else
+                #set($user=$context.user)
+            #end
+            #set($shortname = $user)
+            #if($user.startsWith("XWiki."))
+                #set($shortname = $user.substring(6))
+            #end
+            #curriki_finduserprefix($shortname)
+            #if(!$userPrefix || "$!userPrefix" == "")
+            1 Collection List
+            #else
+            1 $userPrefix Collections
+            #end
+            #set($usercoll = "Coll_${shortname}")
+            #set($collectionsHome = $xwiki.getDocument($usercoll, "WebHome"))
+            #set($collectionsList = $collectionsHome.getObjects("CurrikiCode.SubAssetClass"))
+            #set($nbToDisplay = 5)
+            #set($Integer = 0)
+            #set($startIndex = 0)
+            #if($request.startIndex)
+                #set($startIndex = $Integer.parseInt($request.getParameter("startIndex")))
+            #end
+            #if($startIndex > ($collectionsList.size() - 1))
+                #set($startIndex = $collectionsList.size() - 1)
+            #end
+            #set($endIndex = $startIndex - 1 + $nbToDisplay)
+            #if($endIndex > ($collectionsList.size() - 1))
+                #set($endIndex = $collectionsList.size() - 1)
+            #end
+            #set($deleteMsg = $msg.get("confirmdelete"))
+            #set($localUrl = $doc.getURL("view"))
+
+            $msg.get("colls.infos")
+
+            #if($collectionsList.size() >0)<!-- now listing collections' children --><ul>
+                #foreach ($index in [$startIndex..$endIndex])
+                    ## #asset_displaycollection($collectionsList.get($index))
+                    #set($item=$xwiki.curriki.fetchItem($collectionsList.get($index)))
+                    #if($item)
+                        <li>$item.displayTitle</li>
+                    #else<!-- missing item $collectionsList.get($index) -->
+                    #end
+                #end</ul>
+            #else
+                <p>No content in this collection.</p>
+            #end
+        <hr class="my-curriki-hr">
+
+            #if($context.user=="XWiki.${shortname}" || $xwiki.hasAdminRights())
+            <div style="float:right;"><span class="righttext"><a class="buttonred" onclick="addCollection2(); return false;" href="#" title="$msg.get("colls.createCollection")">$msg.get("colls.createCollection")</a></span></div>
+            #end
+        <div align="center"><div class="my-curriki-nav">
+            #set($nbDisplayed = ($endIndex - $startIndex + 1))
+            #if($collectionsList.size() == 0)
+                #set($nbDisplayed = 0)
+            #end
+            #set($hasPrev = $startIndex > 0)
+            #set($hasNext = $endIndex < ($collectionsList.size() - 1))
+            #set($startDisplayed = $startIndex + 1)
+            #set($endDisplayed = $endIndex + 1)
+            #set($elemsDisplayed = "${startDisplayed}-${endDisplayed}")
+            $msg.get("colls.numberOfCollsDisplayed", [$elemsDisplayed, $collectionsList.size()])
+            <span class="navitems">
+#if($hasPrev)
+    #set($prevIndex = $startIndex - $nbToDisplay)
+    <a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${prevIndex}")" >$msg.get("caption.prev")</a>## /xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${asset.fullName}&dir=prev
+#else
+    $msg.get("caption.prev")
+#end
+                #sep()
+                #if($hasNext)
+                    #set($nextIndex = $startIndex + $nbToDisplay)
+                    <a href="$doc.getURL("view", "bc=${bcLocal}&startIndex=${nextIndex}")" >$msg.get("caption.next")</a> ## /xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${asset.fullName}&dir=next#if($request.bc)&bc=$request.bc#end")
+                #else
+                    $msg.get("caption.next")
+                #end
+</span>
+        </div></div>
+        #end ## }
+    #end
+#end
+
+#macro(ru_asset_display)
+    #set($modeParam="view")
+    #set($asset=$xwiki.curriki.fetchAsset($doc.fullName))
+    #set($ok = $asset.use("CurrikiCode.AssetClass"))
+    #asset_findmode()
+    #if("$!mode"=="")#set($mode="view")#end
+##
+<div id="asset-wrapper" class="view-${asset.categoryClass} mode-$mode">
+    <meta itemprop="mediaType" value="#mediatype($asset)"/>
+    #if(!$isEmbed)
+        #ru_asset_icontitle($asset)
+        #ru_asset_attribution($asset)
+    #end
+    <div id="asset-wrapper-inner" #if($asset.category!="collection") class="filetype-${asset.filetypeClass}" #end >
+        #if(!$asset.hasAccessLevel("view"))
+            #curriki_noaccess()
+        #else
+            #if($asset.category!="collection")
+            <div class="sub-asset-wrapper category-${asset.categoryClass}">
+            <div class="sub-asset-wrapper-inner filetype-${asset.filetypeClass}">
+            #end
+            $asset.displayAsset($mode)
+            #if($asset.category!="collection")
+            </div>
+            </div>
+            #end
+        #end
+        #if($isEmbed)
+            <p id="content-licensed">$msg.get("mode.embed.footer_txt")</p>
+        #end
+    </div> ##asset-wrapper-inner
+</div> ##asset-wrapper
+#end
+

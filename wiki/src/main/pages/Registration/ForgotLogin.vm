@@ -31,7 +31,7 @@
 			</ul>
 		</div>
 		<div class="center pad-vrt">
-			<button class="button-grey" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.cancel_button')</button>
+			<button class="button-grey" onclick="window.location.href='LoginOrRegister?xpage=popup&tempskin=curriki8#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.cancel_button')</button>
             <button class="button-confirm" type="submit">$msg.get('forgot.submit_button')</button>
 		</div>
 	</fieldset>
@@ -88,7 +88,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		}
 
 		var url= "/xwiki/bin/view/XWiki/CheckAccountCreation";
-		var pars = 'xpage=plain&email=' + $F("email");
+		var pars = 'xpage=plain&email=' + encodeURIComponent($F("email"));
 		var myAjax = new Ajax.Request( url, { method: 'get', parameters: pars, onComplete: checkEmailResponse });
 	}
 
@@ -119,7 +119,7 @@ Event.observe('forgotForm', 'submit', function(event) {
             <h1><!-- 2 -->$msg.get('forgot.title')</h1>
             $msg.get("forgot.error.no_user", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
+                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&tempskin=curriki8#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
             #logViewScript("/join/forgotLogin/error")
 		#elseif($list.size()==1) ##}{
@@ -133,7 +133,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)#if($request.framed)&framed=true#end#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup&tempskin=curriki8#if($request.framed)#if($request.framed)&framed=true#end#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
             #logViewScript("/join/forgotLogin/remailedId")
 		#else ##}{
@@ -152,7 +152,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			#set($junk = $xwiki.sendMessage($from, $recipient, $xwiki.parseContent($mesg)))
 			$msg.get("forgotUsername.emailSent", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup&tempskin=curriki8#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
             #logViewScript("/join/forgotLogin/error")
 		#end ##}
@@ -163,13 +163,13 @@ Event.observe('forgotForm', 'submit', function(event) {
 		#if($list.size()==0) ## {
 			$msg.get("forgot.error.no_user", [$uemail])
             <div class="center pad-vrt">
-                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
+                <button class="button-grey" onclick="window.location.href='ForgotLogin?xpage=popup&tempskin=curriki8&#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.cancel_button')</button>
             </div>
             #logViewScript("/join/forgotLogin/error")
 		#elseif($list.size()>1) ## }{
 			$msg.get("forgot.error.multiple_users")
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='ForgotLogin?xpage=popup&tempskin=curriki8#if($request.framed)&framed=true#end'; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
             #logViewScript("/join/forgotLogin/error")
 		#elseif($list.size()==1) ## }{
@@ -195,7 +195,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 			$msg.get("forgotPassword.emailSent", [$uemail])
             #logViewScript("/join/forgotLogin/remailedPassReset")
             <div class="center pad-vrt">
-                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
+                <button class="button-confirm" onclick="window.location.href='LoginOrRegister?xpage=popup&tempskin=curriki8#if($request.framed)&framed=true#end '; return false;">$msg.get('forgot.now_login_button')</button>
             </div>
 
 		#end ##}

@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.dward</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.LudovicDubost</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.LudovicDubost</contentAuthor>
 <creationDate>1233683320000</creationDate>
-<date>1342213070000</date>
-<contentUpdateDate>1342213070000</contentUpdateDate>
-<version>15.1</version>
+<date>1369944322000</date>
+<contentUpdateDate>1369944322000</contentUpdateDate>
+<version>9.1</version>
 <title>Watch Curriki Grow</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>PanelIncludes.WatchCurrikiGrowGuest</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>f422261a-708c-4751-84f6-d4d32a1ae891</guid>
+<guid>b1762e7c-079f-4b7b-bd00-60c8adc31c6e</guid>
 <property>
 <tags/>
 </property>
@@ -63,7 +63,7 @@
 #set($numResources = $xwiki.curriki.countDocsSolrCatchAll("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))
 #set($numUsers =     $xwiki.curriki.countDocsSolrCatchAll("type:user"))
 #set($numGroups =    $xwiki.curriki.countDocsSolrCatchAll("type:group"))
-#if($numResources==-1 || $numUsers==-1 || $numGroups==-1)&lt;!-- $xwiki.mailsender.sendTextMessage("paul@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "polx@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numUsers $numGroups") --&gt;#end
+#if($numResources==-1 || $numUsers==-1 || $numGroups==-1)&lt;!-- $xwiki.mailsender.sendTextMessage("polx@curriki.org","polx@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "CurrikiSolr client error ($xwiki.curriki.getPublicCurrikiConfig('appserverHost', 'missing-host'))", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numUsers $numGroups . The log would contain the detailed error.") --&gt;#end##
 &lt;div id="watch-curriki-grow" class="shadow-outer"&gt; ##{
   &lt;div class="shadow-middle"&gt; ##{
     &lt;div class="shadow-inner information"&gt; ##{

@@ -8,7 +8,7 @@
 #if($provider!="")
     Curriki.ui.login.popupPopupAndIdentityAuthorization('$provider','/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}','/'); return false;
 #else
-    Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&$!{request.getQueryString()}");
+    Curriki.ui.login.displayLoginDialog("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&$!{request.getQueryString()}");
 #end
     });
 </script>
