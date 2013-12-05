@@ -24,7 +24,7 @@
           <div class="modal-content">
             <div class="modal-header">
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Navigate From Here</h4>
+              <h4 class="modal-title">Table Of Contents</h4>
             </div>
             <div class="modal-body">
                 <ol class="secondary-toc">
@@ -43,13 +43,13 @@
         </div><!-- /.modal-dialog -->
       </div><!-- /.modal -->
       <p>
-        <button class="btn btn-primary btn-xs visible-xs visible-sm" data-toggle="modal" data-target="#mobile-toc">show index</button>
+        <button class="btn btn-primary btn-xs visible-xs visible-sm" data-toggle="modal" data-target="#mobile-toc">Table Of Contents</button>
       </p>
     #end
 
     #if($collectionsList.size() >0)<!-- now listing collections' children -->
     <div id="large-toc" class="hidden-xs hidden-sm">
-        <button class="btn btn-custom-toc btn-xs" id="toggle-secondary-toc">navigate from here</button>
+        <button class="btn btn-custom-toc btn-xs" id="toggle-secondary-toc">Table Of Contents</button>
         <ol class="secondary-toc">
             #foreach ($itemObject in $collectionsList)
             ## #asset_displaycollection($collectionsList.get($index))
