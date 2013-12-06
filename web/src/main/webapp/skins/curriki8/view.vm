@@ -9,6 +9,9 @@
 #if($request.method=="POST") ##{
   #set($fileuploadlist = $xwiki.fileupload.getFileItems())
 #end ##}
+#if(!($viewer.startsWith("embed")))
+    #template("curriki-analytics.vm")
+#end
 #if("$!viewer" == "") ##{
   #set($viewer = $request.getParameter("viewer"))
 #end ##}
@@ -50,7 +53,7 @@
     </div>## contentcontainer
     #template("htmlfooter.vm")
   #end ##}
-
+#end
 #else
 ## Forcing temporary asset to not be displayed
 AssetTemp
