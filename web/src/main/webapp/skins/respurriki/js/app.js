@@ -145,7 +145,7 @@ jQuery(document).ready(function() {
             return false;
         }
     });
-
+    /*
     jQuery('#large-toc #toggle-secondary-toc').click(function() {
         var toc_visible = jQuery('#large-toc .secondary-toc').css('display');
         if (toc_visible == 'none') {
@@ -156,4 +156,5 @@ jQuery(document).ready(function() {
             jQuery(this).css('border-radius', '5px 5px 5px 5px');
         }
     });
+    */
 });
