@@ -41,16 +41,10 @@
                         <li><a href="../Coll_Group_${groupName}/CourseTeacherView"
                             #if($doc.space.startsWith("Coll_")) class="current" #end##
                                 >Course</a></li>
-                        #groupinit()
-                        #if($isGroupAdmin)
-                            <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial" class="link-green">Resources</a></li>
-                        #end
+                        <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial" class="link-green">Resources</a></li>
                     #else
                         <li><a href="#">Course</a></li>
-                        #groupinit()
-                        #if($isGroupAdmin)
                         <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial">Resources</a></li>
-                        #end
                     #end
                 </ul>
                 <ul id="action-nav" class="nav navbar-nav navbar-right">
