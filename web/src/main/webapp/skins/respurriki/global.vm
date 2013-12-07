@@ -38,7 +38,12 @@
                 <ul id="main-nav" class="nav navbar-nav">
                         <p class="navbar-text hidden-xs hidden-sm">GEOMETRY</p>
                     #if($groupName!="")
-                        $request.getHeader('referer')
+                        ##set ($url = $themeDisplay.getURLCurrent())
+                        ##if($url.contains("TeacherView"))
+                        ##    The url contains the string <b>TeacherView<b>
+                        ##else
+                        ##    The url does not contain the string <b>TeacherView</b>
+                        ##end
                         <li><a href="../Coll_Group_${groupName}/CourseTeacherView"
                             #if($doc.space.startsWith("Coll_")) class="active" #end
                                 >Course</a></li>

@@ -68,9 +68,9 @@
     <div id="asset-header">
         #set($mediaType="")
         #set($assetTitle = $asset.getDisplayTitle(125))
-        <h3 class="panel-title">
+        <h1 class="panel-title">
             <a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}">$assetTitle</a>
-        </h3>
+        </h1>
         #ru_asset_info_rollover($asset 0)
     </div>
 #end
