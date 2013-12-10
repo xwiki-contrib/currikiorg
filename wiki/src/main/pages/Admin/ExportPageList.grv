@@ -18,6 +18,7 @@ javax.servlet.http.HttpServletResponse response;
 com.xpn.xwiki.web.XWikiMessageTool msg;
 */
 
+
 def pagelist = "Admin.PageList"
 def exportdir = "/appserv/build/projects/curriki/wiki/src/main/resources"
 def createzip = false;
@@ -36,6 +37,14 @@ if (request.pagelist != null){
 if (request.createzip != null){
   createzip = true;
 }
+
+if (request.filename != null){
+    filename = request.filename;
+    if(!(filename.toLowerCase().endsWith(".xar") ||
+            filename.toLowerCase().endsWith(".zip")))
+        filename = filename + ".xar";
+}
+
 
 if (request.exportdir != null){
   exportdir = request.exportdir
@@ -89,8 +98,8 @@ if (request.confirm=="1") {
 
   try {
     if (createzip){
-      context.context.getResponse().setContentType("application/zip");
-      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+filename+".zip")
+      context.context.getResponse().setContentType("application/true");
+      context.context.getResponse().addHeader("Content-disposition", "attachment; filename="+filename)
       context.context.setFinished(true);
       pack.export(context.context.getResponse().getOutputStream(), context.context)
     } else {
