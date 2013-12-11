@@ -365,10 +365,10 @@
             #elseif($request.srid) ##}{
                 #set($logredir = "srid=$request.srid")
             #end ##}
-            #if("$!request.getQueryString"!="")
-                #set($escapedURL=$escapetool.url("${request.getRequestURI()}?${request.getQueryString}"))##
+            #if("$!request.getQueryString()"!="")
+                #set($escapedURL=$escapetool.url("${request.getRequestURI()}?${request.getQueryString()}"))##
             #else
-                #set($escapedURL=$escapetool.url($request.getRequestURI()))##
+                #set($escapedURL=$escapetool.url("${request.getRequestURI()}"))##
             #end
             #set($targetURL="/xwiki/bin/view/Registration/LoginOrRegister?tempskin=curriki8&xpage=popup&xredirect=$escapedURL")
             #set($anchorAtts="href='$targetURL' onclick='displayLoginDialogAlt(&quot;$escapetool.xml($targetURL)&quot;); return false;'")
