@@ -223,6 +223,10 @@ public class TargetsGroovy {
             }
             HttpSession session = request.getSession();
 
+            if("respurriki".equals(session.getAttribute("skin"))){
+                xredirect = "/xwiki/bin/view/Courses/Geometry?skin=respurriki"
+            }
+
             String idProviderName = session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
             List l = new LinkedList();
             for(att in session.getAttributeNames()) {
