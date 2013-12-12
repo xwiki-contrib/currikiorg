@@ -7,6 +7,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /** A small servlet-filter so that the skin is chosen
@@ -23,12 +26,45 @@ public class SkinChoiceFilter implements Filter {
     public void destroy() {
     }
 
+    static List<String> autoRespurrikiPages = (List<String>) Arrays.asList(
+            "/view/Coll_Group_SampleCurrikiGeometryCourse/",
+            //"/view/Coll_Group_GeometryBetaTesters/",
+            "/view/Coll_Group_CurrikiGeometry",
+            "/view/Courses/Geometry"
+            );
+    static String skinChoiceForceRespurriki = null;
+
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest) {
             HttpServletRequest hrq = (HttpServletRequest) request;
             String skinFromParameter = hrq.getParameter("skin");
             String tempSkin = hrq.getParameter("tempskin");
+
+
             HttpSession session = hrq.getSession(false);
+
+            // need to replace list? if yes do so now
+
+            if(session!=null) {
+                String skinChoiceFromAtt = (String) session.getServletContext().getAttribute("SkinChoiceForceRespurrii");
+                if(skinChoiceFromAtt != null && !skinChoiceFromAtt.equals(skinChoiceFromAtt)) {
+                    autoRespurrikiPages = Arrays.asList(skinChoiceFromAtt.split(" |\\t|\\r|\\n"));
+                }
+
+            }
+
+            if(skinFromParameter==null && tempSkin== null &&
+                    autoRespurrikiPages!=null && !autoRespurrikiPages.isEmpty()) {
+                String path = hrq.getPathInfo();
+                for(String pageSubString: autoRespurrikiPages) {
+                    System.out.println("Checking " + pageSubString + " in " + path );
+                    if(path.contains(pageSubString)) {
+                        tempSkin = "respurriki";
+                        break;
+                    }
+                }
+            }
+
             if(session!=null) {
                 if(skinFromParameter !=null) {
                     System.out.println("Settings skin: " + skinFromParameter);

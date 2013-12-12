@@ -12,19 +12,19 @@ println("<h1>List Collections' Pages</h1>");
 println("");
 
 
-
 public void printPage(Document d, int depth) {
     for(i in 0..depth) print("*");
     println(" " + d.fullName);
 }
 
-public void printPageList(Document d, int depth, XWiki xwiki) {
+public void printPageList(Document d, int depth, List pageList, XWiki xwiki) {
     printPage(d, depth);
+    pageList.add(d.fullName);
     depth++;
     for(Object obj in d.getObjects("CurrikiCode.SubAssetClass")) {
         try {
             Document child = xwiki.getDocument((String) obj.get("assetpage"));
-            if(child!=null) printPageList(child, depth, xwiki);
+            if(child!=null) printPageList(child, depth, pageList, xwiki);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -38,7 +38,19 @@ if(request.asset==null) {
     println("<input type='text' name='asset' value='Coll_xx.yyy'>")
     println("<input type='submit'>")
 } else {
-    printPageList(xwiki.getDocument(request.asset), 0, xwiki);
+    List pageList = new ArrayList();
+    printPageList(xwiki.getDocument(request.asset), 0, pageList, xwiki);
+
+    println("");
+    println("")
+    println("<form method='POST' action='/xwiki/bin/view/Admin/ExportPageList'><input type='submit' value='export ${request.asset}.xar'>")
+    println("<input type='hidden' name='createzip' value='1'>")
+    println("<input name='confirm' value='1' type='hidden'> ");
+    println("<input name='filename' value='${request.asset}' type='hidden'> ");
+    println("<input type='hidden' name='pageListInput' value='");
+    for(x in pageList) {print(x); print('&#xA;'); }
+    println("'>");
+    println("</form>");
 }
 
 
