@@ -145,16 +145,11 @@ jQuery(document).ready(function() {
             return false;
         }
     });
-    /*
-    jQuery('#large-toc #toggle-secondary-toc').click(function() {
-        var toc_visible = jQuery('#large-toc .secondary-toc').css('display');
-        if (toc_visible == 'none') {
-            jQuery('#large-toc .secondary-toc').slideDown('slow');
-            jQuery(this).css('border-radius', '5px 5px 0px 0px');
-        } else {
-            jQuery('#large-toc .secondary-toc').slideUp('slow');
-            jQuery(this).css('border-radius', '5px 5px 5px 5px');
-        }
+
+    jQuery('#tab-email a').on('click', function(e) {
+        e.preventDefault();
+        var url = jQuery(this).attr('href');
+        jQuery('#modal_addthis .modal-body').html('<iframe width="100%" height="2550px" frameborder="0" scrolling="no" allowtransparency="true" src="' + url + '"></iframe>');
     });
-    */
+
 });

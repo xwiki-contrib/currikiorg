@@ -27,7 +27,7 @@
               <h4 class="modal-title">Table Of Contents</h4>
             </div>
             <div class="modal-body">
-                <ol class="secondary-toc">
+                <ul class="secondary-toc">
                     #foreach ($itemObject in $collectionsList)
                     ## #asset_displaycollection($collectionsList.get($index))
                         #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
@@ -37,7 +37,7 @@
                             #else<!-- missing item $itemFullname  -->
                         #end
                     #end
-                </ol>
+                </ul>
             </div>
           </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
@@ -52,7 +52,7 @@
         <!--
         <button class="btn btn-custom-toc btn-xs" id="toggle-secondary-toc">Table Of Contents</button>
         -->
-        <ol class="secondary-toc">
+        <ul class="secondary-toc">
             #foreach ($itemObject in $collectionsList)
             ## #asset_displaycollection($collectionsList.get($index))
                 #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
@@ -62,7 +62,7 @@
                     #else<!-- missing item $itemFullname  -->
                 #end
             #end
-        </ol>
+        </ul>
     #else
         <p>No content in this collection.</p>
     #end

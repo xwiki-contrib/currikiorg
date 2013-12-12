@@ -8,26 +8,26 @@
     <!-- dedicated viewer: $viewer -->
 #else
     #template("header.vm")
-<div class="container" id="the-content">
-    #if($request.bc || $doc.getObject("CurrikiCode.AssetClass") && $doc.parent || $doc.getObject("CurrikiCode.CompositeAssetClass"))
-    <div class="row" id="the-breadcrumb">
-        <div class="col-sm-6 col-xs-12">
-            #ru_breadcrumb()
-            #ru_getTOC()
-            <div id="dropable-toc">
+    <div class="container" id="the-content">
+        #if($request.bc || $doc.getObject("CurrikiCode.AssetClass") && $doc.parent || $doc.getObject("CurrikiCode.CompositeAssetClass"))
+        <div class="row" id="the-breadcrumb">
+            <div class="col-sm-6 col-xs-12">
+                #ru_breadcrumb()
+                #ru_getTOC()
+                <div id="dropable-toc">
+                </div>
+            </div>
+            <div class="col-sm-6 col-xs-12 text-right">
+                <div class="btn-group" id="the-pagination">
+                    #set($collPath="$!request.bc")##
+                    <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=prev#if($collPath!="")&collPath=$collPath#end"
+                                            class="btn btn-custom-nav btn-xs"><i class="icon-long-arrow-left icon-large"></i> Previous</a>
+                    <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=next#if($collPath!="")&collPath=$collPath#end"
+                                        class="btn btn-custom-nav btn-xs">Next <i class="icon-long-arrow-right icon-large"></i></a>
+                </div>
             </div>
         </div>
-        <div class="col-sm-6 col-xs-12 text-right">
-            <div class="btn-group" id="the-pagination">
-                #set($collPath="$!request.bc")##
-                <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=prev#if($collPath!="")&collPath=$collPath#end"
-                                        class="btn btn-custom-nav btn-xs"><i class="icon-long-arrow-left"></i> Previous</a>
-                <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=next#if($collPath!="")&collPath=$collPath#end"
-                                    class="btn btn-custom-nav btn-xs">Next <i class="icon-long-arrow-right"></i></a>
-            </div>
-        </div>
-    </div>
-    #end
-<div class="row">
-<div class="col-md-12" id="main-content">
+        #end
+    <div class="row">
+    <div class="col-md-12" id="main-content">
 #end

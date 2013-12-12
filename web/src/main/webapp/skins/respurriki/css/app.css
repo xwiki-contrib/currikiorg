@@ -64,7 +64,7 @@ Breadcrumbs
     float: left;
 }
 #the-breadcrumb .breadcrumb li:last-child a{
-    color: #EAEAEA;
+    color: #CFCFCF;
     text-decoration: none;
     cursor: text;
 }
@@ -354,7 +354,7 @@ Content
     top: -20px;*/
 }
 .secondary-toc{}
-ol.secondary-toc {
+.secondary-toc {
     counter-reset:li;
     margin-left:0;
     padding-left:0;
@@ -362,20 +362,20 @@ ol.secondary-toc {
     float: left;
 }
 /* mobile */
-#mobile-toc ol.secondary-toc{
+#mobile-toc .secondary-toc{
     float: none;
 }
-#mobile-toc ol.secondary-toc > li{
+#mobile-toc .secondary-toc > li{
     float: none;
     width: 100%;
 }
-ol.secondary-toc > li a{
+.secondary-toc > li a{
     display: inline-block;
     font-size: 14px;
     line-height: 13px;
     color: #666;
 }
-ol.secondary-toc > li {
+.secondary-toc > li {
     position:relative; 
     /*margin:0 0 6px 2em;
     padding:4px 8px;*/
@@ -387,8 +387,8 @@ ol.secondary-toc > li {
     min-height: 41px;
     font-size: 18px;
 }
-ol.secondary-toc > li:before {
-    content:counter(li); 
+.secondary-toc > li:before {
+    content:counter(li, disc); 
     counter-increment:li; 
     position:absolute;
     top:-2px;
@@ -406,9 +406,9 @@ ol.secondary-toc > li:before {
     font-family:"Helvetica Neue", Arial, sans-serif;
     text-align:center;
 }
-.secondary-toc li ol,
+.secondary-toc li ul,
 .secondary-toc li ul {margin-top:6px;}
-ol.secondary-toc ol li:last-child {margin-bottom:0;}
+.secondary-toc ul li:last-child {margin-bottom:0;}
 #large-toc .secondary-toc{
     /*display: none;*/
 }
@@ -422,17 +422,22 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
 .compound-btn-right{
     float: left;
 }
+#modal_addthis .modal-body{
+    height: 400px;
+    overflow: auto;
+    margin-bottom: 10px;
+}
 /* responsive behaviour */
 @media(max-width:500px){
     #breadcrumb-wrapper .breadcrumb{
         display: none;
     }
-    #mobile-toc ol.secondary-toc > li{
+    #mobile-toc .secondary-toc > li{
         padding-left: 18% !important;
     }
 }
 @media(max-width:767px){
-    #mobile-toc ol.secondary-toc > li{
+    #mobile-toc .secondary-toc > li{
         padding-left: 12%;
     }
     .navbar-nav{
@@ -495,7 +500,7 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
     }
 }
 @media(min-width:768px){
-    ol.secondary-toc > li{
+    .secondary-toc > li{
         float: left;
         /*width: 50%;*/
         width: 100%;
@@ -540,10 +545,9 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
         background-color: #1E7B98;
     }
     #main-nav li a.active{
-        /*border-bottom: solid 1px #29A3CE;*/
-        /*background-color: #2e8da8;*/
-        position: relative;
-        top: 2px;
+        /*position: relative;
+        top: 2px;*/
+        background-color: #1E7B98;
     }
     #the-header .navbar{
         margin-bottom: 0px;
@@ -562,7 +566,7 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
     }
 }
 @media(min-width:992px){
-    ol.secondary-toc > li{
+    .secondary-toc > li{
         float: left;
         /*width: 25%;*/
         width: 100%;
@@ -607,10 +611,9 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
         background-color: #1E7B98;
     }
     #main-nav li a.active{
-        /*border-bottom: solid 1px #29A3CE;*/
-        /*background-color: #2e8da8;*/
-        position: relative;
-        top: 2px;
+        /*position: relative;
+        top: 2px;*/
+        background-color: #1E7B98;
     }
     #wrapper-account{
         margin-top: 0px;
@@ -625,7 +628,7 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
     }
 }
 @media(min-width:1200px){
-    ol.secondary-toc > li{
+    .secondary-toc > li{
         float: left;
         /*width: 25%;*/
         width: 100%;
@@ -667,9 +670,9 @@ ol.secondary-toc ol li:last-child {margin-bottom:0;}
         border-bottom: none;
     }
     #main-nav li a.active{
-        position: relative;
-        top: 2px;
-        /*border-bottom: solid 1px #29A3CE;*/
+        /*position: relative;
+        top: 2px;*/
+        background-color: #1E7B98;
     }
     #main-nav li a:hover{
         background-color: #1E7B98;
