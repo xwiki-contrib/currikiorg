@@ -27,10 +27,11 @@ public class SkinChoiceFilter implements Filter {
     }
 
     static List<String> autoRespurrikiPages = (List<String>) Arrays.asList(
-            "/view/Coll_Group_SampleCurrikiGeometryCourse/",
+            "/view/Coll_Group_SampleCurrikiGeometryCourse/"
+            //,
             //"/view/Coll_Group_GeometryBetaTesters/",
-            "/view/Coll_Group_CurrikiGeometry",
-            "/view/Courses/Geometry"
+            //"/view/Coll_Group_CurrikiGeometry",
+            //"/view/Courses/Geometry"
             );
     static String skinChoiceForceRespurriki = null;
 
@@ -46,7 +47,7 @@ public class SkinChoiceFilter implements Filter {
             // need to replace list? if yes do so now
 
             if(session!=null) {
-                String skinChoiceFromAtt = (String) session.getServletContext().getAttribute("SkinChoiceForceRespurrii");
+                String skinChoiceFromAtt = (String) session.getServletContext().getAttribute("SkinChoiceForceRespurriki");
                 if(skinChoiceFromAtt != null && !skinChoiceFromAtt.equals(skinChoiceFromAtt)) {
                     autoRespurrikiPages = Arrays.asList(skinChoiceFromAtt.split(" |\\t|\\r|\\n"));
                 }
