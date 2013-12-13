@@ -130,7 +130,7 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 Ext.onReady(function(){
   ## This condition is a fix for CURRIKI-6373, the registration pages need to be excluded separately
   ## because they don't trigger a view where the flag can be removed.
-  if(window.location.pathname.match("/xwiki/bin/view/Registration") == null ){
+  if(window.location.pathname.match("/xwiki/bin/view/Registration") == null && location.href.match(/viewer=embed*/) == null){
     Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&&message=$LOGIN_TO_VIEW_SESSION_FLAG');
   }
 });
