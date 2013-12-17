@@ -1,2 +1,18 @@
 #set($iframeId = "khanExercise${asset.content}")
 <iframe id="${iframeId}" style="border:none;width:100%;" scrolling="no" src="${request.getRequestURL()}?showExercise=${asset.content}&iframeId=${iframeId}&viewer=embed-khan"></iframe>
+<div id="khan-exercise-success-modal" class="modal fade">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h4 class="modal-title">Great</h4>
+      </div>
+      <div class="modal-body">
+        <p>You got 5 correct in a row. Good job!</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
