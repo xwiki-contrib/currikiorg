@@ -95,7 +95,7 @@
             ##<li class="tab-first" id="tab-favorite"><a href="javascript:void(0)" onclick="Curriki.module.addpath.startPath('G', {assetName:'${asset.getJSFullName()}', assetTitle:'${asset.getJSTitle()}'}); return false;" title="$msg.get("rve.title.function.favorite.icon.rollover")"><i class="icon-heart"></i> $msg.get("rve.title.function.favorite")</a></li>
 	#end
 	#set($g_enable_ADDTHIS = true)
-	<li id="tab-email"><a href="http://www.addthis.com/bookmark.php" data-toggle="modal" data-target="#modal_addthis" title="$msg.get("rve.title.function.email.icon.rollover")"><i class="icon-envelope"></i> $msg.get("rve.title.function.email")</a></li>
+	<li id="tab-email"><a class="addthis-button" title="$msg.get("rve.title.function.email.icon.rollover")"><i class="icon-envelope"></i> $msg.get("rve.title.function.email")</a></li>
         #if(!$isguest)
             ##<li id="tab-flag"><a href="javascript:void(0)" onclick="Curriki.module.flag.start({resourcePage:'${asset.getJSFullName()}'}); return false;" title="$msg.get("rve.title.function.flag.icon.rollover")"><i class="icon-flag"></i> $msg.get("rve.title.function.flag")</a></li>
 	#end

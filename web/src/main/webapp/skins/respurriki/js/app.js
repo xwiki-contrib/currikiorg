@@ -148,8 +148,9 @@ jQuery(document).ready(function() {
 
     jQuery('#tab-email a').on('click', function(e) {
         e.preventDefault();
-        var url = jQuery(this).attr('href');
-        jQuery('#modal_addthis .modal-body').html('<iframe width="100%" height="2550px" frameborder="0" scrolling="no" allowtransparency="true" src="' + url + '"></iframe>');
+        //var url = jQuery(this).attr('href');
+        //jQuery('#modal_addthis .modal-body').html('<iframe width="100%" height="2550px" frameborder="0" scrolling="no" allowtransparency="true" src="' + url + '"></iframe>');
+        addthis.button(".addthis-button");
     });
 
 });
