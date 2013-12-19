@@ -300,7 +300,7 @@
           onclick="$scriptBit return false;" ##
           href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
         #else
-          onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
+          onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;" ##
           href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
         #end ##
     </p>
@@ -330,7 +330,7 @@
                 >$msg.get("login.button_login_to_download")
         #else##
             ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
-            onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+            onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;"##
                 >$msg.get("rve.content.view.download.download_button")
         #end##
      </button>
@@ -386,8 +386,8 @@
           onclick="$scriptBit return false;" ##
           href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
         #else
-          onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}');" ##
-          href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
+            onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;"##
+            href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
         #end ##
     </p>
 #end
