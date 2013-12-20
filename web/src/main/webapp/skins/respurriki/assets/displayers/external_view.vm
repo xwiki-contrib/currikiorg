@@ -122,7 +122,7 @@ Please check the address you entered or improve the macro to make it support thi
             #if(!$linktext||$linktext=="")
                 #set($linktext = $url)
             #end
-            <a href="$url" onclick="Curriki.logView('/Download/link/$url');" target="_blank" >#breakLinkText($linktext, 90) <i class="icon-external-link"></i></a>
+            <a href="$url" onclick="Curriki.logView('/Download/link/$url', function() {window.location.href='$url'}); return false;" target="_blank" >#breakLinkText($linktext, 90) <i class="icon-external-link"></i></a>
         </p>
         <button class="btn btn-primary btn-lg" onclick="Curriki.logView('/Download/link/$url'); window.open('${url}');" title="$msg.get("rve.content.view.go_button")">$msg.get("rve.content.view.go_button")</button>
     </div>

@@ -24,17 +24,22 @@ Curriki.logEvent = function(eventParams, followup) {
 
       }
     }
-
   }
 }
 
-Curriki.logView = function(page){
+Curriki.logView = function(page, callback){
   // Usage in site example:
   // <a onClick="javascript:Curriki.logView('/Download/attachment/${space}/${name}/${attach.filename}');"> .. </a>
   if (window.pageTracker) {
-    pageTracker._trackPageview(page);
+      if(typeof(callback)=="function") {
+          pageTracker.push("_trackPageview", page);
+          pageTracker.push(callback);
+      } else pageTracker._trackPageview(page);
   } else if (_gaq) {
-    _gaq.push(["_trackPageview", page]);
+      if(typeof(callback)=="function") {
+          _gaq.push("_trackPageview", page);
+          _gaq.push(callback);
+      } else _gaq._trackPageview(page);
   } else {
 
     // Double try catch for CURRIKI-5828

@@ -75,7 +75,8 @@
         #ru_asset_attachments_pdf($asset)
         </p>
         </div>
-        <a href="$assetAttachmentURL" class="btn btn-default btn-xs alt-download-pdf"><i class="icon-download-alt"></i> Download</a>
+            <a onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${fileName}', function() {window.href='$url';}); return false;" ##
+                href="$url" class="btn btn-default btn-xs alt-download-pdf"><i class="icon-download-alt"></i> Download</a>
 
         <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdfobject.min.js"></script>
         <script type="text/javascript">
