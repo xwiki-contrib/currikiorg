@@ -22,6 +22,7 @@ Breadcrumbs
     background-color: #29a3ce;
     padding-top: 5px;
     padding-bottom: 5px;
+    border-top: 1px solid #fff;
 }
 #dropable-toc{
     position: absolute;
@@ -73,7 +74,7 @@ Content
 --------------------------------------------------------------------------------------------------
 */
 #main-content{
-    background-color: #fff;
+    /*background-color: #fff;*/
 }
 #inner-content{
     padding-top: 10px;
@@ -281,6 +282,18 @@ Content
     left: auto;
     text-align: left;
 }
+#wrapper-header{
+    background-color: #29a3ce;
+    background-image: url("../img/bg-white.jpg");
+    background-repeat: no-repeat;
+    background-position: left;
+}
+body{
+    background-color: #155268;
+    background-image: url("../img/bg-body.png");
+    background-repeat: repeat;
+    background-position: top left;
+}
 #the-header{
     /*background-color: #29a3ce;*/
 }
@@ -313,7 +326,7 @@ Content
 }
 #curriki-navbar-collapse-1{
     background-color: #29a3ce;
-    border-bottom: 1px solid #fff;
+    /*border-bottom: 1px solid #fff;*/
 }
 #curriki-navbar-collapse-1 p.navbar-text{
     color: #FFFFFF;
@@ -325,7 +338,7 @@ Content
     /*padding-top: 13px;
     padding-bottom: 13px;
     background-color: #fa6000;*/
-    padding: 3px 10px 3px 0;
+    padding: 3px 10px 3px 50px;
     background-color: #fff;
 }
 #menuview{
@@ -430,11 +443,77 @@ Content
     overflow: auto;
     margin-bottom: 10px;
 }
+#respurriki-geometry{
+    display: block;
+    text-indent: -9000px;
+    background-image: url("../img/logo-respurriki-geometry.png");
+    background-repeat: no-repeat;
+    background-position: top left;
+    width: 460px;
+    height: 135px;
+}
+#landing-links{}
 
 
 
 /* responsive behaviour */
 @media(max-width:500px){
+    #respurriki-geometry{
+        background-image: url("../img/logo-respurriki-geometry-small.png");
+        background-repeat: no-repeat;
+        background-position: top left;
+        width: 200px;
+        height: 59px;
+    }
+    #landing-links{
+        background-image: url("../img/landing-links-small.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 280px;
+        height: 280px;
+        margin: 0 auto;
+        position: relative;
+        top: -20px;
+    }
+    #landing-links #HTeacherEdition a{
+        display: block;
+        background-image: url("../img/teacher-edition-small.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 112px;
+        height: 112px;
+        text-indent: -9000px;
+        position: absolute;
+        left: 30%;
+        top: 10px;
+        z-index: 10;
+    }
+    #landing-links #HStudentEdition a{
+        display: block;
+        background-image: url("../img/student-edition-small.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 152px;
+        height: 152px;
+        text-indent: -9000px;
+        position: absolute;
+        top: 75px;
+        right: 15%;
+        z-index: 20;
+    }
+    #landing-links #HLearnMore a{
+        display: block;
+        background-image: url("../img/learn-more-small.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 128px;
+        height: 128px;
+        text-indent: -9000px;
+        position: absolute;
+        bottom: 15px;
+        left: 4%;
+        z-index: 10;
+    }
     #breadcrumb-wrapper .breadcrumb{
         display: none;
     }
@@ -442,7 +521,63 @@ Content
         padding-left: 18% !important;
     }
 }
+@media(min-width:501px) and (max-width:767px){
+    #landing-links{
+        background-image: url("../img/landing-links-medium.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 500px;
+        height: 500px;
+        margin: 0 auto;
+        position: relative;
+        top: -40px;
+    }
+    #landing-links #HTeacherEdition a{
+        display: block;
+        background-image: url("../img/teacher-edition-medium.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 200px;
+        height: 200px;
+        text-indent: -9000px;
+        position: absolute;
+        left: 33%;
+        top: 30px;
+        z-index: 10;
+    }
+    #landing-links #HStudentEdition a{
+        display: block;
+        background-image: url("../img/student-edition-medium.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 271px;
+        height: 271px;
+        text-indent: -9000px;
+        position: absolute;
+        top: 150px;
+        right: 15%;
+        z-index: 20;
+    }
+    #landing-links #HLearnMore a{
+        display: block;
+        background-image: url("../img/learn-more-medium.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 228px;
+        height: 228px;
+        text-indent: -9000px;
+        position: absolute;
+        bottom: 20px;
+        left: 4%;
+        z-index: 10;
+    }
+}
 @media(max-width:767px){
+    
+    #wrapper-header{
+        background: none;
+        background-color: #fff;
+    }
     #mobile-toc .secondary-toc > li{
         padding-left: 12%;
     }
@@ -506,6 +641,55 @@ Content
     }
 }
 @media(min-width:768px){
+    #landing-links{
+        background-image: url("../img/landing-links-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 700px;
+        height: 700px;
+        margin: 0 auto;
+        position: relative;
+        top: -40px;
+    }
+    #landing-links #HTeacherEdition a{
+        display: block;
+        background-image: url("../img/teacher-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 280px;
+        height: 281px;
+        text-indent: -9000px;
+        position: absolute;
+        left: 30%;
+        top: 40px;
+        z-index: 10;
+    }
+    #landing-links #HStudentEdition a{
+        display: block;
+        background-image: url("../img/student-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 380px;
+        height: 380px;
+        text-indent: -9000px;
+        position: absolute;
+        top: 200px;
+        right: 15%;
+        z-index: 20;
+    }
+    #landing-links #HLearnMore a{
+        display: block;
+        background-image: url("../img/learn-more-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 320px;
+        height: 320px;
+        text-indent: -9000px;
+        position: absolute;
+        bottom: 40px;
+        left: 4%;
+        z-index: 10;
+    }
     .secondary-toc > li{
         float: left;
         /*width: 50%;*/
@@ -572,6 +756,56 @@ Content
     }
 }
 @media(min-width:992px){
+    #landing-links{
+        background-image: url("../img/landing-links-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 700px;
+        height: 700px;
+        margin: 0 auto;
+        position: relative;
+        top: -80px;
+        left: 30px;
+    }
+    #landing-links #HTeacherEdition a{
+        display: block;
+        background-image: url("../img/teacher-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 280px;
+        height: 281px;
+        text-indent: -9000px;
+        position: absolute;
+        left: 30%;
+        top: 40px;
+        z-index: 10;
+    }
+    #landing-links #HStudentEdition a{
+        display: block;
+        background-image: url("../img/student-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 380px;
+        height: 380px;
+        text-indent: -9000px;
+        position: absolute;
+        top: 200px;
+        right: 15%;
+        z-index: 20;
+    }
+    #landing-links #HLearnMore a{
+        display: block;
+        background-image: url("../img/learn-more-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 320px;
+        height: 320px;
+        text-indent: -9000px;
+        position: absolute;
+        bottom: 40px;
+        left: 4%;
+        z-index: 10;
+    }
     .secondary-toc > li{
         float: left;
         /*width: 25%;*/
@@ -634,6 +868,57 @@ Content
     }
 }
 @media(min-width:1200px){
+    #landing-links{
+        background-image: url("../img/landing-links-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 700px;
+        height: 700px;
+        margin: 0 auto;
+        position: relative;
+        top: -150px;
+        left: 50px;
+    }
+    #landing-links #HTeacherEdition a{
+        display: block;
+        background-image: url("../img/teacher-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 280px;
+        height: 281px;
+        text-indent: -9000px;
+        position: absolute;
+        left: 30%;
+        top: 40px;
+        z-index: 10;
+    }
+    #landing-links #HStudentEdition a{
+        display: block;
+        background-image: url("../img/student-edition-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 380px;
+        height: 380px;
+        text-indent: -9000px;
+        position: absolute;
+        top: 200px;
+        right: 15%;
+        z-index: 20;
+    }
+    #landing-links #HLearnMore a{
+        display: block;
+        background-image: url("../img/learn-more-big.png");
+        background-repeat: no-repeat;
+        background-position: top center;
+        width: 320px;
+        height: 320px;
+        text-indent: -9000px;
+        position: absolute;
+        bottom: 40px;
+        left: 4%;
+        z-index: 10;
+    }
+
     .secondary-toc > li{
         float: left;
         /*width: 25%;*/
