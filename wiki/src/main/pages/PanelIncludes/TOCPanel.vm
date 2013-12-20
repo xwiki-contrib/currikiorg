@@ -1,5 +1,5 @@
-{{html clean=false}}
 {{velocity}}
+{{html clean=false}}
 #if($doc.space.startsWith("Coll_") && $doc.hasAccessLevel("view") && !$doc.isNew()) ## {
     #if($xwiki.skin=="curriki8")
     #macro(tocAssetSubtype $assetDoc) ##{
@@ -13,7 +13,7 @@
     #macro(tocToJSON $curDoc $lastAssetName $lastAssetJSON) ##{
     ## set Current asset information
         #set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
-        #set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
+        #set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replaceAll("'", "\\'").replaceAll("[\n|\r]+", "<br />"))
         #set($curDate = $!xwiki.formatDate($curDoc.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
         #set($curHref = $xwiki.getURL($curDoc.fullName, 'view'))
         #set($curSelected = "")
@@ -81,7 +81,7 @@
                         #end ##}
                         #tocAssetSubtype($subAsset)
                         #set($subTitle = $subAsset.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
-                        #set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
+                        #set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replaceAll("'", "\\'").replaceAll("[\n|\r]+", "<br />"))
                         #set($subDate = $!xwiki.formatDate($subAsset.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
                         #set($subHref = $xwiki.getURL($subAsset.fullName, 'view'))
                     ## Get Framework items
@@ -148,7 +148,12 @@
                 #set($curSubCategory = "unknown")
             #end ##}
         ##
-            #set($curJSON = "{collectionPage:'$!{curDoc.fullName}', displayTitle: '$!{curTitle}', description:'$!{curDesc}', lastUpdated:'$!{curDate}', fwItems:$!{curFW}, levels:$!curLvl, ict:$!curICT, assetType:'$!{curType}', category:'$!{curDoc.category}', subcategory:'$!{curSubCategory}', addCls:'$!{curSelected}', href:'$!{curHref}', expanded: true, children:[$!{curSubJSON}]}")
+            #set($q='"')
+            #set($curJSON = "{collectionPage:${q}$!{curDoc.fullName}${q}, displayTitle: ${q}$!{curTitle}${q},##
+                description:${q}$!{curDesc}${q}, lastUpdated:${q}$!{curDate}${q}, fwItems:$!{curFW}, levels:$!curLvl, ##
+                ict:$!curICT, assetType:${q}$!{curType}${q}, category:${q}$!{curDoc.category}${q}, ##
+                subcategory:${q}$!{curSubCategory}${q}, addCls:${q}$!{curSelected}${q}, ##
+                href:${q}$!{curHref}${q}, expanded: true, children:[$!{curSubJSON}]}")
         #else ##}{  Not isFolder()
             #set($curSubCategory = "")
             #set($curSubCategory = $curDoc.categorySubtype)
@@ -241,5 +246,5 @@
     #ru_getTOC
     #end
 #end ## }
-{{/velocity}}
 {{/html}}
+{{/velocity}}
