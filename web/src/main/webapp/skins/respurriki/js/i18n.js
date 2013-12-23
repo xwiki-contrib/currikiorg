@@ -15,7 +15,7 @@ function _() {
                 args.push(i);
             }
 		}
-		$(args).each(function(i,s){
+		jQuery(args).each(function(i,s){
 			t = t.replace('{' + i + '}', s);
 		});
 		return t;
