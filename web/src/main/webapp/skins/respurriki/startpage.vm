@@ -15,17 +15,30 @@
             <div class="col-sm-6 col-xs-12">
                 #ru_breadcrumb()
                 #ru_getTOC()
+                #if("$!parentPage"!="")
                 <div id="dropable-toc">
                 </div>
+                #end
             </div>
             <div class="col-sm-6 col-xs-12 text-right">
                 <div class="btn-group" id="the-pagination">
-                    #set($collPath="$!request.bc")##
-                    <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=prev#if($collPath!="")&collPath=$collPath#end"
-                                            class="btn btn-custom-nav"><i class="icon-chevron-left icon-large"></i> Previous</a>
-                    <a href="/xwiki/bin/view/CurrikiCode/RespurrikiTocNavigate?current=${doc.fullName}&dir=next#if($collPath!="")&collPath=$collPath#end"
-                                        class="btn btn-custom-nav">Next <i class="icon-chevron-right icon-large"></i></a>
+            #if("$!parentPage"!="")
+                #computePrevAndNext($parentPage)
+                #set($bc="$!request.bc")##
+                #if("$!prev"!="")
+                    <a href="$xwiki.getURL($prev)#if($bc!="")?bc=$bc#end" ##
+                       class="btn btn-custom-nav" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
+                #else
+                    <a href="#" class="btn btn-custom-nav-disabled" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
+                #end
+                #if("$!next"!="")
+                    <a href="$xwiki.getURL($next)#if($bc!="")?bc=$bc#end" ##
+                       class="btn btn-custom-nav" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
+                #else
+                    <a href="#" class="btn btn-custom-nav-disabled" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
+                #end
                 </div>
+            #end
             </div>
         </div>
         #end

@@ -1,3 +1,16 @@
+##s
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
+##
 ### Generate a dropdown item for button
 ###
 ### @param actionurl The URL this entry points to
@@ -657,7 +670,7 @@
     #end
 #end
 ##
-#macro(ru_tocToJSON $curDoc $lastAssetName $lastAssetJSON) 
+#macro(ru_tocToJSON $curDoc $lastAssetName $lastAssetJSON)<!-- ru_tocToJSON $curDoc $lastAssetName $lastAssetJSON -->
     ## set Current asset information
     #set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
     #set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&#39;").replaceAll("[\n|\r]+", "<br />"))
@@ -809,73 +822,40 @@
 
 #macro(ru_getTOC )
     #if($doc.space.startsWith("Coll_") && $doc.hasAccessLevel("view") && !$doc.isNew())
-        ## Reverse breadcrumb (we need to work bottom to top)
         #set($bc = "")
         #set($emptyBC = false)
-        #foreach($bcItem in $request.bc.split(";")) 
-            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}") 
-                #set($bc = "$bcItem;$bc")
+        #set($parentPage = "")
+        #foreach($bcItem in $request.bc.split(";"))
+            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}" && $parentPage!="")
+                ## #set($bc = "$bcItem;$bc")
+                #set($parentPage=$bcItem)
             #end
         #end
-        #set($bc = $bc.replaceAll(";$", ""))
-        #if($bc == "") 
+        #if($parentPage== "")
             #set($emptyBC = true)
         #end
-        #set($bc = "${doc.fullName};$bc")
-
-        #set($lastAssetName = "X")
-        #set($lastAssetJSON = "")
-        #set($lastAssetIsCollection = false)
-
-        #foreach($bcItem in $bc.split(";")) 
-            #set($curDoc = $xwiki.curriki.fetchAssetOrNull($bcItem))
-            #if($curDoc) 
-                #ru_tocToJSON($curDoc $lastAssetName $lastAssetJSON)
-                #set($lastAssetName = $curDoc.fullName)
-                #set($lastAssetJSON = $curJSON)
-                #set($lastAssetIsCollection = $curDoc.isCollection())
+        #if($emptyBC)
+            #set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${doc.fullName}' order by doc.name")
+            <!-- query $sql -->
+            #set($parentList = $xwiki.searchDocuments($sql))
+            <!-- parentList: $parentList -->
+            #if($parentList.size() >= 1)
+                #set($parentPage = $parentList.get(0))
             #end
         #end
-
-        #if($emptyBC) 
-            ## Here we need to see if there are any more parents we can add
-            #foreach($i in [1..50])  ## There is no while loop in velocity (nor break)
-                #if($lastAssetName != "" && !$lastAssetIsCollection) 
-                    #set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${lastAssetName}' order by doc.name")
-                    #set($parentList = $xwiki.searchDocuments($sql))
-                    #if($parentList.size() == 1) 
-                        #foreach($parentPage in $parentList) 
-                            #set($curDoc = $!xwiki.curriki.fetchAssetOrNull($parentPage))
-                            #if($curDoc) 
-                                #ru_tocToJSON($curDoc $lastAssetName $lastAssetJSON)
-                                #set($lastAssetName = $curDoc.fullName)
-                                #set($lastAssetJSON = $curJSON)
-                                #set($lastAssetIsCollection = $curDoc.isCollection())
-                                #set($bc = "$bc;$parentPage")
-                            #else
-                                #set($lastAssetName = "")
-                            #end
-                        #end
-                    #else
-                        #set($lastAssetName = "")
-                    #end
-                #end
-            #end
+        #if("$!parentPage"!="")
+            <!-- a probable parent found $parentPage -->
+            #ru_tocToJSON($xwiki.curriki.fetchAssetOrNull($parentPage) "" "")
         #end
-        #if("$lastAssetJSON" == "") 
-            #set($lastAssetJSON = "{}")
-        #end
-        ##{{html clean="false"}}
-        <script type="text/javascript">
+    <script type="text/javascript">
         /* <![CDATA[ */
         jQuery.noConflict();
         jQuery(document).ready(function() {
-            var json_data = JSON.stringify($lastAssetJSON);
+            var json_data = JSON.stringify($curJSON);
             var json_objects = jQuery.parseJSON(json_data);
             var html_output = '';
             jQuery.each(json_objects.children, function(){
                 var icon_type = '<a href="#" class="icon-caret-left icon-large"></a';
-                /*var html_output_sub = '<ul><li><a href="#">sub item 1</a></li><li><a href="#">sub item 2</a></li></ul>';*/
                 var html_output_sub = '';
                 if(this.assetType == 'Text'){
                     html_output_sub = '';
@@ -886,16 +866,36 @@
             jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
         });
 
-        /*
-        Ext.ns('Curriki.data.toc');
-        Curriki.data.toc.bc = "$bc";
-        Curriki.data.toc.tocData = $lastAssetJSON;
-        Curriki.data.toc.selected = "$doc.fullName";
-        */
         /* ]]> */
-        </script>
-        ##{{/html}}
+    </script>
+    ##{{/html}}
     #end
+#end
+
+#macro(computePrevAndNext $parentPage)
+    #set($pos ="")#set($index=0)
+    #set($subAssetsList=$!xwiki.getDocument("$parentPage").getObjects("CurrikiCode.SubAssetClass"))
+    #foreach($subAssetObject in $subAssetsList)
+        #set($childPage=$!subAssetObject.getProperty("assetpage").value)
+        #if($doc.fullName=="$childPage")
+            #set($pos=$index)
+        #end
+        #set($index=$index+1)
+    #end
+    #set($prev="")#set($next="")
+<!-- pos $pos of type $pos.getClass())-->
+    #if("$!pos"!="")
+        #if($pos+1<$subAssetsList.size())
+            #set($p=$pos+1)<!-- p: $p -->
+            #set($next=$subAssetsList.get($p).getProperty("assetpage").value)
+        #end
+        #if($pos>0)
+            #set($p=$pos+(-1))
+            #set($prev=$subAssetsList.get($p).getProperty("assetpage").value)
+        #end
+    #end
+<!-- prev: "$prev" next: "$next" -->
+
 #end
 
 
