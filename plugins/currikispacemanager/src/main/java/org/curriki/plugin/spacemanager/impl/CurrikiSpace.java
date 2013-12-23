@@ -15,13 +15,13 @@ import com.xpn.xwiki.plugin.spacemanager.impl.SpaceManagerImpl;
 
 
 public class CurrikiSpace extends SpaceImpl {
-	
+
 	public static final String SPACE_LICENCE = "licence";
 	public static final String SPACE_ACCESSLEVEL = "accessprivileges";
 	public static final String SPACE_EDUCATION_LEVEL = "educationLevel";
 	public static final String SPACE_TOPIC = "topic";
     public static final String SPACE_LOGO = "logo";
-    
+
     public static final String VALIDATION_TITLE_SHORT = "title-short";
     public static final String VALIDATION_TITLE_LONG = "title-long";
     public static final String VALIDATION_TITLE_INVALID = "title-invalid";
@@ -44,7 +44,7 @@ public class CurrikiSpace extends SpaceImpl {
 		super(spaceName, spaceTitle, create, manager, context);
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void updateSpaceFromRequest() throws SpaceManagerException {
         super.updateSpaceFromRequest();
         try {
@@ -54,14 +54,14 @@ public class CurrikiSpace extends SpaceImpl {
         	throw new SpaceManagerException(e);
         }
 	}
-	
+
 	public boolean validateSpaceData() throws SpaceManagerException{
 		boolean success = true;
 		Map errors = new HashMap();
-	
-		try {                                                                                                                                           
+
+		try {
             success &= doc.validate(context);
-            
+
             //title
             String title = this.getDisplayTitle();
             if(title.length() < 1)	

@@ -1,6 +1,94 @@
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #template("xwikivars.vm")
 #template("layoutvars.vm")
 #template("htmlheader.vm")
+#macro(computePrevAndNext $parentPage)
+    #set($pos ="")#set($index=0)
+    #set($subAssetsList=$!xwiki.getDocument("$parentPage").getObjects("CurrikiCode.SubAssetClass"))
+    #foreach($subAssetObject in $subAssetsList)
+        #set($childPage=$!subAssetObject.getProperty("assetpage").value)
+        #if($doc.fullName=="$childPage")
+            #set($pos=$index)
+        #end
+        #set($index=$index+1)
+    #end
+    #set($prev="")#set($next="")
+<!-- pos $pos of type $pos.getClass())-->
+    #if("$!pos"!="")
+        #if($pos+1<$subAssetsList.size())
+            #set($p=$pos+1)<!-- p: $p -->
+            #set($next=$subAssetsList.get($p).getProperty("assetpage").value)
+        #end
+        #if($pos>0)
+            #set($p=$pos+(-1))
+            #set($prev=$subAssetsList.get($p).getProperty("assetpage").value)
+        #end
+    #end
+<!-- prev: "$prev" next: "$next" XXX -->
+#end
+#macro(ru_getTOC )
+    #if($doc.space.startsWith("Coll_") && $doc.hasAccessLevel("view") && !$doc.isNew())
+        #set($bc = "")
+        #set($emptyBC = false)
+        #set($parentPage = "")
+        #foreach($bcItem in $request.bc.split(";"))
+            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}" && "$!parentPage"=="")
+            ## #set($bc = "$bcItem;$bc")
+                #set($parentPage=$bcItem)
+            #end
+        #end
+        <!-- parentPage: $parentPage -->
+        #if($parentPage== "")
+            #set($emptyBC = true)
+        #end
+        #if($emptyBC)
+            ## #set($sql = ", BaseObject as composite, BaseObject as subasset, StringProperty as cprops, StringProperty as sprops where doc.name != 'Favorites' and doc.name != 'WebHome' and composite.name=doc.fullName and composite.className='CurrikiCode.CompositeAssetClass' and composite.id=cprops.id.id and cprops.id.name='type' and (cprops.value='collection' or cprops.value='curriki_document') and subasset.name=doc.fullName and subasset.id=sprops.id.id and subasset.className='CurrikiCode.SubAssetClass' and sprops.id.name='assetpage' and sprops.value='${doc.fullName}' order by doc.name")
+            #set($hql = ", BaseObject as obj, StringProperty as props where doc.fullName=obj.name and obj.id=props.id.id and obj.className='CurrikiCode.SubAssetClass' and props.id.name='assetpage' and props.value='${bcDoc.fullName}' AND doc.space !='Coll_Group_CRSCollaboration' AND doc.name NOT IN ('WebHome', 'Favorites') order by doc.creationDate")
+        <!-- query $hql -->
+            #set($parentList = $xwiki.searchDocuments($hql))
+        <!-- parentList: $parentList -->
+            #if($parentList.size() >= 1)
+                #set($parentPage = $parentList.get(0))
+            #end
+        #end
+        #if("$!parentPage"!="")
+        <!-- a probable parent found $parentPage -->
+            #ru_tocToJSON($xwiki.curriki.fetchAssetOrNull($parentPage) "" "")
+        #end
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        jQuery.noConflict();
+        jQuery(document).ready(function() {
+            var json_data = JSON.stringify($curJSON);
+            var json_objects = jQuery.parseJSON(json_data);
+            var html_output = '';
+            jQuery.each(json_objects.children, function(){
+                var icon_type = '<a href="#" class="icon-caret-left icon-large"></a';
+                var html_output_sub = '';
+                if(this.assetType == 'Text'){
+                    html_output_sub = '';
+                    icon_type = '';
+                }
+                html_output += '<li><p class="main-item"><a href="' + this.href + '" class="item-link">' + this.displayTitle + '</a>' + icon_type + '</p>' + html_output_sub + '</li>';
+            });
+            jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
+        });
+
+        /* ]]> */
+    </script>
+    ##{{/html}}
+    #end
+#end
 #if($displayMainMenu)
     #template("menuview.vm")
 #end
@@ -26,19 +114,21 @@
                 #computePrevAndNext($parentPage)
                 #set($bc="$!request.bc")##
                 #if("$!prev"!="")
-                    <a href="$xwiki.getURL($prev)#if($bc!="")?bc=$bc#end" ##
+                    #set($title=$xwiki.getDocument("$!prev").displayTitle)
+                    <a href="$xwiki.getURL($prev)#if($bc!="")?bc=$bc#end" title="$escapetool.html($title)"##
                        class="btn btn-custom-nav" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
                 #else
                     <a href="#" class="btn btn-custom-nav-disabled" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
                 #end
                 #if("$!next"!="")
-                    <a href="$xwiki.getURL($next)#if($bc!="")?bc=$bc#end" ##
+                    #set($title=$xwiki.getDocument("$!next").displayTitle)
+                    <a href="$xwiki.getURL($next)#if($bc!="")?bc=$bc#end" title="$escapetool.html($title)"##
                        class="btn btn-custom-nav" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
                 #else
                     <a href="#" class="btn btn-custom-nav-disabled" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
                 #end
-                </div>
             #end
+                </div>
             </div>
         </div>
         #end
