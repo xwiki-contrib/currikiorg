@@ -17,49 +17,20 @@
 <div class="sub-asset-wrapper category-${embeddedDoc.categoryClass}">
 <div class="sub-asset-wrapper-inner">
     #set($collectionsList=$asset.getObjects("CurrikiCode.SubAssetClass"))
-    ##modal for content in smaller devices
-    #if($collectionsList.size() >0)
-        <div class="modal fade" id="mobile-toc">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              <h4 class="modal-title">Table Of Contents</h4>
-            </div>
-            <div class="modal-body">
-                <ul class="secondary-toc">
-                    #foreach ($itemObject in $collectionsList)
-                    ## #asset_displaycollection($collectionsList.get($index))
-                        #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
-                        #set($item=$xwiki.curriki.fetchAsset($itemFullname))
-                        #if($item)
-                            <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
-                            #else<!-- missing item $itemFullname  -->
-                        #end
-                    #end
-                </ul>
-            </div>
-          </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-      </div><!-- /.modal -->
-      <p>
-        <button class="btn btn-primary btn-xs visible-xs visible-sm" data-toggle="modal" data-target="#mobile-toc">Table Of Contents</button>
-      </p>
-    #end
 
     #if($collectionsList.size() >0)<!-- now listing collections' children -->
-    <div id="large-toc" class="hidden-xs hidden-sm">
-        <!--
-        <button class="btn btn-custom-toc btn-xs" id="toggle-secondary-toc">Table Of Contents</button>
-        -->
+    <div id="large-toc">
         <ul class="secondary-toc">
             #foreach ($itemObject in $collectionsList)
             ## #asset_displaycollection($collectionsList.get($index))
                 #set($itemFullname=$itemObject.getProperty("assetpage").getValue())##
                 #set($item=$xwiki.curriki.fetchAsset($itemFullname))
                 #if($item)
-                    <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
-                    #else<!-- missing item $itemFullname  -->
+                    #if($item.assetType == "FolderComposite")
+                        <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()" class="has-folder">$item.displayTitle</a></li>
+                    #else
+                        <li class="toc-asset-list-category-$item.getCategory()"><a href="$item.getURL()">$item.displayTitle</a></li>
+                    #end
                 #end
             #end
         </ul>
