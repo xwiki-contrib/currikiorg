@@ -308,7 +308,7 @@
     ## the dialog to be popped-up
     <div id="loginPopup"></div>
 
-    <div class="modal fade" id="my-modal">
+    <div class="modal fade" id="my-modal" data-backdrop="static" data-keyboard="false">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-body">
@@ -326,6 +326,7 @@
 
     #if($context.user == "XWiki.XWikiGuest")
       /**
+       * TEMPORARY RESPURRIKI FIX:
        * Needed as temporary solution to protect teacher resources
        * from being viewed by not logged in users. This will be thrown
        * away as soon as we have the groups infrastructure for classes
