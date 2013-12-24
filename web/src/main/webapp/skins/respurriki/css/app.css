@@ -17,12 +17,15 @@
 Breadcrumbs
 --------------------------------------------------------------------------------------------------
 */
+.img-responsive{
+    padding: 3px 5px;
+}
 #the-breadcrumb{
     position: relative;
     background-color: #29a3ce;
     padding-top: 5px;
     padding-bottom: 5px;
-    border-top: 1px solid #fff;
+    /*border-top: 1px solid #fff;*/
 }
 #dropable-toc{
     position: absolute;
@@ -103,20 +106,22 @@ Content
 #dropable-toc ul li p.main-item{
     float: left;
     width: 100%;
+    margin-bottom: 0px;
 }
 #dropable-toc ul li a{
     outline: none;
 }
 #dropable-toc ul li a.item-link{
-    color: #aad3e3;
+    color: #fff;
     padding: 10px 15px;
     display: block;
-    float: left;
+    /*float: left;*/
 }
 #dropable-toc ul li a.icon-large{
     float: right;
     padding: 10px 15px;
     color: #aad3e3;
+    display: none;
 }
 #dropable-toc ul li a.current{
     color: #fff;
@@ -124,7 +129,8 @@ Content
 }
 #dropable-toc ul li a:hover{
     text-decoration: none;
-    color: #c9e2b3;
+    /*color: #c9e2b3;*/
+    background-color: #1e7b98;
 }
 #dropable-toc ul li a:focus{
     text-decoration: none;
@@ -215,12 +221,17 @@ Content
 .panel-heading #asset-header .panel-title{
     margin-top: 0px;
     font-weight: bold;
+    font-size: 18px;
 }
 #asset-links{
     margin-top: 5px;
     list-style: none;
     margin-bottom: 0px;
     display: none;
+}
+.asset-display-text-inner h2{
+    font-size: 16px;
+    font-weight: bold;
 }
 #member-rating{
     margin-top: 5px;
@@ -392,10 +403,12 @@ body{
     width: 100%;
 }
 .secondary-toc > li a{
-    display: inline-block;
-    font-size: 14px;
-    line-height: 13px;
+    /*display: inline-block;*/
+    display: block;
+    font-size: 16px;
+    /*line-height: 13px;*/
     color: #666;
+    font-weight: bold;
 }
 .secondary-toc > li {
     position:relative; 
@@ -408,8 +421,10 @@ body{
     padding-bottom: 5px;
     min-height: 41px;
     font-size: 18px;
+    padding-left: 10px;
 }
 .secondary-toc > li:before {
+    /*
     content:counter(li, disc); 
     counter-increment:li; 
     position:absolute;
@@ -427,6 +442,8 @@ body{
     font-weight:bold;
     font-family:"Helvetica Neue", Arial, sans-serif;
     text-align:center;
+    */
+    
 }
 .secondary-toc li ul,
 .secondary-toc li ul {margin-top:6px;}
@@ -524,7 +541,7 @@ body{
         display: none;
     }
     #mobile-toc .secondary-toc > li{
-        padding-left: 18% !important;
+        /*padding-left: 18% !important;*/
     }
 }
 @media(min-width:501px) and (max-width:767px){
@@ -585,7 +602,7 @@ body{
         background-color: #fff;
     }
     #mobile-toc .secondary-toc > li{
-        padding-left: 12%;
+        /*padding-left: 12%;*/
     }
     .navbar-nav{
         margin: 7.5px 0;
@@ -700,7 +717,7 @@ body{
         float: left;
         /*width: 50%;*/
         width: 100%;
-        padding-left: 10%;
+        /*padding-left: 10%;*/
     }
     #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
         margin-right: 0px;
@@ -816,7 +833,7 @@ body{
         float: left;
         /*width: 25%;*/
         width: 100%;
-        padding-left: 6%;
+        /*padding-left: 6%;*/
     }
     #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
         margin-right: 0px;
@@ -929,7 +946,7 @@ body{
         float: left;
         /*width: 25%;*/
         width: 100%;
-        padding-left: 5%;
+        /*padding-left: 5%;*/
     }
     #curriki-navbar-collapse-1 .navbar-nav.navbar-right:last-child{
         margin-right: 0px;

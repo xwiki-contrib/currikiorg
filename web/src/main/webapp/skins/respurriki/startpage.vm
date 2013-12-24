@@ -116,16 +116,16 @@
                 #if("$!prev"!="")
                     #set($title=$xwiki.getDocument("$!prev").displayTitle)
                     <a href="$xwiki.getURL($prev)#if($bc!="")?bc=$bc#end" title="$escapetool.html($title)"##
-                       class="btn btn-custom-nav" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
+                       class="btn btn-custom-nav btn-xs" id="nav-prev-page"><i class="icon-chevron-left"></i> <!-- Previous--></a>
                 #else
-                    <a href="#" class="btn btn-custom-nav-disabled" id="nav-prev-page"><i class="icon-chevron-left icon-large"></i> <!-- Previous--></a>
+                    <a href="#" class="btn btn-custom-nav-disabled btn-xs" id="nav-prev-page"><i class="icon-chevron-left"></i> <!-- Previous--></a>
                 #end
                 #if("$!next"!="")
                     #set($title=$xwiki.getDocument("$!next").displayTitle)
                     <a href="$xwiki.getURL($next)#if($bc!="")?bc=$bc#end" title="$escapetool.html($title)"##
-                       class="btn btn-custom-nav" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
+                       class="btn btn-custom-nav btn-xs" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right"></i></a>
                 #else
-                    <a href="#" class="btn btn-custom-nav-disabled" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right icon-large"></i></a>
+                    <a href="#" class="btn btn-custom-nav-disabled btn-xs" id="nav-next-page"><!-- Next--> <i class="icon-chevron-right"></i></a>
                 #end
             #end
                 </div>
