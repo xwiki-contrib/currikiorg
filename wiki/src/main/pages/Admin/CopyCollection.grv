@@ -1,0 +1,105 @@
+
+// {{groovy}}
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.Context
+import org.xwiki.model.reference.DocumentReference
+import org.xwiki.model.reference.SpaceReference
+import org.xwiki.model.reference.WikiReference
+
+println("= Copy collection =")
+println("{{html clean=false}}")
+if(request.collection) {
+    String collName = request.collection;
+    String toSpace = request.toSpace;
+    if(request.confirm=='confirm') {
+        println("<p>Copying collection \"<a href='${doc.getURL()}'>${doc.getDisplayTitle()}</a>\" to space");
+        println("<a href='/xwiki/bin/view/Main/SpaceIndex?space=${request.toSpace}'>${request.toSpace}</a>.</p>");
+        CopyProcess cp = new CopyProcess();
+        println("<ul>")
+        DocumentReference result = cp.copyCollection(xwiki, collName, toSpace, false);
+        for(String s:cp.console) println("<li>${s}</li>");
+        println("</ul>")
+        println("Have copied to <a href='/xwiki/bin/view/" + result.getLastSpaceReference().getName() + "/" + result.getName()+ "'>new collection" + "</a>.");
+        println("<p>Have copied ${cp.count} pages.");
+    } else {
+        println("<form action='${doc.name}' method='post'>");
+        def doc = xwiki.getDocument(collName);
+        println("<p>Confirm copy collection \"<a href='${doc.getURL()}'>${doc.getDisplayTitle()}</a>\" to space");
+        println("<a href='/xwiki/bin/view/Main/SpaceIndex?space=${request.toSpace}'>${request.toSpace}</a>.</p>");
+        println("<input type='hidden' name='collection' value='${collName}'>");
+        println("<input type='hidden' name='toSpace'    value='${toSpace}'>");
+        CopyProcess cp = new CopyProcess();
+        println("<ul>")
+        DocumentReference result = cp.copyCollection(xwiki, collName, toSpace, true);
+        for(String s:cp.console) println("<li>${s}</li>");
+        println("</ul>")
+        println("<p>This would copy ${cp.count} pages.");
+        println("<p><input type='submit' name='confirm' value='confirm'></p>");
+        println("</form>")
+
+    }
+} else {
+    println("<form action='${doc.name}' method='post'>");
+    println("<p>Collection's full-name (space.name): <input type='text' name='collection'></p>");
+    println("<p>Copy this collection to space: <input type='text' name='toSpace'></p>")
+    println("<input type='submit' name='launch' value='launch'>");
+}
+println("{{/html}}")
+
+
+public class CopyProcess {
+
+    int count = 0;
+    List console = new LinkedList();
+    Set alreadyDone = new TreeSet();
+
+
+    public DocumentReference copyCollection(XWiki xwiki, String from, String toSpace, boolean dryRun) {
+        Document source = xwiki.getDocument(from);
+        SpaceReference spaceRef = new SpaceReference(toSpace, new WikiReference(source.getWiki()));
+        if(source==null) return;
+        Document coll;
+        DocumentReference targetCollRef = new DocumentReference(source.name, spaceRef);
+        if(!dryRun && !alreadyDone.contains(source.name)) {
+            xwiki.copyDocument(source.getDocumentReference(), targetCollRef, source.getLanguage(), false, true);
+            alreadyDone.add(source.name);
+        }
+        coll = dryRun? source : xwiki.getDocument(toSpace + "." + source.name);
+        for (def obj in coll.getObjects("CurrikiCode.SubAssetClass")) {
+            String sub = obj.getProperty("assetpage").getValue();
+            Document d = xwiki.getDocument(sub);
+            String targetName = toSpace + "." + d.getName();
+            boolean overridesHere= false;
+            DocumentReference targetRef = new DocumentReference(d.getName(), spaceRef);
+            if(xwiki.exists(targetRef)) overridesHere = true;
+            if(!dryRun && !alreadyDone.contains(d.getName())) {
+                /* if(xwiki.exists(targetRef) && !xwiki.getDocument(targetRef).deleteWithProgrammingRights()) {
+                    throw new Exception("Failed deleting " + d.fullName);
+                }*/
+                if(!xwiki.copyDocument(d.getDocumentReference(), targetRef,source.getLanguage(), false, true))
+                    throw new Exception("Failed copying " + d.fullName);
+                // change parents
+                Document newDoc = xwiki.getDocument(targetRef);
+                newDoc.setParent(from);
+                newDoc.saveWithProgrammingRights();
+
+                // change children pointer
+                obj.set("assetpage", targetName);
+            }
+            if(!alreadyDone.contains(d.getName())) count++;
+            alreadyDone.add(d.getName());
+            if(d.getObject("CurrikiCode.SubAssetClass")!=null)
+                copyCollection(xwiki, sub, toSpace, dryRun);
+            console.add("<a href='${xwiki.getURL(sub)}'>${sub}</a>" +  (overridesHere? " (OVERWRITE)" : ""))
+        }
+        return targetCollRef;
+    }
+
+}
+
+
+
+
+
+// {{/groovy}}
