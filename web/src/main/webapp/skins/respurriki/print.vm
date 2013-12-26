@@ -3,14 +3,10 @@
  * It allows nice printing of the site and of assets
  *#
 #asset_findtitle($doc)
-#template("xwikivars.vm")
+#template("ru_xwikivars.vm")
 #template("layoutvars.vm")
-#template("htmlheader.vm")
-#template("printheader.vm")
-<div id="panels" class="expanded">
-    <div id="right-panel">
-        #asset_display($doc "view")
-    </div>
+<div class="container" id="print-wrapper">
+    #template("printheader.vm")
+    #ru_asset_display($doc "view")
+    #template("htmlfooter.vm")
 </div>
-##template("footer.vm")
-#template("htmlfooter.vm")

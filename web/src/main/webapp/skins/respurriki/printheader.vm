@@ -4,24 +4,25 @@
 <!-- logo -->
 #set($altinfo = $msg.get("header.altinfo"))
 #set($logourl = $xwiki.getSkinFile("logo.gif"))
-<div id="header">
-    <div id="header-logo">
+<div class="row" id="print-header">
+    <div class="col-sm-3">
         <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
-            <img src="$logourl" title="$altinfo" alt="$altinfo" />
+            <img src="/xwiki/skins/respurriki/img/logo-curriki-orange.png" title="$altinfo" alt="$altinfo" />
         </a>
     </div>
-    <div id="print-banner-wrapper">
-        <div id="print-meta">
-            <div id="print-meta-inner">
+    <div class="col-sm-9" id="print-sub-header">
+        <div class="row">
+            <div class="col-sm-7">
                 <h4>$msg.get("mode.print.header_title")</h4>
                 <p>$msg.get("mode.print.header_txt", [$doc.displayTitle])</p>
-                <a href="$doc.getURL("view", "bc=$!{request.bc}")">$msg.get("mode.print.header.view_link")</a>
             </div>
-        </div>
-        <div id="print-close">
-            <div id="print-close-inner">
-                <button class="button-link button-link-cancel" onclick="window.close();">$msg.get("mode.print.header.close_button")</button>
-                <button class="button-link button-link-print" onclick="document.getElementById('print-banner-wrapper').style.display='none'; window.print(); ">$msg.get("mode.print.header.print_button")</button>
+            <div class="col-sm-5">
+                <p>
+                    <br />
+                    <a href="$doc.getURL("view", "bc=$!{request.bc}")" class="btn btn-info">$msg.get("mode.print.header.view_link")</a>
+                    <button class="btn btn-default" onclick="window.close();">$msg.get("mode.print.header.close_button")</button>
+                    <button class="btn btn-warning" onclick="document.getElementById('print-banner-wrapper').style.display='none'; window.print(); ">$msg.get("mode.print.header.print_button")</button>
+                </p>
             </div>
         </div>
     </div>
