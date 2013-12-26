@@ -97,7 +97,9 @@
   #set($bodyAction = "view")
 #end
 ## These elements will be closed in the htmlfooter.vm file
-<$bodyTagName>
+<$bodyTagName ##
+#if($viewer=='print')style="background-color: white; background-image: none;"#end##
+>
 
 <!-- Modal -->
 <div class="modal fade" id="modal_addthis" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
