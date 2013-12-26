@@ -5,21 +5,26 @@
 ### Contains the company logo, links to global actions and the search facility
 ###
 
+## compute if we are in resources or courses
+#set($inCourses=false)#set($inResources=false)##
+#set($inTeacher=false)
+#foreach($b in $bcLocal.split(";"))
+    #if($b=="Coll_Group_CurrikiGeometry.CourseTeacherView")
+        #set($inCourses=true)#set($inTeacher=true)
+    #elseif($b=="Coll_CurrikiGeometryStudents.CourseView")
+        #set($inCourses=true)
+    #elseif($b=="Coll_Group_CurrikiGeometry.TeacherPBLMaterial")
+        #set($inResources=true)#set($inTeacher=true)
+    #elseif($b=="Coll_CurrikiGeometryStudents.PBLMaterial")
+        #set($inResources=true)
+    #end
+#end
+<!-- inCourses? $inCourses inResources? $inResources inTeacher? $inTeacher -->
+
     <div class="container" id="the-header">
         #if($isInServletMode) ## Visible only in a page
             #ru_modal_for_login()
             <!-- doc.space: $doc.space of class $doc.space.getClass() -->
-            #if($doc.space.startsWith("Group_"))
-                #set($groupName=$doc.space.substring(6))<!-- Group_  -->##
-            #elseif($doc.space.startsWith("Coll_Group_"))
-                #set($groupName=$doc.space.substring(11))<!-- Coll_Group $doc.space.substring(10) -->##
-            #elseif($doc.space.startsWith("Discussions_Group_"))<!-- Discussions_Group_ -->##
-                #set($groupName=$doc.space.substring(18))##
-            #elseif($doc.space.startsWith("Messages_Group_"))<!-- Messages_Group_ -->
-                #set($groupName=$doc.space.substring(14))##
-            #else
-                #set($groupName="")<!-- no group recognized -->
-            #end
             <div class="row">
             <nav class="navbar navbar-default" id="curriki-primary-menu" role="navigation">
                 <div class="navbar-header">
@@ -37,23 +42,18 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="curriki-navbar-collapse-1">
                     <ul id="main-nav" class="nav navbar-nav">
-                        #if($groupName!="")
-                            ##set ($url = $themeDisplay.getURLCurrent())
-                            ##if($url.contains("TeacherView"))
-                            ##    The url contains the string <b>TeacherView<b>
-                            ##else
-                            ##    The url does not contain the string <b>TeacherView</b>
-                            ##end
-                            <li><a href="../Coll_Group_${groupName}/CourseTeacherView"
-                                #if($doc.space.startsWith("Coll_")) class="active" #end
-                                    >Course</a></li>
-                            <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial">Resources</a></li>
+                       #if($inTeacher)
+                            <li><a href="/xwiki/bin/view/Coll_Group_CurrikiGeometry/CourseTeacherView" ##
+                                #if($inCourses) class="active" #end>Course</a></li>
+                            <li><a href="/xwiki/bin/view/Coll_Group_CurrikiGeometry/TeacherPBLMaterial" ##
+                                #if($inResources) class="active" #end>Resources</a></li>
                         #else
-                            <li><a href="#">Course</a></li>
-                            <li><a href="../Coll_Group_${groupName}/TeacherPBLMaterial">Resources</a></li>
+                            <li><a href="/xwiki/bin/view/Coll_CurrikiGeometryStudents/CourseView" ##
+                                #if($inCourses) class="active" #end>Course</a></li>
+                            <li><a href="/xwiki/bin/view/Coll_CurrikiGeometryStudents/PBLMaterial" ##
+                                #if($inResources) class="active" #end>Resources</a></li>
                         #end
                     </ul>
-
                     #ru_loginLogout()
                 </div><!-- /.navbar-collapse -->
             </nav>

@@ -39,28 +39,12 @@
 <a href="$linkurl" $attributes>$linktext</a>
 #end
 
-### Generate breadcrumb
+### Precompute breadcrumb
 ###
-### @param linktext the button text
-### @param linkurl the url for the anchor
-### @param attributes class, id, html5 dom data
 ###
-#macro(ru_breadcrumb )
-    #*<ol class="breadcrumb">
-        <li><a href="#">GWF</a></li>
-        <li><a href="#">Selling Geometry</a></li>
-        <li><a href="#">Introduction</a></li>
-        <li class="active">Introduction to Geometry</li>
-    </ol> *#
-    #ru_curriki_breadcrumb_bc($request.bc $doc)
-#end
-
-## ==================== breadcrumbs, copied from curiki =====================================
-#**
- * Parents Breadcrumb
- *#
-#macro(ru_curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
-    ## prepare group data
+###
+#macro(precompute_breadcrumb $bcParam $bcCurrentDoc)
+## prepare group data
     #set($sm = $xwiki.csm)
     #set($spaceName = $bcCurrentDoc.getSpace())
     #set($s = "$!sm.getSpace($spaceName)")
@@ -128,6 +112,29 @@
     ## enhance bcLocal from this top Parent
         #ru_curriki_breadcrumb_parent($topParentDoc, 0)
     #end
+#end
+
+### Generate breadcrumb
+###
+### @param linktext the button text
+### @param linkurl the url for the anchor
+### @param attributes class, id, html5 dom data
+###
+#macro(ru_breadcrumb )
+    #*<ol class="breadcrumb">
+        <li><a href="#">GWF</a></li>
+        <li><a href="#">Selling Geometry</a></li>
+        <li><a href="#">Introduction</a></li>
+        <li class="active">Introduction to Geometry</li>
+    </ol> *#
+    #ru_curriki_breadcrumb_bc($request.bc $doc)
+#end
+
+## ==================== breadcrumbs, copied from curiki =====================================
+#**
+ * Parents Breadcrumb
+ *#
+#macro(ru_curriki_breadcrumb_bc $bcParam $bcCurrentDoc)
     ## drill up the bcLocal prent list to generate the breadcrum from the breadcrumb info
     #set($isFirst = true)
     #set($previousBc = "")

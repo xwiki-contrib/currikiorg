@@ -95,6 +95,7 @@
 #if($viewer && $viewer!="view" && $viewer!="content")
     <!-- dedicated viewer: $viewer -->
 #else
+    #precompute_breadcrumb($request.bc $doc)
     #template("header.vm")
     <div id="wrapper-content">
     <div class="container" id="the-content">
