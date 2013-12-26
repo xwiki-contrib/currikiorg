@@ -618,7 +618,7 @@ $!desc
 #set($c = $c / 20)
 #set($c = "${c}%")
 ##
-			<div class="profile-push">{{html clean=false}}$msg.get('view_profile.intro.percent_complete', [$c]){{/html}}</div>
+			<div class="profile-push">$msg.get('view_profile.intro.percent_complete', [$c])</div>
 			#set($highlights = $xwiki.getDocument("MyCurriki.ProfileHighlight"))
 			#if($!highlights) ##{
 			<div class="clearfloats"></div>
