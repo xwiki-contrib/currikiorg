@@ -463,7 +463,7 @@
                 #set($fname = $crtUserDoc.display("first_name","view"))
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">$fname <b class="caret"></b></a>
                 <ul class="dropdown-menu">
-                    <li><a href='$crtUserDoc.getURL()'>My curriki</a></li>
+                    <li><a href='$crtUserDoc.getURL()'>My Curriki</a></li>
                     <li class="divider"></li>
                     #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
                     <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
@@ -495,7 +495,7 @@
         </div>
         <script type="text/javascript">
             jQuery(document).ready(function() {
-                jQuery('#logged-out-message').show(5000).delay(2000).fadeOut('slow');
+                jQuery('#logged-out-message').show(300).delay(2000).fadeOut(300);
             });
         </script>
     #end##
