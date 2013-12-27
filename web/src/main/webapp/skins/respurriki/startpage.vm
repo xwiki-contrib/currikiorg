@@ -23,7 +23,7 @@
         #set($index=$index+1)
     #end
     #set($prev="")#set($next="")
-<!-- pos $pos of type $pos.getClass())-->
+    <!-- pos $pos of type $pos.getClass())-->
     #if("$!pos"!="")
         #if($pos+1<$subAssetsList.size())
             #set($p=$pos+1)<!-- p: $p -->
@@ -34,7 +34,7 @@
             #set($prev=$subAssetsList.get($p).getProperty("assetpage").value)
         #end
     #end
-<!-- prev: "$prev" next: "$next" XXX -->
+<!-- prev: "$prev" next: "$next" -->
 #end
 #macro(ru_getTOC )
     #if($doc.space.startsWith("Coll_") && $doc.hasAccessLevel("view") && !$doc.isNew())
@@ -42,8 +42,7 @@
         #set($emptyBC = false)
         #set($parentPage = "")
         #foreach($bcItem in $request.bc.split(";"))
-            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}" && "$!parentPage"=="")
-            ## #set($bc = "$bcItem;$bc")
+            #if($bcItem.startsWith('Coll_') && !$bcItem.endsWith('.WebHome') && $bcItem != "${doc.fullName}")
                 #set($parentPage=$bcItem)
             #end
         #end
