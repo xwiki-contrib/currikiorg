@@ -100,7 +100,7 @@
     <div class="container" id="the-content">
         #if($request.bc || $doc.getObject("CurrikiCode.AssetClass") && $doc.parent || $doc.getObject("CurrikiCode.CompositeAssetClass"))
         <div class="row" id="the-breadcrumb">
-            <div class="col-sm-7 col-xs-12">
+            <div class="col-sm-12 col-xs-12">
                 #ru_breadcrumb()
                 #ru_getTOC()
                 #if("$!parentPage"!="")
@@ -108,7 +108,7 @@
                 </div>
                 #end
             </div>
-            <div class="col-sm-5 col-xs-12 text-right">
+            <div class="col-sm-12 col-xs-12 text-right">
                 <div class="btn-group" id="the-pagination">
             #if("$!parentPage"!="")
                 #computePrevAndNext($parentPage)
