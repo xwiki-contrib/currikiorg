@@ -1643,7 +1643,7 @@ $asset.use($classname)
          #end
         #end
         #if($hidebydefault)
-        <input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
+        <input class="checkbox" name='doChange${fieldname}' type="checkbox" onclick="if (this.checked) {document.getElementById('${fieldname}').style.display='block'} else {document.getElementById('${fieldname}').style.display='none'}"/>
         #else
         <input class="checkbox" type="checkbox" checked disabled />        
         #end
@@ -1822,7 +1822,9 @@ $asset.updateObjectFromRequest("CurrikiCode.TextAssetClass")
 $asset.updateObjectFromRequest("CurrikiCode.ExternalAssetClass")
 #end
 ## handling file upload
-#set($updateResult = $asset.replaceAttachment())
+#if($request.doChangefile)
+    #set($updateResult = $asset.replaceAttachment())
+#end
 $asset $updateResult
 ## saving with the user comment
 #if("$!request.comment"!="")
