@@ -850,19 +850,25 @@
         /* <![CDATA[ */
         jQuery.noConflict();
         jQuery(document).ready(function() {
-            var json_data = JSON.stringify($curJSON);
-            var json_objects = jQuery.parseJSON(json_data);
-            var html_output = '';
-            jQuery.each(json_objects.children, function(){
-                var icon_type = '<a href="#" class="icon-caret-left icon-large"></a';
-                var html_output_sub = '';
-                if(this.assetType == 'Text'){
-                    html_output_sub = '';
-                    icon_type = '';
-                }
-                html_output += '<li><p class="main-item"><a href="' + this.href + '" class="item-link">' + this.displayTitle + '</a>' + icon_type + '</p>' + html_output_sub + '</li>';
-            });
-            jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');
+            var html_output = '';  
+            try {
+              var json_data = JSON.stringify($curJSON);
+              var json_objects = jQuery.parseJSON(json_data);
+              
+              jQuery.each(json_objects.children, function(){
+                  var icon_type = '<a href="#" class="icon-caret-left icon-large"></a>';
+                  var html_output_sub = '';
+                  if(this.assetType == 'Text'){
+                      html_output_sub = '';
+                      icon_type = '';
+                  }
+                  html_output += '<li><p class="main-item"><a href="' + this.href + '" class="item-link">' + this.displayTitle + '</a>' + icon_type + '</p>' + html_output_sub + '</li>';
+              });
+              jQuery('#dropable-toc').append('<ul>' + html_output + '</ul>');  
+            } catch(e) {
+              console.log('No $curJSON data for the #dropable-toc');
+            }
+            
         });
 
         /* ]]> */
