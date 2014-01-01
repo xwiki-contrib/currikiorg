@@ -356,15 +356,6 @@
               // Display the login window with the constructed url
               displayLoginDialogAlt("/xwiki/bin/view/Registration/LoginOrRegister?tempskin=curriki8&xpage=popup&xredirect="+encodedPathNameWithParemeters+"&message="+message);
 
-              // After the login frame loaded we need to add a click listener to the link in the message, because the
-              // because the modal dialog which is used does not let us use the target="_parent" option correctly.
-              jQuery('#loginIframe').load(function(){
-                  var href = jQuery('#loginIframe').contents().find("#returnToGeometryLadingPage").attr("href");
-                  jQuery('#loginIframe').contents().find("#returnToGeometryLadingPage").attr("href","#")
-                  jQuery('#loginIframe').contents().find("#returnToGeometryLadingPage").click(function(){
-                      window.top.location.href = location.protocol + "//" + location.host + href;
-                  });
-              });
           }
       });
     #end
