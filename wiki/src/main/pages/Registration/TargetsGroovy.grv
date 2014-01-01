@@ -224,7 +224,16 @@ public class TargetsGroovy {
             HttpSession session = request.getSession();
 
             if("respurriki".equals(session.getAttribute("skin"))){
-                xredirect = "/xwiki/bin/view/Courses/Geometry?skin=respurriki"
+                String hostname = request.getServerName();
+                if("curriki.org".equals(hostname)){
+                    xredirect = "http://www.currikigeometry.org";
+                } else if("beta.curriki.org".equals(hostname)) {
+                    xredirect = "http://geometry.beta.curriki.org";
+                } else if("current.dev.curriki.org".equals(hostname)) {
+                    xredirect = "http://geometry.dev.curriki.org";
+                }else {
+                    xredirect = "/xwiki/bin/view/Courses/Geometry?skin=respurriki";
+                }
             }
 
             String idProviderName = session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
