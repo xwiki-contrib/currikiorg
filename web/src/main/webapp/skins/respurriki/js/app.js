@@ -213,11 +213,11 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('#tab-email a').on('click', function(e) {
+    jQuery('#tab-email a').on('cjQuery(".addthis-button")lick', function(e) {
         e.preventDefault();
         //var url = jQuery(this).attr('href');
         //jQuery('#modal_addthis .modal-body').html('<iframe width="100%" height="2550px" frameborder="0" scrolling="no" allowtransparency="true" src="' + url + '"></iframe>');
-        addthis.button(".addthis-button");
+        jQuery(".addthis-button").click(function(element){jQuery("#at15s").toggle();});
     });
-
+    addthis.button(".addthis-button");
 });
