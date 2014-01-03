@@ -9,7 +9,7 @@
   <ul>
   #set($ok = $asset.use("CurrikiCode.TextAssetClass"))
   #set($syntax = $asset.getValue("syntax"))
-  #if($syntax=="xwiki/2.0" || $syntax=="xwiki/2.1")
+  #if($syntax=="xwiki/1.0" || $syntax=="xwiki/2.0" || $syntax=="xwiki/2.1")
     #set($useWikiMode = $asset.isAdvancedContent() && !$request.forcewysiwyg)
     <li class="input-textarea">
     #if($useWikiMode)
