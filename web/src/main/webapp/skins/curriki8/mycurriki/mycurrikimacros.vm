@@ -37,14 +37,6 @@
 ##
 ##
 
-#macro(htmlcomment $comment)
- #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
- {{html clean=false}}${comment}{{/html}}
- #else
- $comment
- #end
-#end
-
 #**
   * Adding a dash instead of an empty text
   *

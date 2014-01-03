@@ -1767,22 +1767,34 @@ $response.setDateHeader("Expires",$expires.getTime())##
   * Starts a verbatim block
   *#
 #macro(verbatim_start)
+  #if("$!{inVerbatim}"=="" || !$inVerbatim)
   #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
 {{html wiki=false clean=false}}
   #else
 {pre}
+  #end
+    #set($inVerbatim=true)
   #end
 #end
 #**
   * Ends a verbatim block
   *#
 #macro(verbatim_end)
+#if($inVerbatim)
   #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
 {{/html}}
   #else
 {/pre}
   #end
+    #set($inVerbatim=false)
 #end
+#end
+
+#macro(htmlcomment $comment)##
+    #verbatim_start()${comment}#verbatim_end()##
+#end
+
+
 
 #macro(markup_editAssetProperty $editedDocument $propertyId $syntax)
 <script type="text/javascript" src="$xwiki.getSkinFile("wikibits.js")"></script>

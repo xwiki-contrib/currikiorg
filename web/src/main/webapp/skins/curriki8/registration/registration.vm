@@ -417,15 +417,6 @@ $errMsg
 document.observe('dom:loaded', function(){
 	$$('#register input[type=text]').each(function(i){i.addClassName('input-text')})
 	$$('#register input[type=password]').each(function(i){i.addClassName('input-text')})
-    console.log("Setting events for neamember fields");
-    $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
-        console.log("Setting event for neamember field");
-        inputElt.observe("click",toggleNEAFieldsVisible);
-    });
-    $$("#register input[name=XWiki.XWikiUsers_0_neamember]").each(function(inputElt){
-        inputElt.observe("change",toggleNEAFieldsVisible);
-        toggleNEAFieldsVisible();
-    });
   Ext.removeNode(Ext.query('option[value="corporation"]').first()) // CURRIKI-6408
 });
 
@@ -451,32 +442,6 @@ function toggleCorporateFieldsVisible() {
     Curriki.console.log("memberTypeNotice: " + text);
     Ext.get("memberTypeNotice").dom.innerHTML= text;
     // Curriki.logView("/myCurriki/editProfile/changeMmeberType/" + memberType);
-}
-
-function toggleNEAFieldsVisible() {
-    // specific NEA visibility
-    var neamember = $('register')['XWiki.XWikiUsers_0_neamember'][0];
-    if (neamember.checked) {
-      console.log("nea member is checked");
-      var i = $('nea-affiliate-section');
-      if(i) i.show();
-    } else {
-      console.log("nea member is not checked");
-      var i = $('nea-affiliate-section');
-      if(i) i.hide();
-    }
-
-    // only show profession title if the occ type is education
-    var occType = $('register')['XWiki.XWikiUsers_0_neaoccupation'][0];
-    occType = occType.options[occType.selectedIndex].value;
-    var i;
-    if(memberType=="support") {
-        i = $('nea-professiontitle-section');
-        if(i) i.show();
-    } else {
-        i = $('nea-professiontitle-section');
-        if(i) i.hide();
-    }
 }
 /* ]]> */
 </script>
@@ -525,7 +490,8 @@ function toggleNEAFieldsVisible() {
     #end ##}
   #else ##}{
     #if($dup!='0') ##{
-      $userdoc.display($fld, "edit", "2")
+      ##$userdoc.display($fld, "edit", "2")
+      <input size="30" id="2XWiki.XWikiUsers_0_password" value="" name="2XWiki.XWikiUsers_0_password" type="password" class="input-text">
     #else ##}{
       $userdoc.display($fld, "edit")
     #end ##}
@@ -552,15 +518,7 @@ function toggleNEAFieldsVisible() {
 			#set($i = $pfx+'.email2')#registrationformtextfielddup($i 'email')
 			#set($i = $pfx+'.name1')#registrationformtextfield($i 'first_name')
 			#set($i = $pfx+'.name2')#registrationformtextfield($i 'last_name')
-            ##set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')
-            #set($i = $pfx+'.neamember')#registrationformtextfield($i 'neamember')
-            <div id="nea-affiliate-section" style="display: none;">
-            #set($i = $pfx+'.neaaffiliate')#registrationformtextfield($i 'neaaffiliate')
-            </div>
-            #set($i = $pfx+'.neaoccupation')#registrationformtextfield($i 'neaoccupation')
-            <div id="nea-profession-section" style="display: none;">
-            #set($i = $pfx+'.neaprofession')#registrationformtextfield($i 'neaprofession')
-            </div>
+            #set($i = $pfx+'.member_type')#registrationformtextfield($i 'member_type')
 		</ul>
         <p id="memberTypeNotice">&nbsp;</p>
         <p style="margin-bottom: 0; color: #777; font-weight: 100;">$msg.get("edit_profile.account_info.remove.member")</p>
