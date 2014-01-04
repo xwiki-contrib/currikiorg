@@ -1,0 +1,56 @@
+
+// {{groovy}}
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.xwiki.model.reference.DocumentReference
+
+Log LOG = LogFactory.getLog("groovyPages.Search2.IndexProcessor");
+println("= Inject discussions into group =");
+String wikiName = doc.getDocumentReference().wikiReference.name;
+if(!(request.group==null || request.group=='')) {
+
+    String group = request.group;
+    LOG.warn("Injecting discussions in all groups.");
+    if("*".equals(group)) {
+        println("Creating discussions for all groups...");
+        List list = xwiki.getSpaces();
+        LOG.warn("Injecting into ${list.size()} spaces.")
+        for(String spaceName in xwiki.getSpaces()) {
+            LOG.warn("Processing space " + spaceName);
+            println("* processing space ${spaceName}");
+            if(!spaceName.startsWith("Group_") || spaceName.endsWith("_Invitations")) continue;
+            DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
+            group = spaceName.substring("Group_".length());
+            if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
+                println("* Sorry, there seems to be no group of name " + group + ".");
+            } else if (xwiki.exists(targetRef)) {
+                println("* Group ${group} already has a discussions.")
+            } else {
+                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, false)) {
+                    println("* Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
+                } else {
+                    println("* Group ${group}: Failed copying.");
+                }
+            }
+        }
+    } else {
+        DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
+        if(xwiki.exists(targetRef)) {
+            println("Discussions for this group already exist.");
+        } else {
+            println("Creating discussions for group...");
+            if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
+                println("Sorry, there seems to be no group of name " + group + ".");
+            } else {
+                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, false)) {
+                    println("Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
+                } else {
+                    println("Failed copying.");
+                }
+            }
+        }
+    }
+} else {
+    println("{{html clean='false'}}<form action='${doc.name}' method='post'>Group name: <input type='text' name='group'></form>{{/html}}");
+}
+// {{/groovy}}
