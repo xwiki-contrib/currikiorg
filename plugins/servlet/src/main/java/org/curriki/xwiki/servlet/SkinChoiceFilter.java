@@ -58,7 +58,7 @@ public class SkinChoiceFilter implements Filter {
 
             }
 
-            if(skinFromParameter==null && tempSkin== null && session.getAttribute("skin")==null &&
+            if(skinFromParameter==null && tempSkin== null && (session==null || session.getAttribute("skin")==null) &&
                     autoRespurrikiPages!=null && !autoRespurrikiPages.isEmpty()) {
                 String path = hrq.getPathInfo();
                 for(String pageSubString: autoRespurrikiPages) {
