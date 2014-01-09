@@ -42,7 +42,7 @@ public class SkinChoiceFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest) {
             HttpServletRequest hrq = (HttpServletRequest) request;
-            String skinFromParameter = "";// ignored currently; hrq.getParameter("skin");
+            String skinFromParameter = null;// ignored currently; hrq.getParameter("skin");
             String tempSkin = hrq.getParameter("tempskin");
 
 
