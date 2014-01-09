@@ -3,6 +3,7 @@
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.api.Document
 import com.xpn.xwiki.api.Context
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager
 import org.xwiki.model.reference.DocumentReference
 import org.xwiki.model.reference.SpaceReference
 import org.xwiki.model.reference.WikiReference
@@ -12,14 +13,16 @@ println("{{html clean=false}}")
 if(request.collection) {
     String collName = request.collection;
     String toSpace = request.toSpace;
+    Document d = xwiki.getDocument(collName);
     if(request.confirm=='confirm') {
-        println("<p>Copying collection \"<a href='${doc.getURL()}'>${doc.getDisplayTitle()}</a>\" to space");
+        println("<p>Have copied collection \"<a href='${d.getURL()}'>${d.getDisplayTitle()}</a>\" to space");
         println("<a href='/xwiki/bin/view/Main/SpaceIndex?space=${request.toSpace}'>${request.toSpace}</a>.</p>");
         CopyProcess cp = new CopyProcess();
         println("<ul>")
         DocumentReference result = cp.copyCollection(xwiki, collName, toSpace, false);
         for(String s:cp.console) println("<li>${s}</li>");
         println("</ul>")
+        cp.addCollectionToOwnCollections(xwiki, ((Context) xcontext).user, result);
         println("Have copied to <a href='/xwiki/bin/view/" + result.getLastSpaceReference().getName() + "/" + result.getName()+ "'>new collection" + "</a>.");
         println("<p>Have copied ${cp.count} pages.");
     } else {
@@ -59,41 +62,68 @@ public class CopyProcess {
         Document source = xwiki.getDocument(from);
         SpaceReference spaceRef = new SpaceReference(toSpace, new WikiReference(source.getWiki()));
         if(source==null) return;
-        Document coll;
+        if(alreadyDone.contains(source.name)) return;
         DocumentReference targetCollRef = new DocumentReference(source.name, spaceRef);
-        if(!dryRun && !alreadyDone.contains(source.name)) {
-            xwiki.copyDocument(source.getDocumentReference(), targetCollRef, source.getLanguage(), false, true);
+        Document target = source;
+        List collsToProcess = new ArrayList();
+        if(!dryRun) {
+            if(!xwiki.copyDocument(source.getDocumentReference(), targetCollRef, source.getLanguage(), false, true))
+                throw new IllegalStateException("Failed copying: " + targetCollRef.name);
+            target = xwiki.getDocument(targetCollRef);
             alreadyDone.add(source.name);
         }
-        coll = dryRun? source : xwiki.getDocument(toSpace + "." + source.name);
-        for (def obj in coll.getObjects("CurrikiCode.SubAssetClass")) {
-            String sub = obj.getProperty("assetpage").getValue();
-            Document d = xwiki.getDocument(sub);
+        for (def obj in target.getObjects("CurrikiCode.SubAssetClass")) {
+            String subAssetOrigin = obj.getProperty("assetpage").getValue();
+            Document d = xwiki.getDocument(subAssetOrigin);
             String targetName = toSpace + "." + d.getName();
-            boolean overridesHere= false;
+            boolean overridesHere = false;
             DocumentReference targetRef = new DocumentReference(d.getName(), spaceRef);
             if(xwiki.exists(targetRef)) overridesHere = true;
-            if(!dryRun && !alreadyDone.contains(d.getName())) {
-                /* if(xwiki.exists(targetRef) && !xwiki.getDocument(targetRef).deleteWithProgrammingRights()) {
-                    throw new Exception("Failed deleting " + d.fullName);
-                }*/
+            if(!dryRun) {
                 if(!xwiki.copyDocument(d.getDocumentReference(), targetRef,source.getLanguage(), false, true))
                     throw new Exception("Failed copying " + d.fullName);
                 // change parents
                 Document newDoc = xwiki.getDocument(targetRef);
                 newDoc.setParent(from);
+
+                newDoc.getObject("CurrikiCode.AssetClass").set("tracking", subAssetOrigin)
                 newDoc.saveWithProgrammingRights();
 
                 // change children pointer
                 obj.set("assetpage", targetName);
             }
-            if(!alreadyDone.contains(d.getName())) count++;
+            count++;
             alreadyDone.add(d.getName());
             if(d.getObject("CurrikiCode.SubAssetClass")!=null)
-                copyCollection(xwiki, sub, toSpace, dryRun);
-            console.add("<a href='${xwiki.getURL(sub)}'>${sub}</a>" +  (overridesHere? " (OVERWRITE)" : ""))
+                collsToProcess.add(subAssetOrigin);
+            console.add("<a href='${xwiki.getURL(subAssetOrigin)}'>${subAssetOrigin}</a>" +  (overridesHere? " (OVERWRITE)" : ""));
         }
+        if(!dryRun) {
+            target.getObject("CurrikiCode.AssetClass").set("tracking", from);
+            target.saveWithProgrammingRights("Copied to " + toSpace + ".");
+        }
+        for(String c in collsToProcess) copyCollection(xwiki, c, toSpace, dryRun);
         return targetCollRef;
+    }
+
+    public void addCollectionToOwnCollections(XWiki xwiki, String userName, DocumentReference docRef) {
+        DocumentReference webHome = new DocumentReference(docRef.wikiReference.name,
+                "Coll_" + userName, "WebHome");
+        if(userName.startsWith("XWiki.")) userName = userName.substring("XWiki.".length());
+        String fullName = docRef.getLastSpaceReference().name + "." + docRef.name;
+        boolean hasObject = false;
+        Document d = xwiki.getDocument(webHome);
+        for(com.xpn.xwiki.api.Object x in d.getObjects("CurrikiCode.SubAssetClass")) {
+            if(fullName.equals(x.getProperty("assetpage").value)) hasObject = true;
+        }
+        if(!hasObject) {
+            int index = d.createNewObject("CurrikiCode.SubAssetClass");
+            com.xpn.xwiki.api.Object newObj = d.getObject("CurrikiCode.SubAssetClass", index);
+            newObj.set("assetpage", fullName);
+            newObj.set("order", (long) index);
+        }
+
+        d.saveWithProgrammingRights();
     }
 
 }
