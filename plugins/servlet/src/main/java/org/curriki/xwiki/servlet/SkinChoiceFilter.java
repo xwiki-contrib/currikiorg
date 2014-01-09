@@ -20,14 +20,18 @@ public class SkinChoiceFilter implements Filter {
     Pattern mobileUserAgent = null;
 
     public void init(FilterConfig filterConfig) throws ServletException {
-        mobileUserAgent = Pattern.compile("iphone|ipad|ipod|android|blackberry|mini|windows\\sce|palm");
+        // ignored for now
+        // mobileUserAgent = Pattern.compile("iphone|ipad|ipod|android|blackberry|mini|windows\\sce|palm");
     }
 
     public void destroy() {
     }
 
     static List<String> autoRespurrikiPages = (List<String>) Arrays.asList(
-            "/view/Coll_Group_SampleCurrikiGeometryCourse/"
+
+            "/view/Coll_Group_CurrikiGeometry",
+            "/view/Coll_CurrikiGeometryStudents",
+            "/view/Coll_Group_SampleCurrikiGeometryCourse"
             //,
             //"/view/Coll_Group_GeometryBetaTesters/",
             //"/view/Coll_Group_CurrikiGeometry",
@@ -38,7 +42,7 @@ public class SkinChoiceFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(request instanceof HttpServletRequest) {
             HttpServletRequest hrq = (HttpServletRequest) request;
-            String skinFromParameter = hrq.getParameter("skin");
+            String skinFromParameter = null;// ignored currently; hrq.getParameter("skin");
             String tempSkin = hrq.getParameter("tempskin");
 
 
@@ -54,7 +58,7 @@ public class SkinChoiceFilter implements Filter {
 
             }
 
-            if(skinFromParameter==null && tempSkin== null &&
+            if(skinFromParameter==null && tempSkin== null && (session==null || session.getAttribute("skin")==null) &&
                     autoRespurrikiPages!=null && !autoRespurrikiPages.isEmpty()) {
                 String path = hrq.getPathInfo();
                 for(String pageSubString: autoRespurrikiPages) {
@@ -86,7 +90,7 @@ public class SkinChoiceFilter implements Filter {
                     */
                     if(mySkin==null) {
                         String userAgent = hrq.getHeader("User-Agent");
-                        if(userAgent!=null) {
+                        if(userAgent!=null && mobileUserAgent !=null) {
                             if(mobileUserAgent.matcher(userAgent.toLowerCase()).find()) {
                                 mySkin = "respurriki";
                                 session.setAttribute("skin", mySkin);

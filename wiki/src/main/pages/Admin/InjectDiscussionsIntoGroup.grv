@@ -2,7 +2,11 @@
 // {{groovy}}
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.curriki.plugin.spacemanager.impl.CurrikiSpaceManager
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi
 import org.xwiki.model.reference.DocumentReference
+
+import java.lang.reflect.Method
 
 Log LOG = LogFactory.getLog("groovyPages.Search2.IndexProcessor");
 println("= Inject discussions into group =");
@@ -32,6 +36,18 @@ if(!(request.group==null || request.group=='')) {
                     println("* Group ${group}: Failed copying.");
                 }
             }
+
+            // checking the Discussions_Group_${groupName}.WebPreferences
+            // needs edit and admin right for XWiki.XWikiAdmin and edit right for Group_${group}.Members
+            println("Updating rights.");
+            try {
+                CurrikiSpaceManagerPluginApi csm = xwiki.csm;
+                csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
+                println("Successfully updated rights of ${group}.");
+            } catch (Exception ex) {
+                println("Failed updating rights: " + ex);
+                ex.printStackTrace();
+            }
         }
     } else {
         DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
@@ -48,6 +64,17 @@ if(!(request.group==null || request.group=='')) {
                     println("Failed copying.");
                 }
             }
+        }
+        // checking the Discussions_Group_${groupName}.WebPreferences
+        // needs edit and admin right for XWiki.XWikiAdmin and edit right for Group_${group}.Members
+        println("Updating rights.");
+        try {
+            CurrikiSpaceManagerPluginApi csm = xwiki.csm;
+            csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
+            println("Successfully updated rights of ${space}.xxx");
+        } catch (Exception ex) {
+            println("Failed updating rights: " + ex);
+            ex.printStackTrace();
         }
     }
 } else {
