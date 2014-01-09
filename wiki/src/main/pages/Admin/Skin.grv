@@ -1,0 +1,21 @@
+// {{groovy}}
+println("<div class='panel' style='margin-top:20px; padding:10px 20px;'>");
+if(request.setSkin!=null && request.setSkin!="") {
+    request.session.setAttribute("skin", request.setSkin);
+    response.sendRedirect(doc.name);
+} else {
+    String currentSkin = request.setSkin;
+    if(currentSkin==null) currentSkin = request.session.getAttribute('skin');
+    if(currentSkin==null) currentSkin = 'curriki8';
+    println("= Set Skin =");
+    println("Type skin name below and press return.")
+    println("{{html clean=false}}<form action='${doc.name}' method='post'>");
+    println("<input type='text' value='${currentSkin}' name='setSkin'>");
+    println("</form>{{/html}}");
+    println("Or press link: ")
+    for(def s in ['curriki8', 'respurriki', 'albatros', 'colibri' ]) {
+        println("* {{html}}<a href='${doc.name}?setSkin=${s}'>${s}</a>{{/html}}");
+    }
+}
+println("</div>")
+// {{/groovy}}
