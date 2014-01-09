@@ -90,7 +90,7 @@ public class SkinChoiceFilter implements Filter {
                     */
                     if(mySkin==null) {
                         String userAgent = hrq.getHeader("User-Agent");
-                        if(userAgent!=null) {
+                        if(userAgent!=null && mobileUserAgent !=null) {
                             if(mobileUserAgent.matcher(userAgent.toLowerCase()).find()) {
                                 mySkin = "respurriki";
                                 session.setAttribute("skin", mySkin);
