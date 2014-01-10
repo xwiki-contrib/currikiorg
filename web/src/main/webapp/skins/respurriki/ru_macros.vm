@@ -444,6 +444,9 @@
                                  <img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png" width="18"
                                      title="$escapetool.xml($msg.get("join.login.social.login-with-${provider.toLowerCase()}.tooltip"))" /> $provider</a></li>
                         #end
+                        <li class="divider"></li>
+                        <li><a href="/xwiki/bin/view/welcome/about-curriki/contact-us">Contact Us</a></li>
+                        <li><a href="/xwiki/bin/view/Coll_CurrikiGeometryStudents/AboutCurrikiGeometry_0">About Curriki</a></li>
                     </ul>
                 </li>
             </ul>
@@ -455,6 +458,8 @@
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">$fname <b class="caret"></b></a>
                 <ul class="dropdown-menu">
                     <li><a href='$crtUserDoc.getURL()'>My Curriki</a></li>
+                    <li><a href="/xwiki/bin/view/welcome/about-curriki/contact-us">Contact Us</a></li>
+                    <li><a href="/xwiki/bin/view/Coll_CurrikiGeometryStudents/AboutCurrikiGeometry_0">About Curriki</a></li>
                     <li class="divider"></li>
                     #set($logouturl = "/xwiki/bin/view/Registration/CleanLogout?xredirect=${escapetool.url($logredir)}")##
                     <li><a href="$logouturl" class="logout" onclick="window.location.replace('$logouturl'); return false;">$msg.get("header.logout")</a></li>
