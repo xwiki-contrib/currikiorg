@@ -22,6 +22,9 @@
     #else
         #set($bc="bc=${bcLocal}")
     #end
+    <div class="collection-view-description">
+        $asset.display("description","view",true)
+    </div>
     #if($collectionsList.size() >0)<!-- now listing collections' children -->
     <div id="large-toc">
         <ul class="secondary-toc">
@@ -43,9 +46,6 @@
     #end
     </div>
 
-    <div class="collection-view-description">
-    $asset.display("description","view",true)
-    </div>
 </div></div>
 ## The subAssetList property has already been prepared
  ## in asset_tabs so that we can determine if we need an organize link
