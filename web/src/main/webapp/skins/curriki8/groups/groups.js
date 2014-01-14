@@ -164,7 +164,7 @@ function editProfile(memberName, groupName, divid) {
   var pars = "user=" + memberName + "&group=" + groupName + "&divid=" + divid + "&xpage=plain";
   $(divid).innerHTML = "<p>"+i18nDict['msg.groups_members_editsettings_loadinginprogress']+"</p>";
   // call url to get the edit html to edit the profile
-  var myAjax = new Ajax.XWikiRequest( "Groups", "EditUserProfileService", {method: 'get', parameters: pars, onComplete: editProfileCallback, divid: divid });
+  var myAjax = new Ajax.XWikiRequest( "Groups", "EditSpaceUserProfileService", {method: 'get', parameters: pars, onComplete: editProfileCallback, divid: divid });
   return false;
 }
 function editProfileCallback(ajaxreq) {

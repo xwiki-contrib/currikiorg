@@ -71,7 +71,7 @@ if(!(request.group==null || request.group=='')) {
         try {
             CurrikiSpaceManagerPluginApi csm = xwiki.csm;
             csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
-            println("Successfully updated rights of ${space}.xxx");
+            println("Successfully updated rights of ${group}.xxx");
         } catch (Exception ex) {
             println("Failed updating rights: " + ex);
             ex.printStackTrace();
