@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1314219048000</creationDate>
-<date>1320772821000</date>
-<contentUpdateDate>1320772821000</contentUpdateDate>
-<version>7.1</version>
+<date>1387798678000</date>
+<contentUpdateDate>1387798678000</contentUpdateDate>
+<version>8.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -44,9 +44,9 @@
     $tool.echoToConsole("Post bit")##
     #if($tool.readAndValidateQueryParams())##
         $success=$tool.createUser()##
-        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&amp;xpage=popup")##
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&amp;tempskin=curriki8&amp;xpage=popup")##
     #else
-        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup")##
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup&amp;tempskin=curriki8")##
     #end ##
 #else
 {pre}
@@ -82,7 +82,7 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
 $tool.echoToConsole("Last bit ")##
 $xwiki.includeForm("Registration.RegistrationBootstrap",false)
 &lt;script type="text/javascript"&gt;##
-    Curriki.ui.login.makeSureWeAreFramed("DirectRegistration?xpage=popup&amp;framed=true");
+    Curriki.ui.login.makeSureWeAreFramed("DirectRegistration?xpage=popup&amp;tempskin=curriki8&amp;framed=true");
     //alert("Would reframe.");
 &lt;/script&gt;
 {/pre}

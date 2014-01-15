@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.mflorea</creator>
-<author>XWiki.ShermanTank</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.ShermanTank</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1202458831000</creationDate>
-<date>1379103493000</date>
-<contentUpdateDate>1379103493000</contentUpdateDate>
-<version>9.1</version>
-<title>$msgdoc.get('title')</title>
+<date>1386712386000</date>
+<contentUpdateDate>1386712386000</contentUpdateDate>
+<version>11.1</version>
+<title>Message Notification for $s.displayTitle -- $msgdoc.get('title')</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>Imported from XAR</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Groups.MailTemplateCreateMessage</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>da7528eb-f3f4-4050-b277-bf760d35ee4d</guid>
+<guid>7c5e1e1d-1e0b-448b-a777-4bcbeaf47a12</guid>
 <property>
 <tags/>
 </property>
@@ -67,18 +67,19 @@
 {pre}
 Dear member of $s.displayTitle,
 
-$xwiki.getUserName($context.user, "$first_name $last_name", false) has posted a new message for you in the $s.displayTitle group.
+You have received a message from $xwiki.getUserName($context.user, "$first_name $last_name", false) in $s.displayTitle.
 
-To read the message on Curriki, select the following link or paste it into your browser.
+The title of this message is "$msgdoc.get('title')".
+
+To view the message, click the URL below or paste it into your browser. (Remember, you must be logged in to Curriki to see this message.) 
+
 $msgdoc.getExternalURL("view")
 
-You will need to log-in to Curriki to see the message and all group curriculum.
+To change your email notification settings for $s.displayTitle, visit your group member profile on your group's Members tab at: 
+
+$xwiki.getDocument("${spaceName}.Members").getExternalURL("view")
 
 Sincerely,
 
-Curriki, for $xwiki.getUserName($context.user, "$first_name $last_name", false) and the $s.displayTitle group.
-
-P.S. You can change your email notification settings for $s.displayTitle at: 
-$xwiki.getDocument("${spaceName}.Members").getExternalURL("view")
-
+Curriki, for $s.displayTitle
 {/pre}</content></xwikidoc>
