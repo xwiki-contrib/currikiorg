@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1309965605000</creationDate>
-<date>1384902493000</date>
-<contentUpdateDate>1384902493000</contentUpdateDate>
-<version>151.1</version>
+<date>1387391673000</date>
+<contentUpdateDate>1387391673000</contentUpdateDate>
+<version>152.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -107,11 +107,11 @@
     #joinformleftblock{float: left; width: 250px; text-align: right; border-right:  2px solid #ccc; padding-right: 20px;padding: 0 20px  10px 0;}
     div#joinformrightblock {float: left; width: 190px; text-align: left; border-left:  2px solid #ccc; margin-left: -2px;padding: 0 0 10px 20px;}
     #joinformrightblock a img {float: left; padding-right: 15px; margin-top: 20px;}
-    #joinformleftblock h2 {margin-right: 130px;	}
+    #joinformleftblock h2 {margin-right: 130px; }
     input#j_username, input#j_password {width: 120px;}
-    #join_register_footer {width: 400px; border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 3px;font-variant: normal;	font-size: 90%; }
+    #join_register_footer {width: 400px; border-top:  2px solid #ccc; width: 400px; margin:0px auto; padding: 3px;font-variant: normal; font-size: 90%; }
     #join_register_footer tr td {vertical-align: top; padding-top:1.5em}
-    ## #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;	 font-size: 95%;	font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
+    ## #join_register_footer_cancel {width: 400px; margin:0px auto; font-variant: normal;    font-size: 95%;    font-weight: bold; padding: 0 50px 20px 0 ; text-align: right;}
     ###join_register_footer * a:active { text-decoration: underline; color: #1C3a7b; }
     input.button {font-weight: bold;border-style: none;padding:3 6 3 7;}
     label {font-weight: bold; color:#555}
@@ -125,7 +125,7 @@
     #login_submit {text-align:right;}
 &lt;/style&gt;
 &lt;script language="javascript"&gt;
-    Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&amp;framed=true&amp;$!{request.getQueryString()}");
+    Curriki.ui.login.makeSureWeAreFramed("/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&amp;tempskin=curriki8&amp;framed=true&amp;$!{request.getQueryString()}");
     //alert("Would reframe.");
 &lt;/script&gt;
 &lt;div class="main layoutsubsection" xmlns:fb="http://www.facebook.com/2008/fbml"&gt;
@@ -133,11 +133,11 @@
         &lt;div id="fb-root"&gt;&lt;/div&gt;
         #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
             #set($junk=$targets.init($request,$xwiki))#end&lt;!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin --&gt;#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-        #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&amp;redir=$escapetool.url($targets.afterLogin)")##
+        #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&amp;tempskin=curriki8&amp;redir=$escapetool.url($targets.afterLogin)")##
         #if($request.getHeader("User-Agent") &amp;&amp; $request.getHeader("User-Agent").contains(" Chrome/"))##
             #set($nextURL="https://$hostname$nextURL")#end
         &lt;div id="join_form_contents" class="fields_wrp"&gt;
-            &lt;form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&amp;xpage=popup" ## &amp;srid=${targets.createSrid($request,$nextURL)}
+            &lt;form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&amp;tempskin=curriki8&amp;xpage=popup" ## &amp;srid=${targets.createSrid($request,$nextURL)}
                   onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post"&gt;
                 &lt;div class="hidden"&gt;##
                     &lt;input type="hidden" name="xredirect" value="$nextURL"/&gt;
@@ -191,7 +191,7 @@
                     ## don't put the following comment inside the div... it'd break the javascript of loginHappened!
                         &lt;!-- provider is "$provider" of class $provider.getClass(), socialLoginConfigurationDocument = $socialLoginConfigurationDocument --&gt;
                         &lt;div class="provider"  id="identifyWith${provider}" style="display:inline"&gt;
-                            #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&amp;xredirect=$escapetool.url($targets.afterLogin)#if($framed)&amp;xpage=popup#end")
+                            #set($link = "/xwiki/bin/view/Registration/SocialLogin?provider=${provider.toLowerCase()}&amp;xredirect=$escapetool.url($targets.afterLogin)#if($framed)&amp;tempskin=curriki8&amp;xpage=popup#end")
                             &lt;a target="_top" href="${link}" title="$msg.get("join.login.social.login-with-${provider}.tooltip")"##
                                onclick="return Curriki.ui.login.popupIdentityAuthorization('${link}');"&gt;##
                                 &lt;img src="/xwiki/skins/curriki8/registration/${provider.toLowerCase()}-logo.png"
@@ -219,12 +219,12 @@
             &lt;td&gt;
             &lt;span id="sign_up"&gt;$msg.get('join.login.join_curriki_question')##
                &lt;/span&gt;
-            &lt;span id="sign_up_link"&gt;&lt;a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup" title="$msg.get('join.login.join_curriki_tooltip')"&gt;##
+            &lt;span id="sign_up_link"&gt;&lt;a href="/xwiki/bin/view/Registration/DirectRegistration?xpage=popup&amp;tempskin=curriki8" title="$msg.get('join.login.join_curriki_tooltip')"&gt;##
                    $msg.get('join.login.join_curriki')&lt;/a&gt;&lt;/span&gt;
             &lt;/td&gt;
             &lt;td align="right"&gt;
             &lt;span id="forgot_password"&gt;&lt;a ##
-                    href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&amp;xpage=popup"
+                    href="/xwiki/bin/view/Registration/ForgotLogin?framed=true&amp;xpage=popup&amp;tempskin=curriki8"
                     title="$msg.get('join.login.forgot_tooltip')"&gt;$msg.get('join.login.forgot')&lt;/a&gt;&lt;/span&gt;
                 &lt;br/&gt;&lt;br/&gt;
                 &lt;span id="alternative_login"&gt;&lt;a href="/xwiki/bin/view/Registration/ManualLogin" target="_top"&gt;$msg.get('join.login.alternative.login')&lt;/a&gt;&lt;/span&gt;

@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1314118673000</creationDate>
-<date>1380810862000</date>
-<contentUpdateDate>1380810862000</contentUpdateDate>
-<version>61.1</version>
+<date>1388619649000</date>
+<contentUpdateDate>1388619649000</contentUpdateDate>
+<version>74.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -22,8 +22,7 @@
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<content>import javax.servlet.http.Cookie
-import javax.servlet.http.HttpServletRequest
+<content>import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpSession
 import org.xwiki.container.servlet.filters.SavedRequestManager
 import com.xpn.xwiki.api.XWiki
@@ -247,6 +246,19 @@ public class TargetsGroovy {
                 return "true";
             }
             HttpSession session = request.getSession();
+
+            if("respurriki".equals(session.getAttribute("skin"))){
+                String hostname = request.getServerName();
+                if("curriki.org".equals(hostname)){
+                    xredirect = "http://www.currikigeometry.org";
+                } else if("beta.curriki.org".equals(hostname)) {
+                    xredirect = "http://geometry.beta.curriki.org";
+                } else if("current.dev.curriki.org".equals(hostname)) {
+                    xredirect = "http://geometry.dev.curriki.org";
+                }else {
+                    xredirect = "/xwiki/bin/view/Courses/Geometry?skin=respurriki";
+                }
+            }
 
             String idProviderName = session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
             List l = new LinkedList();

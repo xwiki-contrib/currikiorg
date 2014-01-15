@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.Admin</creator>
-<author>XWiki.martagirdea</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.martagirdea</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1153577666000</creationDate>
-<date>1171480546000</date>
-<contentUpdateDate>1266877070000</contentUpdateDate>
-<version>1.1</version>
+<date>1336420360000</date>
+<contentUpdateDate>1336420360000</contentUpdateDate>
+<version>2.1</version>
 <title>Panels</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Importé depuis un le XAR</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -35,7 +35,7 @@
 #foreach ($item in $xwiki.searchDocuments($sql))
 #set($obj = $xwiki.getDocument($item).getObject("Panels.PanelClass"))
 #if($obj.type == 'view')
-* [$item]#if($hasadmin){pre} [{/pre}&lt;a href="$xwiki.getURL("$item", "inline")"&gt;$msg.get("edit")&lt;/a&gt; &lt;a href="$xwiki.getURL("$item", "delete")"&gt;$msg.get("delete")&lt;/a&gt;{pre}]{/pre}#end: $obj.description
+* [$item]#if($hasadmin){pre} [{/pre}&lt;a href="$xwiki.getURL("$item", "inline")"&gt;$msg.get("edit")&lt;/a&gt; &lt;a href="$xwiki.getURL("$item", "delete")"&gt;$msg.get("delete")&lt;/a&gt;{pre}]{/pre}#end (views: &lt;a href="/xwiki/bin/view/Panels/DisplayPanelContent?doc=$item&amp;xpage=plain"&gt;plain&lt;/a&gt;, &lt;a href="/xwiki/bin/view/Panels/DisplayPanelContent?doc=$item&amp;xpage=popup"&gt;popup&lt;/a&gt;): $obj.description
 #end
 #end
 
@@ -48,5 +48,4 @@
 #if($obj.type == 'edit')
    * [$item]#if($hasadmin){pre} [{/pre}&lt;a href="$xwiki.getURL("$item", "inline")"&gt;$msg.get("edit")&lt;/a&gt; &lt;a href="$xwiki.getURL("$item", "delete")"&gt;$msg.get("delete")&lt;/a&gt;{pre}]{/pre}#end: $obj.description
 #end
-#end
-</content></xwikidoc>
+#end</content></xwikidoc>

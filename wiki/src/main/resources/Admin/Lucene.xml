@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1163561465000</creationDate>
-<date>1367912265000</date>
-<contentUpdateDate>1367912265000</contentUpdateDate>
-<version>2.1</version>
+<date>1334778381000</date>
+<contentUpdateDate>1334778381000</contentUpdateDate>
+<version>12.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>Importé depuis un le XAR</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Admin.Lucene</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>8c8a9ae1-026d-4e52-ae06-fc3559aef386</guid>
+<guid>d5254bfb-fbc4-4719-a684-1f56faf38395</guid>
 <property>
 <tags/>
 </property>
@@ -67,6 +67,7 @@
 ##
 #set($lucene = $xwiki.getPlugin("lucene"))
 #set($itemsPerPage = "20")
+#if("$!request.itemsPerPage"!="")#set($itemsPerPage=$request.itemsPerPage)#end
 #set($doRebuild = $request.getParameter("rebuild"))
 #if($doRebuild=="yes")
 #if($lucene)
@@ -106,7 +107,7 @@ Index refresh failed.
   #if($results.size()&gt;0)
 #if($xwiki.isVirtual())
 #macro(resultlink $xwiki $web $name)
-   * [${result.wiki}:${result.web}.${result.name}] by [$result.creator]
+   * [${result.wiki}:${result.web}.${result.name}] #if("$!result.creator"!="")by [$result.creator]#end
 #end
 #else
 #macro(resultlink $xwiki $web $name)

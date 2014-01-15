@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.LudovicDubost</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.LudovicDubost</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1298699906000</creationDate>
-<date>1369944295000</date>
-<contentUpdateDate>1369944295000</contentUpdateDate>
-<version>9.1</version>
+<date>1379457029000</date>
+<contentUpdateDate>1379457029000</contentUpdateDate>
+<version>40.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,407 +52,208 @@
 <name>Search2.SOLRExtract</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid>08b2465c-55f8-48c7-abc0-ef9228663a2c</guid>
+<guid>3070f2d6-9276-4d6e-b668-bd536a83a5dd</guid>
 <property>
 <tags/>
 </property>
 </object>
 <content>&lt;?xml version="1.0" encoding="UTF-8" ?&gt;##
-
 ##
-
 ## this page should Search.SOLRExtract
-
 ##                  ===========================
-
 ## this page creates a document containing the information to be indexed.
-
 ##
-
 ## @vtlvariable name="doc" type="com.xpn.xwiki.api.Document"
-
 ## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
-
 ## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
-
 #* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
-
 #* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
-
 #* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
-
 #* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
-
 #* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
-
 #* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
-
 ##
-
 ##
-
 ## a good model is the structure of the json record returned by Search.Resources
-
 ##
-
 ## #set($ret_info = "{ 'page':'${resource.fullName}' ,
-
 ## 'title':'${ret_title}' ,'assetType':'${ret_assetType}' ,
-
 ## 'category':'${ret_category}' ,'subcategory':'${ret_subcategory}',
-
 ## 'ict':'${ret_ictRaw}' ,'ictText':'${ret_ictText}' ,'ictIcon':'${ret_ictIcon}'
-
 ## 'contributor':'${resource.creator}' ,'contributorName':'${ret_cname}' ,
-
 ## 'review':'${ret_review}' ,'rating':'${ret_rating}' ,
-
 ## 'ratingCount':'${ret_rating_count}' ,
-
 ## 'description':'${ret_desc}' ,
-
 ## 'fwItems':${ret_FW} ,'levels':${ret_lvl} ,
-
 ## 'parents':${ret_parents} ,
-
 ## 'lastUpdated':'${xwiki.formatDate($resource.date, $msg.get('mycurriki.dateFormat'))}' ,
-
 ## 'updated':'${resource.date}' } ")
-
 ##
-
 #if(!$hasGlobalAdmin))$response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")#else
-
 &lt;!-- #set($xt=$xwiki.parseGroovyFromPage("Search2.SOLRExtractorGroovy"))##
-
 $xt.init($xwiki,$context,$request.getParameter("doc")) Running $xt --&gt;##
-
 #set($originalResponse=$response)##
-
 #set($response=$xt.getNeutralizedResponse())##
-
     #if($request.getParameter("doc"))
-
         $originalResponse.setContentType("application/xml")
-
         #if($xt.type=="discussion")$originalResponse.sendRedirect("ShowDiscussions?xpage=plain&amp;doc=$request.getParameter('doc')")
-
         #elseif($xt.isApplicable())
-
         &lt;!-- This rendering of $xt.getFullNameForComments() is created by ${doc.space}.${doc.name}  with type ${xt.type}.
-
           This view file is last modified on $doc.date --&gt;
-
         {pre}&lt;add&gt;&lt;doc&gt;
-
             &lt;field name="fullname"&gt;$xt.getFullNameX()&lt;/field&gt;
-
             &lt;field name="name"    &gt;$xt.getNameX()&lt;/field&gt;
-
             &lt;field name="web"     &gt;$xt.getWebX()&lt;/field&gt;
-
             &lt;field name="revisionNumber"&gt;$!xt.getRevisionNumber()&lt;/field&gt;
-
             &lt;field name="type"&gt;$xt.type&lt;/field&gt;
 
-
-
             &lt;field name="authorCode"  &gt;$xt.getAuthorCodeX()&lt;/field&gt;
-
             &lt;field name="author"  &gt;$xt.getAuthorX()&lt;/field&gt;
-
             &lt;field name="creatorCode"&gt;$xt.getCreatorCodeX()&lt;/field&gt;
-
             &lt;field name="creator"&gt;$xt.getCreatorX()&lt;/field&gt;
-
             &lt;field name="modificationDate"&gt;$xt.getModificationDate()&lt;/field&gt;
-
             &lt;field name="creationDate"    &gt;$xt.getCreationDate()&lt;/field&gt;
 
-
-
             #if($xt.type=="resource")
-
                 &lt;field name="title"&gt;$xt.getTitleX()&lt;/field&gt;
-
                 &lt;field name="description"&gt;$xt.getDescriptionX()&lt;/field&gt;
 
-
-
                 #foreach($i in $!xt.getICTs())
-
                     &lt;field name="ict"&gt;$i&lt;/field&gt;
-
                 #end
-
                 &lt;field name="ictText"&gt;#foreach($i in $!xt.getICTs())
-
                     $escapetool.xml($msg.get("CurrikiCode.AssetClass_instructional_component_${i}"))
-
                 #end&lt;/field&gt;
-
                 #foreach($i in $!xt.getSubjects())
-
                     &lt;field name="subject"&gt;$xt.xmlEncode($i)&lt;/field&gt;
-
                 #end
-
                 &lt;field name="subjectText"&gt;#foreach($i in $!xt.getSubjects())
-
                     $escapetool.xml($msg.get("CurrikiCode.AssetClass_fw_items_${i}"))
-
                 #end&lt;/field&gt;
-
                 #foreach($i in $!xt.getLevels())
-
                     &lt;field name="level"&gt;$i&lt;/field&gt;
-
                 #end
-
                 &lt;field name="levelText"&gt;#foreach($i in $!xt.getLevels())
-
                     $escapetool.xml($msg.get("CurrikiCode.AssetClass_educational_level_${i}"))
-
                 #end&lt;/field&gt;
-
-
 
                 &lt;field name="language"&gt;$!xt.getLanguage()&lt;/field&gt;
 
-
-
                 &lt;field name="keywords"&gt;$xt.keywords&lt;/field&gt;
-
                 &lt;field name="generatedKeywords"&gt;$xt.generatedKeywords&lt;/field&gt;
 
-
-
                 #foreach($code in $xt.getStandardsCodeX())
-
                     &lt;field name="standardsCode"&gt;$code&lt;/field&gt;
-
                 #end
-
                 #foreach($label in $xt.getStandardsLabelsX())
-
                     &lt;field name="standardsLabel"&gt;$label&lt;/field&gt;
-
                 #end
-
-
 
                 #foreach($stateNum in $xt.getStandardsStateNumsX())
-
                   &lt;field name="standardsStateNum"&gt;$stateNum&lt;/field&gt;
-
                 #end
-
-
 
                 &lt;!-- rights and licenses --&gt;
-
                 &lt;field name="license"        &gt;$!xt.getLicense()&lt;/field&gt;
-
                 &lt;field name="rights"         &gt;$!xt.getRights()&lt;/field&gt;
-
                 &lt;field name="privateToUser"  &gt;$!xt.getPrivateToUser()&lt;/field&gt;
-
                 &lt;field name="privateToGroup" &gt;$!xt.getPrivateToGroups()&lt;/field&gt;
 
-
-
                 &lt;!-- types (asset-type, media-type) --&gt;
-
                 &lt;field name="assetType"&gt;$xt.getAssetType()&lt;/field&gt;
-
                 #if($xt.hasAttachment())
-
                     #foreach($x in $xt.getAttachmentTypes())
-
                         &lt;field name="attachmentType"&gt;$x&lt;/field&gt;
-
                     #end
-
                     &lt;!-- category --&gt;
-
                     &lt;field name="category"&gt;$xt.getCategory()&lt;/field&gt;
-
                     &lt;field name="subcategory"&gt;$xt.getSubCategory()&lt;/field&gt;
-
                     &lt;!-- actual content --&gt;
-
                     #foreach($x in $xt.getAttachmentFilenames())
-
                         &lt;field name="attachmentFilename"&gt;$x&lt;/field&gt;
-
                     #end
-
                     &lt;field name="renderedContent"&gt;$xt.getRenderedContentX()&lt;/field&gt;
-
                 #end
-
-
 
                 &lt;!-- collections --&gt;
-
                 #foreach($i in $!xt.getInCollection())
-
                     &lt;field name="inCollection"   &gt;$i&lt;/field&gt;
-
                 #end
-
                 #foreach($i in $!xt.getInCollectionDetailsJSON())
-
                     &lt;field name="inCollectionDetailsJSON"   &gt;$i&lt;/field&gt;
-
                 #end
-
                 #foreach($i in $!xt.getInCollectionRights())
-
                     &lt;field name="inCollectionRights"   &gt;$i&lt;/field&gt;
-
                 #end
-
-
-
 
 
                 &lt;!-- reviews and ratings --&gt;
-
                 &lt;field name="fileCheckStatus"&gt;$!xt.getFileCheckStatus()&lt;/field&gt;
-
                 &lt;field name="currikiReview"  &gt;$!xt.getCurrikiReviewStatus()&lt;/field&gt;
-
                 &lt;field name="userRating"     &gt;$!xt.getUsersRating()&lt;/field&gt;
-
                 &lt;field name="userRatingCount"&gt;$!xt.getUsersRatingCount()&lt;/field&gt;
 
-
-
                 &lt;field name="hiddenFromSearch"&gt;$xt.getHiddenFromSearch()&lt;/field&gt;
-
                 #set($asset=$xt.asset)##
-
                 #foreach($collEntry in $xt.getSubAssetsInfo())
-
                 &lt;field name="childInfo"&gt;$xt.flattenMap($collEntry)&lt;/field&gt;
-
                 #end##
-
                 &lt;field name="childRights"&gt;#set($itr=$xt.getChildRights())#foreach($x in $itr)$x,#end&lt;/field&gt;
-
                 &lt;field name="childPages"&gt;#set($itr=$xt.getChildPagesIt())#foreach($x in $itr)$x,#end&lt;/field&gt;
-
             #elseif($xt.type=="user")
-
                 &lt;field name="title"&gt;$xt.userFirstNameX $xt.userLastNameX&lt;/field&gt;
-
                 &lt;field name="userFirstName"&gt;$xt.userFirstNameX&lt;/field&gt;
-
                 &lt;field name="userLastName" &gt;$xt.userLastNameX&lt;/field&gt;
-
                 &lt;field name="userName"     &gt;$xt.userNameX&lt;/field&gt;
-
                 &lt;field name="userCity"     &gt;$xt.userCityX&lt;/field&gt;
-
                 &lt;field name="userEmail"    &gt;$xt.userEmailX&lt;/field&gt;
-
                 &lt;field name="userState"    &gt;$xt.userStateX&lt;/field&gt;
-
                 &lt;field name="userCountry"  &gt;$xt.userCountryX&lt;/field&gt;
-
                 &lt;field name="userActive"   &gt;$xt.userActiveX&lt;/field&gt;
-
                 &lt;field name="userType"     &gt;$xt.userTypeX&lt;/field&gt;
-
                 &lt;field name="userEmailUndeliverable"&gt;$xt.userEmailUndeliverable&lt;/field&gt;
-
                 #foreach($subj in $!xt.userSubjects)
-
                     &lt;field name="userSubject"  &gt;$xt.xmlEncode($subj)&lt;/field&gt;
-
                 #end
-
                 #foreach($leve in $!xt.userLevels)
-
                     &lt;field name="userLevel"  &gt;$xt.xmlEncode($leve)&lt;/field&gt;
-
                 #end
-
                 &lt;field name="userBio"           &gt;$xt.userBioX&lt;/field&gt;
-
                 &lt;field name="userPicture"       &gt;$xt.userPictureX&lt;/field&gt;
-
                 &lt;field name="userContributions" &gt;$xt.userContributionsX&lt;/field&gt;
-
                 &lt;field name="userGroups"        &gt;$xt.userGroupsX&lt;/field&gt;
-
                 &lt;field name="userCollections"  &gt;$xt.userCollectionsX&lt;/field&gt;
-
             #elseif($xt.type=="group")
-
                 &lt;field name="title"                &gt;$xt.groupTitleX&lt;/field&gt;
-
                 &lt;field name="groupName"            &gt;$xt.groupNameX&lt;/field&gt;
-
                 &lt;field name="groupTitle"           &gt;$xt.groupTitleX&lt;/field&gt;
-
                 &lt;field name="groupDescription"     &gt;$xt.groupDescriptionX&lt;/field&gt;
-
                 &lt;field name="groupLanguage"        &gt;$xt.groupLanguageX&lt;/field&gt;
-
                 &lt;field name="groupMembershipPolicy"&gt;$xt.groupMembershipPolicyX&lt;/field&gt;
-
                 #foreach($subj in $!xt.groupSubjects)
-
                     &lt;field name="groupSubject"  &gt;$xt.xmlEncode($subj)&lt;/field&gt;
-
                 #end
-
                 #foreach($lev in $!xt.groupLevels)
-
                     &lt;field name="groupLevel"  &gt;$xt.xmlEncode($lev)&lt;/field&gt;
-
                 #end
-
 ##                &lt;field name="groupCollections"  &gt;$xt.groupCollectionsX&lt;/field&gt;
-
                 #foreach($collEntry in $xt.getSubAssetsInfo())
-
                     &lt;field name="childInfo"&gt;$xt.flattenMap($collEntry)&lt;/field&gt;
-
                 #end##
-
                 &lt;field name="childRights"&gt;#set($itr=$xt.getChildRights())#foreach($x in $itr)$x,#end&lt;/field&gt;
-
                 &lt;field name="childPages"&gt;#set($itr=$xt.getChildPagesIt())#foreach($x in $itr)$x,#end&lt;/field&gt;
-
             #elseif($xt.type=="page")
-
                 &lt;field name="title"&gt;$xt.doc.title&lt;/field&gt;
-
                 &lt;field name="pageText"     &gt;$xt.pageTextX&lt;/field&gt;
-
             #else &lt;!-- the document is no good type --&gt;
-
             #end## xt.type==.... (resource, user, group)
-
         &lt;/doc&gt;&lt;/add&gt;
-
         {/pre}
-
         #else ## $xt.isApplicable()
-
         {pre}&lt;inapplicable/&gt;
 
-
-
         {/pre}#end
-
     #else
-
     Please add doc parameter.
-
     #end
-
 #end</content></xwikidoc>
