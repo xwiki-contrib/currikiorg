@@ -7,7 +7,7 @@
 
 ## compute if we are in resources or courses
 #set($inCourses=false)#set($inResources=false)##
-#set($inTeacher=false)
+#set($inTeacher=false)<!-- bcLocal: $bcLocal -->
 #foreach($b in $bcLocal.split(";"))
     #if($b=="Coll_Group_CurrikiGeometry.CourseTeacherView")
         #set($inCourses=true)#set($inTeacher=true)
@@ -15,7 +15,7 @@
         #set($inCourses=true)
     #elseif($b=="Coll_Group_CurrikiGeometry.TeacherPBLMaterial")
         #set($inResources=true)#set($inTeacher=true)
-    #elseif($b=="Coll_CurrikiGeometryStudents.PBLMaterial")
+    #elseif($b=="Coll_CurrikiGeometryStudents.PBLMaterials")
         #set($inResources=true)
     #end
 #end
