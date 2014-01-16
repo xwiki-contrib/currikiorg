@@ -254,9 +254,9 @@ TinyMCE_Engine.prototype = {
 
 		// Only do this once
 		if (this.configs.length == 0) {
-			// Is Safari enabled
-			if (this.isSafari && this.getParam('safari_warning', false))
-				alert("Safari support is very limited and should be considered experimental.\nSo there is no need to even submit bugreports on this early version.\nYou can disable this message by setting: safari_warning option to false");
+			// Is Safari enabled: diasabled
+			//if (this.isSafari && this.getParam('safari_warning', false))
+			//	alert("Safari support is very limited and should be considered experimental.\nSo there is no need to even submit bugreports on this early version.\nYou can disable this message by setting: safari_warning option to false");
 
 			if (typeof(TinyMCECompressed) == "undefined") {
 				tinyMCE.addEvent(window, "DOMContentLoaded", TinyMCE_Engine.prototype.onLoad);
