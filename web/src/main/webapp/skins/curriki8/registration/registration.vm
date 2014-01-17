@@ -491,7 +491,11 @@ function toggleCorporateFieldsVisible() {
   #else ##}{
     #if($dup!='0') ##{
       ##$userdoc.display($fld, "edit", "2")
-      <input size="30" id="2XWiki.XWikiUsers_0_password" value="" name="2XWiki.XWikiUsers_0_password" type="password" class="input-text">
+      #if($fld == 'email')
+        <input size="30" id="2XWiki.XWikiUsers_0_email" value="$userdoc.email" name="2XWiki.XWikiUsers_0_email" type="text" class="input-text">
+      #elseif($fld == 'password')
+        <input size="30" id="2XWiki.XWikiUsers_0_password" value=#verbatim_start()"$!{userdoc.password}"#verbatim_end() name="2XWiki.XWikiUsers_0_password" type="password" class="input-text">
+      #end
     #else ##}{
       $userdoc.display($fld, "edit")
     #end ##}
