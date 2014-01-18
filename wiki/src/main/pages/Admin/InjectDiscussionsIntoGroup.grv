@@ -20,17 +20,17 @@ if(!(request.group==null || request.group=='')) {
         List list = xwiki.getSpaces();
         LOG.warn("Injecting into ${list.size()} spaces.")
         for(String spaceName in xwiki.getSpaces()) {
+            if(!spaceName.startsWith("Group_") || spaceName.endsWith("_Invitations")) continue;
             LOG.warn("Processing space " + spaceName);
             println("* processing space ${spaceName}");
-            if(!spaceName.startsWith("Group_") || spaceName.endsWith("_Invitations")) continue;
             DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
             group = spaceName.substring("Group_".length());
             if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
                 println("* Sorry, there seems to be no group of name " + group + ".");
-            } else if (xwiki.exists(targetRef)) {
+            } else if (xwiki.exists(targetRef) && ! request.force==1) {
                 println("* Group ${group} already has a discussions.")
             } else {
-                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, false)) {
+                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, true)) {
                     println("* Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
                 } else {
                     println("* Group ${group}: Failed copying.");
