@@ -82,16 +82,22 @@ $text
 #macro(mycurriki_header $userobj $userdoc) ## {
 <div id="mycurriki-img">
   <a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
+  ## first attempt to use the attachment from the avatar property
   #set($current_avatar = $userobj.get('avatar'))
   #set($attach="")
   #if($current_avatar && "${current_avatar}" != "") ##{
     #set($attachObj = $userdoc.getAttachment("${current_avatar}"))
     #if("$!attachObj"!="")
-       #set($attach = $attachObj.attachment)
+       #set($attach = $attachObj.attachment.filename)
     #end
   #end
-  #if($attach!="")
-    <img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true" />
+  ## if this failed, use the "last" attachment filename
+  #foreach ($attachObj in $userdoc.attachmentList)
+      #set($n=$attachObj.filename)
+      #if("$n"!="")#set($attach=$n)#end
+  #end
+  #if("$!attach"!="")
+    <img src="$userdoc.getAttachmentURL($attach,"download")?width=176&height=176&keepAspectRatio=true" />
   #else ##}{
     <img src="$xwiki.getSkinFile("noavatar.png")" />
   #end ##}
