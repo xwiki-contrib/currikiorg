@@ -46,7 +46,7 @@ public class SkinChoiceFilter implements Filter {
             String tempSkin = hrq.getParameter("tempskin");
 
 
-            HttpSession session = hrq.getSession(false);
+            HttpSession session = hrq.getSession(true);
 
             // need to replace list? if yes do so now
 
