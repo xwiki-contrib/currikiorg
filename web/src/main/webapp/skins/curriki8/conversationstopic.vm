@@ -4,6 +4,9 @@
   #template('conversationsvars.vm')
   ## Import macros
   #template('conversationsmacros.vm')
+  <script type="text/javascript">
+      Ext.ns("Curriki.global"); Curriki.global.parentPageURL = "../$doc.getParent().replace('.','/')";
+  </script>
   ## Count comments
   #set($topicAnswers = $xwiki.searchDocuments(', BaseObject obj where doc.parent = ? and doc.fullName = obj.name and obj.className = ? and doc.fullName != ? order by doc.date desc', 0, 0, [$doc.fullName, 'ConversationCode.AnswerClass', 'ConversationCode.AnswerTemplate']))
   #set($comments = $topicAnswers.size())
