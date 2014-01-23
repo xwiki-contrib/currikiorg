@@ -48,10 +48,14 @@ public class DiscussionActivityEvent extends ActivityEvent
         String docLink = "";
         try {
             doc = context.getWiki().getDocument(event.getPage(), context);
-            docLink = "[[" + docTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]"; 
+            String syntax = context.getDoc().getSyntax().toIdString();
+            if("xwiki/1.0".equals(syntax)) {
+                docLink = "[" + docTitle + ">" + doc.getFullName().replaceAll("@", "%40") + "]";
+            } else {
+                docLink = "[[" + docTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]";
+            }
         } catch (XWikiException e) {
         }
-
         String userName = event.getParam2();
         String userLink = userName;
         XWikiDocument userDoc;

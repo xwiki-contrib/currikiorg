@@ -47,7 +47,12 @@ public class ResourceActivityEvent extends ActivityEvent
         try {
             doc = context.getWiki().getDocument(event.getPage(), context);
             assetTitle = doc.getTitle();
-            assetLink = "[[" + assetTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]";
+            String syntax = context.getDoc().getSyntax().toIdString();
+            if("xwiki/1.0".equals(syntax)) {
+                assetLink = "[" + assetTitle + ">" + doc.getFullName().replaceAll("@", "%40") + "]";
+            } else {
+                assetLink = "[[" + assetTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]";
+            }
         } catch (XWikiException e) {
         }
 

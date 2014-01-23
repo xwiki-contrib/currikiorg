@@ -53,7 +53,12 @@ public class DocumentationActivityEvent extends ActivityEvent
             if (tag != null) {
                 docTitle = doc.getTitle();
                 docType = tag.getStringValue("tags");
-                docLink = "[[" + docTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]";
+                String syntax = context.getDoc().getSyntax().toIdString();
+                if("xwiki/1.0".equals(syntax)) {
+                    docLink = "[" + docTitle + ">" + doc.getFullName().replaceAll("@", "%40") + "]";
+                } else {
+                    docLink = "[[" + docTitle + ">>" + doc.getFullName().replaceAll("@", "%40") + "]]";
+                }
             }
         } catch (XWikiException e) {
         }
