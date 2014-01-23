@@ -857,6 +857,7 @@ function init() {
             onSuccess : function() {
               // notify the delete
               alert("$msg.get('conversation.delete.success')");
+              if(Curriki.global.parentPageURL) window.location.href = Curriki.global.parentPageURL;
             }.bind(this),
             onComplete : function() {
               // In the end: re-enable the button
