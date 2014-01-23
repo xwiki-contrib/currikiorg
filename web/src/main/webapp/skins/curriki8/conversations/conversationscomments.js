@@ -97,7 +97,7 @@ viewers.Comments = Class.create({
                   this.resetForm();
                 }
                 // Replace the comment with a "deleted comment" placeholder
-                comment.replace(this.createNotification("$msg.get('core.viewers.comments.commentDeleted')"));
+                comment.replace(this.createNotification(_('core.viewers.comments.commentDeleted')));
                 this.updateCount();
               }.bind(this),
               onComplete : function() {
@@ -107,10 +107,10 @@ viewers.Comments = Class.create({
             },
             /* Interaction parameters */
             {
-               confirmationText: "$msg.get('core.viewers.comments.delete.confirm')",
-               progressMessageText : "$msg.get('core.viewers.comments.delete.inProgress')",
-               successMessageText : "$msg.get('core.viewers.comments.delete.done')",
-               failureMessageText : "$msg.get('core.viewers.comments.delete.failed')"
+               confirmationText: _('core.viewers.comments.delete.confirm'),
+               progressMessageText : _('core.viewers.comments.delete.inProgress'),
+               successMessageText : _('core.viewers.comments.delete.done'),
+               failureMessageText : _('core.viewers.comments.delete.failed')
             }
           );
         }
@@ -150,7 +150,7 @@ viewers.Comments = Class.create({
               onCreate : function() {
                 // Disable the button, to avoid a cascade of clicks from impatient users
                 item.disabled = true;
-                item._x_notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.editForm.fetch.inProgress')", "inprogress");
+                item._x_notification = new XWiki.widgets.Notification(_('core.viewers.comments.editForm.fetch.inProgress'), "inprogress");
               },
               onSuccess : function(response) {
                 try {
@@ -190,7 +190,7 @@ viewers.Comments = Class.create({
                 if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
                   failureReason = 'Server not responding';
                 }
-                item._x_notification.replace(new XWiki.widgets.Notification("$msg.get('core.viewers.comments.editForm.fetch.failed')" + failureReason, "error"));
+                item._x_notification.replace(new XWiki.widgets.Notification(_('core.viewers.comments.editForm.fetch.failed') + failureReason, "error"));
               }.bind(this),
               on0 : function (response) {
                 response.request.options.onFailure(response);
@@ -282,9 +282,9 @@ viewers.Comments = Class.create({
         },
         /* Interaction parameters */
         {
-          confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + item.href + "'/>",
-          yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
-          noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+          confirmationText: _('core.viewers.comments.permalink') + ": <input type='text' class='full' value='" + item.href + "'/>",
+          yesButtonText: _('core.viewers.comments.permalink.goto'),
+          noButtonText : _('core.viewers.comments.permalink.hide')
         });
         permalinkBox.dialog.addClassName('permalinkBox')
         permalinkBox.dialog.down('input[type="text"]').select();
@@ -315,7 +315,7 @@ viewers.Comments = Class.create({
           var url = form.action.replace(/\?.*/, '');
           formData.unset('action_cancel');
           // Create a notification message to display to the user when the submit is being sent
-          form._x_notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.add.inProgress')", "inprogress");
+          form._x_notification = new XWiki.widgets.Notification(_('core.viewers.comments.add.inProgress'), "inprogress");
           form.disable();
           this.restartNeeded = false;
           new Ajax.Request(url, {
@@ -325,14 +325,14 @@ viewers.Comments = Class.create({
             onSuccess : function () {
               this.restartNeeded = true;
               this.editing = false;
-              form._x_notification.replace(new XWiki.widgets.Notification("$msg.get('core.viewers.comments.add.done')", "done"));
+              form._x_notification.replace(new XWiki.widgets.Notification(_('core.viewers.comments.add.done'), "done"));
             }.bind(this),
             onFailure : function (response) {
               var failureReason = response.statusText;
               if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
                 failureReason = 'Server not responding';
               }
-              form._x_notification.replace(new XWiki.widgets.Notification("$msg.get('core.viewers.comments.add.failed')" + failureReason, "error"));
+              form._x_notification.replace(new XWiki.widgets.Notification(_('core.viewers.comments.add.failed') + failureReason, "error"));
             }.bind(this),
             on0 : function (response) {
               response.request.options.onFailure(response);
@@ -375,10 +375,11 @@ viewers.Comments = Class.create({
     if (!form || !XWiki.hasEdit) {
       return;
     }
-    var previewURL = "$xwiki.getURL('__space__.__page__', 'preview')".replace("__space__", encodeURIComponent($$("meta[name=space]")[0].content)).replace("__page__", encodeURIComponent($$("meta[name=page]")[0].content));
+    var previewURL = "/xwiki/bin/preview/" + $$("meta[name=space]")[0].content + "/" + $$("meta[name=page]")[0].content;
+
     form.commentElt = form.down('textarea');
     var buttons = form.down('input[type=submit]').up('div');
-    form.previewButton = new Element('span', {'class' : 'buttonwrapper'}).update(new Element('input', {'type' : 'button', 'class' : 'button', 'value' : "$msg.get('core.viewers.comments.preview.button.preview')"}));
+    form.previewButton = new Element('span', {'class' : 'buttonwrapper'}).update(new Element('input', {'type' : 'button', 'class' : 'button', 'value' : _('core.viewers.comments.preview.button.preview')}));
     form.previewButton._x_modePreview = false;
     form.previewContent = new Element('div', {'class' : 'answer commentPreview'});
     form.commentElt.insert({'before' : form.previewContent});
@@ -387,7 +388,7 @@ viewers.Comments = Class.create({
     form.previewButton.observe('click', function() {
       if (!form.previewButton._x_modePreview && !form.previewButton.disabled) {
          form.previewButton.disabled = true;
-         var notification = new XWiki.widgets.Notification("$msg.get('core.viewers.comments.preview.inProgress')", "inprogress");
+         var notification = new XWiki.widgets.Notification(_('core.viewers.comments.preview.inProgress'), "inprogress");
          new Ajax.Request(previewURL, {
             method : 'post',
             parameters : {'xpage' : 'plain', 'sheet' : '', 'content' : form.commentElt.value},
@@ -406,7 +407,7 @@ viewers.Comments = Class.create({
               if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
                 failureReason = 'Server not responding';
               }
-              notification.replace(new XWiki.widgets.Notification("$msg.get('core.viewers.comments.preview.failed')" + failureReason, "error"));
+              notification.replace(new XWiki.widgets.Notification(_('core.viewers.comments.preview.failed') + failureReason, "error"));
             },
             on0 : function (response) {
               response.request.options.onFailure(response);
@@ -431,7 +432,7 @@ viewers.Comments = Class.create({
     form.previewContent.update(content);
     form.previewContent.show();
     form.commentElt.hide();
-    form.previewButton.down('input').value = "$msg.get('core.viewers.comments.preview.button.back')";
+    form.previewButton.down('input').value = _('core.viewers.comments.preview.button.back');
   },
   /**
    * Display the comment textarea instead of the comment preview.
@@ -444,7 +445,7 @@ viewers.Comments = Class.create({
     form.previewContent.hide();
     form.previewContent.update('');
     form.commentElt.show();
-    form.previewButton.down('input').value = "$msg.get('core.viewers.comments.preview.button.preview')";
+    form.previewButton.down('input').value = _('core.viewers.comments.preview.button.preview');
     }
   },
   resetForm : function (event) {
@@ -530,7 +531,7 @@ viewers.Comments = Class.create({
               // Remove the corresponding HTML element from the UI
               var conversation = conversationDelete.up('.answer');
               // Replace the comment with a "deleted conversation" placeholder
-              conversation.replace(this.createNotification("$msg.get('conversation.delete.success')"));
+              conversation.replace(this.createNotification(_('conversation.delete.success')));
             }.bind(this),
             onComplete : function() {
               // In the end: re-enable the button
@@ -539,10 +540,10 @@ viewers.Comments = Class.create({
           },
           /* Interaction parameters */
           {
-             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('conversation.delete.confirm'))",
-             progressMessageText : "$msg.get('conversation.delete.inProgress')",
-             successMessageText : "$msg.get('conversation.delete.done')",
-             failureMessageText : "$msg.get('conversation.delete.failed')"
+             confirmationText: commentsCount > 0 ? _('conversation.delete.confirm.withReplies') [commentsCount] : _('conversation.delete.confirm'),
+             progressMessageText : _('conversation.delete.inProgress'),
+             successMessageText : _('conversation.delete.done'),
+             failureMessageText : _('conversation.delete.failed')
           }
         );
       }
@@ -570,8 +571,8 @@ viewers.Comments = Class.create({
       var editForm = new Element('form', {'method' : 'post', 'action' : saveUrl})
       conversationEditFormContainer.insert(editForm);
       // create the buttons for the future form, but don't insert them just yet
-      var saveButton = new Element('input', {'type' : 'submit', 'value' : '$escapetool.javascript($msg.get("save"))', 'class' : 'button-orange'});
-      var cancelButton = new Element('a', {'href' : window.location.href, 'class' : 'button-grey'}).insert('$msg.get("cancel")');
+      var saveButton = new Element('input', {'type' : 'submit', 'value' : _('save'), 'class' : 'button-orange'});
+      var cancelButton = new Element('a', {'href' : window.location.href, 'class' : 'button-grey'}).insert(_("cancel"));
       cancelButton.observe('click', function(event) {
         var conversationFormContainer = event.findElement('.conversation-editformcontainer');
         if (conversationFormContainer) {
@@ -600,7 +601,7 @@ viewers.Comments = Class.create({
           if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
             failureReason = 'Server not responding';
           }
-          editForm._x_notification = new XWiki.widgets.Notification("$msg.get('conversation.edit.failed')" + failureReason, "error");
+          editForm._x_notification = new XWiki.widgets.Notification(_('conversation.edit.failed') + failureReason, "error");
           conversationEditFormContainer.remove();
         }.bind(this),
         on0 : function (response) {
@@ -678,9 +679,9 @@ viewers.Comments = Class.create({
           },
           /* Interaction parameters */
           {
-            confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + conversationPermalink.href + "'/>",
-            yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
-            noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+            confirmationText: _('core.viewers.comments.permalink') +  ": <input type='text' class='full' value='" + conversationPermalink.href + "'/>",
+            yesButtonText: _('core.viewers.comments.permalink.goto'),
+            noButtonText : _('core.viewers.comments.permalink.hide')
           }
         );
         permalinkBox.dialog.addClassName('permalinkBox')
@@ -712,7 +713,7 @@ function conversationLikeHandler(event) {
         }
 
         console.log("Liking " + topicDocName);
-        var likeUrl = '$escapetool.javascript($xwiki.getURL("XWiki.Ratings"))';
+        var likeUrl = '/xwiki/bin/view/XWiki/Ratings';
         topicLikeBlock.votingInProgress = false;
 
         new Ajax.Request(likeUrl, {
@@ -720,10 +721,10 @@ function conversationLikeHandler(event) {
           parameters : {'xpage' : 'plain', 'doc' : topicDocName, 'vote' : '1'},
           onCreate : function () {
             topicLikeBlock.votingInProgress = true;
-            topicLikeBlock._x_notification = new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.loading'))", "inprogress");
+            topicLikeBlock._x_notification = new XWiki.widgets.Notification(_('conversation.like.loading'), "inprogress");
           }.bind(this),
           onSuccess : function (response) {
-            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.done'))", "done"));
+            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification(_('conversation.like.done'), "done"));
             // get the conversation score which is the sibling of the like block
             var scoreDisplayer = topicLikeBlock.up(".topic").down(".conversation-score");
             if (scoreDisplayer) {
@@ -745,7 +746,7 @@ function conversationLikeHandler(event) {
             if (response.statusText == '' /* No response */ || response.status == 12031 /* In IE */) {
               failureReason = 'Server not responding';
             }
-            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification("$escapetool.javascript($msg.get('conversation.like.failed'))" + failureReason, "error"));
+            topicLikeBlock._x_notification.replace(new XWiki.widgets.Notification(_('conversation.like.failed') + failureReason, "error"));
           }.bind(this),
           on0 : function (response) {
             response.request.options.onFailure(response);
@@ -800,9 +801,9 @@ function init() {
           },
           /* Interaction parameters */
           {
-            confirmationText: "$msg.get('core.viewers.comments.permalink'): <input type='text' class='full' value='" + topicPermalink.href + "'/>",
-            yesButtonText: "$msg.get('core.viewers.comments.permalink.goto')",
-            noButtonText : "$msg.get('core.viewers.comments.permalink.hide')"
+            confirmationText: _('core.viewers.comments.permalink')+ ": <input type='text' class='full' value='" + topicPermalink.href + "'/>",
+            yesButtonText: _('core.viewers.comments.permalink.goto'),
+            noButtonText : _('core.viewers.comments.permalink.hide')
           }
         );
         permalinkBox.dialog.addClassName('permalinkBox')
@@ -856,7 +857,7 @@ function init() {
             },
             onSuccess : function() {
               // notify the delete
-              alert("$msg.get('conversation.delete.success')");
+              alert(_('conversation.delete.success'));
               if(Curriki.global.parentPageURL) window.location.href = Curriki.global.parentPageURL;
             }.bind(this),
             onComplete : function() {
@@ -866,10 +867,10 @@ function init() {
           },
           /* Interaction parameters */
           {
-             confirmationText: commentsCount > 0 ? "$escapetool.javascript($msg.get('conversation.delete.confirm.withReplies', ['__number__']))".replace('__number__', commentsCount) : "$escapetool.javascript($msg.get('conversation.delete.confirm'))",
-             progressMessageText : "$msg.get('conversation.delete.inProgress')",
-             successMessageText : "$msg.get('conversation.delete.done')",
-             failureMessageText : "$msg.get('conversation.delete.failed')"
+             confirmationText: commentsCount > 0 ? _('conversation.delete.confirm.withReplies', [commentsCount]) : _('conversation.delete.confirm'),
+             progressMessageText : _('conversation.delete.inProgress'),
+             successMessageText : _('conversation.delete.done'),
+             failureMessageText : _('conversation.delete.failed')
           }
         );
       }
