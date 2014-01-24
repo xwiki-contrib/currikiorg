@@ -19,35 +19,61 @@ if(!(request.group==null || request.group=='')) {
         println("Creating discussions for all groups...");
         List list = xwiki.getSpaces();
         LOG.warn("Injecting into ${list.size()} spaces.")
-        for(String spaceName in xwiki.getSpaces()) {
-            if(!spaceName.startsWith("Group_") || spaceName.endsWith("_Invitations")) continue;
-            LOG.warn("Processing space " + spaceName);
-            println("* processing space ${spaceName}");
-            DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
-            group = spaceName.substring("Group_".length());
-            if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
-                println("* Sorry, there seems to be no group of name " + group + ".");
-            } else if (xwiki.exists(targetRef) && ! request.force==1) {
-                println("* Group ${group} already has a discussions.")
-            } else {
-                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, true)) {
-                    println("* Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
-                } else {
-                    println("* Group ${group}: Failed copying.");
+        List spaceNames = xwiki.getSpaces();
+        spaceNames.sort();
+        LOG.warn("${spaceNames.size()} spaces to process.");
+        int i=0;
+        for(String spaceName in spaceNames) {
+            i++;
+            if(!spaceName.startsWith("Group_") || spaceName.endsWith("_Invitations") || spaceName=="*" || spaceName=="Group_*") continue;
+            try {
+                println("* Processing space [[${spaceName}>>${spaceName}.WebHome]].");
+                LOG.warn("Processing space ${spaceName} (${i} of ${spaceNames.size()}).");
+                DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
+                group = spaceName.substring("Group_".length());
+                if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
+                    println("** Sorry, there seems to be no group of name " + group + ".");
+                    continue;
+                } else if (xwiki.exists(targetRef) && ! request.force==1) {
+                    println("** Group ${group} already has a discussions.")
+                    continue;
                 }
+                if(request.noCopyDiscussions!="true") {
+                    if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, true)) {
+                        println("** Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
+                    } else {
+                        println("** Group ${group}: Failed copying Discussions");
+                    }
+                }
+
+                // checking the Discussions_Group_${groupName}.WebPreferences
+                // needs edit and admin right for XWiki.XWikiAdmin and edit right for Group_${group}.Members
+                if(request.noApplyRights!="true") {
+                    print("** Updating rights...");
+                    try {
+                        CurrikiSpaceManagerPluginApi csm = xwiki.csm;
+                        csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
+                        println("Successfully.");
+                    } catch (Exception ex) {
+                        println("** Failed updating rights: " + ex);
+                        ex.printStackTrace();
+                    }
+                }
+
+                if(request.noNewFlag!="true") {
+                    println("** Copying NewFlag.");
+                    targetRef.name = "NewFlag";
+                    if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","NewFlag"),targetRef, "en", false, true)) {
+                        println("** Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".NewFlag]].");
+                    } else {
+                        println("** Group ${group}: Failed copying NewFlag.");
+                    }
+                }
+            } catch (Exception ex) {
+                ex.printStackTrace();
+                println("** exception: ${ex}");
             }
 
-            // checking the Discussions_Group_${groupName}.WebPreferences
-            // needs edit and admin right for XWiki.XWikiAdmin and edit right for Group_${group}.Members
-            println("Updating rights.");
-            try {
-                CurrikiSpaceManagerPluginApi csm = xwiki.csm;
-                csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
-                println("Successfully updated rights of ${group}.");
-            } catch (Exception ex) {
-                println("Failed updating rights: " + ex);
-                ex.printStackTrace();
-            }
         }
     } else {
         DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
@@ -58,6 +84,7 @@ if(!(request.group==null || request.group=='')) {
             if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
                 println("Sorry, there seems to be no group of name " + group + ".");
             } else {
+                System.out.println("Copying Discussions document.")
                 if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, false)) {
                     println("Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
                 } else {
