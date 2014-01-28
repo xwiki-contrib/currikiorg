@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.flixt</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.flixt</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1298699908000</creationDate>
-<date>1379458005000</date>
-<contentUpdateDate>1379458005000</contentUpdateDate>
-<version>108.1</version>
+<date>1390605454000</date>
+<contentUpdateDate>1390605454000</contentUpdateDate>
+<version>113.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -92,6 +92,9 @@ public class SOLRExtractorGroovy {
 
 
     private static boolean isExcluded(Document doc) {
+        // new doc? go away
+        if(doc.isNew()) return true;
+        // is the document not existing? Then exclude it
         boolean baseExcluded = excludedSpaces.contains(doc.space) ||
                 excludedNames.contains(doc.name) ||
                 excludedPages.contains(doc.fullName);
@@ -118,8 +121,6 @@ public class SOLRExtractorGroovy {
                 if(title==null || title.trim().length()==0) return true;
         }
 
-        // new doc? go away
-        if(doc.isNew()) return true;
         return baseExcluded;
     }
 
@@ -145,6 +146,7 @@ public class SOLRExtractorGroovy {
             def userObject = doc.getObject("XWiki.XWikiUsers", false);
             def discussionsObject = doc.getObject("ConversationCode.TopicClass");
             if(discussionsObject==null) discussionsObject = doc.getObject("ConversationCode.AnswerClass");
+            System.out.println("DiscssionsObject = " + discussionsObject )
             if(doc.space=="XWiki" &amp;&amp; userObject==null) return; // only users in XWiki space
             if(assetObject!=null) {
                 // a resource
@@ -849,8 +851,8 @@ public class SOLRExtractorGroovy {
     void initDiscussionObject() {
         if(context.request.comment!=null) commentNum = Integer.parseInt(context.request.comment);
         def comment,
-                topicObject = doc.getObject("ConversationCode.TopicClass", false),
-                answerObject = doc.getObject("ConversationCode.AnswerClass", false);
+            topicObject = doc.getObject("ConversationCode.TopicClass", false),
+            answerObject = doc.getObject("ConversationCode.AnswerClass", false);
 
         if(commentNum!=null) {
             comment = doc.getObject("XWiki.XWikiComments", (int) commentNum);
@@ -973,7 +975,7 @@ public class SOLRExtractorGroovy {
         String baseName = discussionTopicDoc.fullName.replace('.','/') + "?viewer=conversationstopic";
         if(discussionIndexType=="comment")
             return baseName + "#xwikicomment_"+doc.name +"_" + commentNum
-            // http://dev.gpsnetwork.org/xwiki/bin/view/Discussions/WebHome?viewer=conversationstopic#xwikicomment_Topic3Answer_0
+        // http://dev.gpsnetwork.org/xwiki/bin/view/Discussions/WebHome?viewer=conversationstopic#xwikicomment_Topic3Answer_0
         else if(discussionIndexType=="answer")
             return baseName + "#" + doc.name;
         else return baseName;
