@@ -28,8 +28,8 @@ function playFlash(flashItem, button){
   var mObj = getFlashMovieObject("flashItem"+flashItem);
   mObj.Play();
   button.onclick=function(){stopFlash(flashItem, button);};
-  button.title="$msg.get('rve.content.view.pause_button')";
-  button.innerHTML="$msg.get('rve.content.view.pause_button')";
+  button.title=_('rve.content.view.pause_button');
+  button.innerHTML=_('rve.content.view.pause_button');
   button.className="button-link button-link-pause";
 }
 
@@ -37,7 +37,7 @@ function stopFlash(flashItem, button){
   var mObj = getFlashMovieObject("flashItem"+flashItem);
   mObj.StopPlay();
   button.onclick=function(){playFlash(flashItem, button);};
-  button.title="$msg.get('rve.content.view.play_button')";
-  button.innerHTML="$msg.get('rve.content.view.play_button')";
+  button.title=_('rve.content.view.play_button');
+  button.innerHTML=_('rve.content.view.play_button');
   button.className="button-link button-link-play";
 }
