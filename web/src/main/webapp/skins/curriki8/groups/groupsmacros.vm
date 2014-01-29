@@ -995,7 +995,7 @@ $xwiki.addTooltipJS()
 <script type="text/javascript">
 function editGroupInfo(spaceName,divid) {
   var pars = "space=" + spaceName + "&divid=" + divid + "&xpage=plain";
-  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+  $(divid).innerHTML = "<p>"+_('groups_loadinginprogress')+"</p>";
   // call url to get the edit html to edit the profile
   var myAjax = new Ajax.XWikiRequest( "Groups", "EditGroupInfoService", {method: 'get', parameters: pars, onComplete: editGroupInfoCallback, divid: divid });
 }
@@ -1006,7 +1006,7 @@ function editGroupInfoCallback(ajaxreq) {
 function cancelEditGroupInfo(spaceName,divid) {
   if (confirm('$msg.groups_welcomeblock_confirmcancel')) {
    var pars = "space=" + spaceName + "&divid=" + divid + "&xpage=plain";
-   $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+   $(divid).innerHTML = "<p>"+_('groups_loadinginprogress')+"</p>";
    // call url to get the edit html to edit the profile
    var myAjax = new Ajax.XWikiRequest( "Groups", "ViewGroupInfoService", {method: 'get', parameters: pars, onComplete: cancelEditGroupInfoCallback, divid: divid });
   }
@@ -1101,7 +1101,7 @@ $msg.get("groups.curriculum.contributions.about")
 	<div style="clear:both;">
   #verbatim_start
 	<form id="groupsearch" name="groupsearch" method="post"
-		onsubmit="if (document.groupsearch.brsqry.value!='' && document.groupsearch.brsqry.value!='${msg.groups_home_contributions_searchfieldtxt}') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
+		onsubmit="if (document.groupsearch.brsqry.value!='' && document.groupsearch.brsqry.value!='"+_('groups_home_contributions_searchfieldtxt')+"') {document.groupsearch.action=document.groupsearch.action+'#o%3As%3Ds%253Aresource%5Ef%3Do%253Aresource%253Do%25253Aterms%25253Ds%2525253A'+escape(escape(escape(escape(document.groupsearch.brsqry.value))));}; document.location.href=document.groupsearch.action; return false;"
 	action="/xwiki/bin/view/${spaceName}/ContributionsSearch">
 		<div class="groupcontribution-leftbutton">
 			<a class="button-orange" href="/xwiki/bin/view/${spaceName}/Contributions" alt="$msg.get("groups.curriculum.contributions.viewAll")" title="$msg.get("groups.curriculum.contributions.viewAll")">$msg.get("groups.curriculum.contributions.viewAll")</a>
