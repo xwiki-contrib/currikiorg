@@ -48,11 +48,11 @@ function addToList(addLink, selectId, divId){
   deleteLink.appendChild(document.createTextNode('Delete'));
   deleteLink.href = 'javascript:void()';
   if (selectId == 'rolesList') {
-    deleteLink.title = '${msg.get('groups_messages_create_to_delete_role_tooltip')}';
+    deleteLink.title = _('groups_messages_create_to_delete_role_tooltip');
   } else if (selectId == 'membersList') {
-    deleteLink.title = '${msg.get('groups_messages_create_to_delete_member_tooltip')}';
+    deleteLink.title = _('groups_messages_create_to_delete_member_tooltip');
   } else {
-    deleteLink.title = '${msg.get('groups_messages_create_to_delete_tooltip')}';
+    deleteLink.title = _('groups_messages_create_to_delete_tooltip');
   }
   deleteLink.onclick = function(){
     if (!selectObj.disabled){
@@ -195,7 +195,7 @@ function editMessageCallback(ajaxreq) {
 //
 function cancelEditMessage(spaceName,pageName,divid) {
   var pars = "space=" + spaceName + "&page=" + pageName + "&divid=" + divid + "&xpage=plain";
-  $(divid).innerHTML = "<p>${msg.groups_loadinginprogress}</p>";
+  $(divid).innerHTML = "<p>" + _('groups_loadinginprogress') + "</p>";
   // call url to get the edit html to edit the profile
   var myAjax = new Ajax.XWikiRequest( "Groups", "ViewMessageService", {method: 'get', parameters: pars, onComplete: cancelEditMessageCallback, divid: divid });
 }
