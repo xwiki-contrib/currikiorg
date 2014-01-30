@@ -76,32 +76,41 @@ if(!(request.group==null || request.group=='')) {
 
         }
     } else {
+        spaceName=request.group;
+        println("* Processing space [[${spaceName}>>${spaceName}.WebHome]].");
+        LOG.warn("Processing space ${spaceName}.");
         DocumentReference targetRef = new DocumentReference(wikiName, "Group_" + group, "Discussions");
-        if(xwiki.exists(targetRef)) {
-            println("Discussions for this group already exist.");
-        } else {
-            println("Creating discussions for group...");
-            if(!xwiki.exists("Group_"+ group + ".WebPreferences")) {
-                println("Sorry, there seems to be no group of name " + group + ".");
+        group = spaceName.substring("Group_".length());
+        if(request.noCopyDiscussions!="true") {
+            if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, true)) {
+                println("** Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
             } else {
-                System.out.println("Copying Discussions document.")
-                if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","Discussions"),targetRef, "en", false, false)) {
-                    println("Succeeded copying to [[Discussions>>Group_" + group + ".Discussions]].");
-                } else {
-                    println("Failed copying.");
-                }
+                println("** Group ${group}: Failed copying Discussions");
             }
         }
+
         // checking the Discussions_Group_${groupName}.WebPreferences
         // needs edit and admin right for XWiki.XWikiAdmin and edit right for Group_${group}.Members
-        println("Updating rights.");
-        try {
-            CurrikiSpaceManagerPluginApi csm = xwiki.csm;
-            csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
-            println("Successfully updated rights of ${group}.xxx");
-        } catch (Exception ex) {
-            println("Failed updating rights: " + ex);
-            ex.printStackTrace();
+        if(request.noApplyRights!="true") {
+            print("** Updating rights...");
+            try {
+                CurrikiSpaceManagerPluginApi csm = xwiki.csm;
+                csm.setSubSpaceRights(csm.getSpace("Group_" + group), "Discussions");
+                println("Successfully.");
+            } catch (Exception ex) {
+                println("** Failed updating rights: " + ex);
+                ex.printStackTrace();
+            }
+        }
+
+        if(request.noNewFlag!="true") {
+            println("** Copying NewFlag.");
+            targetRef.name = "NewFlag";
+            if(xwiki.copyDocument(new DocumentReference(wikiName,"Groups_TemplateSpace","NewFlag"),targetRef, "en", false, true)) {
+                println("** Group ${group}: Succeeded copying to [[Discussions>>Group_" + group + ".NewFlag]].");
+            } else {
+                println("** Group ${group}: Failed copying NewFlag.");
+            }
         }
     }
 } else {
