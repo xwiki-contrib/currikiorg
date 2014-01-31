@@ -9,10 +9,10 @@ $context.setCacheDuration(1200)##
 #set($numResources = $xwiki.curriki.countDocsSolrCatchAll("type:resource -name:MyCollection -name:WebHome -name:SpaceIndex -web:AssetTemp"))##
 #set($numMembers =     $xwiki.curriki.countDocsSolrCatchAll("type:user"))##
 #set($numGroups =    $xwiki.curriki.countDocsSolrCatchAll("type:group"))##
-#if($numResources==-1 || $numMembers==-1 || $numGroups==-1)<!-- $xwiki.mailsender.sendTextMessage("polx@curriki.org","polx@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numMembers $numGroups . The log would contain the detailed error.") -->#end##
+#if($numResources==-1 || $numMembers==-1 || $numGroups==-1)<!-- $xwiki.mailsender.sendTextMessage("polx@curriki.org","polx@curriki.org,tsherman@curriki.org,jwu@curriki.org,jmarks@curriki.org,bob@curriki.org", "CurrikiSolr client error ($hostname)", "Curriki Solr in Watch Curriki Grow ($doc.name) returned: $numResources $numMembers $numGroups . The log would contain the detailed error.") -->#end##
 <p>
-    <span id="wcg_number_of_visitors" title="Number of Curriki visitors.">$numbertool.format($numUsers) Unique Visitors</span>##
-    <span id="wcg_number_of_users" title="Number of registered users.">$numbertool.format($numMembers) Members</span>##
-    <span id="wcg_number_of_resources" title="Number of free open educational resources."><a href="/welcome/resources-curricula/">$numbertool.format($numResources) Resources</a></span>
-    <span id="wcg_number_of_groups" title="Number of professional networking groups."><a href="/welcome/collaborate/groups/">$numbertool.format($numGroups) Groups</a></span>##
+    <span title="Number of Curriki visitors.">$numbertool.format($numUsers) Unique Visitors</span>##
+    <span title="Number of registered users.">$numbertool.format($numMembers) Members</span>##
+    <span title="Number of free open educational resources."><a href="/welcome/resources-curricula/">$numbertool.format($numResources) Resources</a></span>
+    <span title="Number of professional networking groups."><a href="/welcome/collaborate/groups/">$numbertool.format($numGroups) Groups</a></span>##
 </p>
