@@ -685,7 +685,13 @@ practice to put them here since they are real dependencies -->
     <artifactId>xwiki-plugin-ratings</artifactId>
     <version>1.2</version>
   </dependency>
- 
+      <!-- version override because of CVE-2014-0050 -->
+      <dependency>
+          <groupId>commons-fileupload</groupId>
+          <artifactId>commons-fileupload</artifactId>
+          <version>1.3.1</version>
+      </dependency>
+
   </dependencies>
   <build>
       <finalName>xwiki</finalName>
