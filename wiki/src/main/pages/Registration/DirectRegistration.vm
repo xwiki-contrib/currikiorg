@@ -19,8 +19,10 @@
     $request.session.setAttribute("SocialLoginTool",$tool)##
     $tool.echoToConsole("Post bit")##
     #if($tool.readAndValidateQueryParams())##
-        $success=$tool.createUser()##
-        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&tempskin=curriki8&xpage=popup")##
+        #set($success=$tool.createUser())
+        #set($redir=$tool.getNowTarget())
+        $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/JumpToTop?xpage=popup&redir=$redir")##
+        ##$response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/EmailSentValidationLink?xwikiname=$tool.username&xpage=popup")##
     #else
         $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/DirectRegistration?xpage=popup&tempskin=curriki8")##
     #end ##

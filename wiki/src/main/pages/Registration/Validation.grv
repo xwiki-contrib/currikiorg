@@ -81,6 +81,12 @@ public class Validation {
         return true;
     }
 
+    public boolean isValidEmailConfirmation(String email_confirmation, boolean echoErrors){
+        // The email_confirmation field is a honeypot for spam bots, since the double opt in
+        // for emails is turned of for GPS
+        return echoErrors ? (email_confirmation == null || "".equals(email_confirmation)) : true;
+    }
+
     public boolean isValidPassword(String ps, boolean echoErrors ) {
         if(ps!=null && ps.length()>4 && !ps.contains(" ")) {
             addOk("password");
