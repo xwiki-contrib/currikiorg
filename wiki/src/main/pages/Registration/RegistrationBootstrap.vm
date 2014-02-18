@@ -90,7 +90,9 @@ fieldset h3 {
     color: #666;
     font-weight: bold;
 }
-
+.email_confirmation {
+    display: none;
+}
 </style>
 <!-- begin javascripts -->##
 #set($globalDebug=true)##
@@ -174,6 +176,15 @@ fieldset h3 {
               <input id="${f}_input" name="${f}" value="$!{tool.email}" ##
                      #if($provider)disabled="disabled" #end##
               >
+          </p>
+          ##
+          ##
+          ## This is a honeypot field for spam bots
+          ## and should never be filled in by humans.
+          #set($f="email_confirmation")
+          <p class="textfield #computeTrClasses($f) email_confirmation">
+              <label for="${f}_input"><b>$msg.get("join.member_email_confirm")</b></label>
+              <input id="${f}_input" name="${f}" value="">
           </p>
           ##
           ##
