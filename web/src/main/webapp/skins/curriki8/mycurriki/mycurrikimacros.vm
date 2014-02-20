@@ -680,43 +680,52 @@ $!desc
   *#
 #macro(mycurriki_editprofileemail)
 ## A user changed their email address
-## Force them to validate first
 #if($context.user == "XWiki.XWikiGuest") ## {
 ## Not a real user -- Just bounce to home
 ## TODO: Is this an issue if both email and password change at the same time?
 $response.sendRedirect($xwiki.getURL("Main.WebHome"))
 #end ## }
 ##
-#if($xwiki.hasAdminRights()) ## {
-## Is an admin, so don't bother with verification
+##  We don't bother users with validation anymore
 #if("$!request.user" != "") ## {
 #set($userarg = "user=${request.user}")
 #else ## }{
 #set($userarg = "")
 #end ## }
 $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
-#else ## } {
-##
-## Logout the user, send a verification mail, and redirect to Email Verification page
-#set($username = $context.user.replace("XWiki.", ""))
-#set($userDoc = $xwiki.getDocument("XWiki.${username}"))
-#set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
-#set($valCode = $xwiki.generateRandomString(8))
-#set($newEmail = $userObj.getProperty("email").getValue())
-#set($junk = $userObj.set("validkey", $valCode))
-#set($junk = $userObj.set("active", 0))
-#set($junk = $userObj.set("email_undeliverable", 1))
-#set($junk = $userDoc.saveWithProgrammingRights())
-#set($link = "http://$xwiki.curriki.getPublicCurrikiConfig('hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&validkey=${valCode}"))
-#set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
-#set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
-#set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
-#set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
-$xwiki.mailsender.sendTextMessage($mailFrom, $newEmail, $mailSubject, $mailContent)
-#set($session = $request.getSession(true))
-#set($xredirect = $xwiki.getURL("Registration.EmailVerification", "view", "username=${username}"))
-$response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xredirect=${xredirect}"))
-#end ## }
+##  < Old code start >
+##  Demands the user to validate their email address
+##  #if($xwiki.hasAdminRights()) ## {
+##  ## Is an admin, so don't bother with verification
+##    #if("$!request.user" != "") ## {
+##      #set($userarg = "user=${request.user}")
+##    #else ## }{
+##      #set($userarg = "")
+##    #end ## }
+##    $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
+##  #else ## } {
+##  ##
+##  ## Logout the user, send a verification mail, and redirect to Email Verification page
+##    #set($username = $context.user.replace("XWiki.", ""))
+##    #set($userDoc = $xwiki.getDocument("XWiki.${username}"))
+##    #set($userObj = $!userDoc.getObject("XWiki.XWikiUsers"))
+##    #set($valCode = $xwiki.generateRandomString(8))
+##    #set($newEmail = $userObj.getProperty("email").getValue())
+##    #set($junk = $userObj.set("validkey", $valCode))
+##    #set($junk = $userObj.set("active", 0))
+##    #set($junk = $userObj.set("email_undeliverable", 1))
+##    #set($junk = $userDoc.saveWithProgrammingRights())
+##    #set($link = "http://$xwiki.curriki.getPublicCurrikiConfig('hostname', 'www.curriki.org')/xwiki/bin/view/Registration/CompleteCaller?xwikiname=${username}&validkey=${valCode}"))
+##    #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
+##    #set($mailDoc = $xwiki.getDocument("Registration.MailTemplateVerificationEmail"))
+##    #set($mailSubject = $doc.getRenderedContent($mailDoc.title,"xwiki/1.0"))
+##    #set($mailContent = $doc.getRenderedContent($mailDoc.content,"xwiki/1.0"))
+##    $xwiki.mailsender.sendTextMessage($mailFrom, $newEmail, $mailSubject, $mailContent)
+##    #set($session = $request.getSession(true))
+##    #set($xredirect = $xwiki.getURL("Registration.EmailVerification", "view", "username=${username}"))
+##    $response.sendRedirect($xwiki.getURL("Registration.CleanLogout", "logout", "xredirect=${xredirect}"))
+##  #end ## }
+##  < Old code end >
 #end
 
 #**
