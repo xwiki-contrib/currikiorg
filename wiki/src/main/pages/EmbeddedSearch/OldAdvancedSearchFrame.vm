@@ -1,0 +1,308 @@
+#set($GA_uacct = $xwiki.curriki.getPublicCurrikiConfig("GA","0"))
+$response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
+{pre}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Curriki - Search among resources (Embedded Search)</title>
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', {/pre}'$GA_uacct'{pre}]);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/f33b/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
+        document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
+        //]]>
+    </script>
+
+    <link type="text/css" href="http://extjs.cachefly.net/ext-2.3.0/resources/css/ext-all.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="/xwiki/js/f33b/curriki-js.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/stylebase.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/style.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/skins/curriki8/f33b/style2.css">
+
+    <script type="text/javascript" src="/xwiki/resources/js/prototype/prototype.js"></script>
+    <script type="text/javascript" src="/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/skin.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/ext-all-debug.js"></script>
+
+    <!-- Needed to overwrite the default Ext.History Singleton and replace it by one which works in iFrames correctly-->
+    <script type="text/javascript" src="/xwiki/js/f33b/ext-embedded-history.js"></script>
+
+    <script type="text/javascript" src="/xwiki/gen/js/f33b/lang_en.js"></script>
+    <script type="text/javascript" src="/xwiki/js/f33b/curriki-merged.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/swfobject.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/xwiki.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/js/presentation.js"></script>
+    <script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/f33b/scripts/shortcuts.js"></script>
+
+    <script type="text/javascript">
+        Ext.ns('Curriki.global');
+        Curriki.global.username = "XWiki.XWikiGuest";
+        Curriki.global.fullname = "XWikiGuest";
+        Curriki.global.isAdmin = false;
+    </script>
+</head>
+<body style="background-color:transparent; min-width:100%">
+<style type="text/css">
+    /* COLIN */
+
+
+
+
+
+
+    /* Style2.css */
+
+    .x-panel-bwrap .x-panel-body {background: #f1f1f1;}
+
+    .x-panel-bwrap .x-grid3-row-over {
+        background:#eeeeee;
+    }
+
+
+
+    .x-panel-noborder .x-panel-header-noborder {
+        border-width:0;
+        border-bottom:1px solid #bbb;
+    }
+
+
+    .x-panel-bwrap .x-grid3-hd-row {
+        text-transform:capitalize;
+    }
+
+    .x-panel-bwrap .x-grid3-hd-row td {
+        font-weight:bold;
+    }
+
+    /* Ext-all.css */
+
+
+
+    .x-panel-bwrap .x-grid3-hd-row td {
+        font: normal bold 11px arial, tahoma, helvetica, sans-serif;
+        -moz-outline: none;
+        text-transform: capitalize;
+        -moz-user-focus: normal;
+    }
+
+    .x-panel-bwrap .x-grid3-row td, .x-grid3-summary-row td{
+
+    }
+
+
+
+
+    .x-panel-bwrap td.x-grid3-hd-over .x-grid3-hd-inner, .x-panel-bwrap td.sort-desc
+    .x-grid3-hd-inner, .x-panel-bwrap td.sort-asc .x-grid3-hd-inner, .x-panel-bwrap
+    td.x-grid3-hd-menu-open .x-grid3-hd-inner {  background: #ddd; color:#000}
+
+
+    body .x-tip {
+        font-family:arial, sans-serif;
+        text-align:left;
+        background:none;
+        background-color:#f9f9f9;
+        box-shadow: 0px 0px 15px 0px #ddd;
+        -moz-box-shadow: 0px 0px 15px 0px #ddd;
+        -webkit-box-shadow: 0px 0px 15px 0px #ddd;
+        -khtml-box-shadow: 0px 0px 15px 0px #ddd;
+        border: 1px solid #d1d1d1;
+        padding: 1px;
+        font-size:12px;
+        padding:10px;
+        color:#000;
+    }
+
+
+    .x-panel-bwrap .x-panel-header {
+        overflow:hidden;
+        zoom:1;
+        color:#000;
+        height:42px;
+        font:normal bold 20px/44px Helvetica, Arial;
+        padding:2px 3px 1px 9px;
+        border:1px solid #c9c9c9 !important;
+        background: #fff url(http://teachhub.com/sites/all/themes/teachhub/images/header_gradient_curriki.png) left bottom repeat-x !important;
+    }
+
+
+
+    /* CSS that wasn't a part of a stylesheet */
+
+
+    .x-panel-bwrap fieldset#search-advanced-group, .x-panel-bwrap fieldset#search-advanced-resource, .x-panel-bwrap fieldset#search-advanced-member, .x-panel-bwrap fieldset#search-advanced-blog, .x-panel-bwrap fieldset#search-advanced-curriki {
+        background: none repeat scroll 0 0 #f1f1f1;
+        border: medium none;
+        margin: -10px 0 0;
+        overflow: visible;
+        padding: 10px 0 10px 10px;
+    }
+
+
+    .x-panel-bwrap .search-termPanel-tips-resource a {
+        color:#000;
+    }
+
+    .x-panel-bwrap .x-panel-header-text span.x-panel-header-text {
+        color:#000;
+    }
+
+
+
+    .x-panel-bwrap .x-grid3-header {
+        background: #f1f1f1 url(http://teachhub.com/sites/all/themes/teachhub/images/header_gradient_curriki.png) left top repeat-x !important;
+        color: #000;
+    }
+
+
+
+
+    .x-panel-bwrap #search-termPanel-resource, .x-panel-bwrap #search-termPanel-group, .x-panel-bwrap #search-termPanel-member, .x-panel-bwrap #search-termPanel-blog, .x-panel-bwrap #search-termPanel-curriki {
+        background:#f1f1f1;
+    }
+
+    .x-panel-bwrap td.x-grid3-hd-over {
+        background:#ddd;
+
+    }
+
+
+    .x-panel-bwrap td.x-grid3-hd .x-grid3-hd-inner {
+        height:30px
+
+    }
+
+    .x-panel-bwrap #search-termPanel-resource a, .x-panel-bwrap #search-termPanel-group a, .x-panel-bwrap #search-termPanel-member a, .x-panel-bwrap #search-termPanel-blog a, .x-panel-bwrap #search-termPanel-curriki a {
+        color:#000;
+        font-size:15px;
+        font-weight:bold;
+        padding-top:2px;
+
+        display:inline-block;
+
+    }
+
+
+
+    .x-panel-bwrap .search-termPanel-button button {
+        background:#c6da0a;
+        border: 1px solid #9ba822;
+        color:#000;
+        font-weight:bold;
+        text-shadow: 1px 1px 0px #def129;
+    }
+
+
+    .x-panel-bwrap .search-termPanel-button button:hover {
+        background: #b4c605;
+        color:#000;
+        text-shadow: 1px 1px 0px #def129;
+
+    }
+
+    .x-panel-bwrap .x-grid3-hd-btn {
+        background-image: url(http://teachhub.com/sites/all/themes/teachhub/images/arrows_dropdown_grey.png);
+
+    }
+
+    .x-panel-bwrap .x-grid3-header-offset {
+        background:#f1f1f1;
+    }
+
+    .x-panel-bbar .x-paging-info {
+        border-top: 2px solid transparent !important;
+    }
+    /* END COLIN */
+</style>
+<div style="position:absolute; top: 15px; right:5px; float:right; z-index:1;">
+    <img height="35px" src="/xwiki/skins/curriki8/images/powered_by_curriki.gif"/>
+</div>
+<div id="test">
+    <script type="text/javascript">
+        /* <![CDATA[ */
+        Ext.ns('Curriki.userinfo');
+        Curriki.userinfo = {
+            isAdmin:    false,
+            userGroups:"",
+            userName:   "XWiki.XWikiGuest"
+        };
+        /* ]]>*/
+    </script>
+    <script src="/xwiki/js/f33b/curriki-module-search-debug.js" type="text/javascript"></script>
+    <div id="search-div" class=" x-panel search-module x-panel-noborder"></div>
+    <script type="text/javascript">
+
+        var embeddingPartnerUrl;
+        var resourceDisplay;
+        var embedViewMode;
+
+        var params = Ext.urlDecode(location.search.substring(1));
+
+        // Set the embeddingPartnerUrl
+        if(typeof params.embeddingPartnerUrl === "undefined"){
+            embeddingPartnerUrl = "http://current.dev.curriki.org" // Default a domain we controll
+        }else{
+            embeddingPartnerUrl = params.embeddingPartnerUrl;
+        }
+
+        // Set the resourceDisplay
+        if(typeof params.resourceDisplay === "undefined"){
+            resourceDisplay = "http://current.dev.curriki.org" // Default a domain we controll
+        }else{
+            resourceDisplay = params.resourceDisplay;
+        }
+
+        // Set the embedViewMode
+        if(typeof params.embedViewMode === "undefined"){
+            embedViewMode = "viewer=embed" // Default to the normal embed viewer
+        }else{
+            embedViewMode = "viewer=" + params.embedViewMode;
+        }
+
+        /* <![CDATA[ */
+        Curriki.module.search.tabList = ['resource'];
+        Curriki.module.search.embeddingPartnerUrl = embeddingPartnerUrl;
+        Curriki.module.search.resourceDisplay = resourceDisplay;
+        Curriki.module.search.embedViewMode = embedViewMode;
+        Curriki.module.search.start();
+        /* ]]>*/
+    </script>
+</div>
+
+
+<!-- Hidden form for the history -->
+<form class="x-hidden" id="history-form">
+    <input type="hidden" id="x-history-field" value="">
+    <iframe id="x-history-frame"></iframe>
+</form>
+
+
+<!--  IE9 workaround for the createContextualFragment method which is not supported there under extjs 2.3 -->
+<script type="text/javascript">
+    if ((typeof Range !== "undefined") && !Range.prototype.createContextualFragment)
+    {
+        Range.prototype.createContextualFragment = function(html)
+        {
+            var frag = document.createDocumentFragment();
+            div = document.createElement("div");
+            frag.appendChild(div);
+            div.outerHTML = html;
+            return frag;
+        };
+    }
+</script>
+</body>
+</html>
+{/pre}
