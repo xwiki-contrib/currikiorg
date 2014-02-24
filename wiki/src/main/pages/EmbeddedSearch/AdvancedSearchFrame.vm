@@ -1,0 +1,138 @@
+{{velocity}}
+## Get Google Analyitcs Profile ID
+#set($GA_uacct = $xwiki.curriki.getPublicCurrikiConfig("GA","0"))
+#set($partnerMap = $xwiki.parseGroovyFromPage("EmbeddedSearch.PartnerMap").getInstance("$!{hostname}"))
+##
+## Remove "embed-" from the beginning
+#set($partnerName = "$!{request.embedViewMode.substring(6)}")
+##
+## Get the partner from the partnerPap
+#set($partner = $partnerMap[$partnerName])
+#if("$!{partner}" == "")
+  #set($partner = $partnerMap["default"])
+#end
+##
+## Set the variables from the PartnerMap
+#set($embeddingPartnerUrl = $partner["embeddingPartnerUrl"])
+## The resourceDisplay is a special case, we do not want to restrict our partners
+## to a specific path so far
+#if($request.resourceDisplay && $request.resourceDisplay.startsWith($partner["resourceDisplay"]))
+  #set($resourceDisplay = $request.resourceDisplay)
+#end
+#set($embedViewMode = $partner["embedViewMode"])
+#set($restrictions = $partner["restrictions"])
+#set($searchCssFile = $partner["searchCssFile"])
+##
+## Add http://www.w3.org/P3P/ header since otherwise the
+## Frame communication can get stuck in old brwosers
+$response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
+##
+##
+{{html clean="false"}}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
+    <title>Curriki - Search among resources (Embedded Search)</title>
+
+    <script type="text/javascript" src="/xwiki/resources/js/prototype/prototype.js"></script>
+    <script type="text/javascript" src="/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/skin.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/ext-all-debug.js"></script>
+    <script type="text/javascript" src="/xwiki/js/f33b/curriki-module-search-debug.js" type="text/javascript"></script>
+    <script type="text/javascript" src="/xwiki/gen/js/f33b/lang_en.js"></script>
+    <script type="text/javascript" src="/xwiki/js/f33b/curriki-merged.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/swfobject.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/xwiki.js"></script>
+    <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/js/presentation.js"></script>
+    <script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/f33b/scripts/shortcuts.js"></script>
+
+    ## Needed to overwrite the default Ext.History Singleton and replace it by one which works in iFrames correctly
+    <script type="text/javascript" src="/xwiki/js/f33b/ext-embedded-history.js"></script>
+
+    <script type="text/javascript">
+        var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', '$GA_uacct']);
+
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    </script>
+
+    <script type="text/javascript">
+        //<![CDATA[
+        var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/f33b/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
+        document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
+        //]]>
+    </script>
+
+    <script type="text/javascript">
+        ## Set some vars into Curriki object because it is running stand alone
+        Ext.ns('Curriki.global');
+        Curriki.global.username = "XWiki.XWikiGuest";
+        Curriki.global.fullname = "XWikiGuest";
+        Curriki.global.isAdmin = false;
+
+        Ext.ns('Curriki.userinfo');
+        Curriki.userinfo = {
+            isAdmin:    false,
+            userGroups:"",
+            userName:   "XWiki.XWikiGuest"
+        };
+
+        ## Actually fire up the search interface for the user
+        Curriki.module.search.tabList = ['resource'];
+        Curriki.module.search.embeddingPartnerUrl = "$embeddingPartnerUrl";
+        Curriki.module.search.resourceDisplay = "$resourceDisplay";
+        Curriki.module.search.embedViewMode = "$embedViewMode";
+        Curriki.module.search.restrictions = "$restrictions";
+        Curriki.module.search.start();
+
+        ##  IE9 workaround for the createContextualFragment method which is not supported there under extjs 2.3
+        if ((typeof Range !== "undefined") && !Range.prototype.createContextualFragment)
+        {
+            Range.prototype.createContextualFragment = function(html)
+            {
+                var frag = document.createDocumentFragment();
+                div = document.createElement("div");
+                frag.appendChild(div);
+                div.outerHTML = html;
+                return frag;
+            };
+        }
+    </script>
+
+    <link type="text/css" rel="stylesheet" href="http://extjs.cachefly.net/ext-2.3.0/resources/css/ext-all.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/js/f33b/curriki-js.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/stylebase.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/bin/skin/skins/curriki8/f33b/style.css">
+    <link type="text/css" rel="stylesheet" href="/xwiki/skins/curriki8/f33b/style2.css">
+
+    #if("${searchCssFile}" != "")
+        <link type="text/css" rel="stylesheet" href="${searchCssFile}">
+    #end
+</head>
+    <body style="background-color:transparent; min-width:100%">
+
+        ## The curriki image
+        <div style="position:absolute; top: 15px; right:5px; float:right; z-index:1;">
+            <img height="35px" src="/xwiki/skins/curriki8/images/powered_by_curriki.gif"/>
+        </div>
+
+        ## The container for the search frame
+        <div id="test">
+            <div id="search-div" class=" x-panel search-module x-panel-noborder"></div>
+        </div>
+
+        ## Hidden form for the history
+        <form class="x-hidden" id="history-form">
+            <input type="hidden" id="x-history-field" value="">
+            <iframe id="x-history-frame"></iframe>
+        </form>
+    </body>
+</html>
+{{/html}}
+{{/velocity}

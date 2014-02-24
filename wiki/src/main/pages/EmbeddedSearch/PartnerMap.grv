@@ -1,0 +1,29 @@
+def getInstance(currikiHostName) {
+    [
+
+        "teachhub":[
+            "embeddingPartnerUrl":"http://teachhub.com",
+            "resourceDisplay":"http://teachhub.com", //starts with
+            "embedViewMode":"embed-teachhub",
+            "restrictions":"",
+            "searchCssFile":"/xwiki/skins/curriki8/f33b/embed-teachhub-search.css"
+        ],
+
+        "liberty-school":[
+            "embeddingPartnerUrl":"http://liberty.k12.mo.us",
+            "resourceDisplay":"http://liberty.k12.mo.us", //starts with
+            "embedViewMode":"embed-liberty-school",
+            "restrictions":"web:Coll_Group_TestingResourceRights",
+            "searchCssFile":"/xwiki/skins/curriki8/f33b/embed-liberty-school-search.css"
+        ],
+
+        "default":[
+            "embeddingPartnerUrl":currikiHostName,
+            "resourceDisplay":currikiHostName, //starts with
+            "embedViewMode":"embed",
+            "restrictions":"",
+            "searchCssFile":""
+        ]
+
+    ]
+}
