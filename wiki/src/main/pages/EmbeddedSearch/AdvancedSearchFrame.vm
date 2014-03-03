@@ -16,8 +16,10 @@
 #set($embeddingPartnerUrl = $partner["embeddingPartnerUrl"])
 ## The resourceDisplay is a special case, we do not want to restrict our partners
 ## to a specific path so far
-#if($request.resourceDisplay && $request.resourceDisplay.startsWith($partner["resourceDisplay"]))
+#if($request.resourceDisplay && $request.resourceDisplay.contains($partner["resourceDisplay"]))
   #set($resourceDisplay = $request.resourceDisplay)
+#else
+  #set($resourceDisplay = $partner["resourceDisplay"])
 #end
 #set($embedViewMode = $partner["embedViewMode"])
 #set($restrictions = $partner["restrictions"])
