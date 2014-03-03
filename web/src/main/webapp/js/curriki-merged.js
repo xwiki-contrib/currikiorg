@@ -287,8 +287,9 @@ if(Ext.isEmpty(Curriki.initialized)){Curriki.data.user.GetUserinfo(function(){Cu
 }Curriki.logEvent=function(c,b){var d=c.reverse();d.push("_trackEvent");d=d.reverse();
 if(window._gaq){if(b){_gaq.push(d).push(b)}else{_gaq.push(d)}}else{try{if(b){window.top._gaq.push(d).push(b)
 }else{window.top._gaq.push(d)}if(console){console.info("Would track: ",page)}}catch(a){try{if(console){console.info("Failed to track: ",page)
-}}catch(a){}}}};Curriki.logView=function(a){if(window.pageTracker){pageTracker._trackPageview(a)
-}else{if(_gaq){_gaq.push(["_trackPageview",a])}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])
+}}catch(a){}}}};Curriki.logView=function(a,c){if(window.pageTracker){if(typeof(c)=="function"){pageTracker.push("_trackPageview",a);
+pageTracker.push(c)}else{pageTracker._trackPageview(a)}}else{if(_gaq){if(typeof(c)=="function"){_gaq.push("_trackPageview",a);
+_gaq.push(c)}else{_gaq._trackPageview(a)}}else{try{if(window.top._gaq){window.top._gaq.push(["_trackPageview",a])
 }else{window.top.pageTrackerQueue=window.top.pageTrackerQueue||new Array();window.top.pageTrackerQueue.push(a)
 }if(console){console.info("Would track: ",a)}}catch(b){try{window.pageTrackerQueue=window.pageTrackerQueue||new Array();
 window.pageTrackerQueue.push(a);if(console){console.info("Would track: ",a)}}catch(b){}}}}};
