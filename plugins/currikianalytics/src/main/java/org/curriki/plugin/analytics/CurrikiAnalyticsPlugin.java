@@ -8,6 +8,7 @@ import com.xpn.xwiki.plugin.XWikiDefaultPlugin;
 import com.xpn.xwiki.plugin.XWikiPluginInterface;
 import com.xpn.xwiki.web.XWikiMessageTool;
 import org.curriki.plugin.analytics.module.AnalyticsModule;
+import org.curriki.plugin.analytics.module.justloggedin.JustLoggedInAnalyticsModule;
 import org.curriki.plugin.analytics.module.logintoview.LoginToViewAnalyticsModule;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +70,7 @@ public class CurrikiAnalyticsPlugin extends XWikiDefaultPlugin implements XWikiP
         for(String moduleName : analyticsModules.keySet()){
             AnalyticsModule analyticsModule = analyticsModules.get(moduleName);
             analyticsModule.setCurrentAnalyticsSession(currikiAnalyticsSession);
-            analyticsModule.crawlUrlStore();
+            analyticsModule.evaluateTriggers(currikiAnalyticsSession);
         }
     }
 }
