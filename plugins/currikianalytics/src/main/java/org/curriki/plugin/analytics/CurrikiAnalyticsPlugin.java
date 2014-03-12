@@ -41,6 +41,7 @@ public class CurrikiAnalyticsPlugin extends XWikiDefaultPlugin implements XWikiP
     private void initModules(XWikiContext context) {
         LOG.warn("Initialize AnalyticsModules");
         analyticsModules.put(LoginToViewAnalyticsModule.NAME, new LoginToViewAnalyticsModule(context));
+        analyticsModules.put(JustLoggedInAnalyticsModule.NAME, new JustLoggedInAnalyticsModule(context));
     }
 
     public String getName()
