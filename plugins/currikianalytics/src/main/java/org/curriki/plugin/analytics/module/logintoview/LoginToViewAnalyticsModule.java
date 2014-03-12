@@ -20,7 +20,7 @@ import java.util.regex.Pattern;
 
 /**
  * The concrete implementation of a AnalyticsModule. The main responsibility of this class
- * is to be the clue between all the components.
+ * is to be the glue between all the components.
  * (Plugin <-> AnalyticsModules) (AnalyticsModules <-> Trigger) (Triggers <-> Notifiers)
  */
 public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWikiDocChangeNotificationInterface {

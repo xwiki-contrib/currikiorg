@@ -37,6 +37,7 @@ public abstract class AnalyticsModule {
      */
     protected CurrikiAnalyticsSession currikiAnalyticsSession;
 
+    private static ThreadLocal<CurrikiAnalyticsSession> currentSession = new ThreadLocal<CurrikiAnalyticsSession>();
 
     public AnalyticsModule(XWikiContext context) {
         this.context = context;
@@ -58,7 +59,7 @@ public abstract class AnalyticsModule {
     /**
      * Iterate over all triggers and hand of the current CurrikiANalyticsSession to them
      */
-    public void crawlUrlStore() {
+    public void evaluateTriggers(CurrikiAnalyticsSession currikiAnalyticsSession) {
         LOG.warn("Crawling UrlStore");
         for (Trigger t : triggers) {
             if (currikiAnalyticsSession != null) {
@@ -69,13 +70,20 @@ public abstract class AnalyticsModule {
         }
     }
 
+    public void crawlUrlStore() {
+        throw new IllegalStateException("This method should not be called anymore.");
+    }
+
     /**
      * Set the currikiAnalyticsSession
      * @param currikiAnalyticsSession
      */
     public void setCurrentAnalyticsSession(CurrikiAnalyticsSession currikiAnalyticsSession) {
         LOG.warn("Set current CurrikiAnalyticsSession for module " + getName());
-        this.currikiAnalyticsSession = currikiAnalyticsSession;
+        if(currikiAnalyticsSession!=null)
+            currentSession.set(currikiAnalyticsSession);
+        else
+            currentSession.remove();
     }
 
     /**
@@ -83,6 +91,8 @@ public abstract class AnalyticsModule {
      * @return currikiAnalyticsSession
      */
     public CurrikiAnalyticsSession getCurrentAnalyticsSession() {
-        return currikiAnalyticsSession;
+        return currentSession.get();
     }
+
+
 }
