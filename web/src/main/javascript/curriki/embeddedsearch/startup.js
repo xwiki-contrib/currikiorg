@@ -31,7 +31,7 @@ function resizeCurrikiIframe(styleString){
 
 function setCurrikiIFrameSrc(){
 	//Please do not change
-	var SEARCH_FRAME_PATH = "/xwiki/bin/view/Search/AdvancedSearchFrame?xpage=plain"
+  var SEARCH_FRAME_PATH = "/xwiki/bin/view/EmbeddedSearch/AdvancedSearchFrame?xpage=plain"
 	var currikiSearchFrame = document.getElementById("curriki_search_frame");
 	var iFrameSrc = CURRIKI_HOST + SEARCH_FRAME_PATH + "&embeddingPartnerUrl=" + PARTNER_HOST + "&" + "resourceDisplay=" + RESOURCE_DISPLAYER + "&" + "embedViewMode=" + EMBED_VIEW_MODE;
 	currikiSearchFrame.setAttribute("src", iFrameSrc);

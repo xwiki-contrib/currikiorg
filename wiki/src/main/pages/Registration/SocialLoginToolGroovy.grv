@@ -755,10 +755,11 @@ public class SocialLoginToolGroovy {
         return true;
     }
 
-
-    public void sendValidationEmail() {
-        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail");
-    }
+//    When reenabling this method make sure the emails which are sent here
+//    are in XWikiSyntax 2 with the velocity macro and html macros used
+//    public void sendValidationEmail() {
+//        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail");
+//    }
 
     private void sendRegistrationMail(String nonCorpPage, String corpPage) {
         long time=System.currentTimeMillis();
@@ -768,7 +769,7 @@ public class SocialLoginToolGroovy {
             emailDoc = "Registration." + corpPage;
         LOG.warn("Sending mail to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
-        def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
+        def text = emailDoc.getRenderedContent()
         def subject = xwiki.renderText(emailDoc.title, emailDoc);
         System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
         time=System.currentTimeMillis();
@@ -798,7 +799,7 @@ public class SocialLoginToolGroovy {
         userobj.set("active", "1");
         userobj.set("email_undeliverable", "0");
         userdoc.saveWithProgrammingRights("Validation.");
-        // and send validation mail
+        // and send registration complete mail
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
         authenticateUser(userdoc);
         return "success";

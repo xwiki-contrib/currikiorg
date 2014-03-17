@@ -16,8 +16,10 @@
 #set($embeddingPartnerUrl = $partner["embeddingPartnerUrl"])
 ## The resourceDisplay is a special case, we do not want to restrict our partners
 ## to a specific path so far
-#if($request.resourceDisplay && $request.resourceDisplay.startsWith($partner["resourceDisplay"]))
+#if($request.resourceDisplay && $request.resourceDisplay.contains($partner["resourceDisplay"]))
   #set($resourceDisplay = $request.resourceDisplay)
+#else
+  #set($resourceDisplay = $partner["resourceDisplay"])
 #end
 #set($embedViewMode = $partner["embedViewMode"])
 #set($restrictions = $partner["restrictions"])
@@ -87,7 +89,7 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
         Curriki.module.search.tabList = ['resource'];
         Curriki.module.search.embeddingPartnerUrl = "$embeddingPartnerUrl";
         Curriki.module.search.resourceDisplay = "$resourceDisplay";
-        Curriki.module.search.embedViewMode = "$embedViewMode";
+        Curriki.module.search.embedViewMode = "viewer=$embedViewMode";
         Curriki.module.search.restrictions = "$restrictions";
         Curriki.module.search.start();
 
@@ -135,4 +137,4 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
     </body>
 </html>
 {{/html}}
-{{/velocity}
+{{/velocity}}
