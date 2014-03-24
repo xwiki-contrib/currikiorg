@@ -782,6 +782,10 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 			#mycurriki_dashifempty($userdoc.display("email", $userobj))
 		</li>
 	#end ##}
+  	<li>
+    		**$msg.get("view_profile.account_info.member_since")**
+    		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
+  	</li>
 </ul>
 </div>
 </fieldset>
