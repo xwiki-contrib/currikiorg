@@ -174,7 +174,7 @@ $linkToBreak.substring(0, $index)
  #set($m_fileExt = "Unknown")
 #end
 #set($macro_iconUrl = "")
-#set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
+#set($macro_iconUrl = ${cdn}$xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
 #end
 
 #**
@@ -282,7 +282,7 @@ $linkToBreak.substring(0, $index)
 #if($!rollover == "${m_subcat}") ##{
 #set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
 #end ##}
-#set($macro_iconUrl = "/xwiki/skins/curriki8/extjs/resources/images/default/s.gif")
+#set($macro_iconUrl = "${cdn}/xwiki/skins/curriki8/extjs/resources/images/default/s.gif")
 #set($macro_img = "<img class='resource-${m_icat} category-${m_cat} subcategory-${m_subcat}' src='${macro_iconUrl}' ext:qtip='${rollover}' />")
 #end
 
@@ -719,7 +719,7 @@ $doc.display("content", $obj)
 #end >
 $msg.get("panel.navigation.home")
 #if($active) ##{
-	<img src="$xwiki.getSkinFile("menu-selected.gif")" />
+	<img src="${cdn}$xwiki.getSkinFile("menu-selected.gif")" />
 #end ##}
 </a></div>
 #end ##}
@@ -816,7 +816,7 @@ $msg.get("panel.navigation.home")
     #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
     <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a ${linktitle} href="{pre}${theItemLink}{/pre}">$item.get(0)</a>
     #set($linktitle = "") ##rolling back to default value
-    #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
+    #if($active)<img src="${cdn}$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
   #end ##}
   </ul> ##}
   #if(!$expanded) ##{
@@ -853,7 +853,7 @@ $msg.get("panel.navigation.home")
 <div class="vcardStyle">
    <div class="userpic">
 #if($memberdoc.attachmentList.size()==0)
-   <img src="$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
+   <img src="${cdn}$xwiki.getSkinFile("nouserpicsmall.jpg", true)" alt=""/>
 #else
    #set($width = 72)
     #set($reqWidth=$width*3)
@@ -1578,7 +1578,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
       #end##
     </a>
 #else ## } {
-  #set($src=$xwiki.getSkinFile("noavatar.png"))##
+  #set($src=${cdn}$xwiki.getSkinFile("noavatar.png"))##
   <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  #if("$!width"=="" && "$!height"=="")##
      <img src="$src" class="photo"/>
@@ -1788,7 +1788,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
 
 
 #macro(markup_editAssetProperty $editedDocument $propertyId $syntax)
-<script type="text/javascript" src="$xwiki.getSkinFile("wikibits.js")"></script>
+<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("wikibits.js")"></script>
 <script type="text/javascript">
 ## Syntax elements is a list of: [identifier, start markup, end markup, image name].
 ## The identifier is used to display the button title, and the sample text.
@@ -1856,7 +1856,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
 // <![CDATA[
 document.writeln("<div class='leftmenu2'>");
 #foreach($item in $syntaxElements)
-  #set($imageFile = $xwiki.getSkinFile("icons/silk/${item.get(3)}.gif"))
+  #set($imageFile = ${cdn}$xwiki.getSkinFile("icons/silk/${item.get(3)}.gif"))
   #set($speedTip = $msg.get("core.edit.wikiToolbar.${item.get(0)}").replaceAll("'", "\\'"))
   #set($tagOpen = ${item.get(1)})
   #set($tagClose = ${item.get(2)})
@@ -1953,15 +1953,15 @@ Wysiwyg.onModuleLoad(function() {
 #set($editors = $xcontext.getEditorWysiwyg())
 #if($editors)
 #if($textareadoc.syntax.toIdString() == "xwiki/1.0")
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
-<script type="text/javascript" src="$xwiki.getSkinFile("js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
 //<![CDATA[
     wikiEditor.init({
         elements : "$!{escapetool.javascript($editors)}",
         language: "en",
         mode: "exact",
-        content_css: "$xwiki.getSkinFile("style.css")",
+        content_css: "${cdn}$xwiki.getSkinFile("style.css")",
         debug : false,
         remove_linebreaks : false,
         plugins: 'table, contextmenu, paste, searchreplace',

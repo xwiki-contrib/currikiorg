@@ -1,0 +1,56 @@
+// {{groovy}}
+
+
+def subjects = ["Arts", "VocationalEducation","Education&Teaching", "EducationalTechnology",
+        "Health", "Information&MediaLiteracy", "LanguageArts", "Mathematics", "Science",
+        "SocialStudies", "ForeignLanguages"];
+//xwiki.getSpaceDocsName("FW_masterFramework");
+def categories = ['text','image','audio','video','interactive','archive','document','collection','unknown','external'];
+def eduLevels = ['prek','gr-k-2','gr-3-5','gr-6-8','gr-9-10','gr-11-12','college_and_beyond','professional_development','special_education','na'];
+
+def onlyFromAuthors = services.query.xwql("select doc.name from Document doc, doc.object(XWiki.XWikiUsers) as obj where obj.email like '%gwinnett.k12.ga.us'").execute();
+        //['adriennecarter', 'gilfew', 'gilfew0', 'gingeralexander',
+        //'heidicampbell', 'juliamassey', 'lisavickery', 'pharwell', 'reneesmith', 'suzannemorris', 'tinaforbes'  ];
+
+o = "";
+for(x in onlyFromAuthors) o = o + " or doc.author='XWiki.${x}'";
+if(o.length()>0)
+    o = " and (" + o.substring(4) + ")";
+System.out.println("OnlyFromAuthors: " + o);
+
+
+for(eduLevel in eduLevels) {
+    println("= ${eduLevel} =")
+    printCategories(categories);
+    for(x in subjects) {
+        def shortName = subjectsShortName(x);
+        print("| {{html clean=false}}<a href='/xwiki/bin/view/Search/SearchWidgetJump?level=${eduLevel}&subject=FW_masterFramework.$x'>$x</a>{{/html}}");
+        for(y in categories) {
+            print("|${countIt(eduLevel, x, y)}");
+        }
+        println();
+    }
+    println("-----")
+}
+
+public printCategories(categories) {
+    print("|= ");
+    for(c in categories) {
+        print("|= ${c} ")
+    }
+    println();
+}
+
+
+String subjectsShortName(subject) {
+    def l = "FW_masterFramework.".length();
+    if(subject==null || subject.length()<l) return subject;
+    return subject.substring(l);
+}
+
+String countIt(eduLevel, subject, category) {
+    System.out.println("Counting subject: ${subject}, eduLevel: ${eduLevel}, category: ${category}")
+    return services.query.xwql("select count(doc) from Document doc, doc.object(CurrikiCode.AssetClass) as asset where asset.category='${category}' and 'FW_masterFramework.${subject}' member of asset.fw_items  and '${eduLevel}' member of asset.educational_level ${o}").execute()[0];
+}
+
+// {{/groovy}}
