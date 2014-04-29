@@ -24,6 +24,7 @@
 #if("$!alt_text" == "")
  #set($alt_text = $!asset.title)
 #end
+    #set($alt_text=$!alt_text.replaceAll('<[^>]*>',''))
 <div id="image-wrapper" class="row">
     <div class="col-md-8">
         <a href="$url" title="$!alt_text" class="image-direct-link">

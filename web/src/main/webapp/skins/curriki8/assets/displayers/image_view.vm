@@ -24,6 +24,7 @@
 #if("$!alt_text" == "")
  #set($alt_text = $!asset.title)
 #end
+    #set($alt_text=$!alt_text.replaceAll('<[^>]*>',''))
 <div class="asset-display-media">
     <div class="asset-display-media-inner">
         <a href="$url" title="$!alt_text" ><img src="$asset.getAttachmentURL("$fileName", "download", "width=${pictWidth}")" align="middle" width="$pictWidth" alt="$!alt_text" /></a>
