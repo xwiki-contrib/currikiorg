@@ -26,7 +26,7 @@ public interface Constants {
     String GUEST_USER = "XWiki.XWikiGuest";
 
     String ASSET_TEMPORARY_SPACE = "AssetTemp";
-    String ASSET_DISPLAYTITLE_UNTITLED = "Untitiled";
+    String ASSET_DISPLAYTITLE_UNTITLED = "Untitled";
 
     String COLLECTION_PREFIX = "Coll_";
     String FAVORITES_COLLECTION_TITLE = "Favorites";
