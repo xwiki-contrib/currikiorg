@@ -73,11 +73,12 @@
   * @param prop The xwiki property
   * @author	Curriki
   *#
-#macro(displayPropName $prop)
+#*#macro(displayPropName $prop)
 #if($msg.get("$class.getName()_$prop.name") == "$class.getName()_$prop.name")
 $prop.prettyName#else
 $msg.get($prop.name)#end
 #end
+*#
 
 #**
  * Truncates a text to a maximum number of chars
@@ -174,7 +175,8 @@ $linkToBreak.substring(0, $index)
  #set($m_fileExt = "Unknown")
 #end
 #set($macro_iconUrl = "")
-#set($macro_iconUrl = ${cdn}$xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
+#set($macro_iconUrl = $xwiki.getSkinFile("mimetypes/${m_fileExt}.gif"))
+#set($macro_iconUrl = "${cdn}${macro_iconUrl}")
 #end
 
 #**
@@ -656,15 +658,6 @@ $doc.display("content", $obj)
 <div class="large panel expanded">
 <h5 class="xwikipaneltitle" onclick="togglePanelVisibility(this.parentNode);">$title</h5>##<span class="xwikipanelarrow" onclick="alert(5);">&nbsp;</span>
 <div class="xwikipanelcontents">
-#end
-
-#**
-  * Display a panel footer
-  *
-  *#
-#macro(panelfooter)
-</div>
-</div>
 #end
 
 #**
@@ -1578,7 +1571,8 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
       #end##
     </a>
 #else ## } {
-  #set($src=${cdn}$xwiki.getSkinFile("noavatar.png"))##
+  #set($src=$xwiki.getSkinFile("noavatar.png"))##
+  #set($src="${cdn}${src}")##
   <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  #if("$!width"=="" && "$!height"=="")##
      <img src="$src" class="photo"/>
@@ -1856,7 +1850,8 @@ $response.setDateHeader("Expires",$expires.getTime())##
 // <![CDATA[
 document.writeln("<div class='leftmenu2'>");
 #foreach($item in $syntaxElements)
-  #set($imageFile = ${cdn}$xwiki.getSkinFile("icons/silk/${item.get(3)}.gif"))
+  #set($imageFile = $xwiki.getSkinFile("icons/silk/${item.get(3)}.gif"))
+    #set($imageFile = "${cdn}${imageFile}")
   #set($speedTip = $msg.get("core.edit.wikiToolbar.${item.get(0)}").replaceAll("'", "\\'"))
   #set($tagOpen = ${item.get(1)})
   #set($tagClose = ${item.get(2)})
