@@ -2,10 +2,15 @@
 
 <form action="">
 $msg.get("curriki.crs.reviews.viewnominated"): <select name="fw_item" onchange="this.form.submit()">
-<option value="" #if(!$request.fw_item||($request.fw_item=="")) selected #end >$msg.get("curriki.crs.reviews.all")</option>
+<option value="">$msg.get("curriki.crs.reviews.all")</option>
+#if(!$request.fw_item||($request.fw_item==""))
+  #set($fw_item = "FW_masterFramework.Mathematics")
+#else
+  #set($fw_item = $request.fw_item)
+#end
 #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome' order by doc.title"))
 #set($itemdoc = $xwiki.getDocument($item))
-<option value="$item" #if($item==$request.fw_item) selected #end >$itemdoc.title</option>
+<option value="$item" #if($item==$fw_item) selected #end >$itemdoc.title</option>
 #end
 </select>
 </form>
