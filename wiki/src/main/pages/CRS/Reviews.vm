@@ -1,0 +1,32 @@
+1 $msg.get("curriki.crs.reviews.reviewertools")
+
+<form action="">
+$msg.get("curriki.crs.reviews.viewnominated"): <select name="fw_item" onchange="this.form.submit()">
+<option value="" #if(!$request.fw_item||($request.fw_item=="")) selected #end >$msg.get("curriki.crs.reviews.all")</option>
+#foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome' order by doc.title"))
+#set($itemdoc = $xwiki.getDocument($item))
+<option value="$item" #if($item==$request.fw_item) selected #end >$itemdoc.title</option>
+#end
+</select>
+</form>
+
+#if(($request.fw_item)&&($request.fw_item!=""))
+	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate, BaseObject as obj2, DBStringListProperty as prop2 join prop2.list list where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and prop.id.name='reviewpending' and propDate.id.name='nomination_date' and prop.value=1 and doc.fullName=obj2.name and obj2.className='CurrikiCode.AssetClass' and obj2.id=prop2.id.id and prop2.id.name='fw_items' and list = '${request.fw_item}' order by propDate.value desc")
+#else
+	#set($sql = ", BaseObject as obj, IntegerProperty as prop, DateProperty as propDate where doc.fullName=obj.name and obj.className='CRS.CurrikiReviewStatusClass' and obj.id=prop.id.id and obj.id=propDate.id.id and propDate.id.name='nomination_date' and prop.id.name='reviewpending' and prop.value=1 order by propDate.value desc")
+#end
+{table}
+$msg.get("curriki.crs.reviews.assetname")  | $msg.get("curriki.crs.reviews.ict") | $msg.get("curriki.crs.reviews.educlevel")  | $msg.get("curriki.crs.reviews.lastreviewed")  | $msg.get("curriki.crs.reviews.currentrating")  | $msg.get("curriki.crs.reviews.actions")
+#foreach($assetdocname in $xwiki.searchDocuments($sql))
+#set($asset = $xwiki.getDocument($assetdocname))
+#set($ok = $asset.use("CurrikiCode.AssetClass"))
+#set($ict = $asset.display("instructional_component").replaceAll("#--#", ", "))
+#set($educlevel = $asset.display("educational_level"))
+#set($ok= $asset.use("CRS.CurrikiReviewStatusClass"))
+#set($nomdate = $asset.display("nomination_date"))
+#set($nomuser = $asset.display("nomination_user"))
+#set($lastreview_date = $asset.display("lastreview_date"))
+#set($status = $asset.display("status"))
+{pre} <a href="$asset.getURL()" target="_blank">$asset.getDisplayTitle()</a> {/pre}  | {pre}&nbsp; $ict  {/pre}  | {pre}&nbsp; $educlevel.replaceAll("#--#",",")  {/pre} | {pre}&nbsp; $lastreview_date  {/pre} | {pre}&nbsp; $status  {/pre} | {pre} <span class="wikilink"><a href="$asset.getURL()" target="_blank">$msg.get("curriki.crs.reviews.view")</a></span> {/pre} [$msg.get("curriki.crs.reviews.review")>Review?page=$assetdocname]
+#end
+{table}
