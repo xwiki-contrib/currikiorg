@@ -70,7 +70,7 @@
     #set($from = $assetFilterCreationDateFrom)
     #set($qs = "${qs}&from=$!$assetFilterCreationDateFrom")
 #else
-    #set($from = "MM/DD/YYYY")
+    #set($from = "01/01/2014")
 #end
 
 #if($assetFilterCreationDateTo&&($assetFilterCreationDateTo!="")&&($assetFilterCreationDateTo!="MM/DD/YYYY"))
@@ -78,7 +78,7 @@
     #set($to = $assetFilterCreationDateTo)
     #set($qs = "${qs}&to=$!$assetFilterCreationDateTo")
 #else
-    #set($to = "MM/DD/YYYY")
+    #set($to = $datetool.get('M/d/yyyy'))
 #end
 
 #set($ordered=true)
@@ -112,13 +112,13 @@
 <form action="" onsubmit="return saveFilterParameters(this);">
     1.1 $msg.fc_daterange
     #if($from == "")
-        #set($!from = "MM/DD/YYYY")
+        #set($!from = "01/01/2014")
     #end
-    $msg.fc_showresourcesfrom <input type="text" style="width: auto;" id="from" name="from" value="$!from" size="12" onclick="if(this.value=='MM/DD/YYYY'){this.value='';}" />
+    $msg.fc_showresourcesfrom <input type="text" style="width: auto;" id="from" name="from" value="$!from" size="12" onclick="if(this.value=='01/01/2014'){this.value='';}" />
     #if($to == "")
-        #set($!to = "MM/DD/YYYY")
+        #set($!to = $datetool.get('M/d/yyyy'))
     #end
-    $msg.fc_to <input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" onclick="if (this.value=='MM/DD/YYYY'){this.value='';}" />
+    $msg.fc_to <input type="text" style="width: auto;" id="to" name="to" value="$!to" size="12" onclick="if (this.value=="${datetool.get('M/d/yyyy')}"){this.value='';}" />
     1.1 $msg.fc_filterby
 
     <table class="filechecktable" style="table-layout:fixed;width:100%;overflow:hidden;word-wrap:break-word;">
@@ -127,8 +127,8 @@
                 $msg.fc_queueFilterChooseFCStatus
 
                 <select name="type" id="type">
-                    <option value="0" #if(!$assetFilterFileCheckStatus||($assetFilterFileCheckStatus=="0")) selected #end >$msg.get("fc_all")</option>
-                    <option value="1" #if($assetFilterFileCheckStatus=="1") selected #end >$msg.get("fc_onlywithoutfcstatus")</option>
+                    <option value="0" #if($assetFilterFileCheckStatus=="0") selected #end >$msg.get("fc_all")</option>
+                    <option value="1" #if(!$assetFilterFileCheckStatus||($assetFilterFileCheckStatus=="1")) selected #end >$msg.get("fc_onlywithoutfcstatus")</option>
                     <option value="2" #if($assetFilterFileCheckStatus=="2") selected #end >$msg.get("fc_onlywithfcstatus")</option>
                     <option value="7" #if($assetFilterFileCheckStatus=="7") selected #end >$msg.get("fc_statusFilter_5")</option>
                     #foreach($status in [1..4])
