@@ -78,7 +78,7 @@
             <a onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${fileName}', function() {window.href='$url';}); return false;" ##
                 href="$url" class="btn btn-default btn-xs alt-download-pdf"><i class="icon-download-alt"></i> Download</a>
 
-        <script type="text/javascript" src="/xwiki/skins/respurriki/${gVersion}/js/pdfobject.min.js"></script>
+        <script type="text/javascript" src="${cdn}/xwiki/skins/respurriki/js/pdfobject.min.js"></script>
         <script type="text/javascript">
                 window.onload = function (){
                     var myPDF = new PDFObject({ url: decodeURIComponent("$url") }).embed("the_pdf");
