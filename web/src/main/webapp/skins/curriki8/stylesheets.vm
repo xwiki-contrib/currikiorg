@@ -1,53 +1,58 @@
 #**
-  * Setup the external stylesheets loaded by the curriki pages used by the curriki pages
-  * @author Curriki dev team
-  *#
-#if($gVersion)#else#template("xwikivars.vm")#end##
+ * Setup the external stylesheets loaded by the curriki pages used by the curriki pages
+ * @author Curriki dev team
+ *#
+#if("$!gVersion"=="")#else#template("xwikivars.vm")#end##
 #set($hasStyles=true)##
 ##<link href="$xwiki.getSkinFile('extjs/resources/css/ext-all.css')" rel="stylesheet" type="text/css" />
 ##<link rel="stylesheet" type="text/css" href="http://extjs.cachefly.net/ext-2.3/resources/css/ext-all.css" />
-<script type="text/javascript">
-//<![CDATA[
-var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
-document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
-//]]>
-</script>
+## <script type="text/javascript">
+##    //<![CDATA[
+##     var ejLoc = (("https:" == document.location.protocol) ? "https://"+document.location.host+"/xwiki/skins/curriki20/${gVersion}/extjs/" : "http://extjs.cachefly.net/ext-2.3.0/");
+##     document.write(unescape("%3Clink rel='stylesheet' href='" + ejLoc + "resources/css/ext-all.css' type='text/css' /%3E"));
+##    //]]>
+##</script>
 ##
+<link href="${cdn}/xwiki/skins/curriki8/extjs/resources/css/ext-all.css" type="text/css" rel="stylesheet"/>
 <link href="${cdn}/xwiki/js/curriki-js.css" type="text/css" rel="stylesheet"/>
 <link href="${cdn}/xwiki/skins/curriki8/stylebase.css" rel="stylesheet" type="text/css"  />
 <link href="${cdn}/xwiki/skins/curriki8/style.css" rel="stylesheet" type="text/css"  />
 <link href="${cdn}/xwiki/skins/curriki8/style2.css" rel="stylesheet" type="text/css"  />
 
-##<link href="/xwiki/skins/curriki8/neagps.css" rel="stylesheet" type="text/css"  />
-##<link href="/xwiki/bin/skin/skins/curriki8/neagps.css" rel="stylesheet" type="text/css"  />
-##<link href="$xwiki.getSkinFile("neagps.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-<link href="${cdn}$xwiki.getSkinFile("discussions.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"/>
+##<link href="${cdn}/xwiki/skins/curriki8/${gVersion}/neagps.css" rel="stylesheet" type="text/css"  />
+##<link href="/xwiki/bin/skin/skins/curriki8/${gVersion}/neagps.css" rel="stylesheet" type="text/css"  />
+##<link href="$xwiki.getSkinFile("neagps.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+#### <link href="$xwiki.getSkinFile("discussions.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"/>
+<link href="${cdn}/xwiki/skins/curriki8/discussions.css" rel="stylesheet" type="text/css"/>
 
-## #if(!$request.style || $request.style=="1")
-## <link href="${cdn}$xwiki.getSkinFile("style.css", true).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-## #end
+#if(!$request.style || $request.style=="1")
+####<link href="$xwiki.getSkinFile("style.css", true).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+<link href="${cdn}/xwiki/skins/curriki8/style.css" rel="stylesheet" type="text/css"  />
+#end
 ##secondary (new) skin
-#if(!$request.style || $request.style=="2")
-## <link href="${cdn}$xwiki.getSkinFile("style2.css").replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-#if($doc.getObject("CurrikiCode.AssetClass"))
-<link href="${cdn}$xwiki.getSkinFile("views.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-<link href="${cdn}$xwiki.getSkinFile("print.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css" media="print" />
-#if($viewer.startsWith("embed"))
-    <link href="${cdn}$xwiki.getSkinFile("embed.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-    #if($viewer == "embed-teachhub")
-    <link href="${cdn}$xwiki.getSkinFile("embed-teachhub.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-    #elseif($viewer == "embed-liberty-school")
-    <link href="${cdn}$xwiki.getSkinFile("embed-liberty-school.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-    #elseif($viewer=="embed")
-    <!-- no stylesheet for regular embedder -->
-    #elseif($viewer=="embed-gps")
-    <!-- no stylesheet for gps embedder -->
+#if("$!request.style"!="" || $request.style=="2")
+<link href="${cdn}/xwiki/skins/curriki8/style2.css" rel="stylesheet" type="text/css"  />
+    #if($doc.getObject("CurrikiCode.AssetClass"))
+    <link href="${cdn}/xwiki/skins/curriki8/views.css" rel="stylesheet" type="text/css"  />
+    <link href="${cdn}/xwiki/skins/curriki8/print.css" rel="stylesheet" type="text/css" media="print" />
+        <!-- TODO: viewer = ... ->
+        #if($viewer.startsWith("embed"))
+        <link href="$xwiki.getSkinFile("embed.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+            #if($viewer == "embed-teachhub")
+            <link href="$xwiki.getSkinFile("embed-teachhub.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+            #elseif($viewer == "embed-liberty-school")
+            <link href="$xwiki.getSkinFile("embed-liberty-school.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+            #elseif($viewer=="embed")
+            <!-- no stylesheet for regular embedder -->
+            #elseif($viewer=="embed-gps")
+            <!-- no stylesheet for gps embedder -->
+            #end
+        #end
     #end
-#end
-#end
-#if($viewer=="print")
-<link href="${cdn}$xwiki.getSkinFile("print_preview.css", false).replaceAll('/curriki8/', "/curriki8/")" rel="stylesheet" type="text/css"  />
-#end
+    #if($viewer=="print")
+        <!-- TODO: test me ! --
+    <link href="$xwiki.getSkinFile("print_preview.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+    #end
 #end
 #set( $defaultstyle = $xwiki.getSpacePreference("stylesheet"))
 #set( $stylesheets = $xwiki.getSpacePreference("stylesheets"))
