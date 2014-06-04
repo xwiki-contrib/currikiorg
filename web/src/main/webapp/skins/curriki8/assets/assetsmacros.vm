@@ -40,7 +40,7 @@
 <!--<img src="images/collectionmedium.gif">-->
     #set($mediaType="")
 	#set($assetTitle = $asset.getDisplayTitle(125))
-		<h2 itemprop="name"><img src="$xwiki.getSkinFile("images/px.gif")" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
+		<h2 itemprop="name"><img src="$cdn/xwiki/skins/curriki8/images/px.gif" /><a href="$asset.getURL("view", "bc=$!{request.bc}")" target="${target}" itemprop}="url" onmouseover="$('mycurriki-description-0').show();" onmouseout="$('mycurriki-description-0').hide();">$assetTitle</a></h2>
 			#asset_info_rollover($asset 0)
 	</div>
 #end
@@ -110,7 +110,7 @@
 #if($context.user != "XWiki.XWikiGuest") ##{ No rating and member
 <div class="rating-0">
 	<a href="$asset.getURL("view", "viewer=comments&addcomment=true")">
-<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}" />
+<img class="rating-icon" src="$cdn/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}" />
 </a>
 	<a href="$asset.getURL("view", "viewer=comments&addcomment=true")" ext:qtip="${msg.get("rve.title.member.rating.function.add_rating")}">
 (0)<span>
@@ -121,7 +121,7 @@ $msg.get("rve.title.member.rating.function.add_rating")
 #else ##}{ No rating and guest
 <div class="rating-0">
 	<a href="${msg.get("rve.title.member.rating.info.url")}">
-<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.info")}" />
+<img class="rating-icon" src="$cdn/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.info")}" />
 </a>
 	<a href="${msg.get("rve.title.member.rating.info.url")}" ext:qtip="${msg.get("rve.title.member.rating.info")}">
 (0)<span>
@@ -134,7 +134,7 @@ $msg.get("rve.title.member.rating.info")
 #else ##}{ Has rating
 <div class="rating-${rating}">
 	<a href="$asset.getURL("view", "viewer=comments")">
-<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}" />
+<img class="rating-icon" src="$cdn/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}" />
 </a>
 	<a href="$asset.getURL("view", "viewer=comments")" ext:qtip="${msg.get("rve.title.member.rating.${rating}.rollover")}">
 (${rateCount})
@@ -382,8 +382,8 @@ $xwiki.addTooltipJS()
 #else
 #set($seccounter = $seccounter + 1)
 #end
-#set($closedGif = $xwiki.getSkinFile("icons/collapse.png"))
-#set($openedGif = $xwiki.getSkinFile("icons/collapse_down.png"))
+#set($closedGif = "$cdn/xwiki/skins/curriki8/icons/collapse.png"))
+#set($openedGif = "$cdn/xwiki/skins/curriki8/icons/collapse_down.png")
 #set($defaultGif = $openedGif)
 ###if($doHide)
 ## #set($defaultGif = $closedGif)
@@ -467,7 +467,8 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 #end
 #if($msgtext)
 <p><strong>$msgtext</strong>
-    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" src="$xwiki.getSkinFile("images/px.gif")" alt="" border="0" height="16" width="16">
+    <img ext:qtip="$msg.get("rve.content.view.download.instruction_tooltip")" class="tooltip" ##
+         src="$cdn/xwiki/skins/curriki8/images/px.gif" alt="" border="0" height="16" width="16">
 </p>
 #end      
 #foreach($attachment in $asset.getAttachmentList())
@@ -839,40 +840,40 @@ $asset.use("CurrikiCode.AssetClass")
     <ul>
         $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-title" class="field-important input-text">
-            <span><em>!</em><label for="edit-title" class="sectitle">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-title" class="sectitle">$msg.get("rve.information.title.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.title.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.title.edit_txt")</p>
             <input id="edit-title" name="title" value="$xwiki.getFormEncoded($asset.getTitle())" type="text" maxlength="250">
         </li>
         <li id="info-edit-description" class="field-important input-textarea">
-            <span><em>!</em><label for="edit-description" class="sectitle">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-description" class="sectitle">$msg.get("rve.information.description.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.description.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.description.edit_txt")</p>
             $asset.display("description", "edit", true)
         </li>
         <li id="info-edit-subject" class="field-important input-tree">
-            <span><em>!</em><label for="edit-subject" class="sectitle">$msg.get("rve.information.subject.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.subject.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-subject" class="sectitle">$msg.get("rve.information.subject.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.subject.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.subject.edit_txt")</p>
             $asset.display("fw_items", "edit", true)
         </li>
         <li id="info-edit-education" class="field-important input-tree">
-            <span><em>!</em><label for="edit-subject" class="sectitle">$msg.get("rve.information.edlevel.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.edlevel.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-subject" class="sectitle">$msg.get("rve.information.edlevel.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.edlevel.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.edlevel.edit_txt")</p>
             $asset.display("educational_level", "edit", true)
         </li>
         <li id="info-edit-ict" class="field-important input-select">
-            <span><em>!</em><label for="edit-ict" class="sectitle">$msg.get("rve.information.ict.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.ict.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-ict" class="sectitle">$msg.get("rve.information.ict.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.ict.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.ict.edit_txt")</p>
             $asset.display("instructional_component", "edit", true)
         </li>
         <li id="info-edit-tags" class="input-text">
-            <span><label for="edit-tags" class="sectitle">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><label for="edit-tags" class="sectitle">$msg.get("rve.information.keywords.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.keywords.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             $asset.display("keywords", "edit", true)
         </li>
         <li id="info-edit-language" class="input-select">
-            <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><label for="edit-language">$msg.get("rve.information.language.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.language.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             $asset.display("language", "edit", true)
         </li>
         <li id="info-edit-hide" class="input-checkbox">
-            <span><label for="edit-hide" class="sectitle">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><label for="edit-hide" class="sectitle">$msg.get("rve.information.hidefromsearch.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.hidefromsearch.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.hidefromsearch.edit_txt")</p>
             $asset.display("hidden_from_search", "edit", true) $msg.get("rve.information.hidefromsearch.edit_instruction")
         </li>
@@ -880,18 +881,18 @@ $asset.use("CurrikiCode.AssetClass")
         #if($isOriginalAuthorOrAdmin)
         $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-rights" class="field-important input-text">
-            <span><em>!</em><label for="edit-rights" class="sectitle">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><em>!</em><label for="edit-rights" class="sectitle">$msg.get("rve.information.rightsholder.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.rightsholder.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             $asset.display("rightsHolder", "edit", true)
         </li>
         $asset.use("CurrikiCode.AssetClass")
         <li id="info-edit-access" class="input-radio">
-            <span><label for="edit-access" class="sectitle">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><label for="edit-access" class="sectitle">$msg.get("rve.information.accessprivileges.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.accessprivileges.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.accessprivileges.edit_txt")</p>
             $asset.display("rights", "edit", true)
         </li>
         $asset.use("CurrikiCode.AssetLicenseClass")
         <li id="info-edit-license" class="input-select">
-            <span><label for="edit-license" class="sectitle">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="$xwiki.getSkinFile("images/px.gif")" alt="" /></span>
+            <span><label for="edit-license" class="sectitle">$msg.get("rve.information.licensedeed.edit_title")</label><img class="tooltip" width="16" height="16" border="0" ext:qtip="$msg.get("rve.information.licensedeed.edit_tooltip")" src="${cdn}/xwiki/skins/curriki8/images/px.gif" alt="" /></span>
             <p>$msg.get("rve.information.licensedeed.edit_txt")</p>
             $asset.display("licenseType", "edit", true)
             ##
@@ -993,7 +994,7 @@ $asset.use("CurrikiCode.AssetClass")
 <div class="comment-rating rating-${r}">
 <strong>$msg.get("rve.comments.commentrating.rating.display_header")</strong>
 <p>
-<img class="rating-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${r}.rollover")}" />
+<img class="rating-icon" src="$cdn/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${msg.get("rve.title.member.rating.${r}.rollover")}" />
 </p>
 </div>
 #end ##}
@@ -1647,7 +1648,7 @@ $asset.use($classname)
         #else
         <input class="checkbox" type="checkbox" checked disabled />        
         #end
-        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
+        <label for="${fieldname}">$msg.get("rve.content.edit.${transname}.instruction_title")</label><img width="16" height="16" border="0" alt="" src="${cdn}/xwiki/skins/curriki8/images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.${transname}.instruction_tooltip")"/></span>
     <div  id="${fieldname}" #if($hidebydefault) style="display: none" #end >
     #if("$!fieldcontent"!="")
     $fieldcontent
@@ -1664,7 +1665,7 @@ $asset.use($classname)
 #macro(asset_edit_revision)
 <li class="input-text">
     <span>
-        <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
+        <label for="revision">$msg.get("rve.content.edit.revision.instruction_title")</label><img width="16" height="16" border="0" alt="" src="${cdn}/xwiki/skins/curriki8/images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.revision.instruction_tooltip")"/></span>
     <div  id="revision">
         #set($revnote = $xwiki.curriki.escapeForJS($msg.get("rve.content.edit.revision.entry_sample")))
         <input id="comment" name="comment" value="$xwiki.getFormEncoded($revnote)" onfocus="if (this.value=='$revnote') { this.value ='' };" />

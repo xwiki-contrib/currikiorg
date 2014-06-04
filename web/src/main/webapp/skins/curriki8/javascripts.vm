@@ -11,8 +11,11 @@
     #set($debugging = "")
 #end##}
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile('skin.js')"></script>
-
-#set($useCdns=true)
+<script type="text/javascript">
+  document.domain="curriki.org";
+</script>
+#set($useCdns=false)
+<!-- useCdns : $useCdns (external CDNs!)-->
 #if($useCdns)
 <script type="text/javascript">
 /* <![CDATA[ */
@@ -33,14 +36,14 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 #end
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
-	#if("$!request.lang" != "")##{
-		#set($lang = $request.lang)
-	#else##}{
-		#set($lang = $xwiki.getLanguagePreference())
-	#end##}
-	#if("$!lang" == "")##{
-		#set($lang = "en")
-	#end##}
+        #if("$!request.lang" != "")##{
+                #set($lang = $request.lang)
+        #else##}{
+                #set($lang = $xwiki.getLanguagePreference())
+        #end##}
+        #if("$!lang" == "")##{
+                #set($lang = "en")
+        #end##}
 ##
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /xwiki/gen/js/0/lang_${lang}.js URL using an apache rewrite rule
@@ -51,9 +54,9 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="${cdn}/trans/lang_${lang}.js"></script>
 
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
-	#if("$!debugging" == "")##{
+        #if("$!debugging" == "")##{
 <script src="${cdn}/xwiki/js/curriki-merged.js"></script>
-	#else ##}{
+        #else ##}{
 <script src="/xwiki/js/i18n.js"></script>
 <script src="${cdn}$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
 <script src="${cdn}/xwiki/js/curriki-main${debugging}.js"></script>
@@ -65,12 +68,12 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="${cdn}/xwiki/js/curriki-module-partner${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-asterixReview${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-flag${debugging}.js"></script>
-	#end ##}
+        #end ##}
 
-	#if($!headerfile == "html")##{
+        #if($!headerfile == "html")##{
         <!-- would embed accordion.js -->
 ## <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
-	#end ## }
+        #end ## }
 #end ##}
 
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("swfobject.js")"></script>
@@ -79,23 +82,23 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("browserdetect.js")"></script>
-	#if($!headerfile == "http")##{
+        #if($!headerfile == "http")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
-	#end ## }
-	#if($!headerfile == "help")##{
+        #end ## }
+        #if($!headerfile == "help")##{
 <script defer type="text/javascript" src="${cdn}$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("js/presentation.js")"></script>
-	#end ## }
-	#if($headerfile == "html")##{
+        #end ## }
+        #if($headerfile == "html")##{
 <script defer type="text/javascript" src="${cdn}$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("js/presentation.js")"></script>
 <script type="text/javascript" src="${cdn}/xwiki/skins/curriki8/scripts/shortcuts.js"></script>
-		#if($context.action=="admin")##{
+                #if($context.action=="admin")##{
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("usersandgroups.js", true)"></script>
 <script type="text/javascript" src="${cdn}$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
-		#end ##}
-	#end ## }
+                #end ##}
+        #end ## }
 
 #set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
 #if($mediaHost!='-missing-media-host-')

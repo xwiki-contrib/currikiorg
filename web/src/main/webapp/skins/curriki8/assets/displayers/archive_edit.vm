@@ -20,7 +20,7 @@
 	#set($currentstartfile = $asset.getValue("startfile"))
 						<span>
 							<input class="checkbox" type="checkbox" onclick="if (this.checked) {document.getElementById('startfile').style.display='block'} else {document.getElementById('startfile').style.display='none'}"/>
-							<label for="startfile" class="sectitle">$msg.get("rve.content.edit.set_start.instruction_title")</label><img width="16" height="16" border="0" alt="" src="$xwiki.getSkinFile("images/px.gif")" class="tooltip" ext:qtip="$msg.get("rve.content.edit.set_start.instruction_tooltip")"/></span>
+							<label for="startfile" class="sectitle">$msg.get("rve.content.edit.set_start.instruction_title")</label><img width="16" height="16" border="0" alt="" src="${cdn}/xwiki/skins/curriki8/images/px.gif" class="tooltip" ext:qtip="$msg.get("rve.content.edit.set_start.instruction_tooltip")"/></span>
 						<div  id="startfile" style="display: none">
 	#set($tmpActiveClass = $asset.getActiveClass())
 	$asset.use("CurrikiCode.ArchiveAssetClass")
