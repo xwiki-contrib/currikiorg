@@ -22,7 +22,7 @@ public class CurrikiServletURLFactory extends XWikiServletURLFactory {
         StringBuffer newpath = new StringBuffer();
         if(cdn!=null)
             newpath.append(cdn);
-        newpath.append(this.contextPath);
+        newpath.append('/').append(this.contextPath);
         newpath.append("skins/");
         newpath.append(skin);
         addFileName(newpath, filename, false, context);
