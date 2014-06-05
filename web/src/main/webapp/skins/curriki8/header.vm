@@ -16,7 +16,6 @@
 <!-- logo -->
 #set($altinfo = $msg.get("header.altinfo"))
 #set($logourl = $xwiki.getSkinFile("images/curriki-logo.gif"))
-#set($logourl = "${cdn}$logourl")
 <div id="header-logo"> ##{
   <a href="$xwiki.getURL("Main.WebHome", "view")" title="$altinfo">
     <img src="$logourl" title="$escapetool.xml($altinfo)" alt="$escapetool.xml($altinfo)" />
