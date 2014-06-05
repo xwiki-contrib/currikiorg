@@ -712,7 +712,7 @@ $doc.display("content", $obj)
 #end >
 $msg.get("panel.navigation.home")
 #if($active) ##{
-	<img src="${cdn}$xwiki.getSkinFile("menu-selected.gif")" />
+	<img src="$xwiki.getSkinFile("menu-selected.gif")" />
 #end ##}
 </a></div>
 #end ##}
@@ -809,7 +809,7 @@ $msg.get("panel.navigation.home")
     #if($item.size()>2) #set($linktitle="title='$item.get(2)'") #end
     <li class="#if($active)selected#end#if($velocityCount == $items.size()) last#end"><a ${linktitle} href="{pre}${theItemLink}{/pre}">$item.get(0)</a>
     #set($linktitle = "") ##rolling back to default value
-    #if($active)<img src="${cdn}$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
+    #if($active)<img src="$xwiki.getSkinFile("menu-selected.gif")" />#end</li>
   #end ##}
   </ul> ##}
   #if(!$expanded) ##{
@@ -1782,7 +1782,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
 
 
 #macro(markup_editAssetProperty $editedDocument $propertyId $syntax)
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("wikibits.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("wikibits.js")"></script>
 <script type="text/javascript">
 ## Syntax elements is a list of: [identifier, start markup, end markup, image name].
 ## The identifier is used to display the button title, and the sample text.
@@ -1948,15 +1948,15 @@ Wysiwyg.onModuleLoad(function() {
 #set($editors = $xcontext.getEditorWysiwyg())
 #if($editors)
 #if($textareadoc.syntax.toIdString() == "xwiki/1.0")
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/tiny_mce/tiny_mce.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("${cdn}js/xwiki/wysiwyg/tinymce/wiki_editor/wiki_editor.js")"></script>
 <script type="text/javascript">
 //<![CDATA[
     wikiEditor.init({
         elements : "$!{escapetool.javascript($editors)}",
         language: "en",
         mode: "exact",
-        content_css: "${cdn}$xwiki.getSkinFile("style.css")",
+        content_css: "$xwiki.getSkinFile("style.css")",
         debug : false,
         remove_linebreaks : false,
         plugins: 'table, contextmenu, paste, searchreplace',
