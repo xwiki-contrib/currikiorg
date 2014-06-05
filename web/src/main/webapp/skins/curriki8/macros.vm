@@ -1572,7 +1572,6 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
     </a>
 #else ## } {
   #set($src=$xwiki.getSkinFile("noavatar.png"))##
-  #set($src="${cdn}${src}")##
   <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
  #if("$!width"=="" && "$!height"=="")##
      <img src="$src" class="photo"/>
