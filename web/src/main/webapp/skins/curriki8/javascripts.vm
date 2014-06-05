@@ -10,7 +10,7 @@
 #else##}{
     #set($debugging = "")
 #end##}
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile('skin.js')"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile('skin.js')"></script>
 <script type="text/javascript">
   document.domain="curriki.org";
 </script>
@@ -58,7 +58,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="${cdn}/xwiki/js/curriki-merged.js"></script>
         #else ##}{
 <script src="/xwiki/js/i18n.js"></script>
-<script src="${cdn}$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
+<script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
 <script src="${cdn}/xwiki/js/curriki-main${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-addpath${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-organize${debugging}.js"></script>
@@ -76,27 +76,27 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
         #end ## }
 #end ##}
 
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("swfobject.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
 
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("xwiki.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("browserdetect.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
         #if($!headerfile == "http")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
         #end ## }
         #if($!headerfile == "help")##{
-<script defer type="text/javascript" src="${cdn}$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("js/presentation.js")"></script>
+<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
         #end ## }
         #if($headerfile == "html")##{
-<script defer type="text/javascript" src="${cdn}$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("js/presentation.js")"></script>
+<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
 <script type="text/javascript" src="${cdn}/xwiki/skins/curriki8/scripts/shortcuts.js"></script>
                 #if($context.action=="admin")##{
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("usersandgroups.js", true)"></script>
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
                 #end ##}
         #end ## }
 
@@ -120,7 +120,7 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
     <script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
 #end##}
 ## Include the custom livetable.js which temporary, until the events are fixed
-<script type="text/javascript" src="${cdn}$xwiki.getSkinFile('livetable.js')"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile('livetable.js')"></script>
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin -->
 ## Use $xwiki.jsfx.use("jsfile.js", true)
 <!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->

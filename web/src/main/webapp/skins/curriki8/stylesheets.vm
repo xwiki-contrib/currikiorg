@@ -35,13 +35,13 @@
     #if($doc.getObject("CurrikiCode.AssetClass"))
     <link href="${cdn}/xwiki/skins/curriki8/views.css" rel="stylesheet" type="text/css"  />
     <link href="${cdn}/xwiki/skins/curriki8/print.css" rel="stylesheet" type="text/css" media="print" />
-        <!-- TODO: viewer = ... ->
+        <!-- TODO: viewer = ... -->
         #if($viewer.startsWith("embed"))
-        <link href="$xwiki.getSkinFile("embed.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+        <link href="$xwiki.getSkinFile("embed.css", false)" rel="stylesheet" type="text/css"  />
             #if($viewer == "embed-teachhub")
-            <link href="$xwiki.getSkinFile("embed-teachhub.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+            <link href="$xwiki.getSkinFile("embed-teachhub.css", false)" rel="stylesheet" type="text/css"  />
             #elseif($viewer == "embed-liberty-school")
-            <link href="$xwiki.getSkinFile("embed-liberty-school.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+            <link href="$xwiki.getSkinFile("embed-liberty-school.css", false)" rel="stylesheet" type="text/css"  />
             #elseif($viewer=="embed")
             <!-- no stylesheet for regular embedder -->
             #elseif($viewer=="embed-gps")
@@ -51,7 +51,7 @@
     #end
     #if($viewer=="print")
         <!-- TODO: test me ! --
-    <link href="$xwiki.getSkinFile("print_preview.css", false).replaceAll('/curriki8/', "/curriki8/${gVersion}/")" rel="stylesheet" type="text/css"  />
+    <link href="$xwiki.getSkinFile("print_preview.css", false)" rel="stylesheet" type="text/css"  />
     #end
 #end
 #set( $defaultstyle = $xwiki.getSpacePreference("stylesheet"))
