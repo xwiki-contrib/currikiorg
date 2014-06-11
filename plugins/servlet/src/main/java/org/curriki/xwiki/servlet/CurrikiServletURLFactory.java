@@ -12,7 +12,7 @@ public class CurrikiServletURLFactory extends XWikiServletURLFactory {
     @Override
     public URL createSkinURL(String filename, String skin, XWikiContext context) {
         URL u = createSkinURLImpl(filename, skin, context);
-        System.err.println("Skin file: " + filename + " requested, responded " + u);
+        //System.err.println("Skin file: " + filename + " requested, responded " + u);
         return u;
     }
 
