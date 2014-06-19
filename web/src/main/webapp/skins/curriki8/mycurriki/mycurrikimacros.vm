@@ -104,6 +104,10 @@ $text
   </a>
 </div>
 <h2>$userobj.first_name $userobj.last_name</h2>
+#set($isAmbassadorStudent=$userdoc.getObject("CurrikiCode.AmbassadorStudent").getProperty("IsAmbassadorStudent").getValue() == 1)
+#if($isAmbassadorStudent)
+  <img class="mycurriki-second-image" src="/xwiki/skins/curriki8/images/curriki-student-ambassador.png" />
+#end
 #end ## macro ## }
 
 
