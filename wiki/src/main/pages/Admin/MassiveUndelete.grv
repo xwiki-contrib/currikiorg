@@ -1,0 +1,52 @@
+
+= Massive Undelete =
+        On this page you can request the restore of multiple pages.
+
+{{groovy}}
+import com.xpn.xwiki.doc.XWikiDeletedDocument;
+
+println("{{html clean=false}}");
+
+def d = request.undelete;
+if(d==null) d = "";
+
+
+if(request.undelete) {
+
+    def alldocs = request.undelete.split("\\s+");
+    def store = xwiki.getXWiki().getRecycleBinStore();
+    println("<hr/><h4>Result</h4><ul>")
+    for (docname in alldocs) {
+        print("<li>Restoring <a href='../${docname.replace('.','/')}'>${docname}</a>...");
+        System.err.println("Restoring ${docname}...");
+        def docToRestore = xwiki.getDocument(docname).getDocument()
+        XWikiDeletedDocument deletedDoc = null;
+        for (it in store.getAllDeletedDocuments(docToRestore, xcontext.getContext(), true)) {
+            if (deletedDoc == null) deletedDoc = it;
+            if(it==null) continue;
+            if (it.date > deletedDoc.date) deletedDoc = it;
+        }
+        if(deletedDoc==null) {
+            println("No deleted doc.");
+            System.err.println("... no deleted doc " + docname);
+            continue;
+        }
+        def newdoc = store.restoreFromRecycleBin(docToRestore, deletedDoc.id, xcontext.getContext(), true)
+        xwiki.getXWiki().saveDocument(newdoc, "restored from recycle bin", xcontext.getContext());
+        store.deleteFromRecycleBin(docToRestore, deletedDoc.id, xcontext.getContext(), true);
+        // Save attachments
+        newdoc.getAttachmentList().each() { attachment ->
+            // Do not increment attachment version
+            attachment.setMetaDataDirty(false);
+            attachment.getAttachment_content().setContentDirty(false);
+            xwiki.getXWiki().getAttachmentStore().saveAttachmentContent(attachment, false, xcontext.getContext(), true);
+        }
+        println(".. done</li>");
+        System.err.println("Restoring ${docname} done.");
+    }
+    println("</ul><hr/>")
+    println("<p>Do it again?</p>")
+}
+println("   <form action='${doc.name}' method='POST'>        <textarea cols='60' rows='20' name='undelete'>${d}</textarea>    <p align='right'><input type='submit' name='submit'/></p></form>");
+println("{{/html}}");
+{{/groovy}}
