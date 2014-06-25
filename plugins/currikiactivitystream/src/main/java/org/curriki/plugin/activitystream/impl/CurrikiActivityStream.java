@@ -69,7 +69,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     }
 
     public void onEvent(Event event, Object source, Object data) {
-        System.out.println("onEvent for CurrikiActivityStream!");
+        System.out.println("onEvent for CurrikiActivityStream! We should not be there.");
         // ignoring these calls, we get the notify calls in principle
     }
 
@@ -80,7 +80,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
-        System.out.println("DISCUSSION STREAM: in notify");
+        System.out.println("STREAM: in notify");
 
         if(Utils.getComponent(RemoteObservationManagerContext.class).isRemoteState()) {
             System.out.println("Ignoring remote DocumentUpdatedEvent for " + newdoc);
@@ -88,7 +88,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         }
         try {
             String spaceName = newdoc.getSpace();
-            System.out.println("DISCUSSION STREAM: in space" + spaceName);
+            System.out.println("STREAM: in space" + spaceName + " with event " + event);
 
             if (spaceName == null) {
                 return;
@@ -131,7 +131,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 4.1;
+            double initialVersion = 3.1;
             if ((olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)
                 || (olddoc == null && version == initialVersion)) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
