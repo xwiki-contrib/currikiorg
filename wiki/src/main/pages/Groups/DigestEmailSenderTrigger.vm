@@ -1,0 +1,41 @@
+{{velocity}}
+#if($hasGlobalAdmin)
+    #if($request.groupname)
+        #set($digestEmailSender=$xwiki.parseGroovyFromPage("Groups.DigestEmailSender"))
+        $digestEmailSender.init($request, $xwiki, $context)
+        #set($groupname=$request.groupname)
+
+        {{html clean="false"}}
+        <h3>Done..</h3>
+        <p>
+        Sent $digestEmailSender.sendDigestEmailForGroup($groupname) E-Mail\s.
+        </br>
+        </br>
+        <a href="/xwiki/bin/view/Groups/DigestEmailSenderTrigger">Back</a>
+        </p>
+        {{/html}}
+    #else
+        {{html clean="false"}}
+        <script>
+            function generateMails(){
+                window.location.href=window.location.href+"?groupname="+document.getElementById("groupname").value;
+            }
+        </script>
+        <h3>Generate and send digest E-Mails to all leaders of a group.</h3>
+        <p>
+            E.g "<a href="/xwiki/bin/view/Group_Test/WebHome">Group_Test</a>" (without quotes):
+            <br>
+            <br>
+            <label>Group-Name:</label>
+            <input id="groupname" type="text"></input>
+            <button onclick="generateMails()">Generate Mails</button>
+        </p>
+        {{/html}}
+    #end
+#else
+    {{html clean="false"}}
+    <h3>Not authorized!</h3>
+    <p>You don't have enough rights to see this page.</p>
+    {{/html}}
+#end
+{{/velocity}}
