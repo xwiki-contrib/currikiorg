@@ -51,7 +51,7 @@
                                 <td align="center" bgcolor="#ffffff" style="background-color: #ffffff;">
                                     <br>
                                     <br>
-                                    <em style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;">Curriki</em>
+                                    <em style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;">$msg.get("groups.digestemail.heading")</em>
                                 </td>
                             </tr>
                         </table>
@@ -64,7 +64,7 @@
                         $msg.get("groups.digestemail.content",[$groupname])
                         <ul>
                             #foreach($event in $events)
-                                #set($date=$xwiki.formatDate($event.date, $msg.get("mycurriki.datetimeFormat")))
+                                #set($date=$xwiki.formatDate($event.date, "hh:mm"))
                                 #set($groupMember=$event.user)
                                 #set($userDoc=$xwiki.getDocument($groupMember))
                                 #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
@@ -72,27 +72,49 @@
                                 #set($groupMemberPageUrl="http://${hostname}/xwiki/bin/view/MyCurriki/Profile?user=${groupMember}")
                                 #set($groupMembersPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/Members")
 
+                                #set($displayTitle=$event.getDisplayTitle())
+                                #set($displayBody=$event.getDisplayBody())
+                                #set($url="http://${hostname}${event.getUrl()}")
+
                                 #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
                                     <li>
-                                        $msg.get("groups.digestemail.member_activity_event", [$groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
-                                        ##$date - The new user <a href="${groupMemberPageUrl}">$groupMemberName</a> joined the group. (<a href="${groupMembersPageUrl}">Group Members Page</a>)
+                                        $msg.get("groups.digestemail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                                     </li>
+
+
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DiscussionActivityEvent")
+                                    #set($docTitle=$event.getParam1())
+                                    #set($docType=$event.getParam3())
+
                                     <li>
-                                        $msg.get("groups.digestemail.discussion_activity_event", [$groupMemberPageUrl,$groupMemberName])
-                                        ##$date - The user <a href="${groupMemberPageUrl}">$groupMemberName</a> contributed to a discussion in the group.
+                                        #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
+                                            $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        #elseif(($docType.contains("discussion-answer")))
+                                            $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        #end
+                                        ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
+                                        ##    $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
+                                        ##    $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        ###end
                                     </li>
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MessageActivityEvent")
+                                    #set($articleTitle=$event.getParam1())
+                                    #set($level=$event.getParam3())
                                     <li>
-                                        $msg.get("groups.digestemail.message_activity_event", [$groupMemberPageUrl,$groupMemberName])
-                                        ##$date - The user <a href="${groupMemberPageUrl}">$groupMemberName</a> sent a message to the group the group.
+                                        #if($level=="message")
+                                            $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                        #elseif(($level=="comment"))
+                                            $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                        #end
+
                                     </li>
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
+                                    #set($assetTitle=$event.getParam1())
                                     <li>
-                                        $msg.get("groups.digestemail.resource_activity_event", [$groupMemberPageUrl,$groupMemberName])
-                                        ##$date - The user <a href="${groupMemberPageUrl}">$groupMemberName</a> created a resource in the group the group.
+                                        $msg.get("groups.digestemail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
                                     </li>
                                 #end
 
