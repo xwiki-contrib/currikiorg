@@ -22,6 +22,19 @@ public class DigestEmailSender {
         LOG.warn("Inited DigestEmailSender");
     }
 
+    public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupAdminsUserNames){
+        boolean hasWildcard = pattern.endsWith("*");
+        String prefix = pattern; if(hasWildcard) prefix = pattern.substring(0, pattern.length()-1);
+        int count = 0;
+        for(name in wiki.csm.getSpaceNames(10000,0)) {
+            if(hasWildcard && !(name.startsWith(prefix))) continue;
+            println("Processing " + name);
+            System.out.println("Processing " + name);
+            count += sendDigestEmailForGroup(name, groupAdminsUserNames);
+        }
+        return count;
+    }
+
     public int sendDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
         List<ActivityEvent> activityEvents = getActivityEventsForGroup(groupName);
 
@@ -42,6 +55,7 @@ public class DigestEmailSender {
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+            if(userObj==null || userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
             LOG.warn("Sending mail to " + to);
             sendMail(from, to, subject, text);
