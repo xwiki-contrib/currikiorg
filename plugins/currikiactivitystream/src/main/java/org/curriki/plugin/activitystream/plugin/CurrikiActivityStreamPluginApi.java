@@ -70,6 +70,7 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
                                 getXWikiContext());
             }
             result.add(wrappedEvent);
+            System.out.println("Wrapping event " + event +"(space: " + event.getSpace() + ") into " + wrappedEvent );
         }
         return result;
     }

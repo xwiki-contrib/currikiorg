@@ -22,6 +22,7 @@ package org.curriki.plugin.activitystream.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.xpn.xwiki.objects.ObjectDiff;
 import com.xpn.xwiki.web.Utils;
 import org.apache.velocity.VelocityContext;
 
@@ -302,9 +303,25 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else {
-                    // this means an answer has been updated (or comment published)
-                    addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                    int oldCommentsCount = -1, newCommentsCount = -1;
+                    if(newdoc!=null) {
+                        List l = newdoc.getObjects("XWiki.XWikiComments");
+                        newCommentsCount = l.size();
+                    }
+                    if(olddoc!=null) {
+                        List l = olddoc.getObjects("XWiki.XWikiComments");
+                        if(l!=null) oldCommentsCount = l.size();
+                    }
+                    if(newCommentsCount-oldCommentsCount==1) {
+                        // this means a comment has been published
+                        addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
+                                ActivityEventPriority.NOTIFICATION, "", params, context);
+                    } else {
+                        // this means an answer has been updated (or comment published)
+                        addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
+                                ActivityEventPriority.NOTIFICATION, "", params, context);
+                    }
+
                 }
             } else if ((topicClass!=null)||(oldTopicClass!=null)) {
 
