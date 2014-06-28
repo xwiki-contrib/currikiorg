@@ -1,9 +1,12 @@
 import com.xpn.xwiki.api.Document
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
+import com.xpn.xwiki.plugin.spacemanager.api.Space
 import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
+
+import java.text.SimpleDateFormat
 
 public class DigestEmailSender {
 
@@ -16,11 +19,14 @@ public class DigestEmailSender {
      * The xwiki object of the running curriki instance
      */
     private XWiki wiki;
+    private String sinceHowLong = "24*60*60*1000";
 
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
         LOG.warn("Inited DigestEmailSender");
     }
+
+    public void setSinceHowLong(String s) { this.sinceHowLong = s;}
 
     public int sendDigestEmailToAllGroupsMatching(String pattern, List<String> groupAdminsUserNames){
         boolean hasWildcard = pattern.endsWith("*");
@@ -42,8 +48,13 @@ public class DigestEmailSender {
             groupAdminsUserNames = wiki.csm.getAdmins(groupName);
         }
 
+
+
+        Space space = wiki.csm.getSpace(groupName);
         wiki.context.put("GROUPNAME", groupName);
+        wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENTS", activityEvents);
+        wiki.context.put("DIGEST_EMAIL_SENDER", this);
 
         Document emailDoc = wiki.getDocument("Groups.DigestEmailMailTemplate");
         String subject = wiki.renderText(emailDoc.title, emailDoc);
@@ -55,7 +66,7 @@ public class DigestEmailSender {
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
-            if(userObj==null || userObj.getProperty("email")) continue;
+            if(userObj==null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
             LOG.warn("Sending mail to " + to);
             sendMail(from, to, subject, text);
@@ -63,10 +74,16 @@ public class DigestEmailSender {
         return groupAdminsUserNames.size();
     }
 
+    public String formatDate(Date date){
+        SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a");
+        isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+        return isoFormat.format(date);
+    }
+
     private List<ActivityEvent> getActivityEventsForGroup(String groupName) {
         CurrikiActivityStreamPluginApi activityStream = wiki.activitystream;
         String streamName = activityStream.getStreamName(groupName);
-        return activityStream.getEvents(streamName, true, 15, 0);
+        return activityStream.searchEvents("act.stream='"+ streamName+"'  and act.date > current_timestamp()-${sinceHowLong}", false, 25, 0)
     }
 
     private void sendMail(String from, String to, String subject, String text){

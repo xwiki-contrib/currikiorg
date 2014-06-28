@@ -1,15 +1,17 @@
 {{velocity}}
 #set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
+#set($displayGroupname=$context.get("DISPLAY_GROUPNAME"))
 #set($groupname=$context.get("GROUPNAME"))
 #set($groupPageUrl="http://${hostname}/xwiki/view/${groupname}")
 #set($events=$context.get("EVENTS"))
+#set($digestEmailSender=$context.get("DIGEST_EMAIL_SENDER"))
 {{html clean="false"}}
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="initial-scale=1.0">    <!-- So that mobile webkit will display zoomed in -->
     <meta name="format-detection" content="telephone=no"> <!-- disable auto telephone linking in iOS -->
-    <title>Hi there! Curriki wants to keep you up to date with your groups. The following activities happened in the past 24 hours in your ${groupname} group.</title>
+    <title>Hi there! Curriki wants to keep you up to date with your groups. The following activities happened in the past 24 hours in your ${displayGroupname} group.</title>
     <style type="text/css">
         .ReadMsgBody { width: 100%; background-color: #ebebeb;}
         .ExternalClass {width: 100%; background-color: #ebebeb;}
@@ -61,10 +63,10 @@
                             $msg.get("groups.digestemail.greeting")
                         </div><br>
 
-                        $msg.get("groups.digestemail.content",[$groupname])
+                        $msg.get("groups.digestemail.content",[$displayGroupname])
                         <ul>
                             #foreach($event in $events)
-                                #set($date=$xwiki.formatDate($event.date, "hh:mm"))
+                                #set($date="${digestEmailSender.formatDate($event.date)} EDT")
                                 #set($groupMember=$event.user)
                                 #set($userDoc=$xwiki.getDocument($groupMember))
                                 #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
@@ -124,35 +126,6 @@
 
                             #end
                         </ul>
-
-                        <table width="100%" class="social">
-                            <tbody><tr>
-                                <td>
-
-                                    <!-- column 1 -->
-                                    <table class="column">
-                                        <tbody>
-                                        <tr align="left">
-                                            <td>
-
-                                                Connect with Us: <br>
-                                                <a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #FF6700 !important;" href="http://currikiblog.wordpress.com/">Curriki Blog</a>
-                                                <a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #3B5998 !important;" href="http://www.facebook.com/pages/Curriki/134427817464">Facebook</a>
-                                                <a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #1DACED !important;" href="http://twitter.com/curriki">Twitter</a>
-
-                                            </td>
-                                            <td align="left">
-                                                <em style="padding: 30px;"> Contact Info: </em><br>
-                                                <em style="padding: 30px;"> Email: <strong><a href="emailto:jpinto@curriki.org">jpinto@curriki.org</a></strong></em><br>
-                                            </td>
-                                        </tr>
-                                        </tbody></table><!-- /column 2 -->
-
-                                    <span class="clear"></span>
-
-                                </td>
-                            </tr>
-                            </tbody></table>
 
                     </td>
                 </tr>
