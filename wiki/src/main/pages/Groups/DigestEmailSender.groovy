@@ -19,7 +19,7 @@ public class DigestEmailSender {
      * The xwiki object of the running curriki instance
      */
     private XWiki wiki;
-    private String sinceHowLong = "24*60*60*1000";
+    private String sinceHowLong = "24*60*60";
 
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
@@ -44,11 +44,16 @@ public class DigestEmailSender {
     public int sendDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
         List<ActivityEvent> activityEvents = getActivityEventsForGroup(groupName);
 
+        // If we have no events to send we don't proceed here.
+        // Log that and return quietly
+        if(activityEvents == null || activityEvents.size() == 0) {
+            LOG.warn("No Events to send for group with name: " + groupName)
+            return 0;
+        }
+
         if(groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")){
             groupAdminsUserNames = wiki.csm.getAdmins(groupName);
         }
-
-
 
         Space space = wiki.csm.getSpace(groupName);
         wiki.context.put("GROUPNAME", groupName);
