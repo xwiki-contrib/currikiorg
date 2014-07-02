@@ -20,7 +20,9 @@
 package org.curriki.plugin.activitystream.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.xpn.xwiki.objects.ObjectDiff;
 import com.xpn.xwiki.web.Utils;
@@ -82,6 +84,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         int event, XWikiContext context)
     {
         System.out.println("STREAM: in notify");
+        System.out.println("TempAttributes; " + tempStorage.get());
 
         if(Utils.getComponent(RemoteObservationManagerContext.class).isRemoteState()) {
             System.out.println("Ignoring remote DocumentUpdatedEvent for " + newdoc);
@@ -317,7 +320,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     } else {
-                        // this means an answer has been updated (or comment published)
+                        // this means an answer has been updated
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     }
@@ -599,5 +602,25 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             throw new ActivityStreamException(e);
         }
     }
+
+    private static ThreadLocal<Map<String, Object>> tempStorage = new ThreadLocal<Map<String,Object>>();
+
+    public void setTempAttribute(String name, Object obj) {
+        Map<String, Object> m = tempStorage.get();
+        if(m==null) {
+            m = new HashMap<String, Object>();
+            tempStorage.set(m);
+        }
+        m.put(name, obj);
+    }
+    public void clearTempAttributes() {
+        tempStorage.remove();
+    }
+    public Object getTempAttribute(String name) {
+        if(tempStorage.get()==null) return null;
+        return tempStorage.get().get(name);
+    }
+
+
 
 }

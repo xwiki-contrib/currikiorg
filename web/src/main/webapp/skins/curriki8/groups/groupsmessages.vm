@@ -310,6 +310,7 @@
                 #end
             #end
         #end
+
         #if("$!mailTo" != "")
             #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
             #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
@@ -606,6 +607,15 @@
             #set($pagefullname = "$space.${pagename}")
             #set($tdoc = $xwiki.getDocument($request.page))
             #set($ok = $xwiki.renamePage($tdoc, $pagefullname))
+
+            #set($as = $xwiki.activitystream)##
+            $as.setTempAttribute("mailTo", ${mailTo})##
+            $as.setTempAttribute("recipientRole", ${role})##
+            $as.setTempAttribute("mailToGroup", ${request.toGroup})##
+            $as.setTempAttribute("messageBody", ${msg_doc.get('content')})##
+            $as.setTempAttribute("messageSubject", ${msg_doc.get('title')})##
+
+
             #set($newdoc = $xwiki.getDocument($pagefullname))
             #set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
             $newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
