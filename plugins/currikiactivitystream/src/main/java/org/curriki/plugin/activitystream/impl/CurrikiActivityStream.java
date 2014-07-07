@@ -271,7 +271,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         event.setVersion(answerDoc.getVersion());
         event.setParams(params);
         // This might be wrong once non-altering events will be logged.
-        event.setUser(topicDoc.getAuthor());
+        if(answerDoc!=null && answerDoc.getDate().compareTo(topicDoc.getDate())>0)
+            event.setUser(answerDoc.getAuthor());
+        else event.setUser(topicDoc.getAuthor());
         addActivityEvent(event, topicDoc, context);
         }
 
@@ -306,7 +308,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else {
-                    int oldCommentsCount = -1, newCommentsCount = -1;
+                    int oldCommentsCount = 0, newCommentsCount = 0;
                     if(newdoc!=null) {
                         List l = newdoc.getObjects("XWiki.XWikiComments");
                         newCommentsCount = l.size();
