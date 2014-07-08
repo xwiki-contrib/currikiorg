@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.xpn.xwiki.objects.ObjectDiff;
+import com.google.gson.Gson;
 import com.xpn.xwiki.web.Utils;
 import org.apache.velocity.VelocityContext;
 
@@ -112,6 +112,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         } catch (Throwable t) {
             // Error in activity stream notify should be ignored but logged in the log file
             t.printStackTrace();
+        } finally {
+            this.clearTempAttributes();
         }
     }
 
@@ -156,21 +158,29 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         params.add(article.getStringValue("title"));
         params.add(getUserName(context.getUser(), context));
         params.add(level);
+        params.add(getTempAttribute("messageBody"));
+
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("mailTo", (String) getTempAttribute("mailTo"));
+        paramsMap.put("recipientRole", (String) getTempAttribute("recipientRole"));
+        paramsMap.put("mailToGroup", (String) getTempAttribute("mailToGroup"));
+        Gson gson = new Gson();
+        params.add(gson.toJson(paramsMap));
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     notify = true;
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
             }
             if (notify) {
@@ -532,7 +542,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     /**
      * Sends a notification email to the creator of the given document if it has been updated by
      * another user and he opted in his space profile for this kind of notifications.
-     * 
+     *
      * @param spaceName the space the changed document is associated with. Also, the document
      *            creator's profile in this space can block this notification
      * @param doc the changed document

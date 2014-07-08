@@ -21,8 +21,10 @@ package org.curriki.plugin.activitystream.plugin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 
+import com.google.gson.Gson;
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.XWikiException;
 import com.xpn.xwiki.doc.XWikiDocument;
@@ -40,6 +42,8 @@ public class MessageActivityEvent extends ActivityEvent
         XWikiContext context)
     {
         super(event, context);
+
+        if(event == null || context == null) return;
 
         String articleTitle = event.getParam1();
         String articleLink = articleTitle;
@@ -113,5 +117,31 @@ public class MessageActivityEvent extends ActivityEvent
     public String getDisplayBody()
     {
         return displayBody;
+    }
+
+    public String getRecipientRole() {
+        return retrieveFromParam5("recipientRole");
+    }
+
+    public String getMailTo() {
+        return retrieveFromParam5("mailTo");
+    }
+
+    public String getMailToGroup() {
+        return retrieveFromParam5("mailToGroup");
+    }
+
+    private String retrieveFromParam5(String name){
+        String result = null;
+        try {
+            String param5 = this.getParam5();
+            Gson gson = new Gson();
+            Map<String, String> params = (Map<String,String>)gson.fromJson(param5, Map.class);
+            result =  params.get(name);
+        } catch (Exception e){
+            //Too bad the parser failed, but we return null.
+
+        }
+        return result;
     }
 }

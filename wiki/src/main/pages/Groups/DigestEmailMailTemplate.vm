@@ -110,6 +110,12 @@
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MessageActivityEvent")
                                     #set($articleTitle=$event.getParam1())
                                     #set($level=$event.getParam3())
+
+                                    ## Not used yet..
+                                    #set($mailTo=$event.getMailTo())
+                                    #set($recipientRole=$event.getRecipientRole())
+                                    #set($toGroupMail=$event.getToGroupMail())
+                                    ##
                                     <li>
                                         #if($level=="message")
                                             $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
