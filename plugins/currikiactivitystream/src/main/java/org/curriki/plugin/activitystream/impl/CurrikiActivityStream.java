@@ -120,6 +120,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     protected void handleMessageEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
         XWikiContext context)
     {
+        System.out.println("handleMessageEvent");
         String streamName = getStreamName(newdoc.getSpace(), context);
         if (streamName == null) {
             return;
@@ -154,11 +155,27 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             notify = true;
         }
 
+        // cut the messageBody at max 200 (but at a word please!)
+        String messageBody = (String) getTempAttribute("messageBody");
+        if(messageBody==null) messageBody = "";
+        // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
+        messageBody = messageBody.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)>"," <x");
+        messageBody = messageBody.replaceAll("<[^>]+>","");
+        messageBody = messageBody.replaceAll("[\\s]+", " ");
+        int p =0, max = Math.min(200, messageBody.length());
+        for(int i=0; i<max; i++) {
+            if(!Character.isLetterOrDigit(messageBody.charAt(i))) p = i;
+        }
+        if(p<150) p = 150;
+        if(p<messageBody.length())
+            messageBody = messageBody.substring(p) + "…";
+
         List params = new ArrayList();
         params.add(article.getStringValue("title"));
         params.add(getUserName(context.getUser(), context));
         params.add(level);
-        params.add(getTempAttribute("messageBody"));
+        params.add(messageBody);
+        System.out.println("Params: " + params);
 
         Map<String, String> paramsMap = new HashMap<String, String>();
         paramsMap.put("mailTo", (String) getTempAttribute("mailTo"));

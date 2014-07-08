@@ -1,0 +1,76 @@
+
+// {{groovy}}
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityStreamPluginApi
+
+println("{{html clean=false}}")
+String query = request.query;
+boolean hasQuery = true;
+if(query==null || query.length()==0) {
+    hasQuery = false;
+    query="act.stream='Group_CurrikiLeadersGroup' ";
+            //"select act from ActivityEventImpl as act where act.eventId=act2.eventId and act.stream='Group_CurrikiLeadersGroup' order by act.date desc";
+}
+
+println("<h1>Query Activity Stream</h1>");
+println("<form action='${doc.name}' method='get'>")
+println("Query:<p><textarea name='query' cols='60' rows='20'>${query}</textarea></p>")
+println("<p align='right'><input type='submit' name='config' value='submit'></p>");
+println("</form>");
+int max = 50;
+
+if(hasQuery) {
+    println("<hr/>")
+    ActivityStreamPluginApi activityStream = xwiki.activitystream;
+    List<ActivityEvent> events; Exception ex = null;
+    try {
+        events = activityStream.searchEvents(query, false, max, 0); ;
+    } catch (Exception x) {
+        ex = x;
+        x.printStackTrace();
+    }
+    if(ex==null) {
+        println("<p>Query succeeded.");
+        if(events!=null) {
+            println(events.size() + " results; showing ${Math.max(max, events.size())}.</p>")
+
+            // collect property names
+            Set names = new TreeSet();
+            for(ActivityEvent event in events) {
+                names.addAll(event.properties.keySet());
+            }
+            names.remove("XWikiContext");
+            names.remove("wiki");
+            names.remove("class");
+            names.remove("event");
+            names.remove("protectedEvent");
+            names.add("param1"); names.add("param2"); names.add("param3"); names.add("param4"); names.add("param5");
+
+
+            print("<table cellpadding='3' border='1'><thead><tr>");
+            for(String k in names) {print("<th>\"${k}\"</th>");}
+            println("</tr></thead><tbody>");
+            for(ActivityEvent event in events) {
+                print("<tr>");
+                //println("<tr><td>${event.date}</td><td>${event.page}</td><td>${event.space}</td><td>${event.application}</td><td>${event.displayUser}</td><td>${event.eventId}</td><td>${event.title}</td><td>${event.type}</td><td>${event.user}</td></tr>")
+
+                Map m = event.properties;
+                for(String k in names) {
+                    print("<td>")
+                    if(m.containsKey(k)) {print(m.get(k)); }
+                    print("</td>");
+                }
+                println("</tr>");
+            }
+            println("</tbody></table>");
+        } else {
+            println("<p>Strange, no exception but no result.</p>");
+        }
+    } else {
+        println("<p>An exception occurred: " + ex + "</p>");
+    }
+
+}
+
+println("{{/html}}")
+//{{/groovy}}
