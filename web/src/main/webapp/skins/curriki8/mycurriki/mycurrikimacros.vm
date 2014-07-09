@@ -80,6 +80,7 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_header $userobj $userdoc) ## {
+#verbatim_start()##
 <div id="mycurriki-img">
   <a href="$userdoc.getURL('view')" title="$userobj.first_name $userobj.last_name" class="mycurriki-avatar">
   ## first attempt to use the attachment from the avatar property
@@ -106,8 +107,10 @@ $text
 <h2>$userobj.first_name $userobj.last_name</h2>
 #set($isAmbassadorStudent=$userdoc.getObject("CurrikiCode.AmbassadorStudent").getProperty("IsAmbassadorStudent").getValue() == 1)
 #if($isAmbassadorStudent)
-  <img class="mycurriki-second-image" src="$xwiki.getSkinFile("images/curriki-student-ambassador.png")" />
+  <img class="mycurriki-second-image" src="${cdn}/xwiki/skins/curriki8/images/curriki-student-ambassador.png")" />
+  <div class="clear"></div>
 #end
+#verbatim_end()##
 #end ## macro ## }
 
 

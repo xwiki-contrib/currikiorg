@@ -310,6 +310,7 @@
                 #end
             #end
         #end
+
         #if("$!mailTo" != "")
             #set($mailFrom = $xwiki.getXWikiPreference("admin_email"))
             #set($mailDoc = $xwiki.getDocument("Groups.MailTemplateCreateMessage"))
@@ -606,14 +607,27 @@
             #set($pagefullname = "$space.${pagename}")
             #set($tdoc = $xwiki.getDocument($request.page))
             #set($ok = $xwiki.renamePage($tdoc, $pagefullname))
+
             #set($newdoc = $xwiki.getDocument($pagefullname))
             #set($ok = $newdoc.addObjectFromRequest("XWiki.ArticleClass"))
             $newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
             $newdoc.setParent("${spaceName}.Messages")
-        ## Update rights
-            #messageUpdateRightsFromRequest($newdoc)
+
         ## Send notification mail
             #messageSendNotificationMail($newdoc)
+
+            #set($as = $xwiki.activitystream)##
+            $as.setTempAttribute("mailTo", "$!mailTo")##
+            #if($request.toRole)
+                $as.setTempAttribute("recipientRole", "${request.selectedRolesList}")##
+            #end
+            $as.setTempAttribute("mailToGroup", "$!request.toGroup")##
+            #set($renderedContent = $newdoc.getRenderedContent())
+            $as.setTempAttribute("messageBody", "$!renderedContent")##
+            $as.setTempAttribute("messageSubject", "$!mytitle")##
+
+        ## Update rights
+            #messageUpdateRightsFromRequest($newdoc)
         ## Redirect to message
             $response.sendRedirect($newdoc.getURL())
         #else

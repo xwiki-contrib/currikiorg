@@ -1,0 +1,58 @@
+{{velocity}}
+#if($hasGlobalAdmin)
+    #if($request.groupname)
+        #set($digestEmailSender=$xwiki.parseGroovyFromPage("Groups.DigestEmailSender"))
+        $digestEmailSender.init($xwiki)
+        #set($groupname=$request.groupname)
+        #set($admins=$request.admins)
+
+        {{html clean="false"}}
+        <h3>Done..</h3>
+        <p>
+        $admins
+        #if(${groupname.contains("*")})
+                #set($count=$digestEmailSender.sendDigestEmailToAllGroupsMatching($groupname, [$admins]))
+            #else
+                #set($count=$digestEmailSender.sendDigestEmailForGroup($groupname,[$admins]))
+        #end
+        Sent  ${count} E-Mail}\s.
+        </br>
+        </br>
+        <a href="$doc.name">Back</a>
+        </p>
+        {{/html}}
+    #else
+        {{html clean="false"}}
+        <script>
+            function generateMails(){
+                window.location.href=window.location.href+"?groupname="+document.getElementById("groupname").value+"&admins="+document.getElementById("admins").value;
+            }
+        </script>
+        <h3>Generate and send digest E-Mails to all leaders of a group.</h3>
+        <p>
+            E.g "<a href="/xwiki/bin/view/Group_Test/WebHome">Group_Test</a>" (without quotes); a * at end means a wildcard:
+            <br>
+            <br>
+            <label>Group-Name: </label>
+            <input id="groupname" type="text"></input>
+            <br>
+            <br>
+            E.g "XWiki.flixt" (without quotes), if you leave this empty the mails is sent to
+            all leaders of the group
+            <br>
+            <br>
+            <label>Receiver: </label>
+            <input id="admins" type="text"></input>
+            <br>
+            <br>
+            <button onclick="generateMails()">Generate Mails</button>
+        </p>
+        {{/html}}
+    #end
+#else
+    {{html clean="false"}}
+    <h3>Not authorized!</h3>
+    <p>You don't have enough rights to see this page.</p>
+    {{/html}}
+#end
+{{/velocity}}

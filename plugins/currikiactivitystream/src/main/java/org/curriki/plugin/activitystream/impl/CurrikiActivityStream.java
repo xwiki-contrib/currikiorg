@@ -20,8 +20,11 @@
 package org.curriki.plugin.activitystream.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.Gson;
 import com.xpn.xwiki.web.Utils;
 import org.apache.velocity.VelocityContext;
 
@@ -69,7 +72,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     }
 
     public void onEvent(Event event, Object source, Object data) {
-        System.out.println("onEvent for CurrikiActivityStream!");
+        System.out.println("onEvent for CurrikiActivityStream! We should not be there.");
         // ignoring these calls, we get the notify calls in principle
     }
 
@@ -80,7 +83,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc,
         int event, XWikiContext context)
     {
-        System.out.println("DISCUSSION STREAM: in notify");
+        System.out.println("STREAM: in notify");
+        System.out.println("TempAttributes; " + tempStorage.get());
 
         if(Utils.getComponent(RemoteObservationManagerContext.class).isRemoteState()) {
             System.out.println("Ignoring remote DocumentUpdatedEvent for " + newdoc);
@@ -88,7 +92,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         }
         try {
             String spaceName = newdoc.getSpace();
-            System.out.println("DISCUSSION STREAM: in space" + spaceName);
+            System.out.println("STREAM: in space" + spaceName + " with event " + event);
 
             if (spaceName == null) {
                 return;
@@ -108,12 +112,15 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         } catch (Throwable t) {
             // Error in activity stream notify should be ignored but logged in the log file
             t.printStackTrace();
+        } finally {
+            this.clearTempAttributes();
         }
     }
 
     protected void handleMessageEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
         XWikiContext context)
     {
+        System.out.println("handleMessageEvent");
         String streamName = getStreamName(newdoc.getSpace(), context);
         if (streamName == null) {
             return;
@@ -131,7 +138,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             event = XWikiDocChangeNotificationInterface.EVENT_DELETE;
         } else {
             double version = Double.parseDouble(newdoc.getVersion());
-            double initialVersion = 4.1;
+            double initialVersion = 3.1;
             if ((olddoc != null && olddoc.getObject("XWiki.ArticleClass") == null)
                 || (olddoc == null && version == initialVersion)) {
                 event = XWikiDocChangeNotificationInterface.EVENT_NEW;
@@ -148,25 +155,49 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             notify = true;
         }
 
+        // cut the messageBody at max 200 (but at a word please!)
+        String messageBody = (String) getTempAttribute("messageBody");
+        if(messageBody==null) messageBody = "";
+        // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
+        messageBody = messageBody.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)>"," <x");
+        messageBody = messageBody.replaceAll("<[^>]+>","");
+        messageBody = messageBody.replaceAll("[\\s]+", " ");
+        int p =0, max = Math.min(200, messageBody.length());
+        for(int i=0; i<max; i++) {
+            if(!Character.isLetterOrDigit(messageBody.charAt(i))) p = i;
+        }
+        if(p<150) p = 150;
+        if(p<messageBody.length())
+            messageBody = messageBody.substring(p) + "…";
+
         List params = new ArrayList();
         params.add(article.getStringValue("title"));
         params.add(getUserName(context.getUser(), context));
         params.add(level);
+        params.add(messageBody);
+        System.out.println("Params: " + params);
+
+        Map<String, String> paramsMap = new HashMap<String, String>();
+        paramsMap.put("mailTo", (String) getTempAttribute("mailTo"));
+        paramsMap.put("recipientRole", (String) getTempAttribute("recipientRole"));
+        paramsMap.put("mailToGroup", (String) getTempAttribute("mailToGroup"));
+        Gson gson = new Gson();
+        params.add(gson.toJson(paramsMap));
 
         try {
             switch (event) {
                 case XWikiDocChangeNotificationInterface.EVENT_NEW:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_CHANGE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     notify = true;
                     break;
                 case XWikiDocChangeNotificationInterface.EVENT_DELETE:
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                            ActivityEventPriority.NOTIFICATION, "", params, context);
                     break;
             }
             if (notify) {
@@ -267,7 +298,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         event.setVersion(answerDoc.getVersion());
         event.setParams(params);
         // This might be wrong once non-altering events will be logged.
-        event.setUser(topicDoc.getAuthor());
+        if(answerDoc!=null && answerDoc.getDate().compareTo(topicDoc.getDate())>0)
+            event.setUser(answerDoc.getAuthor());
+        else event.setUser(topicDoc.getAuthor());
         addActivityEvent(event, topicDoc, context);
         }
 
@@ -302,9 +335,25 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else {
-                    // this means an answer has been updated (or comment published)
-                    addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
-                        ActivityEventPriority.NOTIFICATION, "", params, context);
+                    int oldCommentsCount = 0, newCommentsCount = 0;
+                    if(newdoc!=null) {
+                        List l = newdoc.getObjects("XWiki.XWikiComments");
+                        newCommentsCount = l.size();
+                    }
+                    if(olddoc!=null) {
+                        List l = olddoc.getObjects("XWiki.XWikiComments");
+                        if(l!=null) oldCommentsCount = l.size();
+                    }
+                    if(newCommentsCount-oldCommentsCount==1) {
+                        // this means a comment has been published
+                        addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
+                                ActivityEventPriority.NOTIFICATION, "", params, context);
+                    } else {
+                        // this means an answer has been updated
+                        addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
+                                ActivityEventPriority.NOTIFICATION, "", params, context);
+                    }
+
                 }
             } else if ((topicClass!=null)||(oldTopicClass!=null)) {
 
@@ -510,7 +559,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     /**
      * Sends a notification email to the creator of the given document if it has been updated by
      * another user and he opted in his space profile for this kind of notifications.
-     * 
+     *
      * @param spaceName the space the changed document is associated with. Also, the document
      *            creator's profile in this space can block this notification
      * @param doc the changed document
@@ -582,5 +631,25 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             throw new ActivityStreamException(e);
         }
     }
+
+    private static ThreadLocal<Map<String, Object>> tempStorage = new ThreadLocal<Map<String,Object>>();
+
+    public void setTempAttribute(String name, Object obj) {
+        Map<String, Object> m = tempStorage.get();
+        if(m==null) {
+            m = new HashMap<String, Object>();
+            tempStorage.set(m);
+        }
+        m.put(name, obj);
+    }
+    public void clearTempAttributes() {
+        tempStorage.remove();
+    }
+    public Object getTempAttribute(String name) {
+        if(tempStorage.get()==null) return null;
+        return tempStorage.get().get(name);
+    }
+
+
 
 }

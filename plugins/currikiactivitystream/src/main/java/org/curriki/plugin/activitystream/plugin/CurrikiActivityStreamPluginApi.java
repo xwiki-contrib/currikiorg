@@ -70,9 +70,14 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
                                 getXWikiContext());
             }
             result.add(wrappedEvent);
+            System.out.println("Wrapping event " + event +"(space: " + event.getSpace() + ") into " + wrappedEvent );
         }
         return result;
     }
+
+    public void setTempAttribute(String name, Object obj) { getCurrikiActivityStream().setTempAttribute(name, obj);}
+    public void clearTempAttributes() { getCurrikiActivityStream().clearTempAttributes(); }
+    public Object getTempAttribute(String name) { return getCurrikiActivityStream().getTempAttribute(name); }
 /*
     protected List unwrapEvents(List events)
     {

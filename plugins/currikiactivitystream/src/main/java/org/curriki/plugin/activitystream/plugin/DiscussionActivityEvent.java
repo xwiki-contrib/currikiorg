@@ -84,6 +84,8 @@ public class DiscussionActivityEvent extends ActivityEvent
                 eventTitle = "discussions_activity_answer_upd";
             } else if (ActivityEventType.CREATE.equals(event.getType())) {
                 eventTitle = "discussions_activity_answer_add";
+            } else if (ActivityEventType.ADD_COMMENT.equals(event.getType())) {
+                eventTitle = "discussions_activity_answer_comment";
             } else if (ActivityEventType.DELETE.equals(event.getType())) {
                 eventTitle = "discussions_activity_answer_del";
             }
