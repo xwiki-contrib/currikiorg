@@ -2,7 +2,7 @@
 #set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
 #set($displayGroupname=$context.get("DISPLAY_GROUPNAME"))
 #set($groupname=$context.get("GROUPNAME"))
-#set($groupPageUrl="http://${hostname}/xwiki/view/${groupname}")
+#set($groupPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/WebHome")
 #set($events=$context.get("EVENTS"))
 #set($digestEmailSender=$context.get("DIGEST_EMAIL_SENDER"))
 {{html clean="false"}}
@@ -63,7 +63,7 @@
                             $msg.get("groups.digestemail.greeting")
                         </div><br>
 
-                        $msg.get("groups.digestemail.content",[$displayGroupname])
+                        $msg.get("groups.digestemail.content",[$displayGroupname, $groupPageUrl])
                         <ul>
                             #foreach($event in $events)
                                 #set($date="${digestEmailSender.formatDate($event.date)} EDT")
