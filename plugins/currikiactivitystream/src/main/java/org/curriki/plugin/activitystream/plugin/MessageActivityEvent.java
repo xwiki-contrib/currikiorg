@@ -146,7 +146,7 @@ public class MessageActivityEvent extends ActivityEvent
     }
 
     public String getMessageBodyTeaser() {
-        return getEvent().getParam5();
+        return getEvent().getParam4();
     }
 
 }
