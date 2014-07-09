@@ -88,24 +88,33 @@
                                     #set($docTitle=$event.getParam1())
                                     #set($docType=$event.getParam3())
 
-                                    <li>
                                         ## Topics
                                         #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
+                                        <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
-                                        #elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
-                                            $msg.get("groups.digestemail.discussion_activity_event.topic.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        </li>
+                                        ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
+                                        ##<li>
+                                        ##    $msg.get("groups.digestemail.discussion_activity_event.topic.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        ##</li>
 
                                         ## Answers
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
+                                        <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
-                                        #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
-                                            $msg.get("groups.digestemail.discussion_activity_event.answer.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        </li>
+                                        ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
+                                        ##<li>
+                                        ##    $msg.get("groups.digestemail.discussion_activity_event.answer.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        ##</li>
 
                                         ## Comments
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
+                                        <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                        </li>
                                         #end
-                                    </li>
+
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MessageActivityEvent")
                                     #set($articleTitle=$event.getParam1())
@@ -115,16 +124,18 @@
                                     #set($mailTo=$event.getMailTo())
                                     #set($recipientRole=$event.getRecipientRole())
                                     #set($toGroupMail=$event.getToGroupMail())
-                                    ##
-                                    <li>
-                                        #if($level=="message")
-                                            $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
-                                        #elseif(($level=="comment"))
-                                            $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
-                                        #end
-                                        <div style="border:thin">$event.getMessageBodyTeaser()</div>
 
+                                    #if($level=="message")
+                                    <li>
+                                        $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                        <div style="border:thin">$event.getMessageBodyTeaser()</div>
                                     </li>
+                                    ###elseif(($level=="comment"))
+                                    ##<li>
+                                    ##    $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                                    ##    <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                    ##</li>
+                                    #end
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
                                     #set($assetTitle=$event.getParam1())
@@ -135,8 +146,6 @@
 
                             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
                             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
-
-
                             #end
                         </ul>
 
