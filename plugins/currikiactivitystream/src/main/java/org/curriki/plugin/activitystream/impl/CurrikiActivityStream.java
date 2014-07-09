@@ -159,8 +159,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         String messageBody = (String) getTempAttribute("messageBody");
         if(messageBody==null) messageBody = "";
         // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
-        messageBody = messageBody.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)>"," <x");
+        messageBody = messageBody.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)"," <x");
         messageBody = messageBody.replaceAll("<[^>]+>","");
+        messageBody = messageBody.replaceAll("\\{\\{/?html[^}]*\\}\\}", "");
         messageBody = messageBody.replaceAll("[\\s]+", " ");
         int p =0, max = Math.min(200, messageBody.length());
         for(int i=0; i<max; i++) {
