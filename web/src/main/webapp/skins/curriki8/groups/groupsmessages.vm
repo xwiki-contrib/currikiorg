@@ -622,7 +622,7 @@
                 $as.setTempAttribute("recipientRole", "${request.selectedRolesList}")##
             #end
             $as.setTempAttribute("mailToGroup", "$!request.toGroup")##
-            #set($renderedContent = $newdoc.getRenderedContent())
+            #set($renderedContent = $newdoc.getObject("XWiki.ArticleClass").get("content"))
             $as.setTempAttribute("messageBody", "$!renderedContent")##
             $as.setTempAttribute("messageSubject", "$!mytitle")##
 
