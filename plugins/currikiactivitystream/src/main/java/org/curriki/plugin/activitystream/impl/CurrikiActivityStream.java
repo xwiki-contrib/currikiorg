@@ -52,6 +52,8 @@ import com.xpn.xwiki.render.XWikiVelocityRenderer;
 import org.xwiki.observation.event.Event;
 import org.xwiki.observation.remote.RemoteObservationManagerContext;
 
+import javax.servlet.http.HttpServletRequest;
+
 public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDocChangeNotificationInterface
 {
     private static final String CURRIKI_SPACE_TYPE = "currikispace";
@@ -156,8 +158,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         }
 
         // cut the messageBody at max 200 (but at a word please!)
-        String messageBody = (String) getTempAttribute("messageBody");
-        messageBody = sanitize(messageBody);
+        String messageBody = sanitize(readCommentBody(newdoc, context));
+
 
         List params = new ArrayList();
         params.add(article.getStringValue("title"));
@@ -197,6 +199,15 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             // Error in activity stream notify should be ignored but logged in the log file
             e.printStackTrace();
         }
+    }
+
+    private String readCommentBody(XWikiDocument newdoc, XWikiContext context) {
+        String messageBody = (String) getTempAttribute("messageBody");
+        if(messageBody==null || messageBody.length()==0) {
+            messageBody = ((HttpServletRequest) ((VelocityContext) context.get("vcontext")).get("request")).getParameter("XWiki.XWikiComments_comment");
+            messageBody = newdoc.getRenderedContent(messageBody, newdoc.getSyntaxId(), context);
+        }
+        return messageBody;
     }
 
     private String sanitize(String text) {
@@ -304,6 +315,9 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         event.setVersion(answerDoc.getVersion());
         params.add(sanitize((String) getTempAttribute("messageBody")));
         event.setParams(params);
+
+
+
         // This might be wrong once non-altering events will be logged.
         if(answerDoc!=null && answerDoc.getDate().compareTo(topicDoc.getDate())>0)
             event.setUser(answerDoc.getAuthor());
@@ -333,13 +347,14 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                 params.add(topicDoc.getTitle());
                 params.add(getUserName(context.getUser(), context));
                 params.add(DISCUSSION_ANSWER);
-                params.add(sanitize((String) getTempAttribute("messageBody")));
                 if (answerClass==null) {
                     // this means an answer has been deleted
+                    params.add(sanitize((String) getTempAttribute("messageBody")));
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.DELETE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else if (oldAnswerClass==null) {
                     // this means an answer has been created
+                    params.add(sanitize((String) getTempAttribute("messageBody")));
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else {
@@ -354,10 +369,12 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     }
                     if(newCommentsCount-oldCommentsCount==1) {
                         // this means a comment has been published
+                        params.add(sanitize(readCommentBody(newdoc, context)));
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     } else {
                         // this means an answer has been updated
+                        params.add(sanitize((String) getTempAttribute("messageBody")));
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     }
@@ -391,6 +408,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(newdoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
+                    params.add(sanitize((String) getTempAttribute("messageBody")));
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 }
