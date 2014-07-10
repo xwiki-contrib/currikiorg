@@ -157,19 +157,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
 
         // cut the messageBody at max 200 (but at a word please!)
         String messageBody = (String) getTempAttribute("messageBody");
-        if(messageBody==null) messageBody = "";
-        // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
-        messageBody = messageBody.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)"," <x");
-        messageBody = messageBody.replaceAll("<[^>]+>","");
-        messageBody = messageBody.replaceAll("\\{\\{/?html[^}]*\\}\\}", "");
-        messageBody = messageBody.replaceAll("[\\s]+", " ");
-        int p =0, max = Math.min(200, messageBody.length());
-        for(int i=0; i<max; i++) {
-            if(!Character.isLetterOrDigit(messageBody.charAt(i))) p = i;
-        }
-        if(p<150) p = 150;
-        if(p<messageBody.length())
-            messageBody = messageBody.substring(p) + "…";
+        messageBody = sanitize(messageBody);
 
         List params = new ArrayList();
         params.add(article.getStringValue("title"));
@@ -209,6 +197,23 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             // Error in activity stream notify should be ignored but logged in the log file
             e.printStackTrace();
         }
+    }
+
+    private String sanitize(String text) {
+        if(text==null) text = "";
+        // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
+        text = text.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)"," <x");
+        text = text.replaceAll("<[^>]+>","");
+        text = text.replaceAll("\\{\\{/?html[^}]*\\}\\}", "");
+        text = text.replaceAll("[\\s]+", " ");
+        int p =0, max = Math.min(200, text.length());
+        for(int i=0; i<max; i++) {
+            if(!Character.isLetterOrDigit(text.charAt(i))) p = i;
+        }
+        if(p<150) p = 150;
+        if(p<text.length())
+            text = text.substring(p) + "…";
+        return text;
     }
 
     protected void handleDocumentationEvent(XWikiDocument newdoc, XWikiDocument olddoc,
@@ -297,6 +302,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         event.setTitle(title);
         event.setBody(title);
         event.setVersion(answerDoc.getVersion());
+        params.add(sanitize((String) getTempAttribute("messageBody")));
         event.setParams(params);
         // This might be wrong once non-altering events will be logged.
         if(answerDoc!=null && answerDoc.getDate().compareTo(topicDoc.getDate())>0)
@@ -327,6 +333,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                 params.add(topicDoc.getTitle());
                 params.add(getUserName(context.getUser(), context));
                 params.add(DISCUSSION_ANSWER);
+                params.add(sanitize((String) getTempAttribute("messageBody")));
                 if (answerClass==null) {
                     // this means an answer has been deleted
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.DELETE,
@@ -364,6 +371,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(olddoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
+                    params.add(sanitize((String) getTempAttribute("messageBody")));
 
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
@@ -373,6 +381,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(newdoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
+                    params.add(sanitize((String) getTempAttribute("messageBody")));
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
 
