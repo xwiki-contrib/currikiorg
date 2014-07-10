@@ -14,6 +14,12 @@
                     #set($discard = $topicDoc.updateObjectFromRequest('ConversationCode.TopicClass'))
                     $topicDoc.setTitle($topicTitle)
                     $topicDoc.setParent("$!request.parent")
+                    ## prepare information for the event tracking
+                    #set($as = $xwiki.activitystream)##
+                    #set($renderedContent = $topicDoc.getObject("ConversationCode.TopicClass").get("description"))
+                    $as.setTempAttribute("messageBody", "$!renderedContent")##
+                    $as.setTempAttribute("messageSubject", "$!topicTitle")##
+                    ##
                     #set($discard = $topicDoc.saveWithProgrammingRights())
                     #if("$!request.xredirect" != "")
                         $response.sendRedirect("$!request.xredirect")
@@ -44,6 +50,12 @@
             #if($newAnswerDoc.hasAccessLevel('edit'))
                 $newAnswerDoc.setParent("${request.parent}")
                 #set($discard = $newAnswerDoc.updateObjectFromRequest('ConversationCode.AnswerClass'))
+                ## prepare information for the event tracking
+                #set($as = $xwiki.activitystream)##
+                #set($renderedContent = $newAnswerDoc.getObject("ConversationCode.AnswerClass").get("answer"))
+                $as.setTempAttribute("messageBody", "$!renderedContent")##
+                $as.setTempAttribute("messageSubject", "$!topicName")##
+                ##
                 #set($discard = $newAnswerDoc.saveWithProgrammingRights())
                 #if("$!request.xredirect" != "")
                     $response.sendRedirect("$!request.xredirect")
