@@ -93,7 +93,7 @@ public class DigestEmailSender {
         Date date = new Date(new Date().getTime() - sinceHowLong);
         String dateStr = isoFormat.format(date);
         LOG.warn("Selecting events from stream \"" + streamName + "\" with date > " + dateStr);
-        return activityStream.searchEvents("act.stream='"+ streamName+"'  and act.date > ${dateStr}", false, 25, 0)
+        return activityStream.searchEvents("act.stream='"+ streamName+"'  and act.date > ${dateStr} and act.type!='update' and (act.param3!='comment' or act.type!='create')", false, 25, 0)
     }
 
     private void sendMail(String from, String to, String subject, String text){
