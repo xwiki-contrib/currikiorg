@@ -92,6 +92,7 @@
                                         #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
                                         </li>
                                         ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
                                         ##<li>
@@ -102,6 +103,7 @@
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
                                         </li>
                                         ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
                                         ##<li>
@@ -112,6 +114,7 @@
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
                                         <li>
                                             $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
                                         </li>
                                         #end
 
