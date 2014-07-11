@@ -158,7 +158,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         }
 
         // cut the messageBody at max 200 (but at a word please!)
-        String messageBody = sanitize(readCommentBody(newdoc, context));
+        String messageBody = teasify(readCommentBody(newdoc, context));
 
 
         List params = new ArrayList();
@@ -210,20 +210,24 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         return messageBody;
     }
 
-    private String sanitize(String text) {
+    static String teasify(String text) {
         if(text==null) text = "";
         // put a space before block-separating elements (see http://de.selfhtml.org/html/referenz/elemente.htm)
         text = text.replaceAll("</?(address|blockquote|center|del|dir|div|dl|fieldset|form|h[0-6]|hr|ins|isindex|menu|noframes|noscript|ol|p|pre|table|ul)"," <x");
         text = text.replaceAll("<[^>]+>","");
         text = text.replaceAll("\\{\\{/?html[^}]*\\}\\}", "");
         text = text.replaceAll("[\\s]+", " ");
+        text = text.trim();
         int p =0, max = Math.min(200, text.length());
         for(int i=0; i<max; i++) {
             if(!Character.isLetterOrDigit(text.charAt(i))) p = i;
         }
-        if(p<150) p = 150;
-        if(p<text.length())
-            text = text.substring(p) + "…";
+        if(p<150 && text.length()>=200) p = 150;
+        if(p<text.length()) {
+            text = text.substring(0, p);
+            text = text.trim();
+            text = text + "…";
+        }
         return text;
     }
 
@@ -313,7 +317,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         event.setTitle(title);
         event.setBody(title);
         event.setVersion(answerDoc.getVersion());
-        params.add(sanitize((String) getTempAttribute("messageBody")));
+        params.add(teasify((String) getTempAttribute("messageBody")));
         event.setParams(params);
 
 
@@ -349,12 +353,12 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                 params.add(DISCUSSION_ANSWER);
                 if (answerClass==null) {
                     // this means an answer has been deleted
-                    params.add(sanitize((String) getTempAttribute("messageBody")));
+                    params.add(teasify((String) getTempAttribute("messageBody")));
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.DELETE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else if (oldAnswerClass==null) {
                     // this means an answer has been created
-                    params.add(sanitize((String) getTempAttribute("messageBody")));
+                    params.add(teasify((String) getTempAttribute("messageBody")));
                     addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 } else {
@@ -369,12 +373,12 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     }
                     if(newCommentsCount-oldCommentsCount==1) {
                         // this means a comment has been published
-                        params.add(sanitize(readCommentBody(newdoc, context)));
+                        params.add(teasify(readCommentBody(newdoc, context)));
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.ADD_COMMENT,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     } else {
                         // this means an answer has been updated
-                        params.add(sanitize((String) getTempAttribute("messageBody")));
+                        params.add(teasify((String) getTempAttribute("messageBody")));
                         addAnswerActivityEvent(streamName, topicDoc, newdoc, ActivityEventType.UPDATE,
                                 ActivityEventPriority.NOTIFICATION, "", params, context);
                     }
@@ -388,7 +392,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(olddoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
-                    params.add(sanitize((String) getTempAttribute("messageBody")));
+                    params.add(teasify((String) getTempAttribute("messageBody")));
 
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.DELETE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
@@ -398,7 +402,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(newdoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
-                    params.add(sanitize((String) getTempAttribute("messageBody")));
+                    params.add(teasify((String) getTempAttribute("messageBody")));
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.CREATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
 
@@ -408,7 +412,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
                     params.add(newdoc.getTitle());
                     params.add(getUserName(context.getUser(), context));
                     params.add(DISCUSSION_TOPIC);
-                    params.add(sanitize((String) getTempAttribute("messageBody")));
+                    params.add(teasify((String) getTempAttribute("messageBody")));
                     addDocumentActivityEvent(streamName, newdoc, ActivityEventType.UPDATE,
                         ActivityEventPriority.NOTIFICATION, "", params, context);
                 }
