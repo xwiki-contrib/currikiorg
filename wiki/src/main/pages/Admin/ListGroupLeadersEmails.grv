@@ -1,0 +1,22 @@
+
+// {{groovy}}
+import com.xpn.xwiki.api.Document
+
+Set emails = new java.util.TreeSet();
+
+for(spaceName in xwiki.csm.getSpaceNames(0,0)) {
+    def groupAdminsUserNames = xwiki.csm.getAdmins(spaceName);
+    for(groupAdminUserName in groupAdminsUserNames) {
+        Document groupAdminUserDoc = xwiki.getDocument(groupAdminUserName);
+        com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
+        if(userObj==null || !userObj.getProperty("email")) continue;
+        emails.add(userObj.getProperty("email").getValue());
+    }
+}
+
+
+for(String email in emails) {
+    println("* " + email);
+}
+
+// {{/groovy}}
