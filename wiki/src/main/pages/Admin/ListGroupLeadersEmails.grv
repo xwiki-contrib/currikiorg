@@ -1,4 +1,4 @@
-
+// = {{html clean=false}}<h1>List GPS Members Admins</h1>{{/html}} =
 // {{groovy}}
 import com.xpn.xwiki.api.Document
 
@@ -10,7 +10,10 @@ for(spaceName in xwiki.csm.getSpaceNames(0,0)) {
         Document groupAdminUserDoc = xwiki.getDocument(groupAdminUserName);
         com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
         if(userObj==null || !userObj.getProperty("email")) continue;
-        emails.add(userObj.getProperty("email").getValue());
+        String email= userObj.getProperty("email").getValue();
+        String firstName = userObj.getProperty("first_name").getValue();
+        String lastName = userObj.getProperty("last_name").getValue();
+        emails.add("${firstName} ${lastName} <${email}>");
     }
 }
 
