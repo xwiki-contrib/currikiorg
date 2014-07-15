@@ -218,6 +218,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         text = text.replaceAll("\\{\\{/?html[^}]*\\}\\}", "");
         text = text.replaceAll("[\\s]+", " ");
         text = text.trim();
+        if(text.length()<200) return text;
         int p =0, max = Math.min(200, text.length());
         for(int i=0; i<max; i++) {
             if(!Character.isLetterOrDigit(text.charAt(i))) p = i;
