@@ -91,8 +91,9 @@
                                         ## Topics
                                         #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
                                         <li>
-                                            $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
-                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                            $msg.get("groups.digestemail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
+                                            <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
+                                                #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                         </li>
                                         ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
                                         ##<li>
@@ -102,8 +103,9 @@
                                         ## Answers
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
                                         <li>
-                                            $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
-                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                            $msg.get("groups.digestemail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
+                                            <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
+                                                #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                         </li>
                                         ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
                                         ##<li>
@@ -113,8 +115,9 @@
                                         ## Comments
                                         #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
                                         <li>
-                                            $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
-                                            <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                            $msg.get("groups.digestemail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])<br/><br/>
+                                            <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
+                                                #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                         </li>
                                         #end
 
@@ -130,8 +133,9 @@
 
                                     #if($level=="message")
                                     <li>
-                                        $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
-                                        <div style="border:thin">$event.getMessageBodyTeaser()</div>
+                                        $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])<br/><br/>
+                                        <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
+                                            #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
                                     </li>
                                     ###elseif(($level=="comment"))
                                     ##<li>
