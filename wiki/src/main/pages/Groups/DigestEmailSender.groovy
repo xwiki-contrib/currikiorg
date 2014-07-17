@@ -20,6 +20,7 @@ public class DigestEmailSender {
      */
     private XWiki wiki;
     private Long sinceHowLong = 24*60*60*1000;
+    private int eventsCount = 0;
 
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
@@ -39,6 +40,11 @@ public class DigestEmailSender {
             count += sendDigestEmailForGroup(name, groupAdminsUserNames);
         }
         return count;
+    }
+
+    public int eventTick() {
+        eventsCount++;
+        return eventsCount;
     }
 
     public int sendDigestEmailForGroup(String groupName, List<String> groupAdminsUserNames){
@@ -64,19 +70,27 @@ public class DigestEmailSender {
         Document emailDoc = wiki.getDocument("Groups.DigestEmailMailTemplate");
         String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
+        eventsCount = 0;
         String text = emailDoc.getRenderedContent();
+
 
         LOG.warn("Events ###  " + activityEvents);
         LOG.warn("Groupadmins ### "+groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        int count=0;
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
             if(userObj==null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
-            LOG.warn("Sending mail to " + to);
-            sendMail(from, to, subject, text);
+            if(eventsCount>0) {
+                LOG.warn("Sending mail to " + to);
+                sendMail(from, to, subject, text);
+                count++;
+            } else {
+                LOG.warn("Not sending mail to " + to + " as the number of events ("+eventsCount+") is not strictly positive.");
+            }
         }
-        return groupAdminsUserNames.size();
+        return count;
     }
 
     public String formatDate(Date date){
