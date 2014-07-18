@@ -19,12 +19,14 @@
  */
 package org.curriki.plugin.activitystream.impl;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.Gson;
+import com.xpn.xwiki.util.AbstractXWikiRunnable;
 import com.xpn.xwiki.web.Utils;
 import org.apache.velocity.VelocityContext;
 
@@ -49,6 +51,8 @@ import com.xpn.xwiki.plugin.spacemanager.api.SpaceManager;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceManagers;
 import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile;
 import com.xpn.xwiki.render.XWikiVelocityRenderer;
+import org.curriki.plugin.activitystream.plugin.CurrikiActivityStreamPluginApi;
+import org.xwiki.context.Execution;
 import org.xwiki.observation.event.Event;
 import org.xwiki.observation.remote.RemoteObservationManagerContext;
 
@@ -117,6 +121,31 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
         } finally {
             this.clearTempAttributes();
         }
+    }
+
+
+    @Override
+    public void addActivityEvent(ActivityEvent event, XWikiDocument doc, XWikiContext context) throws ActivityStreamException {
+        super.addActivityEvent(event, doc, context);
+        if(event instanceof ActivityEventImpl) dispatchEventNotification((ActivityEventImpl) event, context);
+    }
+
+    protected void dispatchEventNotification(final ActivityEventImpl event, XWikiContext xcontext) {
+        AbstractXWikiRunnable runnable = new AbstractXWikiRunnable(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone()) { public void runInternal() {
+        try {
+            // here we could synchronize on anything we think is useful since we are on separate threads for each event
+            // I wonder what... some representative of the group so we don't get flooded by actions that trigger huge things?
+            XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
+                    .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
+            Object p = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
+            Class clazz = p.getClass();
+            Method[] methods = clazz.getMethods();
+            Method method = p.getClass().getMethod("sendNotificationEmailForEvent", ActivityEvent.class, com.xpn.xwiki.api.Context.class);
+            method.invoke(p, event, new com.xpn.xwiki.api.Context(xcontext));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }}};
+        new Thread(runnable,"CurrikiActivityStreamDispatchNotification").start();
     }
 
     protected void handleMessageEvent(XWikiDocument newdoc, XWikiDocument olddoc, int event,
@@ -519,7 +548,7 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             params.add(user);
             params.add(getUserName(user, context));
 
-            ActivityEvent activityEvent = new ActivityEventImpl();
+            ActivityEventImpl activityEvent = new ActivityEventImpl();
             activityEvent.setStream(streamName);
             activityEvent.setPriority(ActivityEventPriority.NOTIFICATION);
             activityEvent.setUrl(userDoc.getExternalURL("view", context));

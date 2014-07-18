@@ -24,6 +24,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent;
 import org.curriki.plugin.activitystream.impl.CurrikiActivityStream;
 
 import com.xpn.xwiki.XWikiContext;
@@ -53,26 +54,30 @@ public class CurrikiActivityStreamPluginApi extends ActivityStreamPluginApi
         while (iter.hasNext()) {
             com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event =
                     (com.xpn.xwiki.plugin.activitystream.api.ActivityEvent) iter.next();
-            com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent;
-            if (event.getSpace().startsWith("Messages_Group_")) {
-                wrappedEvent = new MessageActivityEvent(event, getXWikiContext());
-            } else if (event.getSpace().startsWith("UserProfiles_Group_")) {
-                wrappedEvent = new MemberActivityEvent(event, getXWikiContext());
-            } else if (event.getSpace().startsWith("Coll_Group_")) {
-                wrappedEvent = new ResourceActivityEvent(event, getXWikiContext());
-            } else if (event.getSpace().startsWith("Documentation_Group_")) {
-                wrappedEvent = new DocumentationActivityEvent(event, getXWikiContext());
-            } else if (event.getSpace().startsWith("Discussions_Group_")) {
-                wrappedEvent = new DiscussionActivityEvent(event, getXWikiContext());
-            } else {
-                wrappedEvent =
-                        new com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent(event,
-                                getXWikiContext());
-            }
+            com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent wrappedEvent =
+                    wrapEvent(event, getXWikiContext());
             result.add(wrappedEvent);
-            System.out.println("Wrapping event " + event +"(space: " + event.getSpace() + ") into " + wrappedEvent );
+            // System.out.println("Wrapping event " + event +"(space: " + event.getSpace() + ") into " + wrappedEvent );
         }
         return result;
+    }
+
+    public static ActivityEvent wrapEvent(com.xpn.xwiki.plugin.activitystream.api.ActivityEvent event, XWikiContext context) {
+        ActivityEvent wrappedEvent;
+        if (event.getSpace().startsWith("Messages_Group_")) {
+            wrappedEvent = new MessageActivityEvent(event, context);
+        } else if (event.getSpace().startsWith("UserProfiles_Group_")) {
+            wrappedEvent = new MemberActivityEvent(event, context);
+        } else if (event.getSpace().startsWith("Coll_Group_")) {
+            wrappedEvent = new ResourceActivityEvent(event, context);
+        } else if (event.getSpace().startsWith("Documentation_Group_")) {
+            wrappedEvent = new DocumentationActivityEvent(event, context);
+        } else if (event.getSpace().startsWith("Discussions_Group_")) {
+            wrappedEvent = new DiscussionActivityEvent(event, context);
+        } else {
+            wrappedEvent = new ActivityEvent(event, context);
+        }
+        return wrappedEvent;
     }
 
     public void setTempAttribute(String name, Object obj) { getCurrikiActivityStream().setTempAttribute(name, obj);}
