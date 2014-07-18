@@ -348,6 +348,18 @@ $uprofile.display("profile","edit")
 $uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
 <br />
 $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
+#* <br/>
+    How often do you want to be notified per email of events happening in your group?<br>
+    #set($notif=$!doc.getObject("XWiki.SpaceUserProfileClass").getProperty("notifications").value)
+    <label class="xwiki-form-listclass"><input value="immediate"
+       #if($notif=="immediate")checked#end
+       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">immediately at each action</label><br>
+    <label class="xwiki-form-listclass"><input value="digest"
+       #if($notif=="digest" || $notif=="")checked#end
+       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">once a day</label><br>
+    <label class="xwiki-form-listclass"><input value="none"
+       #if($notif=="none")checked#end
+       name="XWiki.SpaceUserProfileClass_0_notifications" type="radio">never</label><br> *#
 </form>
 #end
 ##

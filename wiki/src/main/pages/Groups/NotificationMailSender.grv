@@ -1,0 +1,18 @@
+
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
+
+
+public class NotificationMailSender {
+
+    public void sendNotificationEmailForEvent(ActivityEvent event, Context context) {
+        XWiki wiki = new XWiki(context.getXWiki(), context.getContext());
+        System.out.println("Would be dispatching event ${event} within context ${context}.");
+        def text = wiki.getDocument("Groups.DigestEmailMailTemplate").getRenderedContent();
+        wiki.mailsender.sendHtmlMessage("paul@hoplahup.net", "polx@online.de", null, null, "test", text, text.replaceAll("<[^>]*>",""), []);
+    }
+
+
+}
