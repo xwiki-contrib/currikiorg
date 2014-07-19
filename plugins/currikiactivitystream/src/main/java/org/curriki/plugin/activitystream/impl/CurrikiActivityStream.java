@@ -138,10 +138,8 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
             XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
                     .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
             Object p = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
-            Class clazz = p.getClass();
-            Method[] methods = clazz.getMethods();
-            Method method = p.getClass().getMethod("sendNotificationEmailForEvent", ActivityEvent.class, com.xpn.xwiki.api.Context.class);
-            method.invoke(p, event, new com.xpn.xwiki.api.Context(xcontext));
+            Method method = p.getClass().getMethod("sendNotificationEmailForEvent", String.class, ActivityEvent.class);
+            method.invoke(p, getStreamName(event.getSpace(),xcontext), event);
         } catch (Exception e) {
             e.printStackTrace();
         }}};
