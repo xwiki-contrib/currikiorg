@@ -96,6 +96,11 @@ public class NotificationMailSender {
         return count;
     }
 
+    public void sendNotificationEmailForEvent(ActivityEvent event, String groupName) {
+        sendNotificationEmailForEvent(event, groupName, null);
+    }
+
+
     public int sendNotificationEmailForEvent(ActivityEvent event, String groupName, List<String> groupAdminsUserNames) {
         //XWiki wiki = new XWiki(context.getXWiki(), context.getContext());
         //System.out.println("Would be dispatching event ${event} within context ${context}.");
