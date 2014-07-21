@@ -1,8 +1,8 @@
 {{velocity}}
 #if($hasGlobalAdmin)
     #if($request.groupname)
-        #set($digestEmailSender=$xwiki.parseGroovyFromPage("Groups.DigestEmailSender"))
-        $digestEmailSender.init($xwiki)
+        #set($notificationMailsender=$xwiki.parseGroovyFromPage("Groups.NotificationMailSender"))
+        $notificationMailsender.init($xwiki)
         #set($groupname=$request.groupname)
         #set($admins=$request.admins)
 
@@ -11,9 +11,9 @@
         <p>
         $admins
         #if(${groupname.contains("*")})
-                #set($count=$digestEmailSender.sendDigestEmailToAllGroupsMatching($groupname, [$admins]))
+                #set($count=$notificationMailsender.sendDigestEmailToAllGroupsMatching($groupname, [$admins]))
             #else
-                #set($count=$digestEmailSender.sendDigestEmailForGroup($groupname,[$admins]))
+                #set($count=$notificationMailsender.sendDigestEmailForGroup($groupname,[$admins]))
         #end
         Sent  ${count} E-Mail}\s.
         </br>

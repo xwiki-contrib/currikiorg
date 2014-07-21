@@ -115,8 +115,10 @@
             #set($url="http://${hostname}${event.getUrl()}")
 
             #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
-              <!-- $notificationMailSender.eventTick() events} -->
-              $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+              #if("${event.getType()}" == "create")
+                <!-- $notificationMailSender.eventTick() events} -->
+                $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+              #end
 
 
             #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DiscussionActivityEvent")

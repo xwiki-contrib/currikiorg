@@ -79,10 +79,12 @@
                                 #set($url="http://${hostname}${event.getUrl()}")
 
                                 #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
+                                  #if("${event.getType()}" == "create")
                                     <!-- $digestEmailSender.eventTick() events} -->
                                     <li>
                                         $msg.get("groups.digestemail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                                     </li>
+                                  #end
 
 
                                 #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DiscussionActivityEvent")
