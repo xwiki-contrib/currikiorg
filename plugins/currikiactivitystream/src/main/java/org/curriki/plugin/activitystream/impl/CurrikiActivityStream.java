@@ -127,22 +127,27 @@ public class CurrikiActivityStream extends ActivityStreamImpl implements XWikiDo
     @Override
     public void addActivityEvent(ActivityEvent event, XWikiDocument doc, XWikiContext context) throws ActivityStreamException {
         super.addActivityEvent(event, doc, context);
-        if(event instanceof ActivityEventImpl) dispatchEventNotification((ActivityEventImpl) event, context);
+        dispatchEventNotification(event, context);
     }
 
-    protected void dispatchEventNotification(final ActivityEventImpl event, XWikiContext xcontext) {
-        AbstractXWikiRunnable runnable = new AbstractXWikiRunnable(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone()) { public void runInternal() {
-        try {
-            // here we could synchronize on anything we think is useful since we are on separate threads for each event
-            // I wonder what... some representative of the group so we don't get flooded by actions that trigger huge things?
-            XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
-                    .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
-            Object p = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
-            Method method = p.getClass().getMethod("sendNotificationEmailForEvent", String.class, ActivityEvent.class);
-            method.invoke(p, getStreamName(event.getSpace(),xcontext), event);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }}};
+    protected void dispatchEventNotification(final ActivityEvent event, XWikiContext xcontext) {
+        AbstractXWikiRunnable runnable = new AbstractXWikiRunnable(XWikiContext.EXECUTIONCONTEXT_KEY, xcontext.clone()) {
+            public void runInternal() {
+                try {
+                    // here we could synchronize on anything we think is useful since we are on separate threads for each event
+                    // I wonder what... some representative of the group so we don't get flooded by actions that trigger huge things?
+                    XWikiContext xcontext = (XWikiContext) Utils.getComponent(Execution.class).getContext()
+                            .getProperty(XWikiContext.EXECUTIONCONTEXT_KEY);
+                    Object notificationMailSender = xcontext.getWiki().parseGroovyFromPage("Groups.NotificationMailSender", xcontext);
+                    Method sendNotificationEmailForEventMethod = notificationMailSender.getClass().getMethod("sendNotificationEmailForEvent", String.class, ActivityEvent.class);
+                    Method initMethod = notificationMailSender.getClass().getMethod("init", com.xpn.xwiki.api.Context.class);
+                    initMethod.invoke(notificationMailSender, new com.xpn.xwiki.api.Context(xcontext));
+                    sendNotificationEmailForEventMethod.invoke(notificationMailSender, getStreamName(event.getSpace(), xcontext), event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        };
         new Thread(runnable,"CurrikiActivityStreamDispatchNotification").start();
     }
 

@@ -3,8 +3,8 @@
 #set($displayGroupname=$context.get("DISPLAY_GROUPNAME"))
 #set($groupname=$context.get("GROUPNAME"))
 #set($groupPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/WebHome")
-#set($events=$context.get("EVENTS"))
-#set($digestEmailSender=$context.get("DIGEST_EMAIL_SENDER"))
+#set($event=$context.get("EVENT"))
+#set($notificationMailSender=$context.get("NOTIFICATION_MAIL_SENDER"))
 {{html clean="false"}}
 <html lang="en">
 <head>
@@ -87,7 +87,7 @@
                   <br/>
                   <br/>
                   <em
-                    style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;">$msg.get("groups.immediate_notification_mail.heading")</em>
+                    style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;">$msg.get("groups.notification_mail.heading")</em>
                 </td>
               </tr>
             </table>
@@ -95,14 +95,14 @@
             <br/>
 
             <div style="font-weight: bold; font-size: 18px; line-height: 24px; color:#373ACA">
-              $msg.get("groups.immediate_notification_mail.greeting")
+              $msg.get("groups.notification_mail.greeting")
             </div>
             <br>
 
-            $msg.get("groups.immediate_notification_mail.content",[$displayGroupname, $groupPageUrl])
+            $msg.get("groups.notification_mail.content",[$displayGroupname, $groupPageUrl])
             <br/>
 
-            #set($date="${digestEmailSender.formatDate($event.date)} EDT")
+            #set($date="${notificationMailSender.formatDate($event.date)} EDT")
             #set($groupMember=$event.user)
             #set($userDoc=$xwiki.getDocument($groupMember))
             #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
@@ -115,8 +115,8 @@
             #set($url="http://${hostname}${event.getUrl()}")
 
             #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
-              <!-- $digestEmailSender.eventTick() events} -->
-              $msg.get("groups.immediate_notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+              <!-- $notificationMailSender.eventTick() events} -->
+              $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
 
 
             #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DiscussionActivityEvent")
@@ -125,8 +125,8 @@
 
             ## Topics
               #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
-                <!-- $digestEmailSender.eventTick() events} -->
-                $msg.get("groups.immediate_notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                <!-- $notificationMailSender.eventTick() events} -->
+                $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -134,13 +134,13 @@
                 <br/>
               ###elseif(($docType.contains("discussion-topic")) && ($event.getType().contains("update")))
               ##<li>
-              ##    $msg.get("groups.immediate_notification_mail.discussion_activity_event.topic.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+              ##    $msg.get("groups.notification_mail.discussion_activity_event.topic.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
               ##</li>
 
               ## Answers
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
-                <!-- $digestEmailSender.eventTick() events} -->
-                $msg.get("groups.immediate_notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                <!-- $notificationMailSender.eventTick() events} -->
+                $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -148,13 +148,13 @@
                 <br/>
               ###elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("update")))
               ##<li>
-              ##    $msg.get("groups.immediate_notification_mail.discussion_activity_event.answer.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+              ##    $msg.get("groups.notification_mail.discussion_activity_event.answer.update", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
               ##</li>
 
               ## Comments
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
-                <!-- $digestEmailSender.eventTick() events} -->
-                $msg.get("groups.immediate_notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                <!-- $notificationMailSender.eventTick() events} -->
+                $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -172,8 +172,8 @@
               #set($toGroupMail=$event.getToGroupMail())
 
               #if($level=="message")
-                <!-- $digestEmailSender.eventTick() events} -->
-                $msg.get("groups.immediate_notification_mail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                <!-- $notificationMailSender.eventTick() events} -->
+                $msg.get("groups.notification_mail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -181,15 +181,15 @@
                 <br/>
               ###elseif(($level=="comment"))
               ##<li>
-              ##    $msg.get("groups.immediate_notification_mail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+              ##    $msg.get("groups.notification_mail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
               ##    <div style="border:thin">$event.getMessageBodyTeaser()</div>
               ##</li>
               #end
 
             #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
               #set($assetTitle=$event.getParam1())
-              <!-- $digestEmailSender.eventTick() events} -->
-              $msg.get("groups.immediate_notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
+              <!-- $notificationMailSender.eventTick() events} -->
+              $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
             #end
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
