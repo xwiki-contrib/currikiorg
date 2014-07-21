@@ -1,5 +1,6 @@
 import com.xpn.xwiki.api.Context
 import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.Property
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
 import com.xpn.xwiki.plugin.spacemanager.api.Space
@@ -36,8 +37,8 @@ public class NotificationMailSender {
         LOG.warn("Inited NotificationMailSender");
     }
 
-    public void init(Context context){
-         this.wiki = new XWiki(context.getXWiki(), context.getContext());
+    public void init(Context context) {
+        this.wiki = new XWiki(context.getXWiki(), context.getContext());
     }
 
     // #### Public API for the notification sending ####
@@ -66,7 +67,7 @@ public class NotificationMailSender {
         }
 
         if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
-            groupAdminsUserNames = this.getGroupAdminsByGroupName(groupName);
+            groupAdminsUserNames = this.getGroupAdminsForDigestMail(groupName);
         }
 
         Space space = wiki.csm.getSpace(groupName);
@@ -75,7 +76,7 @@ public class NotificationMailSender {
         wiki.context.put("EVENTS", activityEvents);
         wiki.context.put("DIGEST_EMAIL_SENDER", this);
 
-        Document emailDoc = wiki.getDocument("Groups.DigestEmailMailTemplate");
+        Document emailDoc = wiki.getDocument("Groups.DigestMailTemplate");
         String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
         eventsCount = 0;
@@ -112,13 +113,13 @@ public class NotificationMailSender {
         List events = new ArrayList();
         events.add(event);
         com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent pluginEvent = wiki.activitystream.wrapEvents(events).get(0);
-        if(pluginEvent == null) {
+        if (pluginEvent == null) {
             LOG.warn("No Event to send a notification for: " + groupName)
             return 0;
         }
 
-        if(groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")){
-            groupAdminsUserNames = this.getGroupAdminsByGroupName(groupName);
+        if (groupAdminsUserNames == null || groupAdminsUserNames.size() == 0 || groupAdminsUserNames.contains("")) {
+            groupAdminsUserNames = this.getGroupAdminsForNotificationMail(groupName);
         }
 
         Space space = wiki.csm.getSpace(groupName);
@@ -133,14 +134,18 @@ public class NotificationMailSender {
         String text = emailDoc.getRenderedContent();
 
         LOG.warn("Event ###  " + pluginEvent);
-        LOG.warn("Groupadmins ### "+groupAdminsUserNames.size() + " " + groupAdminsUserNames);
+        LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
             com.xpn.xwiki.api.Object userObj = groupAdminUserDoc.getObject("XWiki.XWikiUsers", true);
-            if(userObj==null || !userObj.getProperty("email")) continue;
+            if (userObj == null || !userObj.getProperty("email")) continue;
             String to = userObj.getProperty("email").getValue();
-            LOG.warn("Sending mail to " + to);
-            sendMail(from, to, subject, text);
+            if (eventsCount > 0) {
+                LOG.warn("Sending mail to " + to);
+                sendMail(from, to, subject, text);
+            } else {
+                LOG.warn("Not sending mail to " + to + " as the number of events (" + eventsCount + ") is not strictly positive.");
+            }
         }
         return groupAdminsUserNames.size();
 
@@ -150,7 +155,7 @@ public class NotificationMailSender {
 
     public String formatDate(Date date) {
         String result = "";
-        if(date != null) {
+        if (date != null) {
             SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a")
             isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
             result = isoFormat.format(date)
@@ -188,9 +193,45 @@ public class NotificationMailSender {
         return result;
     }
 
+    private List<String> getGroupAdminsForNotificationMail(String groupName) {
+        List<String> admins = getGroupAdminsByGroupName(groupName);
+        List<String> result = new ArrayList<String>();
+
+        for (String admin in admins) {
+            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
+            Property property = obj.getProperty("notifications")
+            if (property != null) {
+                String digestHow = property.value;
+                if ("immediate" == digestHow) {
+                    result.add(admin)
+                }
+            }
+        }
+
+        return result;
+    }
+
+    private List<String> getGroupAdminsForDigestMail(String groupName) {
+        List<String> admins = getGroupAdminsByGroupName(groupName);
+        List<String> result = new ArrayList<String>();
+
+        for (String admin in admins) {
+            com.xpn.xwiki.api.Object obj = wiki.csm.getSpaceUserProfile(groupName, admin).getObject("XWiki.SpaceUserProfileClass");
+            Property property = obj.getProperty("notifications")
+            if (property == null) {
+                result.add(admin)
+            } else {
+                String digestHow = property.value;
+                if ("digest" == digestHow || null == digestHow) {
+                    result.add(admin)
+                }
+            }
+        }
+        return result;
+    }
+
     private void sendMail(String from, String to, String subject, String text) {
         wiki.mailsender.sendHtmlMessage(from, to, null, null, subject, text, text.replaceAll("<[^>]*>", ""), []);
     }
-
 
 }
