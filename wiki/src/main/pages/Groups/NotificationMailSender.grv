@@ -1,3 +1,4 @@
+import com.xpn.xwiki.api.Context
 import com.xpn.xwiki.api.Document
 import com.xpn.xwiki.api.XWiki
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent
@@ -33,6 +34,10 @@ public class NotificationMailSender {
     public void init(XWiki xwiki) {
         this.wiki = xwiki;
         LOG.warn("Inited NotificationMailSender");
+    }
+
+    public void init(Context context){
+         this.wiki = new XWiki(context.getXWiki(), context.getContext());
     }
 
     // #### Public API for the notification sending ####
@@ -96,18 +101,18 @@ public class NotificationMailSender {
         return count;
     }
 
-    public void sendNotificationEmailForEvent(ActivityEvent event, String groupName) {
+    public void sendNotificationEmailForEvent(String groupName, ActivityEvent event) {
         sendNotificationEmailForEvent(event, groupName, null);
     }
 
 
     public int sendNotificationEmailForEvent(ActivityEvent event, String groupName, List<String> groupAdminsUserNames) {
-        //XWiki wiki = new XWiki(context.getXWiki(), context.getContext());
-        //System.out.println("Would be dispatching event ${event} within context ${context}.");
-
         // If we have no event to send we don't proceed here.
         // Log that and return quietly
-        if(event == null) {
+        List events = new ArrayList();
+        events.add(event);
+        com.xpn.xwiki.plugin.activitystream.plugin.ActivityEvent pluginEvent = wiki.activitystream.wrapEvents(events).get(0);
+        if(pluginEvent == null) {
             LOG.warn("No Event to send a notification for: " + groupName)
             return 0;
         }
@@ -119,15 +124,15 @@ public class NotificationMailSender {
         Space space = wiki.csm.getSpace(groupName);
         wiki.context.put("GROUPNAME", groupName);
         wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
-        wiki.context.put("EVENT", event);
-        wiki.context.put("DIGEST_EMAIL_SENDER", this);
+        wiki.context.put("EVENT", pluginEvent);
+        wiki.context.put("NOTIFICATION_MAIL_SENDER", this);
 
-        Document emailDoc = wiki.getDocument("Groups.NotificationEmailTemplate");
+        Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
         String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
         String text = emailDoc.getRenderedContent();
 
-        LOG.warn("Event ###  " + event);
+        LOG.warn("Event ###  " + pluginEvent);
         LOG.warn("Groupadmins ### "+groupAdminsUserNames.size() + " " + groupAdminsUserNames);
         for (groupAdminUserName in groupAdminsUserNames) {
             Document groupAdminUserDoc = wiki.getDocument(groupAdminUserName);
@@ -144,9 +149,13 @@ public class NotificationMailSender {
     // #### Public Helper for the views ####
 
     public String formatDate(Date date) {
-        SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a");
-        isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
-        return isoFormat.format(date);
+        String result = "";
+        if(date != null) {
+            SimpleDateFormat isoFormat = new SimpleDateFormat("hh:mm a")
+            isoFormat.setTimeZone(TimeZone.getTimeZone("EST5EDT"));
+            result = isoFormat.format(date)
+        }
+        return result;
     }
 
     public void setSinceHowLong(String s) {
