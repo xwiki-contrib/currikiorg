@@ -651,31 +651,35 @@ $!desc
 #macro(mycurriki_viewphoto $userdoc) ##{
 <!-- My Curriki View Photo -->
 <div class="userpic">
-  #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
-  #set($current_avatar = $userobj.get('avatar'))
-  #if($current_avatar && "${current_avatar} " != "") ##{
-    #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-    <a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")"><img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true"/></a>
-    #if ($context.action=="inline") ##{
-      #set($deleteredir = $userdoc.getURL("inline"))
-      <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');"
-         title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
-    #end  ## } if inline
-    #if ($context.action!="inline") ##{
-      #set($i = $context.user.indexOf(":")+1)
-      #if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
-        #set($deleteredir = $userdoc.getURL("view"))
-        <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');">$msg.get("profile.modifyYourPhoto")</a>
-      #end  ## } is same user
-    #end  ## } is inline
-  #else  ## }{ attachmentList.size must be > 0
-    <img src="$xwiki.getSkinFile("noavatar.png")"/>
-    #if($context.action=="view" && ($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
-      <a class="curriki-link"
-         onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;'
-         href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a>
-    #end ## }
-  #end ##}
+    #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+    #set($current_avatar = $userobj.get('avatar'))
+    #if("$!current_avatar"!="") ##{
+        #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
+        #if("$!attach"!="")
+            <a class="curriki-link" href="$userdoc.getAttachmentURL($attach.filename,"download")"><img src="$userdoc.getAttachmentURL($attach.filename,"download")?width=176&height=176&keepAspectRatio=true"/></a>
+            #if ($context.action=="inline") ##{
+                #set($deleteredir = $userdoc.getURL("inline"))
+                <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('$msg.get("profile.removePhoto.confirmation")');"
+                   title="$msg.get("profile.removeYourPhoto")">$msg.get("profile.removePhoto")</a>
+            #end  ## } if inline
+            #if ($context.action!="inline") ##{
+                #set($i = $context.user.indexOf(":")+1)
+                #if ($context.user.substring($i) == $userdoc.fullName || $hasGlobalAdmin) ## {
+                    #set($deleteredir = $userdoc.getURL("view"))
+                    <a class="curriki-link" href="$userdoc.getAttachmentURL("${attach.filename}", "delattachment", "xredirect=${deleteredir}")" onclick="return confirm('You need to remove your picture first. Do you want to do that ?');">$msg.get("profile.modifyYourPhoto")</a>
+                #end  ## } is same user
+            #end  ## } is inline
+        #else
+            <img src="$xwiki.getSkinFile("noavatar.png")"/>
+        #end
+    #else  ## }{ attachmentList.size must be > 0
+        <img src="$xwiki.getSkinFile("noavatar.png")"/>
+        #if($context.action=="view" && ($userdoc.fullName == $context.user || $hasGlobalAdmin)) ##{
+            <a class="curriki-link"
+               onclick='document.getElementById("attachdiv").attributes{pre}[{/pre}"class"].value="visible"; {pre}$("attachdiv").scrollTo();{/pre} return false;'
+               href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a>
+        #end ## }
+    #end ##}
 </div>
 <!-- End My Curriki View Photo -->
 #end ##}
