@@ -127,11 +127,12 @@ public class NotificationMailSender {
         wiki.context.put("DISPLAY_GROUPNAME", space.getDisplayTitle());
         wiki.context.put("EVENT", pluginEvent);
         wiki.context.put("NOTIFICATION_MAIL_SENDER", this);
+        wiki.context.put("EMAIL_SUBJECT", "");
 
         Document emailDoc = wiki.getDocument("Groups.NotificationMailTemplate");
-        String subject = wiki.renderText(emailDoc.title, emailDoc);
         String from = wiki.getXWikiPreference("admin_email");
         String text = emailDoc.getRenderedContent();
+        String subject = wiki.context.get("EMAIL_SUBJECT");
 
         LOG.warn("Event ###  " + pluginEvent);
         LOG.warn("Groupadmins ### " + groupAdminsUserNames.size() + " " + groupAdminsUserNames);
