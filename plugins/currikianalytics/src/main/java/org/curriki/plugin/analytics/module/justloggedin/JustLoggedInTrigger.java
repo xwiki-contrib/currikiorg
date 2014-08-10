@@ -22,7 +22,7 @@ public class JustLoggedInTrigger  extends Trigger {
     }
 
     @Override
-    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
+    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession) {
         JustLoggedInNotifier notifier = (JustLoggedInNotifier) super.notifiers.get(0);
         String lastUserName = (String) currikiAnalyticsSession.getHttpSessionAttribute("last_username");
         String currentUserName = currikiAnalyticsSession.getUser();

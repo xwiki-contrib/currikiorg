@@ -63,12 +63,19 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
     private List<Notifier> notifiers;
 
     /**
-     * The list of exception patterns.
+     * The list of exception patterns
      */
     private List<Pattern> exceptions;
 
+    /**
+     * The list of referer exception patterns
+     */
+    private List<Pattern> refererExceptions;
+
+
     public LoginToViewAnalyticsModule(XWikiContext context){
         super(context);
+        // Set the instance variables of this class
         this.reloadConfig();
         //Add this class as listener for changed documents.
         context.getWiki().getNotificationManager().addGeneralRule(new DocChangeRule(this));
@@ -89,6 +96,19 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
      */
     private List<Pattern> loadExceptionList(){
         List<String> lines = Helper.getLinesOfPage("CurrikiCode/LoginToViewExceptions", context);
+        for (int i = 0; i < lines.size(); i++) {
+            String line = ".*" + lines.get(i) + ".*";
+            lines.set(i,line);
+        }
+        return Helper.compileStringsToPatterns(lines);
+    }
+
+    /**
+     * Create the list for the referer exceptions. Read from an xwiki page.
+     * @return the referer exception patterns
+     */
+    private List<Pattern> loadRefererExceptionList(){
+        List<String> lines = Helper.getLinesOfPage("CurrikiCode/LoginToViewRefererExceptions", context);
         for (int i = 0; i < lines.size(); i++) {
             String line = ".*" + lines.get(i) + ".*";
             lines.set(i,line);
@@ -130,7 +150,7 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
         }
 
         if(moduleIsActive){
-            triggerList.add(new LoginToViewTrigger(numberOfResourceToView, numberOfWarnings, notifiers, patterns, exceptions));
+            triggerList.add(new LoginToViewTrigger(numberOfResourceToView, numberOfWarnings, notifiers, patterns, exceptions, refererExceptions));
         }else{
             triggerList.add(new DisableLoginToViewTrigger(notifiers));
         }
@@ -148,6 +168,7 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
         this.config = Helper.loadConfigFromPage("CurrikiCode/LoginToViewConfig",context);
         this.patterns = loadPatternList();
         this.exceptions = loadExceptionList();
+        this.refererExceptions = loadRefererExceptionList();
         this.notifiers = loadNotifierList();
         this.triggers = loadTriggerList();
     }
