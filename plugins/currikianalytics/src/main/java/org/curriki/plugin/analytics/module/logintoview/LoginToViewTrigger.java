@@ -40,29 +40,52 @@ public class LoginToViewTrigger extends Trigger {
     private List<Pattern> patterns;
 
     /**
-     * A list of patterns that are exceptions to the matches above
+     * A list of patterns that are exceptions to the url pattern matches above
      */
     private List<Pattern> exceptions;
 
-    public LoginToViewTrigger(int threshold, int numberOfWarnings, List<Notifier> notifiers, List<Pattern> patterns, List<Pattern> exceptions) {
+    /**
+     * A list of patterns that are exceptions matched against the referer value of the last request
+     */
+    private List<Pattern> refererExceptions;
+
+
+    /**
+     * @param threshold
+     * @param numberOfWarnings
+     * @param notifiers
+     * @param patterns
+     * @param exceptions
+     */
+    public LoginToViewTrigger(int threshold, int numberOfWarnings, List<Notifier> notifiers, List<Pattern> patterns, List<Pattern> exceptions, List<Pattern> refererExceptions) {
         super(notifiers);
         this.threshold = threshold;
         this.numberOfWarnings = numberOfWarnings;
         this.patterns = patterns;
         this.exceptions = exceptions;
+        this.refererExceptions = refererExceptions;
     }
 
     @Override
-    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
+    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession) {
         LOG.warn("Triggered");
         int matches = getMatchCountFromLoginToViewCookie(currikiAnalyticsSession);
-        boolean currentUrlMatches = matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), referer, matches);
+        boolean currentUrlMatches = matchCurrentUrl(currikiAnalyticsSession.getUrlStore(), currikiAnalyticsSession.getRefererOfLastRequest(), matches);
         boolean currentUrlIsException = urlIsException(currikiAnalyticsSession.getUrlStore().getLast());
         boolean currentUserIsGuest = currikiAnalyticsSession.getUser() != null && ("XWiki.XWikiGuest".equals(currikiAnalyticsSession.getUser()));
+        boolean currentUserCameFromExceptionalReferer = refererIsException(currikiAnalyticsSession.getRefererOfLastRequest());
 
         // If the current user is logged in. Don't show notifications and remove the login to view cookie
         if(!currentUserIsGuest){
             LOG.warn("User is already logged in");
+            Map notificationValues = new HashMap<String, Boolean>();
+            notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, true);
+            removeNotifications(notificationValues);
+        }
+
+        // If the current user came from an referer that is in the refererExceptions
+        else if (currentUserCameFromExceptionalReferer) {
+            LOG.warn("User is coming from an exceptional referer, let him pass..");
             Map notificationValues = new HashMap<String, Boolean>();
             notificationValues.put(LoginToViewSessionNotifier.DELETE_COOKIE_VALUE, true);
             removeNotifications(notificationValues);
@@ -138,13 +161,13 @@ public class LoginToViewTrigger extends Trigger {
         history.removeLast();
 
         // If we come from the login page and the limit is not exceeded, we don't match the current url
-        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches <= this.threshold){
+        if(referer.contains("/xwiki/bin/view/Registration/LoginOrRegister") && historicMatches <= this.threshold){
             LOG.warn("Coming from the login page, don't show the login page again");
             return false;
         }
 
         // If we come from the login page and the limit is exceeded, we match the current url
-        if("/xwiki/bin/view/Registration/LoginOrRegister".equals(referer) && historicMatches > this.threshold){
+        if(referer.contains("/xwiki/bin/view/Registration/LoginOrRegister") && historicMatches > this.threshold){
             if(!currentUrl.contains("/xwiki/bin/view/Main/")){ //Only if we go to the homepage from a link in the pop up
                 LOG.warn("Coming from the login page, but the threshold is exceeded. Show the login page again");
                 return true;
@@ -179,6 +202,23 @@ public class LoginToViewTrigger extends Trigger {
             // If the current url is an exceptions it does not match
             if (exception.matcher(url).matches()) {
                 LOG.warn("Match for exception\"" + exception.toString() + "\"");
+                return true;
+            }
+        }
+        LOG.warn("No match for exception");
+        return false;
+    }
+
+    /**
+     * Checks if the given url does match any of the referer exception patterns
+     * @param refererOfLastRequest
+     * @return true if the refererOfLastRequest is an exception
+     */
+    private boolean refererIsException(String refererOfLastRequest) {
+        for(Pattern exception : refererExceptions) {
+            // If the last referer is an exceptions it does not match
+            if (exception.matcher(refererOfLastRequest).matches()) {
+                LOG.warn("Match for referer exception\"" + exception.toString() + "\"");
                 return true;
             }
         }

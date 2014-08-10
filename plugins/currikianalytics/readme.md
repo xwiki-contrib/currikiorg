@@ -78,3 +78,10 @@ resources or collections accessible while demand users on others to login to vie
     /Coll_Admin/test-collection
 
 
+####CurrikiCode/LoginToViewRefererExceptions
+This pages lists the referer exeptions for the LoginToViewTrigger if a referer is on this list, users coming from that referer
+never trigger a login dialog even though the LoginToView is turned on.
+
+    beta.curriki.org
+
+

@@ -20,7 +20,7 @@ public class DisableLoginToViewTrigger extends Trigger {
     }
 
     @Override
-    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer) {
+    public void trigger(CurrikiAnalyticsSession currikiAnalyticsSession) {
         removeNotifications(null);
     }
 

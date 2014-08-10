@@ -138,12 +138,33 @@
                                     #set($toGroupMail=$event.getToGroupMail())
 
                                     #if($level=="message")
+
                                         <!-- $digestEmailSender.eventTick() events} -->
-                                    <li>
-                                        $msg.get("groups.digestemail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])<br/><br/>
-                                        <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
-                                            #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div><br/>
-                                    </li>
+                                        #if("$!{mailTo}" != "")
+                                          <li>
+                                            <!-- $notificationMailSender.eventTick() events} -->
+                                              $msg.get("groups.digestemail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
+                                            #end
+                                          </li>
+                                        #if("$!{recipientRole}" != "")
+                                          <li>
+                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            $msg.get("groups.digestemail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
+                                          </li>
+                                        #end
+                                        #if("$!{toGroupMail}" != "")
+                                          <li>
+                                            <!-- $notificationMailSender.eventTick() events} -->
+                                            $msg.get("groups.digestemail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                                          </li>
+                                        #end
+                                        <div style="border:thin">
+                                          <i>$event.getMessageBodyTeaser()</i>##
+                                          #if($event.getMessageBodyTeaser().endsWith("…"))
+                                            <a href="$url">$msg.get("readmore")</a>
+                                          #end
+                                        </div>
+                                        <br/>
                                     ###elseif(($level=="comment"))
                                     ##<li>
                                     ##    $msg.get("groups.digestemail.message_activity_event.comment", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])

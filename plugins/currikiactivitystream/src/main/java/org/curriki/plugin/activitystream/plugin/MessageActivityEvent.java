@@ -124,7 +124,17 @@ public class MessageActivityEvent extends ActivityEvent
     }
 
     public String getMailTo() {
-        return retrieveFromParam5("mailTo");
+        String result = null;
+        String mailTo = retrieveFromParam5("mailTo");
+        if(mailTo != null && mailTo != ""){
+            int index = mailTo.lastIndexOf(",");
+            if(index != -1){
+                result = mailTo.substring(0,mailTo.lastIndexOf(","));
+            } else {
+                result = mailTo;
+            }
+        }
+        return result;
     }
 
     public String getMailToGroup() {

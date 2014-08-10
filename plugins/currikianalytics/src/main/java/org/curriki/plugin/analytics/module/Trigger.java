@@ -32,9 +32,8 @@ public abstract class Trigger {
      * Entry point for the trigger
      *
      * @param currikiAnalyticsSession the current currikiAnalyticsSession
-     * @param referer the referer of the request we currently handle
      */
-    public abstract void trigger(CurrikiAnalyticsSession currikiAnalyticsSession, String referer);
+    public abstract void trigger(CurrikiAnalyticsSession currikiAnalyticsSession);
 
     /**
      * Match the current UrlStore and return the number of matches

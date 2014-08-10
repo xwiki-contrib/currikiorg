@@ -4,7 +4,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.plugin.activitystream.api.ActivityEvent;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 public class TestMessageActivityEvent {
 
@@ -23,8 +23,8 @@ public class TestMessageActivityEvent {
 
     @Test
     public void testGetMailTo(){
-        assertEquals("felix@curriki.org,", msg1.getMailTo());
-        assertEquals("felix@curriki.org,", msg2.getMailTo());
+        assertEquals("XWiki.Flixt", msg1.getMailTo());
+        assertEquals("XWiki.Flixt", msg2.getMailTo());
         assertEquals(null, msg3.getMailTo());
         assertEquals(null, msg4.getMailTo());
     }
@@ -44,7 +44,7 @@ class MessageActivityEventStub1 extends MessageActivityEvent {
 
     @Override
     public String getParam5() {
-        return "{\"recipientRole\":\"Group_FelixDigestTest.AdminGroup\",\"mailTo\":\"felix@curriki.org,\",\"mailToGroup\":\"on\"}";
+        return "{\"recipientRole\":\"Group_FelixDigestTest.AdminGroup\",\"mailTo\":\"XWiki.Flixt,\",\"mailToGroup\":\"on\"}";
     }
 }
 
@@ -53,7 +53,7 @@ class MessageActivityEventStub2 extends MessageActivityEvent {
 
     @Override
     public String getParam5() {
-        return "{\"recipientRole\":\"Group_FelixDigestTest.AdminGroup\",\"mailTo\":\"felix@curriki.org,\"}";
+        return "{\"recipientRole\":\"Group_FelixDigestTest.AdminGroup\",\"mailTo\":\"XWiki.Flixt\"}";
     }
 }
 

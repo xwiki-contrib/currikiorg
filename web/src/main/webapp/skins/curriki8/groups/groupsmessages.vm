@@ -613,15 +613,37 @@
             $newdoc.setContent($xwiki.getDocument("Groups.MessageTemplate").getContent())
             $newdoc.setParent("${spaceName}.Messages")
 
-        ## Send notification mail
+            ## Send notification mail
             #messageSendNotificationMail($newdoc)
 
             #set($as = $xwiki.activitystream)##
-            $as.setTempAttribute("mailTo", "$!mailTo")##
-            #if($request.toRole)
-                $as.setTempAttribute("recipientRole", "${request.selectedRolesList}")##
+            #if($request.toMember)
+              #set($mailToList = $xwiki.arrayList)
+              #set($mailTo = "")
+              #if($request.selectedMembersList.trim().length() > 0)
+                  #foreach($member in $request.selectedMembersList.split(","))
+                      #set($profile = $sm.getSpaceUserProfile($spaceName, $member))
+                      #if($profile && $profile.allowNotifications)
+
+                        #set($userDoc=$xwiki.getDocument($member))
+                        #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
+                        #set($groupMemberName="${userObj.getProperty('first_name').getValue()} ${userObj.getProperty('last_name').getValue()}")
+                          #if(!$mailToList.contains($groupMemberName))
+                              #set($ok = $mailToList.add($groupMemberName))
+                              #set($mailTo = $mailTo + $groupMemberName + ",")
+                          #end
+                      #end
+
+                  #end
+              #end
+              $as.setTempAttribute("mailTo", "${mailTo}")##
             #end
-            $as.setTempAttribute("mailToGroup", "$!request.toGroup")##
+            #if($request.toRole)
+              $as.setTempAttribute("recipientRole", "${request.selectedRolesList}")##
+            #end
+            #if($request.toGroup)
+              $as.setTempAttribute("mailToGroup", "${request.toGroup}")##
+            #end
             #set($renderedContent = $newdoc.getObject("XWiki.ArticleClass").get("content"))
             $as.setTempAttribute("messageBody", "$!renderedContent")##
             $as.setTempAttribute("messageSubject", "$!mytitle")##

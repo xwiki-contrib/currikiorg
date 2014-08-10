@@ -63,7 +63,7 @@ public abstract class AnalyticsModule {
         LOG.warn("Crawling UrlStore");
         for (Trigger t : triggers) {
             if (currikiAnalyticsSession != null) {
-                t.trigger(currikiAnalyticsSession, currikiAnalyticsSession.getRefererOfLastRequest());
+                t.trigger(currikiAnalyticsSession);
             } else {
                 LOG.warn("No AnalyticsSession to get the UrlStore");
             }

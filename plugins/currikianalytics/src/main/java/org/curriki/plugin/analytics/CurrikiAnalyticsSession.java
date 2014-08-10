@@ -225,11 +225,10 @@ public class CurrikiAnalyticsSession {
      */
     public String getRefererOfLastRequest(){
         String referer = "UNKOWN REFERER";
-        try {
-            referer =  new URI(this.request.getHeader("referer")).getPath();
-        } catch (Exception e) {
-            LOG.warn("Could not get referer header from request");
+        if(this.request.getHeader("referer") != null) {
+            referer = this.request.getHeader("referer");
         }
+        LOG.warn("Referer: " + referer);
         return referer;
     }
 

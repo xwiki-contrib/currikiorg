@@ -118,6 +118,7 @@
               #if("${event.getType()}" == "create")
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.member_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
               #end
 
 
@@ -129,6 +130,7 @@
               #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.topic.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -143,6 +145,7 @@
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.answer.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -157,6 +160,7 @@
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
                 <!-- $notificationMailSender.eventTick() events} -->
                 $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.comment.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
@@ -171,12 +175,28 @@
               ## Not used yet..
               #set($mailTo=$event.getMailTo())
               #set($recipientRole=$event.getRecipientRole())
-              #set($toGroupMail=$event.getToGroupMail())
+              #set($toGroupMail=$event.getMailToGroup())
 
               #if($level=="message")
-                <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.message_activity_event.message", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url])
+                #if("$!{mailTo}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
+                #end
+                #if("$!{recipientRole}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
+                #end
+                #if("$!{toGroupMail}" != "")
+                  <!-- $notificationMailSender.eventTick() events} -->
+                  <br/>
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                #end
                 <br/><br/>
+
+                #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.message_activity_event.message.email_subject", [$groupMemberName, $displayGroupname])))
+
 
                 <div style="border:thin"><i>$event.getMessageBodyTeaser()</i>##
                   #if($event.getMessageBodyTeaser().endsWith("…")) <a href="$url">$msg.get("readmore")</a>#end</div>
@@ -192,6 +212,7 @@
               #set($assetTitle=$event.getParam1())
               <!-- $notificationMailSender.eventTick() events} -->
               $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
+              #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.resource_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
             #end
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
