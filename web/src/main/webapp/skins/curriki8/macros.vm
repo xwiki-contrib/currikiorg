@@ -1549,41 +1549,41 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author plibbrecht@curriki.org
   *#
 #macro(curriki_avatar_width_height $userdoc $width $height)
-#set($reqHeight=$!height+$!height)
-#set($reqWidth=$!width+$!width)
-#set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
-#set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
-#set($current_avatar = $userobj.get('avatar'))
+    #set($reqHeight=$!height+$!height)
+    #set($reqWidth=$!width+$!width)
+    #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
+    #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
+    #set($current_avatar = $userobj.get('avatar'))
 
-#if($current_avatar && "${current_avatar}" != "") ## {
-   #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
+    #if($current_avatar && "${current_avatar}" != "") ## {
+        #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
 
-     #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
+        #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
-      #if("$!width"=="" && "$!height"=="")##
-         <img src="$src" class="photo"/>##
-      #elseif("$!width"=="")##
-         <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
-      #elseif("$!height"=="")##
-         <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
-      #else##
-         <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" class="photo"/>
-      #end##
+        #if("$!width"=="" && "$!height"=="")##
+            <img src="$src" class="photo"/>##
+        #elseif("$!width"=="")##
+            <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
+        #elseif("$!height"=="")##
+            <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
+        #else##
+            <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
+        #end##
     </a>
-#else ## } {
-  #set($src=$xwiki.getSkinFile("noavatar.png"))##
-  <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
- #if("$!width"=="" && "$!height"=="")##
-     <img src="$src" class="photo"/>
- #elseif("$!width"=="")##
-     <img src="$src?height=$reqHeight" height="$height" class="photo"/>
- #elseif("$!height"=="")##
-     <img src="$src?width=$reqWidth" width="$width" class="photo"/>
- #else##
-     <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" class="photo"/>
- #end##
- </a>
-#end ## }
+    #else ## } {
+        #set($src=$xwiki.getSkinFile("noavatar.png"))##
+    <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
+        #if("$!width"=="" && "$!height"=="")##
+            <img src="$src" class="photo"/>
+        #elseif("$!width"=="")##
+            <img src="$src?height=$reqHeight" height="$height" class="photo"/>
+        #elseif("$!height"=="")##
+            <img src="$src?width=$reqWidth" width="$width" class="photo"/>
+        #else##
+            <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
+        #end##
+    </a>
+    #end ## }
 #end ## macro ## }
 
 #**
@@ -1750,28 +1750,28 @@ $response.setDateHeader("Expires",$expires.getTime())##
 #**
   * Starts a verbatim block
   *#
-#macro(verbatim_start)
-  #if("$!{inVerbatim}"=="" || !$inVerbatim)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{html wiki=false clean=false}}
-  #else
-{pre}
-  #end
-    #set($inVerbatim=true)
-  #end
+#macro(verbatim_start)##
+#if("$!{inVerbatim}"=="" || !$inVerbatim)##
+#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
+{{html wiki=false clean=false}}##
+#else##
+{pre}##
+#end##
+#set($inVerbatim=true)##
+#end##
 #end
 #**
   * Ends a verbatim block
   *#
-#macro(verbatim_end)
-#if($inVerbatim)
-  #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")
-{{/html}}
-  #else
-{/pre}
-  #end
-    #set($inVerbatim=false)
-#end
+#macro(verbatim_end)##
+#if($inVerbatim)##
+#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
+{{/html}}##
+#else##
+{/pre}##
+#end##
+#set($inVerbatim=false)##
+#end##
 #end
 
 #macro(htmlcomment $comment)##
