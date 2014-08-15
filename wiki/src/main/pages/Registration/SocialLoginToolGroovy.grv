@@ -375,14 +375,18 @@ public class SocialLoginToolGroovy {
                 // gather profile info
                 if(hasReadProviderProfile) return;
                 hasReadProviderProfile = true;
-                firstName = cleverComProfile.name.first;
-                lastName = cleverComProfile.name.last;
+                if(cleverComProfile.name){
+                    firstName = cleverComProfile.name.first;
+                    lastName = cleverComProfile.name.last;
+                }
                 email = cleverComProfile.email;
-                city = cleverComProfile.location.city;
-                state = cleverComProfile.location.state;
-                postalCode = cleverComProfile.location.zip;
-                latitude = cleverComProfile.location.lat;
-                longitude = cleverComProfile.location.long;
+                if(cleverComProfile.location){
+                    city = cleverComProfile.location.city;
+                    state = cleverComProfile.location.state;
+                    postalCode = cleverComProfile.location.zip;
+                    latitude = cleverComProfile.location.lat;
+                    longitude = cleverComProfile.location.long;
+                }
                 country  = "US"; // profile.get("location.country")
                 password = RandomStringUtils.randomAlphanumeric(8)
 
