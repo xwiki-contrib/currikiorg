@@ -181,7 +181,7 @@ public class LoginToViewAnalyticsModule extends AnalyticsModule implements XWiki
      */
     public void notify(XWikiNotificationRule rule, XWikiDocument newdoc, XWikiDocument olddoc, int event, XWikiContext context) {
         LOG.warn("Notify about doc change: " + newdoc.getFullName());
-        if("CurrikiCode.LoginToViewExceptions".equals(newdoc.getFullName()) || "CurrikiCode.LoginToViewConfig".equals(newdoc.getFullName())){
+        if("CurrikiCode.LoginToViewExceptions".equals(newdoc.getFullName()) || "CurrikiCode.LoginToViewRefererExceptions".equals(newdoc.getFullName()) || "CurrikiCode.LoginToViewConfig".equals(newdoc.getFullName())){
             reloadConfig();
         }
     }
