@@ -1,42 +1,26 @@
-import com.google.gson.stream.JsonReader
+import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
+import com.xpn.xwiki.web.XWikiMessageTool
 import groovy.json.JsonSlurper
-import net.sf.json.JSON
-import net.sf.json.util.JSONBuilder
-import org.apache.http.HttpResponse
-import org.apache.http.auth.AuthScope
-import org.apache.http.auth.Credentials
-import org.apache.http.client.AuthCache
-import org.apache.http.client.CredentialsProvider
-import org.apache.http.client.HttpClient;
 import org.apache.commons.lang.RandomStringUtils
-import org.apache.http.auth.UsernamePasswordCredentials
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
+import org.apache.http.HttpResponse
+import org.apache.http.client.HttpClient
 import org.apache.http.client.methods.HttpGet
 import org.apache.http.client.methods.HttpPost
 import org.apache.http.entity.StringEntity
-import org.apache.http.impl.auth.BasicScheme
-import org.apache.http.impl.client.BasicAuthCache
-import org.apache.http.impl.client.BasicCredentialsProvider
 import org.apache.http.impl.client.DefaultHttpClient
-import org.apache.http.protocol.BasicHttpContext
-import org.apache.http.protocol.HttpContext
 import org.apache.http.util.EntityUtils
-import org.apache.http.client.HttpClient
-import org.brickred.socialauth.AuthProvider;
-import org.brickred.socialauth.AuthProviderFactory;
-import com.xpn.xwiki.api.XWiki;
-import com.xpn.xwiki.api.Context
-import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.HttpServletRequest
-import com.xpn.xwiki.api.Document;
-import com.xpn.xwiki.web.XWikiMessageTool
-import org.apache.commons.logging.Log
-import org.apache.commons.logging.LogFactory
+import org.brickred.socialauth.AuthProvider
+import org.brickred.socialauth.AuthProviderFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
-import com.xpn.xwiki.doc.XWikiAttachment
-import org.xwiki.container.servlet.filters.SavedRequestManager
-import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
-import com.xpn.xwiki.api.Attachment;
+
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -335,49 +319,34 @@ public class SocialLoginToolGroovy {
 
         try {
 
-
             // perform scenario at https://clever.com/developers/docs#identity-api-sso-oauth2-flow-section
             String providerId = "clever.com";
             LOG.info("Welcoming from provider " + providerId);
-
-            // TODO: find a way to do pre-emptive basic auth
-            // something for http-client 4.1 similar to http://hc.apache.org/httpcomponents-client-4.3.x/tutorial/html/authentication.html#d5e706
             DefaultHttpClient client = new DefaultHttpClient();
-            CredentialsProvider basic = new BasicCredentialsProvider();
-            String targetHost = properties.getProperty("clever.com.authHost");
-            basic.setCredentials(new AuthScope(targetHost, AuthScope.ANY_PORT),
-                new UsernamePasswordCredentials(
-                        properties.getProperty("clever.com.username"),
-                        properties.getProperty("clever.com.password")));
-            AuthCache authCache = new BasicAuthCache(); authCache.put(targetHost, new BasicScheme());
-            client.execute()
-            BasicHttpContext context = new BasicHttpContext();context.
-            context.setCredentialsProvider(credsProvider);
-            context.setAuthCache(authCache);
-
-
             HttpPost post = new HttpPost(properties.getProperty("clever.com.tokenFetchURL"));
+            post.setHeader("Authorization", "Basic " + properties.getProperty("clever.com.basic.auth"));
             post.setEntity(new StringEntity("{" +
-                    " \"code\": \"${request.code}\",\n" +
+                    " \"code\": \""+ request.code + "\",\n" +
                     "  \"grant_type\": \"authorization_code\",\n" +
-                    "  \"redirect_uri\": \"${targets.afterLogin}\"\n" +
+                    "  \"redirect_uri\": \"http://current.dev.curriki.org/xwiki/bin/view/Registration/SocialLogin\"\n" +
                     "}","application/json","utf-8"));
             HttpResponse response = client.execute(post);
             String result = EntityUtils.toString(response.getEntity());
-            if(status!=200)
-                throw new IllegalStateException("Received wrong http status with Http response \"${result}\".");
-
+            if (response.getStatusLine().getStatusCode() != 200){
+                throw new IllegalStateException("Received wrong http status with Http response (StatusCode: " + response.getStatusLine().getStatusCode() + "value:" + result + ".");
+            }
 
             // "redeem code" convert code to token
             def obj = new JsonSlurper().parseText(result);
             String token = obj.access_token;
+            LOG.warn("YAY WE GOT A TOKEN");
 
             // fetch the info
-            HttpGet get = new HttpGet(properties.getProperty("clever.com.dev.apiURL"));
-            client.getParams().setAuthenticationPreemptive(false);
+            HttpGet get = new HttpGet(properties.getProperty("clever.com.apiURL"));
+//            client.getParams().setAuthenticationPreemptive(false);
             get.addHeader("Authorization", "Bearer ${token}");
             response = client.execute(get);
-            def cleverComProfile = new JsonSlurper().parseText(EntityUtils.toString(response.getEntity()));
+            def cleverComProfile = (new JsonSlurper().parseText(EntityUtils.toString(response.getEntity()))).data;
 
             // Search for this profile id in database, find user
             String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
@@ -385,12 +354,10 @@ public class SocialLoginToolGroovy {
                     " and socialLoginObj.className='XWiki.SocialLoginProfileClass' and " +
                     " doc.fullName=socialLoginObj.name and " +
                     " provider.id.id = socialLoginObj.id and profileId.id.id = socialLoginObj.id and " +
-                    " provider.name='provider' and profileId.name='validatedId' and provider.value='"+providerId+
+                    " provider.name='provider' and profileId.name='validatedId' and provider.value='clever.com"+
                     "' and profileId.value='"+cleverComProfile.id+"'";
             System.out.println("Querying: " + query);
             List userDocs = xwiki.searchDocuments(query,30,0);
-            //original: XWQL: from doc.object(XWiki.XWikiUsers) as user, doc.object(XWiki.SocialLoginProfileClass) as profile where profile.provider = '""" + provider + "' and profile.validatedId = '" + profile.validatedId + "'")
-
             System.out.println("Found userDocs: " + userDocs);
             // case with existing email
             if(userDocs!=null && !userDocs.isEmpty()) {
@@ -399,7 +366,7 @@ public class SocialLoginToolGroovy {
                     if(x==null) continue;
                     Document userDoc = xwiki.getDocument(x)
                     System.out.println("Doc: " + result + " of class " + result.getClass());
-                    authenticateUser(userDoc)
+                    authenticateUser(userDoc);
                 }
             } else if(userDocs==null || userDocs.isEmpty()) {
                 // Not authenticated/redirected yet ? -> You must be new here
@@ -408,15 +375,16 @@ public class SocialLoginToolGroovy {
                 // gather profile info
                 if(hasReadProviderProfile) return;
                 hasReadProviderProfile = true;
-                firstName = profile.get("name.first");
-                lastName = profile.get("name.last");
-                email = profile.email;
-                city = profile.get("location.city");
-                state = profile.get("location.state");
-                postalCode = profile.get("location.zip");
-                latitude = profile.get("location.lat");
-                longitude = profile.get("location.long");
+                firstName = cleverComProfile.name.first;
+                lastName = cleverComProfile.name.last;
+                email = cleverComProfile.email;
+                city = cleverComProfile.location.city;
+                state = cleverComProfile.location.state;
+                postalCode = cleverComProfile.location.zip;
+                latitude = cleverComProfile.location.lat;
+                longitude = cleverComProfile.location.long;
                 country  = "US"; // profile.get("location.country")
+                password = RandomStringUtils.randomAlphanumeric(8)
 
                 if(username==null || username=='') {
                     int p = email.indexOf('@');
@@ -445,27 +413,28 @@ public class SocialLoginToolGroovy {
                 // now create the social-login object
                 def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
                 socialProfile.set('provider', providerId)
-                socialProfile.set('fullName', "XWiki.${userName}");
+                socialProfile.set('fullName', "XWiki."+username);
                 socialProfile.set('firstName', firstName)
                 socialProfile.set('lastName', lastName)
-                socialProfile.set('displayName', "${firstName} ${lastName}")
+                socialProfile.set('displayName', firstName + " " + lastName)
                 socialProfile.set('email', cleverComProfile.email)
                 socialProfile.set('gender', cleverComProfile.gender)
                 //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
-                socialProfile.set('profileId', profile.id)
+                socialProfile.set('validatedId', cleverComProfile.id)
                 socialProfile.set('country', country)
-                socialProfile.set('location', location)
 
                 def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
                 socialPrefs.set('preferred_provider', providerId)
 
                 userDoc.saveWithProgrammingRights();
-                // final step, login worked, existing user
-                def afterLogin = targets!=null? targets.afterLogin : request.getSession().getAttribute("xredirect");
-                nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=" + afterLogin;
-                System.out.println("Redirecting to " + afterLogin+ " through a redirectOnTop");
-                return "backFromAuthorization";
+                authenticateUser(userDoc)
+                           // final step, login worked, existing user
+//                def afterLogin = targets!=null? targets.afterLogin : request.getSession().getAttribute("xredirect");
+                nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=/xwiki/bin/view/MyCurriki/Profile";
+                System.out.println("Redirecting to /xwiki/bin/view/MyCurriki/Profile through a redirectOnTop");
+                return "redirectOnTop";
             }
+
         } catch (Exception ex) {
             ex.printStackTrace();
             errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
