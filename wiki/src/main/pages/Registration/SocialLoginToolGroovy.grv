@@ -328,7 +328,7 @@ public class SocialLoginToolGroovy {
             post.setEntity(new StringEntity("{" +
                     " \"code\": \""+ request.code + "\",\n" +
                     "  \"grant_type\": \"authorization_code\",\n" +
-                    "  \"redirect_uri\": \"http://current.dev.curriki.org/xwiki/bin/view/Registration/SocialLogin\"\n" +
+                    "  \"redirect_uri\": \"https://" + xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config') + "/xwiki/bin/view/Registration/SocialLogin\"\n" +
                     "}","application/json","utf-8"));
             HttpResponse response = client.execute(post);
             String result = EntityUtils.toString(response.getEntity());
@@ -432,12 +432,10 @@ public class SocialLoginToolGroovy {
 
                 userDoc.saveWithProgrammingRights();
                 authenticateUser(userDoc)
-                           // final step, login worked, existing user
-//                def afterLogin = targets!=null? targets.afterLogin : request.getSession().getAttribute("xredirect");
-                nowTarget = "/xwiki/bin/view/Registration/JumpToTop?xpage=plain&redir=/xwiki/bin/view/MyCurriki/Profile";
-                System.out.println("Redirecting to /xwiki/bin/view/MyCurriki/Profile through a redirectOnTop");
-                return "redirectOnTop";
             }
+            nowTarget = "/xwiki/bin/view/Search/WebHome";
+            System.out.println("Redirecting to /xwiki/bin/view/Search/WebHome through a redirectOnTop");
+            return "redirectOnTop";
 
         } catch (Exception ex) {
             ex.printStackTrace();
