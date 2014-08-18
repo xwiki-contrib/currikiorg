@@ -392,21 +392,7 @@ public class SocialLoginToolGroovy {
                 }
                 country  = "US"; // profile.get("location.country")
                 password = RandomStringUtils.randomAlphanumeric(8)
-
-                if(username==null || username=='') {
-                    int p = email.indexOf('@');
-                    username = email.substring(0,p);
-                    username = username.replaceAll("[^a-zA-Z0-9]","");
-                    username = username.replaceAll("_","").replaceAll("__","");
-                    if(!validation.isValidUsername(username, false)) {
-                        int i=0;
-                        while(i<100) {
-                            if(validation.isValidUsername(username + i, false)) break
-                            i++;
-                        }
-                        username = username +i;
-                    }
-                }
+                username = generateUserNameFromSocialProfile();
 
                 // Search for this email in database, find user
                 String queryUserDocsForUserObjectEmail =", BaseObject userObj, StringProperty email where " +
@@ -417,14 +403,12 @@ public class SocialLoginToolGroovy {
 
                 // Either create the new user or use the user for the existing email, if there is exactly one
                 Document userDoc = null;
-                if (userDocsForEmail.size() == 0){
+                if (userDocsForEmail.size() == 0 || email == null || email == "") {
                     System.out.println("No user for existing email address either -> create a new user doc")
-                    def validation = xwiki.parseGroovyFromPage("Registration.Validation");
-                    validation.init(xwiki, errors, warningFields, okFields);
                     userDoc = createUserDoc();
                 }else if(userDocsForEmail.size() == 1){
-                    userDoc = xwiki.getDocument(userDocsForEmail.get(0))
                     System.out.println("Found userDocs for existing email address: " + userDocs);
+                    userDoc = xwiki.getDocument(userDocsForEmail.get(0))
                 } else {
                     //TODO: get rid of this unpretty illegal state and show a defined error to the user!?
                     // Well what if we find more than one?? For now we fail, otherwise we potentially authenticate a wrong user
@@ -438,7 +422,7 @@ public class SocialLoginToolGroovy {
                 socialProfile.set('firstName', firstName)
                 socialProfile.set('lastName', lastName)
                 socialProfile.set('displayName', firstName + " " + lastName)
-                socialProfile.set('email', cleverComProfile.email)
+                socialProfile.set('email', email)
                 socialProfile.set('gender', cleverComProfile.gender)
                 //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
                 socialProfile.set('validatedId', cleverComProfile.id)
@@ -463,7 +447,40 @@ public class SocialLoginToolGroovy {
         };
     }
 
+    private String generateUserNameFromSocialProfile(String proposedUserName) {
+        String username = "";
+        // Check if the given name is okay, if yes return it.
+        if(proposedUserName != null && proposedUserName != "" && validation.isValidUsername(proposedUserName, false)){
+            username = proposedUserName
 
+        // If not generate one
+        } else {
+            // From the email
+            if (email != null && email != "" && email.indexOf('@') != -1){
+                username = email.substring(0, email.indexOf('@'));
+
+            // Or the firstname
+            } else if (firstName != null && firstName != "") {
+                username = firstName;
+
+            // Or just a random one
+            } else {
+                username = RandomStringUtils.randomAscii(8);
+            }
+            username = username.replaceAll("[^a-zA-Z0-9]", "");
+            username = username.replaceAll("_", "").replaceAll("__", "");
+            username = username.replaceAll(" ", "")
+            if (!validation.isValidUsername(username, false)) {
+                int i = 0;
+                while (i < 100) {
+                    if (validation.isValidUsername(username + i, false)) break
+                    i++;
+                }
+                username = username + i;
+            }
+        }
+        return username;
+    }
 
     /**
      * Create a new user profile from the social profile result
