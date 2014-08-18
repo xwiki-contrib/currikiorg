@@ -333,6 +333,7 @@ public class SocialLoginToolGroovy {
             HttpResponse response = client.execute(post);
             String result = EntityUtils.toString(response.getEntity());
             if (response.getStatusLine().getStatusCode() != 200){
+                //TODO: get rid of this unpretty illegal state and show a defined error to the user!?
                 throw new IllegalStateException("Received wrong http status with Http response (StatusCode: " + response.getStatusLine().getStatusCode() + "value:" + result + ".");
             }
 
@@ -349,16 +350,18 @@ public class SocialLoginToolGroovy {
             def cleverComProfile = (new JsonSlurper().parseText(EntityUtils.toString(response.getEntity()))).data;
 
             // Search for this profile id in database, find user
-            String query =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
+            String queryForSocialProfileValidatedId =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
                     " userObj.className='XWiki.XWikiUsers' and doc.web='XWiki' and doc.fullName=userObj.name " +
                     " and socialLoginObj.className='XWiki.SocialLoginProfileClass' and " +
                     " doc.fullName=socialLoginObj.name and " +
                     " provider.id.id = socialLoginObj.id and profileId.id.id = socialLoginObj.id and " +
                     " provider.name='provider' and profileId.name='validatedId' and provider.value='clever.com"+
                     "' and profileId.value='"+cleverComProfile.id+"'";
-            System.out.println("Querying: " + query);
-            List userDocs = xwiki.searchDocuments(query,30,0);
-            System.out.println("Found userDocs: " + userDocs);
+            System.out.println("Querying: " + queryForSocialProfileValidatedId);
+            List userDocs = xwiki.searchDocuments(queryForSocialProfileValidatedId,30,0);
+
+
+            System.out.println("Found userDocs for SocialProfile validatedId: " + userDocs);
             // case with existing email
             if(userDocs!=null && !userDocs.isEmpty()) {
                 // already exists?
@@ -389,30 +392,28 @@ public class SocialLoginToolGroovy {
                 }
                 country  = "US"; // profile.get("location.country")
                 password = RandomStringUtils.randomAlphanumeric(8)
+                username = generateUserNameFromSocialProfile();
 
-                if(username==null || username=='') {
-                    int p = email.indexOf('@');
-                    username = email.substring(0,p);
-                    username = username.replaceAll("[^a-zA-Z0-9]","");
-                    username = username.replaceAll("_","").replaceAll("__","");
-                    if(!validation.isValidUsername(username, false)) {
-                        int i=0;
-                        while(i<100) {
-                            if(validation.isValidUsername(username + i, false)) break
-                            i++;
-                        }
-                        username = username +i;
-                    }
+                // Search for this email in database, find user
+                String queryUserDocsForUserObjectEmail =", BaseObject userObj, StringProperty email where " +
+                        " userObj.className='XWiki.XWikiUsers' and doc.web='XWiki' and doc.fullName=userObj.name and" +
+                        " email.id.id = userObj.id and email.value = '" + cleverComProfile.email + "'";
+                System.out.println("Querying: " + queryUserDocsForUserObjectEmail);
+                List userDocsForEmail = xwiki.searchDocuments(queryUserDocsForUserObjectEmail,30,0);
+
+                // Either create the new user or use the user for the existing email, if there is exactly one
+                Document userDoc = null;
+                if (userDocsForEmail.size() == 0 || email == null || email == "") {
+                    System.out.println("No user for existing email address either -> create a new user doc")
+                    userDoc = createUserDoc();
+                }else if(userDocsForEmail.size() == 1){
+                    System.out.println("Found userDocs for existing email address: " + userDocs);
+                    userDoc = xwiki.getDocument(userDocsForEmail.get(0))
+                } else {
+                    //TODO: get rid of this unpretty illegal state and show a defined error to the user!?
+                    // Well what if we find more than one?? For now we fail, otherwise we potentially authenticate a wrong user
+                    throw new IllegalStateException("Duplicate email address for user profiles... " + cleverComProfile.email);
                 }
-
-                def validation = xwiki.parseGroovyFromPage("Registration.Validation");
-                validation.init(xwiki, errors, warningFields, okFields);
-
-                // TODO: More validation
-                // TODO: error reporting
-
-                // now create the document
-                Document userDoc = createUserDoc();
 
                 // now create the social-login object
                 def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
@@ -421,7 +422,7 @@ public class SocialLoginToolGroovy {
                 socialProfile.set('firstName', firstName)
                 socialProfile.set('lastName', lastName)
                 socialProfile.set('displayName', firstName + " " + lastName)
-                socialProfile.set('email', cleverComProfile.email)
+                socialProfile.set('email', email)
                 socialProfile.set('gender', cleverComProfile.gender)
                 //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
                 socialProfile.set('validatedId', cleverComProfile.id)
@@ -433,6 +434,8 @@ public class SocialLoginToolGroovy {
                 userDoc.saveWithProgrammingRights();
                 authenticateUser(userDoc)
             }
+
+            // Always redirect to the advanced search page.
             nowTarget = "/xwiki/bin/view/Search/WebHome";
             System.out.println("Redirecting to /xwiki/bin/view/Search/WebHome through a redirectOnTop");
             return "redirectOnTop";
@@ -444,7 +447,40 @@ public class SocialLoginToolGroovy {
         };
     }
 
+    private String generateUserNameFromSocialProfile(String proposedUserName) {
+        String username = "";
+        // Check if the given name is okay, if yes return it.
+        if(proposedUserName != null && proposedUserName != "" && validation.isValidUsername(proposedUserName, false)){
+            username = proposedUserName
 
+        // If not generate one
+        } else {
+            // From the email
+            if (email != null && email != "" && email.indexOf('@') != -1){
+                username = email.substring(0, email.indexOf('@'));
+
+            // Or the firstname
+            } else if (firstName != null && firstName != "") {
+                username = firstName;
+
+            // Or just a random one
+            } else {
+                username = RandomStringUtils.randomAscii(8);
+            }
+            username = username.replaceAll("[^a-zA-Z0-9]", "");
+            username = username.replaceAll("_", "").replaceAll("__", "");
+            username = username.replaceAll(" ", "")
+            if (!validation.isValidUsername(username, false)) {
+                int i = 0;
+                while (i < 100) {
+                    if (validation.isValidUsername(username + i, false)) break
+                    i++;
+                }
+                username = username + i;
+            }
+        }
+        return username;
+    }
 
     /**
      * Create a new user profile from the social profile result
