@@ -39,13 +39,13 @@ Reorder.init = function(){
 	Reorder.store = new Ext.data.JsonStore({
 		storeId:'CollectionsStore'
 		,url: '/xwiki/curriki/'+Data.place+'/'+Data.which+'/collections?_dc='+(new Date().getTime())
-		,fields: ['displayTitle', 'collectionPage']
+		,fields: ['displayTitle', 'assetpage']
 		,autoLoad:true
 		,listeners: {
 			load:{
 				fn: function(store, records, options){
 					var list = [];
-					store.each(function(rec){list.push(rec.data.collectionPage);});
+					store.each(function(rec){list.push(rec.data.assetpage);});
 					Data.orig = list;
 					console.log('Fetched list', list);
 				}
@@ -108,7 +108,7 @@ Reorder.init = function(){
 							click:{
 								 fn: function(){
 								 	var list = [];
-									Ext.getCmp('reorderCollectionsMS').store.each(function(rec){list.push(rec.data.collectionPage);});
+									Ext.getCmp('reorderCollectionsMS').store.each(function(rec){list.push(rec.data.assetpage);});
 									console.log('Reordering', list);
 
 									var dlg = this;
@@ -156,7 +156,7 @@ Reorder.init = function(){
 								//,legend:_('sri.instructional_component2_title')
 								,legend:' '
 								,store:Reorder.store
-								,valueField:'collectionPage'
+								,valueField:'assetpage'
 								,displayField:'[""]}<span class="resource-CollectionComposite"><img class="x-tree-node-icon assettype-icon" src="'+Ext.BLANK_IMAGE_URL+'" /></span> {displayTitle'
 								,width:600
 								,height:200
