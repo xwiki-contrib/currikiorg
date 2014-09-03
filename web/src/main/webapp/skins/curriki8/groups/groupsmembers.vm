@@ -320,7 +320,9 @@ $profile
 </div>
 <form action="$xwiki.getURL("Groups.SaveSpaceUserProfileService")" method="post" onsubmit="document.getElementById('${divid}').parentNode.className = 'groups-members-member'; new iframe(this,{update:'${divid}'}); return false;">
 <div class="groups-members-member-buttons">
-<input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")" onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" /><input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
+<input type="button"  class="button-grey" value="$msg.get("groups_members_admin_current_membersettings_cancel_link")"
+       onclick="cancelEditProfile('${memberName}','${spaceName}','${divid}');" />##
+<input type="submit" class="button-orange" value="$msg.get("groups_members_admin_current_membersettings_save_link")" />
 </div>
 <input type="hidden" name="user" value="$!memberName" />
 <input type="hidden" name="space" value="$!spaceName" />
@@ -363,10 +365,10 @@ $uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_
 #macro(groupsdisplaymember $memberName $spaceName $divid)
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
-<div class="groups-members-member">
+#verbatim_start()<div class="groups-members-member">
 <div id="groups-members-memberinfo-$divid" class="groups-members-memberinfo">
 #groupsdisplaymemberinfo("$memberName" "$spaceName" "groups-members-memberinfo-$divid")
-</div>
+</div>#verbatim_end()
 #else
 $msg.get("groups_members_admin_current_membersettings_error")
 #end
