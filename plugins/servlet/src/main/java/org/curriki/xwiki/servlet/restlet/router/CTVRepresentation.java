@@ -111,7 +111,7 @@ public class CTVRepresentation extends StreamRepresentation {
                 subAssetNames = currikiPlugin.fetchCollectionsList(docFullName, context);
                 objectToOutput = currikiPlugin.fetchCollectionsInfo(docFullName, context);
             } else if(type==Type.GROUP_COLLECTIONS) {
-                propNameForFullname = "collectionPage";
+                propNameForFullname = "assetpage";
                 String groupName = docFullName.replace(".WebPreferences", "");
                 subAssetNames = currikiPlugin.fetchCollectionsList(groupName, context);
                 objectToOutput = currikiPlugin.fetchCollectionsInfo(groupName, context);
