@@ -109,7 +109,20 @@ public abstract class CompositeAsset extends Asset {
         return subInfo;
     }
 
+    public enum Order {
+        BY_DATE, BY_NUMBER
+    }
+
     public List<Map<String, Object>> getSubassetsInfo() {
+        Order order = Order.BY_DATE;
+        BaseObject sortMethod = doc.getObject("CurrikiCode.CollectionReorderedClass");
+        if(isRootCollection() && sortMethod!=null && sortMethod.getIntValue("reordered")==1) {
+            order = Order.BY_NUMBER;
+        }
+        return getSubassetsInfo(order);
+    }
+
+    public List<Map<String, Object>> getSubassetsInfo(Order order) {
         List<BaseObject> objs = doc.getObjects(Constants.SUBASSET_CLASS);
 
         if (objs != null ) {
@@ -143,12 +156,34 @@ public abstract class CompositeAsset extends Asset {
                 }
             }
 
-            Collections.sort(subList, new Comparator<Map<String,Object>>(){
-                public int compare(Map<String,Object> s1, Map<String,Object> s2){
+            if(order==Order.BY_NUMBER)
+                Collections.sort(subList, new Comparator<Map<String,Object>>(){ public int compare(Map<String,Object> s1, Map<String,Object> s2){
                     return ((Long) s1.get(Constants.SUBASSET_CLASS_ORDER)).compareTo((Long) s2.get(Constants.SUBASSET_CLASS_ORDER));
                 }
-            });
-
+                });
+            else
+                Collections.sort(subList, new Comparator<Map<String,Object>>(){ public int compare(Map<String,Object> s1, Map<String,Object> s2){
+                    try {
+                        String s1Name = (String) (s1.get("assetpage")),
+                                s2Name=(String) (s2.get("assetpage"));
+                        if(s1Name == null) s1Name = (String) (s1.get("collectionPage"));
+                        if(s2Name == null) s2Name = (String) (s1.get("collectionPage"));
+                        XWikiContext ctx = getXWikiContext();
+                        int comparison =
+                                getXWikiContext().getWiki().getDocument(s1Name, ctx).getDate().compareTo(
+                                        context.getWiki().getDocument(s2Name, ctx).getDate()
+                                );
+                        //getXWikiContext().getWiki().getResourceLastModificationDate(s1Name)
+                        //.compareTo(getXWikiContext().getWiki().getResourceLastModificationDate(s2Name));
+                        if(comparison>0) return -1;
+                        else if (comparison==0) return 0;
+                        else return +1;
+                    } catch (XWikiException e) {
+                        e.printStackTrace();
+                        return 0;
+                    }
+                }
+                });
             return subList;
         }
 
@@ -349,15 +384,15 @@ public abstract class CompositeAsset extends Asset {
 
 // TODO: Remove
 // DEBUGGING CODE for CURRIKI-4238
-System.out.println("REORDER "+assetDoc.getFullName()+" want: "+(wantedList==null?"NULL":wantedList.toString()));
-System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+(existingList==null?"NULL":existingList.toString()));
+        System.out.println("REORDER "+assetDoc.getFullName()+" want: "+(wantedList==null?"NULL":wantedList.toString()));
+        System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+(existingList==null?"NULL":existingList.toString()));
 
         int wSize = (wantedList != null)?want.length:0;
         int eSize = (existingList != null)?existing.length:0;
 
         int e = 0;
         int w = 0;
-        
+
         while (w < wSize) {
             if (want[w] != null && context.getWiki().exists(want[w], context)) {
                 // Only add the asset if it still exists
@@ -367,12 +402,12 @@ System.out.println("REORDER "+assetDoc.getFullName()+" existing: "+(existingList
                     e++;
                 }
                 if (b == null) {
-System.out.println("REORDER "+assetDoc.getFullName()+" Adding object w="+w+" e="+e);
+                    System.out.println("REORDER "+assetDoc.getFullName()+" Adding object w="+w+" e="+e);
                     b = assetDoc.newObject(Constants.SUBASSET_CLASS, context);
                 }
-else {
-System.out.println("REORDER "+assetDoc.getFullName()+" Updating object w="+w+" e="+e);
-}
+                else {
+                    System.out.println("REORDER "+assetDoc.getFullName()+" Updating object w="+w+" e="+e);
+                }
 
                 b.setStringValue(Constants.SUBASSET_CLASS_PAGE, want[w]);
                 b.setLongValue(Constants.SUBASSET_CLASS_ORDER, w);
@@ -387,7 +422,7 @@ System.out.println("REORDER "+assetDoc.getFullName()+" Updating object w="+w+" e
                 e++;
             }
             if (b != null) {
-System.out.println("REORDER "+assetDoc.getFullName()+" Removing object w="+w+" e="+e);
+                System.out.println("REORDER "+assetDoc.getFullName()+" Removing object w="+w+" e="+e);
                 assetDoc.removeObject(b);
             }
         }
