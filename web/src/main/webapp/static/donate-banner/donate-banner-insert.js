@@ -8,7 +8,7 @@ try {
             "        border-top: 0;"+
             "        border-bottom-right-radius: 10px;"+
             "        border-bottom-left-radius: 10px;"+
-            "        display:none;"+
+            "        display:none;" +
             "    }"+
             "    .curriki #donateBanner {"+
             "        max-width: 850px; align:center;"+
@@ -36,9 +36,12 @@ try {
             "        height: 1em;"+
             "    }"+
             "    #pleaseHelpCtn {"+
+            "        z-index: 200; position: absolute;"+
             "        text-align:center;"+
             "        width:100%;"+
-            "        margin-bottom: -0.6em;"+
+            "    }"+
+            "    .curriki #pleaseHelpCtn  {"+
+            "        max-width: 840px;"+
             "    }"+
             "    #pleaseHelpBtn {"+
             "        background:#FFCC00;"+
@@ -48,7 +51,7 @@ try {
             "        border-bottom-right-radius: 10px;"+
             "        border-bottom-left-radius: 10px;"+
             "        padding: 5px 10px 5px 10px;" +
-            ""+
+            "        overflow: visible;"+
             "        font-family: Arial, sans-serif; font-size: 11pt; font-weight: bold;"+
             "    }"+
             "    #pleaseHelpBtn:hover {"+
@@ -86,12 +89,14 @@ try {
         ""+
         "<div id=\"pleaseHelpCtn\">"+
         "    <span id=\"pleaseHelpBtn\""+
-        "            ><a href=\"/welcome/about-curriki/donate/\">Please help.</a><a onclick=\"switchDonateBanner();\">&nbsp;&nbsp;<img id=\"pleaseHelpBtnArrow\" src=\"/static/donate-banner/icon-arrow-circle-down.png\" style=\"height:1.2em\"/>&nbsp;&nbsp;</a></span>"+
+        "            ><a href=\"/welcome/about-curriki/donate/\">Please help.</a><a onclick=\"switchDonateBanner();\">&nbsp;&nbsp;<img id=\"pleaseHelpBtnArrow\" src=\"/static/donate-banner/icon-arrow-circle-down.png\" style=\"height:1.1em\"/>&nbsp;&nbsp;</a></span>"+
         "</div>";
+
+    var cookieName = "donateBannerVisible";
 
     /** Compute visibility from the cookie. */
     function initDonateBannerVisible() {
-        if(document.cookie.indexOf("donateBannerVisible=false")>=0)
+        if(document.cookie.indexOf(cookieName+"=false")>=0)
             window.donateBannerVisible = false;
         else
             window.donateBannerVisible = true;
@@ -102,22 +107,26 @@ try {
         }
     }
 
+
     function switchDonateBanner() {
-        if(window.donateBannerVisible) {
-            document.getElementById("donateBanner").style.display="none";
-            if(console) console.log("Made display none.");
-            document.getElementById("pleaseHelpBtnArrow").src="/static/donate-banner/icon-arrow-circle-down.png";
-            document.cookie = "donateBannerVisible=false";
+        var expiry24 = new Date();
+        expiry24.setTime(expiry24.getTime() + 24 * 60 * 60 * 1000);
+        if (window.donateBannerVisible) {
+            document.getElementById("donateBanner").style.display = "none";
+            if (console) console.log("Made display none.");
+            document.getElementById("pleaseHelpBtnArrow").src = "/static/donate-banner/icon-arrow-circle-down.png";
+            document.cookie = cookieName + "=false; expires=Thu Jan 01 1970 01:00:00 GMT+0100 (CET);path=/";
+            document.cookie = "donateBannerVisible=false; expires=" + expiry24.toGMTString() + ";path=/";
             window.donateBannerVisible = false;
         } else {
-            document.getElementById("donateBanner").style.display="block";
-            if(console) console.log("Made display block.");
-            document.getElementById("pleaseHelpBtnArrow").src="/static/donate-banner/icon-arrow-circle-up.png";
-            document.cookie = "donateBannerVisible=true";
+            document.getElementById("donateBanner").style.display = "block";
+            if (console) console.log("Made display block.");
+            document.getElementById("pleaseHelpBtnArrow").src = "/static/donate-banner/icon-arrow-circle-up.png";
+            document.cookie = cookieName + "=true; expires=Thu Jan 01 1970 01:00:00 GMT+0100 (CET);path=/";
+            document.cookie = "donateBannerVisible=true; expires=" + expiry24.toGMTString() + ";path=/";
             window.donateBannerVisible = true;
         }
     }
-
 
     function initDonateBanner() {
 
