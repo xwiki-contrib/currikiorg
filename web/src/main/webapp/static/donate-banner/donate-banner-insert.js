@@ -1,72 +1,72 @@
 try {
-
     var htmlHeadInsert = "<style type=\"text/css\">"+
-            "    #donateBanner {"+
-            "        font-family: Arial, sans-serif; font-size: 11pt;"+
-            "        text-align: center;"+
-            "        border: 2px solid orange;"+
-            "        border-top: 0;"+
-            "        border-bottom-right-radius: 10px;"+
-            "        border-bottom-left-radius: 10px;"+
-            "        display:none;" +
-            "    }"+
-            "    .curriki #donateBanner {"+
-            "        max-width: 850px; align:center;"+
-            "    }"+
-            "    #donateBanner table {"+
-            "        background: #FFCC00;"+
-            "        width: 100%;"+
-            "    }"+
-            "    #donateBanner table tr td {"+
-            "        padding: 1em;"+
-            "        font-weight: bold;"+
-            "        vertical-align: top;"+
-            "        text-align: justify;"+
-            "    }"+
-            "    #donateBanner #closeBox {"+
-            "        text-align:right;"+
-            "        padding: 0.5em;"+
-            "    }"+
-            "    #donateBanner a {"+
-            "        background: transparent;"+
-            "        border:0;"+
-            "    }"+
-            "    #donateBanner a img {"+
-            "        width: 1em;"+
-            "        height: 1em;"+
-            "    }"+
-            "    #pleaseHelpCtn {"+
-            "        z-index: 200; position: absolute;"+
-            "        text-align:center;"+
-            "        width:100%;"+
-            "    }"+
-            "    .curriki #pleaseHelpCtn  {"+
-            "        max-width: 840px;"+
-            "    }"+
-            "    #pleaseHelpBtn {"+
-            "        background:#FFCC00;"+
-            "        margin-top: -2pt;"+
-            "        border: 2px solid orange;"+
-            "        border-top: 0;"+
-            "        border-bottom-right-radius: 10px;"+
-            "        border-bottom-left-radius: 10px;"+
-            "        padding: 5px 10px 5px 10px;" +
-            "        overflow: visible;"+
-            "        font-family: Arial, sans-serif; font-size: 11pt; font-weight: bold;"+
-            "    }"+
-            "    #pleaseHelpBtn:hover {"+
-            "        background: #FFC000;"+
-            "    }"+
-            "    #pleaseHelpBtn:focus { outline:0; }"+
-            "    #pleaseHelpBtn img {"+
-            "        vertical-align: -30%;"+
-            "    }"+
-            "    #pleaseHelpBtn a, #pleaseHelpBtn a:visited {color:black; text-decoration: none}"+
-            "    #pleaseHelpBtn a:hover {color:#111111; text-decoration: none; cursor: hand; cursor:pointer;}"+
-            "    #pleaseHelpBtn a:active {color:#555555; text-decoration: none}"+
-            "</style>";
+        "    #donateBanner {"+
+        "        font-family: Arial, sans-serif; font-size: 11pt;"+
+        "        text-align: center;"+
+        "        border: 2px solid orange;"+
+        "        border-top: 0;"+
+        "        border-bottom-right-radius: 10px;"+
+        "        border-bottom-left-radius: 10px;"+
+        "        display:none;"+
+        "    }"+
+        "    .curriki #donateBanner {"+
+        "        max-width: 850px; align:center;"+
+        "    }"+
+        "    #donateBanner table {"+
+        "        background: #FFCC00;"+
+        "        width: 100%;"+
+        "    }"+
+        "    #donateBanner table tr td {"+
+        "        padding: 1em;"+
+        "        font-weight: bold;"+
+        "        vertical-align: top;"+
+        "        text-align: justify;"+
+        "    }"+
+        "    #donateBanner #closeBox {"+
+        "        text-align:right;"+
+        "        padding: 0.5em;"+
+        "    }"+
+        "    #donateBanner a {"+
+        "        background: transparent;"+
+        "        border:0;"+
+        "    }"+
+        "    #donateBanner a img {"+
+        "        width: 1em;"+
+        "        height: 1em;"+
+        "    }"+
+        "    #pleaseHelpCtn {"+
+        "        z-index: 200; position: absolute;"+
+        "        text-align:center;"+
+        "        width:100%;"+
+        "    }"+
+        "    .curriki #pleaseHelpCtn  {"+
+        "        max-width: 840px;"+
+        "    }"+
+        "    #pleaseHelpBtn {"+
+        "        background:#FFCC00;"+
+        "        margin-top: -2pt;"+
+        "        border: 2px solid orange;"+
+        "        border-top: 0;"+
+        "        border-bottom-right-radius: 10px;"+
+        "        border-bottom-left-radius: 10px;"+
+        "        padding: 5px 10px 5px 10px;"+
+        "        overflow: visible;"+
+        "        font-family: Arial, sans-serif; font-size: 11pt; font-weight: bold;"+
+        "    }"+
+        "    #pleaseHelpBtn:hover {"+
+        "        background: #FFC000;"+
+        "    }"+
+        "    #pleaseHelpBtn:focus { outline:0; }"+
+        "    #pleaseHelpBtn img {"+
+        "        vertical-align: -30%;"+
+        "    }"+
+        "    #pleaseHelpBtn a, #pleaseHelpBtn a:visited {color:black; text-decoration: none}"+
+        "    #pleaseHelpBtn a:hover {color:#111111; text-decoration: none; cursor: hand; cursor:pointer;}"+
+        "    #pleaseHelpBtn a:active {color:#555555; text-decoration: none}"+
+        "</style>";
 
-    var htmlBodyInsert ="<div id=\"donateBanner\">"+
+
+    var htmlBodyInsert = "<div id=\"donateBanner\">"+
         "    <table ><tr>"+
         "        <td></td>"+
         "        <td colspan=\"2\""+
