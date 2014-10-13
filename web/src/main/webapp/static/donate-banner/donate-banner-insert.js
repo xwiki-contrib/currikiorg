@@ -62,7 +62,8 @@ try {
         "    }"+
         "    #pleaseHelpBtn a, #pleaseHelpBtn a:visited {color:black; text-decoration: none}"+
         "    #pleaseHelpBtn a:hover {color:#111111; text-decoration: none; cursor: hand; cursor:pointer;}"+
-        "    #pleaseHelpBtn a:active {color:#555555; text-decoration: none}"+
+        "    #pleaseHelpBtn a:active {color:#555555; text-decoration: none}" +
+        "    #donateSpacer { margin-top:0; }"+
         "</style>";
 
 
@@ -134,6 +135,7 @@ try {
             clearInterval(window.bannerInitter);
             if (document.body.insertAdjacentHTML) {
                 document.head.insertAdjacentHTML("beforeEnd", htmlHeadInsert);
+                if(typeof(jQuery)=="undefined") htmlBodyInsert = htmlBodyInsert + "<p id='donateSpacer'>&nbsp;</p>"
                 document.getElementById("header").insertAdjacentHTML("beforeBegin", htmlBodyInsert);
                 initDonateBannerVisible();
             }
