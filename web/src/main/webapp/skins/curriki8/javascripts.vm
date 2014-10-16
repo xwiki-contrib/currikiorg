@@ -14,9 +14,9 @@
 ## <script type="text/javascript">
 ##   document.domain="curriki.org";
 ## </script>
-#set($useCdns=false)
-<!-- useCdns : $useCdns (external CDNs!)-->
-#if($useCdns)
+#set($useExternalCdns=false)
+<!-- useCdns : $useExternalCdns (external CDNs!)-->
+#if($useExternalCdns)
 <script type="text/javascript">
 /* <![CDATA[ */
 ## ExtJS through CDNs
@@ -51,7 +51,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ## If using xwiki standalone you need to uncomment the line
 ##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&language=${lang}"></script>
 ## and comment the next one out instead
-<script src="${cdn}/trans/lang_${lang}.js"></script>
+<script src="${cdnSemiStatic}/trans/lang_${lang}.js"></script>
 
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
         #if("$!debugging" == "")##{
