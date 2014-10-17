@@ -1,0 +1,160 @@
+// {{groovy}}
+
+import com.xpn.xwiki.XWiki
+import com.xpn.xwiki.XWikiContext
+import com.xpn.xwiki.doc.XWikiDocument
+import com.xpn.xwiki.objects.BaseObject
+import com.xpn.xwiki.objects.classes.BaseClass
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceUserProfileImpl
+import org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi
+
+public class Worker {
+
+    private XWikiContext xcontext;
+
+    public void init(XWikiContext xcontext) {
+        this.xcontext = xcontext;
+        println("Initted.")
+        System.out.println("Initted.")
+    }
+
+
+    public Map<String,String> evalLine(String line) {
+
+        if(line==null || line.length()==0) return null;
+        String[] arr = line.split("\t");
+        if(arr.length<10) return null;
+
+        // does an account with that email exist? rather take that one.
+        String email = arr[2];
+        String query = "select doc.fullName from XWikiDocument doc,BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and doc.space='XWiki' and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and prop.value='"+email+"'";
+        List docs = xcontext.getWiki().search(query, xcontext);
+        if (!docs.isEmpty()) {
+            return [accountAlreadyExists:docs.get(0), email:email];
+        }
+
+
+        // auto-computation till a free spot for a user-name exists
+        String userName = email;
+        if(userName.contains("@")) userName = userName.substring(0, userName.indexOf("@"));
+        if(xcontext.getWiki().exists("XWiki.${userName}", xcontext)) {
+            for(int i in 0..10000) {
+                if(! (xcontext.getWiki().exists("XWiki.${userName}${i}", xcontext))) {
+                    userName = "${userName}${i}";
+                    break;
+                }
+                if(i==10000) {
+                    throw new Exception("All documents booked, till 10000");
+                }
+            }
+        }
+
+        return [
+                userName:   userName,
+                firstName:  arr[0],
+                lastName:   arr[1],
+                email:      arr[2],
+                password:   arr[3],
+
+                // constants for Liberty school
+                memberType:   arr[4], //"teacher",
+                country:      arr[5], //"US",
+                postalCode:   arr[6], //"64068",
+                city:         arr[7], //"Liberty",
+                state:        arr[8], //"MO",
+                longitude:    arr[9], //"39.2989",
+                latitude:     arr[10],// "-94.4363",
+                agree:        "1",
+                show_contact: "2",
+                show_email:   0
+        ];
+    }
+
+    public String createUser(Map<String,String> p) {
+        System.out.println(" xcontext: " + xcontext);
+        System.out.println("");
+
+        String userName= p.userName;
+        System.out.println("Creating user ${p.userName}");
+
+        // TODO: is there a user with such a mail already? if yes, do nothing
+
+        // create user profile
+        XWikiDocument userDoc = new XWikiDocument("XWiki", userName);
+        BaseObject userObj = userDoc.newObject("XWiki.XWikiUsers", xcontext);
+        userObj.setStringValue("first_name", p.firstName);
+        userObj.setStringValue("last_name", p.lastName);
+        userObj.setStringValue("email", p.email);
+        userObj.setStringValue("password", p.password);
+        userObj.setStringValue("member_type", p.memberType)
+        userObj.setStringValue("city", p.city);
+        userObj.setStringValue("postalCode", p.postalCode)
+        userObj.setStringValue("state", p.state)
+        userObj.setStringValue("country", p.country)
+        userObj.setStringValue("longitude", p.longitude)
+        userObj.setStringValue("latitude", p.latitude)
+        userObj.setStringValue("i_agree", p.agree);
+        userObj.setStringValue("show_contact", p.show_contact);
+        userObj.setIntValue("show_email",   p.show_email);
+
+        userObj.setIntValue("active", 1);
+        userObj.setIntValue("emailUndeliverable", 0);
+        xcontext.getWiki().saveDocument(userDoc, "Massive Registration (Step 1)", xcontext);
+
+        def rightobj = userDoc.newObject("XWiki.XWikiRights", xcontext);
+        rightobj.setLargeStringValue("users", new String(userName));
+        rightobj.setIntValue("allow", 1);
+        rightobj.setStringValue("levels", new String("edit"));
+        rightobj.setLargeStringValue("groups", new String(""));
+
+
+        userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
+        userDoc.setCreator(userDoc.getFullName());
+        userDoc.setAuthor(userDoc.getFullName());
+        xcontext.getWiki().saveDocument(userDoc, "Massive Registration (Step 2)", xcontext);
+
+        System.out.println("Created user ${userName}.");
+        return userName;
+    }
+
+}
+
+
+if(!xcontext.hasAdminRights()) {
+    println("= Massive Registration =")
+    println("You need to be an admin to perform this operation.");
+} else {
+    println("= Massive Registration =")
+    String input = request.input;
+    if (input != null && input.trim() != "") {
+        Worker m = new Worker();
+        m.init(xcontext.getXWikiContext());
+        println("Should have initted: " + m + " with context " + xcontext)
+        for (String line : input.split("\n|\r")) {
+            if (line == null || line.trim().length() == 0) continue;
+            Map<String, String> params = m.evalLine(line);
+            if (params == null) {
+                println("* Can't process line \"//${line}//\".");
+                System.out.println("Can't process line ${line}.");
+            } else if (params.get("accountAlreadyExists") != null) {
+                println("* Account [[${params.get("accountAlreadyExists")}]] already exists for email ${params.email}.")
+                System.out.println("Not created user ${params.email}.");
+            } else {
+                String userName = m.createUser(params);
+                println("* {{html}}Created user <a href='../MyCurriki/Profile?user=XWiki.${userName}'>$userName</a>.{{/html}}");
+                System.out.println("Created user ${userName}.");
+                response.flushBuffer();
+            }
+        }
+        println();
+        println("[[Back to ${doc.name}>>${doc.name}]].")
+    } else {
+        println("{{html clean='false'}}<form action='${doc.name}' method='post'>" +
+                "<textarea name='input' cols=80 rows=10></textarea>" +
+                "<br><input type='submit'></form>{{/html}}");
+    }
+}
+
+
+// {{/groovy}}

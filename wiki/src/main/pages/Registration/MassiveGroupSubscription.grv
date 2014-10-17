@@ -1,0 +1,96 @@
+// {{groovy}}
+
+
+import com.xpn.xwiki.XWiki
+import com.xpn.xwiki.XWikiContext
+import com.xpn.xwiki.doc.XWikiDocument
+import com.xpn.xwiki.objects.BaseObject
+import com.xpn.xwiki.objects.classes.BaseClass
+import com.xpn.xwiki.plugin.spacemanager.api.SpaceUserProfile
+import com.xpn.xwiki.plugin.spacemanager.impl.SpaceUserProfileImpl
+
+
+XWikiContext xWikiContext = xcontext.getXWikiContext();
+XWiki xwiki = xWikiContext.getWiki();
+
+public boolean addUserToGroup(String groupName, String userName, XWikiContext xWikiContext, XWikiDocument groupDoc) {
+    XWiki xwiki = xWikiContext.getWiki();
+
+    // check the user name is that of a true user
+    def trueUser = false;
+    XWikiDocument uDoc = xwiki.getDocument("XWiki.${userName}", xWikiContext);
+    if(!uDoc.isNew()) {
+        BaseObject obj = uDoc.getObject(xwiki.getUserClass(xWikiContext).getName(), false, xWikiContext);
+        if(obj!=null) trueUser = true;
+    }
+    if(!trueUser) return false;
+
+    // user already registered? don't do it
+    if(xwiki.exists("UserProfiles_${groupName}.${userName}", xWikiContext)) {
+        return false;
+    }
+
+
+
+    // add a user profile
+    SpaceUserProfile userProfile =
+            new SpaceUserProfileImpl(userName, groupName, xWikiContext.getWiki().getPlugin("csm", xWikiContext), xWikiContext);
+    userProfile.saveWithProgrammingRights();
+
+
+    // put into memberGroup
+    BaseClass groupClass = xwiki.getGroupClass(xWikiContext);
+    BaseObject memberObject = (BaseObject) groupClass.newObject(xWikiContext);
+    memberObject.setClassName(groupClass.getName());
+    memberObject.setName(groupDoc.getFullName());
+    memberObject.setStringValue("member", "XWiki.${userName}");
+    groupDoc.addObject(groupClass.getName(), memberObject);
+    String content = groupDoc.getContent();
+    if ((content == null) || (content.equals("")))
+        groupDoc.setContent("#includeForm(\"XWiki.XWikiGroupSheet\")");
+    return true;
+}
+
+
+String groupName = request.groupName;
+String input = request.input;
+
+println("= Massive Group Subscription =");
+
+if(!xcontext.hasAdminRights()) {
+    println("= Massive Registration =")
+    println("You need to be an admin to perform this operation.");
+} else {
+    if(!(groupName && input)) {
+        println("{{html clean='false'}}<form action='${doc.name}' method='post'>" +
+                "<p>Please input one user name per line.</p>" +
+                "<textarea name='input' cols=80 rows=10></textarea>" +
+                "<br>Group-name: <input name='groupName' value='${request.groupName}'/>" +
+                "<br><input type='submit'></form>{{/html}}");
+    } else {
+        // now put in group
+        XWikiDocument groupDoc = xwiki.getDocument(groupName, "MemberGroup", xWikiContext);
+        for(String line in request.input.split("[\\r\\n]")) {
+            if(line==null || line.trim().length()==0) continue;
+            if(line.startsWith("Created user ") && line.endsWith(".")) line = line.substring(13, line.length()-1);
+            if(line.startsWith("Account ") && line.contains(" already exists for email ") && line.endsWith(".")) line = line.substring(8, line.indexOf(' ',8));
+            if(line.startsWith("Registered ") && line.endsWith(".")) line = line.substring(11, line.length()-1);
+            if(line.startsWith("XWiki.")) line = line.substring(6);
+            String userName = line;
+            boolean passed = addUserToGroup(groupName, userName, xWikiContext, groupDoc);
+            if(passed) {
+                System.out.println("Registered ${userName}.");
+                println("* Registered ${userName}.");
+            } else {
+                System.out.println("User \"${userName}\" is not a user or is already registered.");
+                println("* User \"${userName}\" is not a user or is already registered.");
+            }
+        }
+        xwiki.saveDocument(groupDoc, xWikiContext.getMessageTool()
+                .get("core.comment.addedUserToGroup"), xWikiContext);
+    }
+
+
+
+}
+//{{/groovy}}
