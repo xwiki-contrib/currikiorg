@@ -156,7 +156,7 @@ public class SocialLoginToolGroovy {
             maybeXpage="&xpage=popup&tempskin=curriki8";
 
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1' + maybeXpage //+ maybeRedirect ;
+                    request.getPathInfo()  + '?callbackCurriki=1' + maybeXpage //+ maybeRedirect ;
 
             // Keep the autoCreateUser flag even when bouncing the provider, so it comes back with the providers answer
             if(autoCreateUser) targetUrl += "&autoCreateUser=" + autoCreateUser;
@@ -754,13 +754,12 @@ public class SocialLoginToolGroovy {
     public String actionHere(HttpServletRequest request) {
         if(request.error == "access_denied" && request.error_reason == "user_denied") {
             return "refused";
+        }  else if (request.callbackCurriki=="1"){
+            return "processAuthReturn";
         } else if(request.code) {
             return "processCleverComAuthArrival";
         } else if(!request.callback && request.provider) {
             return "bounceToProvider";
-        }
-        else if (request.callback){
-            return "processAuthReturn";
         } else if(request.xaction && request.xaction=='creationForm')
             return "creationForm";
         else if (request.xaction && request.xaction == 'createProfile') {
