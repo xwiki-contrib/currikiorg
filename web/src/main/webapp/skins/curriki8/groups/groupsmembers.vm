@@ -184,14 +184,7 @@ function removeMember(memberName,spaceName) {
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
 <div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
- #end
-#end
+#curriki_avatar_width_height($mdoc 80 80)
 </div>
 #end
 #set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
@@ -243,14 +236,7 @@ $profile
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
 <div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
- #end
-#end
+    #curriki_avatar_width_height($mdoc 80 80)
 </div>
 #end
 #set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
@@ -385,14 +371,7 @@ $msg.get("groups_members_admin_current_membersettings_error")
 #set($memberName = $invitation.invitee)
 #set($mdoc = $xwiki.getDocument($memberName))
 <div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
- #end
-#end
+    #curriki_avatar_width_height($mdoc 80 80)
 </div>
 <div class="groups-members-inviteeinfo">
 <div class="groups-members-inviteename">
@@ -546,14 +525,7 @@ $msg.get("groups_members_admin_denied_infotxt")
 #set($memberName = $msreq.requester)
 #set($mdoc = $xwiki.getDocument($memberName))
 <div class="groups-members-memberpic userpic">
-#if($mdoc.attachmentList.size()==0)
- <img src="$xwiki.getSkinFile("noavatar.png")" width="80" />
-#else
- #foreach ($attach in $mdoc.attachmentList)
-  <a href="$mdoc.getURL("view")" >
-  <img src="$mdoc.getAttachmentURL($attach.filename,"download")?width=80" width="80" /></a>
- #end
-#end
+    #curriki_avatar_width_height($mdoc 80 80)
 </div>
 <div class="groups-members-request-name">
 #if($mdoc.isNew())
