@@ -441,7 +441,7 @@
 ##
 #macro(displayForumAddThis $topicDoc, $topicTitle) 
 #if(!$request.viewer)
-{{html clean=false}}
+#verbatim_start()
 #end
 #set($addThisTitle = $msg.get("conversations.addthis.title", [$topicTitle, $topicDoc.getExternalURL()]))
 #set($addThisDesc = $msg.get("conversations.addthis.desc", [$topicTitle, $topicDoc.getExternalURL()]))
@@ -467,7 +467,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 <!-- AddThis Button END -->
 </div>
 #if(!$request.viewer)
-{{/html}}
+#verbatim_end()
 #end
 #end
 ##
@@ -484,6 +484,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 
 ## TO DO : display all metadata, as specified in requirements
 #macro(displayForumTopic $topic $withdetails)
+  #verbatim_start()
   #set($topicDoc = $xwiki.getDocument($topic))  
   #set($topicTitle = $topicDoc.displayTitle)
   #set($topicDescription = $topicDoc.display('description'))
@@ -543,6 +544,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     </div>  
   #end
   </div>
+  #verbatim_end()
 #end
 ##
 ##
