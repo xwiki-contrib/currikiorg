@@ -1549,6 +1549,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author plibbrecht@curriki.org
   *#
 #macro(curriki_avatar_width_height $userdoc $width $height)
+    #verbatim_start()
     #set($reqHeight=$!height+$!height)
     #set($reqWidth=$!width+$!width)
     #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
@@ -1557,7 +1558,6 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 
     #if($current_avatar && "${current_avatar}" != "") ## {
         #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-
         #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
         #if("$!width"=="" && "$!height"=="")##
@@ -1584,6 +1584,7 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
         #end##
     </a>
     #end ## }
+    #verbatim_end()
 #end ## macro ## }
 
 #**
