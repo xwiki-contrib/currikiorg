@@ -228,6 +228,7 @@ function getFileExtension() {
   * Show Documentation Home page Document and Wiki Page list
   *#
 #macro(groups_documentation_home_list)
+#verbatim_start()
 #begingroupsection("${msg.groups_documentation_documents_title}" "" "" "blue" true)
 #set($itemsPerPage = 5)
 #if( $request.ipp )
@@ -289,6 +290,7 @@ function getFileExtension() {
   #set($args = "")
   #curriki_paginatorargs( "" $startItem $itemsPerPage $totalcount  $args  )
 #endgroupsection()
+#verbatim_end()
 #end ## macro
 
 #**
