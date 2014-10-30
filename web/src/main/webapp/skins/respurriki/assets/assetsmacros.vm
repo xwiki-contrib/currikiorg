@@ -286,24 +286,10 @@
         #set($junk=$processor.seedLoginToDownloadEscapes())##
         #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
     #end##
-    #set($requireLogin= (!$viewer.startsWith("embed-") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($asset.space)))##
-    <!-- require login: $requireLogin
-    loginToDownloadEscapes is $loginToDownloadEscapes
-     parts: !request.viewer"!="embed" #if("$!request.viewer"!="embed") true #else false #end
-     parts: context.user=="XWiki.XWikiGuest" #if($context.user=="XWiki.XWikiGuest") true #else false #end
-     parts: !loginToDownloadEscapes.contains(asset.space) #if(!$loginToDownloadEscapes.contains($asset.space)) true #else false #end
-    -->
     <p>
      <a class="btn btn-default btn-xs"
-        #if($requireLogin) ##
-          #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
-          #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos());")##
-          onclick="$scriptBit return false;" ##
-          href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
-        #else
           onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;" ##
           href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
-        #end ##
     </p>
      <p class="text-link">
          #if($attachment.filesize)
@@ -313,27 +299,15 @@
          #set($filesize = 0)
          #end
          <a
-        #if($requireLogin)##
-            onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;" ##
-            href="javascript:$escapetool.url($scriptBit)" ##
-        #else##
             href="$assetAttachmentURL" ##
             target="_blank"
             onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
-        #end##
                  >$assetAttachmentFilename <i class="icon-external-link"></i></a> (${filesize}kb)
      </p>
      <button class="btn btn-primary btn-lg" ##
-        #if($requireLogin)##
-            #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
-            ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
-            onclick="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos()); return false;"##
-                >$msg.get("login.button_login_to_download")
-        #else##
             ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
             onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;"##
                 >$msg.get("rve.content.view.download.download_button")
-        #end##
      </button>
 #end
 
@@ -372,23 +346,9 @@
         #set($junk=$processor.seedLoginToDownloadEscapes())##
         #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
     #end##
-    #set($requireLogin= (!$viewer.startsWith("embed-") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($asset.space)))##
-    <!-- require login: $requireLogin
-    loginToDownloadEscapes is $loginToDownloadEscapes
-     parts: !request.viewer"!="embed" #if("$!request.viewer"!="embed") true #else false #end
-     parts: context.user=="XWiki.XWikiGuest" #if($context.user=="XWiki.XWikiGuest") true #else false #end
-     parts: !loginToDownloadEscapes.contains(asset.space) #if(!$loginToDownloadEscapes.contains($asset.space)) true #else false #end
-    -->
     <p>
      <a class="btn btn-default btn-xs"
-        #if($requireLogin) ##
-          #set($target="${assetAttachmentURL}?force%2Ddownload=1")##
-          #set($scriptBit="Curriki.logView('/Download/attachment/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&tempskin=curriki8&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&xredirect=${escapetool.url($target)}'+ Curriki.ui.login.readScrollPos());")##
-          onclick="$scriptBit return false;" ##
-          href="javascript:$escapetool.url($scriptBit)">$msg.get("rve.content.view.download.download_button")</a>
-        #else
             onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}', function() {window.href='$assetAttachmentURL';})); return false;"##
             href="$assetAttachmentURL"><i class="icon-download-alt"></i> $msg.get("rve.content.view.download.download_button")</a>
-        #end ##
     </p>
 #end
