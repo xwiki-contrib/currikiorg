@@ -647,7 +647,7 @@ e++){var o=b[e];o.file=window.videoPrefixToDownload+o.file}var k=window.videoFul
 var c="http://"+location.host+"/xwiki/bin/view/"+k.replace(".","/")+"?viewer=embed";
 var g="<iframe width='558' height='490' \n src='"+c+"'></iframe>";jwplayer("video_div_"+h).setup({playlist:[{image:window.videoPrefixToDownload+b[0].image,sources:b,width:b[0].width,height:b[0].height}],ga:{},sharing:{code:encodeURI(g),link:c,title:_("video.sharing.title")}})
 }}var f=window["video_"+h+"_originalName"];if(f){Ext.get("download_original_"+h+"_div").setVisible(true);
-var n=f.substring(f.lastIndexOf(".")+1);Ext.get("download_original_"+h+"_div").addClass("filetype-"+n);
+var n=f.substring(f.lastIndexOf(".")+1);if(n==null){n=""}n=n.toLowerCase();Ext.get("download_original_"+h+"_div").addClass("filetype-"+n);
 Ext.get("video_download_link_"+h).dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1");
 Ext.get("video_download_link_"+h+"_text").dom.setAttribute("href",window.videoPrefixToDownload.replace("/deliver/","/original/")+f+"?forceDownload=1")
 }}function videoDownloadOriginal(b){var a=window["video_"+b+"_originalName"];location.href=window.videoPrefixToDownload.replace("/deliver/","/original/")+a+"?forceDownload=1";

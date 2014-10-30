@@ -119,11 +119,6 @@ Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
 #if($globalDebug)##{
     <script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
 #end##}
-## Include the custom livetable.js which temporary, until the events are fixed
-<script type="text/javascript" src="$xwiki.getSkinFile('livetable.js')"></script>
-<!-- com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin -->
-## Use $xwiki.jsfx.use("jsfile.js", true)
-<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
 
 ## Search for the login to view flag
 #set($LOGIN_TO_VIEW_SESSION_FLAG = $request.getSession().getAttribute("LOGIN_TO_VIEW_SESSION_FLAG"))
@@ -139,7 +134,13 @@ Ext.onReady(function(){
 });
 </script>
 #end
-
 <script type="text/javascript" src="/static/donate-banner/donate-banner-insert.js"></script>
+
+## Include the custom livetable.js which temporary, until the events are fixed
+<script type="text/javascript" src="$xwiki.getSkinFile('livetable.js')"></script>
+
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinFileExtensionPlugin -->
+## Use $xwiki.jsfx.use("jsfile.js", true)
+<!-- com.xpn.xwiki.plugin.skinx.JsSkinExtensionPlugin -->
 ## the HTML comment there actually inserts it!
 <!-- end javascripts.vm -->

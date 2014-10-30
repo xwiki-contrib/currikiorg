@@ -39,7 +39,7 @@
     </div>
 </div>
 
-<div class="asset-display-download" id="download_original_${video_id}_div" style="display:none">
+<div class="asset-display-download filetype-${streamFileext}" id="download_original_${video_id}_div" style="display:none">
     ## will be set to displayed by the javascript, if available
     <div class="asset-display-download-inner subcategory-video_viditalk">
 	<p><strong>$msg.get("rve.content.view.download.instruction_title.single_file")</strong>
@@ -48,30 +48,14 @@
     </div>
 ##
     <div class="asset-display-download-inner"> ## filetype-$streamFileext
-        #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
-        #if($loginToDownloadEscapes)#else##
-            #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
-            #set($junk=$processor.init($xwiki, $context, $request))##
-            #set($junk=$processor.seedLoginToDownloadEscapes())##
-            #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
-        #end##
-        #set($requireLogin= ("$!request.viewer"!="embed") && $context.user=="XWiki.XWikiGuest" && !$loginToDownloadEscapes.contains($doc.space))
         <a class="icon-link" href="$origVideo" id='video_download_link_${video_id}_text'
-        #if($requireLogin) ##
-          onclick="Curriki.logView('/Download/will/viditalk/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos())); return false;" ##
-        #else
           onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');"
-        #end ##
             >$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
 ##
      <p class="text-link">
 		##<a onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original');" href="$origVideo">$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
         <a id='video_download_link_${video_id}'
-       #if($requireLogin)##
-           onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/${assetAttachmentFilename}'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;" ##
-       #else##
            onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/${assetAttachmentFilename}'); videoDownloadOriginal('${video_id}'); return false;"##
-       #end##
                 >$msg.get("rve.content.view.download.viditalk.download_button_original")</a>
 ##
 ##
@@ -83,15 +67,9 @@
             href="${origVideo}">$msg.get("rve.content.view.download.download_button")</a>
         *#
         <button class="button-link button-link-download" ##
-           #if($requireLogin)##
-               ext:qtip="$msg.get("login.button_login_to_download_tooltip")" ##
-               onclick="Curriki.logView('/Download/viditalk/will/${asset.space}/${asset.name}/Original'); Curriki.ui.login.displayLoginDialog('/xwiki/bin/view/Registration/LoginOrRegister?xpage=popup&framed=true&message=${escapetool.url($msg.get('login.please_login_to_download'))}&' + Curriki.ui.login.readScrollPos()); return false;"##
-                   >$msg.get("login.button_login_to_download")
-           #else##
                ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
                onclick="Curriki.logView('/Download/viditalk/${asset.space}/${asset.name}/Original'); videoDownloadOriginal('${video_id}'); return false;"##
                    >$msg.get("rve.content.view.download.download_button")
-           #end##
         </button>
 </div>
 </div>
