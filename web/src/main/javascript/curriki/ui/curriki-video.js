@@ -81,7 +81,9 @@ function videoNotifyVideoSizeArrived(videoId, sources) {
     if(origPath) {
         Ext.get("download_original_"+videoId+"_div").setVisible(true);
         var extension = origPath.substring(origPath.lastIndexOf('.')+1);
-        Ext.get("download_original_"+videoId+"_div").addClass("filetype-" + extension)
+        if(extension==null) extension="";
+        extension = extension.toLowerCase();
+        Ext.get("download_original_"+videoId+"_div").addClass("filetype-" + extension);
         Ext.get("video_download_link_" + videoId).dom.setAttribute("href",
             window.videoPrefixToDownload.replace('/deliver/', '/original/') + origPath + "?forceDownload=1");
         Ext.get("video_download_link_" + videoId + "_text").dom.setAttribute("href",
