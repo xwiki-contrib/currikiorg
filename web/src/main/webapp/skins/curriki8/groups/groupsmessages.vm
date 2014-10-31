@@ -31,8 +31,8 @@
         #groupsdisplaywelcome($msg.get("groups_messages_about_title") $spaceName $doc.name $isGroupAdmin)
         #if($isGroupMember)
             #begingroupsection($msg.get("groups_messages_createmessage_title"),"","","blue",false)
-        <a href="$xwiki.getURL("${doc.space}.CreateMessage")">
-            <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>
+        #verbatim_start()<a href="$xwiki.getURL("${doc.space}.CreateMessage")">
+            <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>#verbatim_end()
         <div class="add-message-content">
             $msg.get("groups_messages_createmessage_infotxt")
         </div>
