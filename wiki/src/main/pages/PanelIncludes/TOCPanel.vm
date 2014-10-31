@@ -81,6 +81,8 @@
                         #end ##}
                         #tocAssetSubtype($subAsset)
                         #set($subTitle = $subAsset.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+                        #set($subTitle = $subAsset.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
+                        #set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replace("'", "&amp;#39;").replaceAll("[\n|\r]+", "&lt;br /&gt;"))
                         #set($subDesc = $subAsset.getDescription().replaceAll('\\', '\\\\').replaceAll("'", "\\'").replaceAll("[\n|\r]+", "<br />"))
                         #set($subDate = $!xwiki.formatDate($subAsset.contentUpdateDate, $msg.get("mycurriki.dateFormat")))
                         #set($subHref = $xwiki.getURL($subAsset.fullName, 'view'))
@@ -235,7 +237,7 @@
     #else##}{
         #set($debugging = "")
     #end##}
-<script src="/xwiki/js/${gVersion}/curriki-module-toc${debugging}.js"></script>
+<script src="${cdn}/xwiki/js/curriki-module-toc${debugging}.js"></script>
 <div class="shadow-outer">
     <div class="shadow-middle">
         <div id="resource-toc" class="shadow-inner">
