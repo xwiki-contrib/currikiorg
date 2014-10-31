@@ -1540,16 +1540,12 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
 #end
 
 #**
-  * Display the avatar of a user with maximum width and height
-  * keeping the aspect ratio.
-  *
-  * @param $userdoc User document
-  * @param $width the maximum width
-  * @param $height the maximum height
-  * @author plibbrecht@curriki.org
-  *#
-#macro(curriki_avatar_width_height $userdoc $width $height)
-    #verbatim_start()
+ * Display the avatar of a user in an environment where the #verbatim_start and
+ * #verbatim_end  are inappropriate. This should only be used  when verbatim code
+ * is not doing its job.
+ *
+ *#
+#macro(curriki_avatar_width_height_noverb $userdoc $width $height)
     #set($reqHeight=$!height+$!height)
     #set($reqWidth=$!width+$!width)
     #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
@@ -1584,6 +1580,21 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
         #end##
     </a>
     #end ## }
+#end
+
+
+#**
+  * Display the avatar of a user with maximum width and height
+  * keeping the aspect ratio.
+  *
+  * @param $userdoc User document
+  * @param $width the maximum width
+  * @param $height the maximum height
+  * @author plibbrecht@curriki.org
+  *#
+#macro(curriki_avatar_width_height $userdoc $width $height)
+    #verbatim_start()
+    #curriki_avatar_width_height_noverb($userdoc $width $height)
     #verbatim_end()
 #end ## macro ## }
 

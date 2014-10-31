@@ -66,7 +66,7 @@
 #if($assetIsFromGroup)
 	#groups_grouplogo2($assetGroup false)
 #else
-	#curriki_avatar_width_height($assetAuthorDoc 200 80)
+    #curriki_avatar_width_height_noverb($assetAuthorDoc 200 80)
 #end
 	</li>
 #if($assetIsFromGroup)
@@ -1015,7 +1015,7 @@ $c
 		</li>
 	#end
 		<li class="comment-avatar">
-			#curriki_avatar($authorDoc)
+            #curriki_avatar_width_height_noverb($authorDoc "" "")
 		</li>
 		<li class="comment-username">$!xwiki.getUserName($authorDoc.fullName)</li>
 		<li class="comment-datestamp">$xwiki.formatDate($asset.getValue("date"),$msg.get("mycurriki.datetimeFormat"))</li>
