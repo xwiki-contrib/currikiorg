@@ -119,6 +119,7 @@
 ##
 #macro(groupsdisplaywelcomecolour $title $spaceName $pageName $colour $isGroupAdmin)
   #if($isGroupAdmin)
+    #verbatim_start()
     #groupsajaxjs()
     <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
     #set($wdoc = $xwiki.getDocument($spaceName, $pageName))
@@ -156,9 +157,9 @@
     #set($ok = $doc.use("XWiki.CurrikiWelcomeBlockClass"))
     ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
     #set($welcomeContent = $!doc.display("content").replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
-    #if($welcomeContent!="")
+    #if("$welcomeContent"!="")
       #begingroupsection($title,"","", $colour, false)
-      <div id="groups-members-welcomeblock">$welcomeContent</div>
+      <div id="groups-members-welcomeblock">#outputWithoutHtmlMacro($welcomeContent)</div>
       #endgroupsection()
     #end
   #else
@@ -168,6 +169,7 @@
     </div>
     #endgroupsection()
   #end
+    #verbatim_end()
 #end
 ##
 #macro(groupsdisplaywelcomeblock $wdoc)
@@ -181,10 +183,10 @@
   #if("$!welcomeContent" == "")
     ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
     <div class="xwikicontent">
-    $xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
+    #outputWithoutHtmlMacro($xwiki.getDocument("Groups.${wdoc.name}Welcome").getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>"))
     </div>
   #else
-    $welcomeContent
+    #outputWithoutHtmlMacro($welcomeContent)
   #end
 #end
 ##
