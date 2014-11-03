@@ -86,20 +86,20 @@
  #else
    #set($stopRender = "ok")
    #begingroupsection("Edit about discussions" "" "" "blue" true)
+ #verbatim_start()
     <form action="#" method="post">
     ## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
     <input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
     <label for="doctext" class="doctext">${msg.groups_discussions_enter_content}</label>
     <textarea name="doctext" id="doctext" rows="20">$editDoc.content</textarea>
     <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-    #verbatim_start
     #wysiwyg_editProperty($editDoc 'doctext' true)
-    #verbatim_end
         <div class="right mgn-vrt-15">
           <input type="button" onclick="if(confirm('${msg.groups_discussions_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_discussions_edit_wiki_cancel}"  class="button button-cancel mgn-rt" />
           <input type="submit" value="${msg.groups_home_editwelcome_submit_btt}"  class="button button-confirm" />
         </div>
     </form>
+ #verbatim_end()
    #endgroupsection()
  #end
 #end

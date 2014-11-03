@@ -2019,3 +2019,9 @@ document.observe("dom:loaded", function() { new XWiki.widgets.FullScreen(); });
 #verbatim_end()
 #end
 #end
+
+#macro(outputWithoutHtmlMacro $t)##
+    #if($t.startsWith('{{html clean="false" wiki="false"}}'))#set($t=$t.substring(35))#end##
+    #if($t.endsWith('{{/html}}'))#set($t=$t.substring(0,$mathtool.sub($t.length(),9)))#end##
+    $t##
+#end

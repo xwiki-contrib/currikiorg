@@ -484,8 +484,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 
 ## TO DO : display all metadata, as specified in requirements
 #macro(displayForumTopic $topic $withdetails)
-  #verbatim_start()
-  #set($topicDoc = $xwiki.getDocument($topic))  
+  #set($topicDoc = $xwiki.getDocument($topic))
   #set($topicTitle = $topicDoc.displayTitle)
   #set($topicDescription = $topicDoc.display('description'))
   #set($topicComments = 0)
@@ -544,7 +543,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     </div>  
   #end
   </div>
-  #verbatim_end()
 #end
 ##
 ##

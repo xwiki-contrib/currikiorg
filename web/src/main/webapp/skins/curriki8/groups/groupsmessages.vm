@@ -421,8 +421,9 @@
     #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
   #end
   #if($doc.hasAccessLevel("edit"))
+      #verbatim_start()
     #wysiwyg_import(true)
-    <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script> 
+    <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
     #groupsajaxjs()
     ## Includes the JavaScript code needed for the "Send To" input fields
     #messageIncludeCreateJs()
@@ -445,6 +446,7 @@
       <a href="javascript:deleteMessage('$doc.space','$doc.name', '$escapetool.url($xredirect)')" title="$deleteText">$deleteText</a>
       </div>
     </div>
+      #verbatim_end()
     <div class="frame-content" id="section${counter}content">
   #else
     #begingroupsection($msgtitle,"Edit","javascript:editMessage('$doc.space','$doc.name','$divid')","blue",false)

@@ -297,6 +297,7 @@ function getFileExtension() {
   *  Documentation New Wiki Page edit about form and handling
   *#
 #macro(groups_documentation_editabout)
+    #verbatim_start()
 #set( $docName = $docsSpaceName + ".AboutDocumentation" )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
 #if("$!request.xwiki2" == "true")
@@ -312,13 +313,9 @@ $editDoc.setSyntaxId("xwiki/2.1")
 ## Store the xwiki2 flag (=force xwiki/2.0 syntax) in an input hidden to prevent loosing it when the form is submitted.
 <input type="hidden" name="xwiki2" value="$!{request.xwiki2}" />
 <label for="doctext" class="doctext">${msg.groups_documentation_enter_content}</label>
-{{html clean=false}}
 <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
-{{/html}}
 <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
-    #verbatim_start
     #wysiwyg_editProperty($editDoc 'doctext' true)
-    #verbatim_end
         <div class="right mgn-vrt-15">
           <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}"  class="button-grey button-cancel mgn-rt" />
           <input type="submit" value="${msg.groups_home_editwelcome_submit_btt}"  class="button-orange button-confirm" />
@@ -326,12 +323,14 @@ $editDoc.setSyntaxId("xwiki/2.1")
     </form>
 #endgroupsection()
 #end
+#verbatim_end()
 #end
 
 #**
   *  Documentation New Wiki Page edit wiki page form and handling
   *#
 #macro(groups_documentation_newwikipage)
+#verbatim_start()
 #if( $request.method == "POST" && $request.doctitle.trim() != "" )
   ##getting where the attached images were
   #set( $attachDocName = $request.olddoc)
@@ -386,6 +385,7 @@ $editDoc.setSyntaxId("xwiki/2.1")
   #set( $stopRender = "ok" )
   #endgroupsection()
 #end ## post
+#verbatim_end()
 #end ## macro
 
 
@@ -413,6 +413,7 @@ $editDoc.setSyntaxId("xwiki/2.1")
     #set( $editDocSaved = $request.doctitle )
   #else
     #set($stopRender = "ok")
+    #verbatim_start()
     <div class="edit-history">
       <span class="inactive-link">Wiki</span>
       <a href="${doc.uRL}?action=history&pagename=${request.pagename}">History</a>
@@ -438,6 +439,7 @@ $editDoc.setSyntaxId("xwiki/2.1")
     #set( $stopRender = "ok" )
     #endgroupsection()
   </div>
+  #verbatim_stop()
   #end ## post
 #end ## pagename
 #end ## macro
