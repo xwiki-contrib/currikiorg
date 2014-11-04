@@ -1557,26 +1557,26 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
         #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
         #if("$!width"=="" && "$!height"=="")##
-            <img src="$src" class="photo"/>##
+            <img src="#verbatim($src)" class="photo"/>##
         #elseif("$!width"=="")##
-            <img src="$src?height=$reqHeight" height="$height" class="photo"/>##
+            <img src="#verbatim($src)?height=$reqHeight" height="$height" class="photo"/>##
         #elseif("$!height"=="")##
-            <img src="$src?width=$reqWidth" width="$width" class="photo"/>##
+            <img src="#verbatim($src)?width=$reqWidth" width="$width" class="photo"/>##
         #else##
-            <img src="$src?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
+            <img src="#verbatim($src)?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
         #end##
     </a>
     #else ## } {
         #set($src=$xwiki.getSkinFile("noavatar.png"))##
     <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
         #if("$!width"=="" && "$!height"=="")##
-            <img src="$src" class="photo"/>
+            <img src="#verbatim($src)" class="photo"/>
         #elseif("$!width"=="")##
-            <img src="$src?height=$reqHeight" height="$height" class="photo"/>
+            <img src="#verbatim($src)?height=$reqHeight" height="$height" class="photo"/>
         #elseif("$!height"=="")##
-            <img src="$src?width=$reqWidth" width="$width" class="photo"/>
+            <img src="#verbatim($src)?width=$reqWidth" width="$width" class="photo"/>
         #else##
-            <img src="$src?width=$width&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
+            <img src="#verbatim($src)?width=$width&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
         #end##
     </a>
     #end ## }
@@ -1758,7 +1758,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
   *
   * @param $text the text on which there should be no wiki transformations
   *#
-#macro(verbatim $text)#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end
+#macro(verbatim $text)#if($inVerbatim)$!text#else#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end#end
 #**
   * Starts a verbatim block
   *#
