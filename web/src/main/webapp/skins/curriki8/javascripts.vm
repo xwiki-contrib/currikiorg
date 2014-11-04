@@ -29,10 +29,10 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 /* ]]> */
 </script>
 #else
-<script src="#verbatim(${cdn})/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
-<script src="#verbatim(${cdn})/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
-<script src="#verbatim(${cdn})/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
-<script src="#verbatim(${cdn})/xwiki/skins/curriki20/extjs/ext-all${debugging}.js" type="text/javascript"></script>
+<script src="${cdn}/xwiki/resources/js/prototype/prototype.js" type="text/javascript"></script>
+<script src="${cdn}/xwiki/resources/js/scriptaculous/scriptaculous.js?load=effects" type="text/javascript"></script>
+<script src="${cdn}/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
+<script src="${cdn}/xwiki/skins/curriki20/extjs/ext-all${debugging}.js" type="text/javascript"></script>
 #end
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
@@ -51,14 +51,14 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ## If using xwiki standalone you need to uncomment the line
 ##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&language=${lang}"></script>
 ## and comment the next one out instead
-<script src="#verbatim(${cdnSemiStatic})/trans/lang_${lang}.js"></script>
+<script src="${cdnSemiStatic}/trans/lang_${lang}.js"></script>
 
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
         #if("$!debugging" == "")##{
 <script src="${cdn}/xwiki/js/curriki-merged.js"></script>
         #else ##}{
-<script src="#verbatim(${cdn})/xwiki/js/i18n.js"></script>
-<script src="#verbatim($xwiki.getSkinFile('js/viditalk_stub.js'))"></script>
+<script src="${cdn}/xwiki/js/i18n.js"></script>
+<script src="$xwiki.getSkinFile('js/viditalk_stub.js')"></script>
 <script src="${cdn}/xwiki/js/curriki-main${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-addpath${debugging}.js"></script>
 <script src="${cdn}/xwiki/js/curriki-module-organize${debugging}.js"></script>
@@ -72,37 +72,37 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 
         #if($!headerfile == "html")##{
         <!-- would embed accordion.js -->
-## <script type="text/javascript" src="#verbatim($xwiki.getSkinFile("accordion/accordion.js"))"></script>
+## <script type="text/javascript" src="$xwiki.getSkinFile("accordion/accordion.js")"></script>
         #end ## }
 #end ##}
 
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("swfobject.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("swfobject.js")"></script>
 
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("xwiki.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("xwiki.js")"></script>
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("browserdetect.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("browserdetect.js")"></script>
         #if($!headerfile == "http")##{
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("js/presentation.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
         #end ## }
         #if($!headerfile == "help")##{
 <script defer type="text/javascript" src="#verbatim($xwiki.getSkinFile("ajax/wzToolTip.js"))"></script>
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("js/presentation.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
         #end ## }
         #if($headerfile == "html")##{
-<script defer type="text/javascript" src="#verbatim($xwiki.getSkinFile("ajax/wzToolTip.js"))"></script>
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("js/presentation.js"))"></script>
+<script defer type="text/javascript" src="$xwiki.getSkinFile("ajax/wzToolTip.js")"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("js/presentation.js")"></script>
 <script type="text/javascript" src="${cdn}/xwiki/skins/curriki8/scripts/shortcuts.js"></script>
                 #if($context.action=="admin")##{
 <script type="text/javascript" src="$xwiki.getSkinFile("scripts/lightbox/lightbox.js",true)"></script>
 <script type="text/javascript" src="$xwiki.getSkinFile("usersandgroups.js", true)"></script>
-<script type="text/javascript" src="#verbatim($xwiki.getSkinFile("suggest/ajaxSuggest.js"))"></script>
+<script type="text/javascript" src="$xwiki.getSkinFile("suggest/ajaxSuggest.js")"></script>
                 #end ##}
         #end ## }
 
 #set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
 #if($mediaHost!='-missing-media-host-')
-<script src="#verbatim(${mediaHost})/media/jwplayer6/jwplayer.js"></script>
+<script src="${mediaHost}/media/jwplayer6/jwplayer.js"></script>
 <script type="text/javascript">
     if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
     window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
