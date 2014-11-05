@@ -152,7 +152,7 @@
     #set($selected = false)
   #end ## }
 #set($roleTitle="${role.title}")##
-#if($roleTitle=="")
+#if($roleTitle=="" || $roleTitle==$role.name)
     #set($roleTitle=$role.name)
     #if($roleTitle.startsWith("Role_")) #set($roleTitle=$roleTitle.substring(5))#end
     #if($roleTitle.endsWith("Group")) #set($roleTitle=$roleTitle.substring(0, $mathtool.sub($roleTitle.length(),5)))#end
