@@ -37,7 +37,6 @@
     #if($doc.getObject("CurrikiCode.AssetClass"))
     <link href="${cdn}/xwiki/skins/curriki8/views.css" rel="stylesheet" type="text/css"  />
     <link href="${cdn}/xwiki/skins/curriki8/print.css" rel="stylesheet" type="text/css" media="print" />
-        <!-- TODO: viewer = ... -->
         #if($viewer.startsWith("embed"))
         <link href="$xwiki.getSkinFile("embed.css", false)" rel="stylesheet" type="text/css"  />
             #if($viewer == "embed-teachhub")
@@ -52,7 +51,6 @@
         #end
     #end
     #if($viewer=="print")
-        <!-- TODO: test me ! --
     <link href="$xwiki.getSkinFile("print_preview.css", false)" rel="stylesheet" type="text/css"  />
     #end
 #end
