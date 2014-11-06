@@ -158,7 +158,7 @@
     #if($roleTitle.endsWith("Group")) #set($roleTitle=$roleTitle.substring(0, $mathtool.sub($roleTitle.length(),5)))#end
 #end##
 
-<option#if($disabled) DISABLED#end #if($selected) SELECTED#end value="${role.fullName}">$role.title</option>
+<option#if($disabled) DISABLED#end #if($selected) SELECTED#end value="${role.fullName}">$roleTitle</option>
 #end ## }
 #end ## }
 
