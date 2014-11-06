@@ -1546,38 +1546,43 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
  *
  *#
 #macro(curriki_avatar_width_height_noverb $userdoc $width $height)
-    #set($reqHeight=$!height+$!height)
-    #set($reqWidth=$!width+$!width)
+    #set($noUseVerb=true)##
+    #set($reqHeight=$mathtool.mul(2,$!height))
+    #set($reqWidth=$mathtool.mul($2,$!width))
     #set($assetAuthorDisplayName = $!xwiki.getUserName($userdoc.fullName, false))
     #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
     #set($current_avatar = $userobj.get('avatar'))
 
+    #if("$!width"=="" && "$!height"=="")##
+        #set($params="")#set($atts="")##
+    #elseif("$!width"=="")##
+        #set($params="?height=$reqHeight")##
+        #set($atts="height='${height}'")##
+    #elseif("$!height"=="")##
+        #set($params="?width=$width")##
+        #set($atts="width='${width}'")##
+    #else##
+        #set($params="?width=$reqWidth&height=$reqHeight&keepAspectRatio=true")##
+        #set($atts="style='max-width:${width}px; max-height:${height}px'")##
+    #end##
     #if($current_avatar && "${current_avatar}" != "") ## {
         #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
         #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
-        #if("$!width"=="" && "$!height"=="")##
-            <img src="#verbatim($src)" class="photo"/>##
-        #elseif("$!width"=="")##
-            <img src="#verbatim($src)?height=$reqHeight" height="$height" class="photo"/>##
-        #elseif("$!height"=="")##
-            <img src="#verbatim($src)?width=$reqWidth" width="$width" class="photo"/>##
-        #else##
-            <img src="#verbatim($src)?width=$reqWidth&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
-        #end##
+        #if($noUseVerb==true)
+            <img src="$src${params}" $atts class="photo"/>##
+        #else
+            <img src="#verbatim($src)${params}" $atts class="photo"/>##
+        #end
     </a>
     #else ## } {
-        #set($src=$xwiki.getSkinFile("noavatar.png"))##
+    #set($src=$xwiki.getSkinFile("noavatar.png"))##
     <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
-        #if("$!width"=="" && "$!height"=="")##
-            <img src="#verbatim($src)" class="photo"/>
-        #elseif("$!width"=="")##
-            <img src="#verbatim($src)?height=$reqHeight" height="$height" class="photo"/>
-        #elseif("$!height"=="")##
-            <img src="#verbatim($src)?width=$reqWidth" width="$width" class="photo"/>
-        #else##
-            <img src="#verbatim($src)?width=$width&height=$reqHeight&keepAspectRatio=true" style="max-width:${width}px; max-height:${height}px" class="photo"/>
-        #end##
+        #if($noUseVerb==true)
+            <img src="$src${params}" $atts class="photo"/>##
+        #else
+            <img src="#verbatim($src)${params}" $atts class="photo"/>##
+        #end
     </a>
     #end ## }
 #end
@@ -1593,8 +1598,9 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
   * @author plibbrecht@curriki.org
   *#
 #macro(curriki_avatar_width_height $userdoc $width $height)
-    #verbatim_start()
+    #verbatim_start()#set($oldNoUseVerb=$noUseVerb)#set($noUseVerb=true)
     #curriki_avatar_width_height_noverb($userdoc $width $height)
+    #set($noUseVerb=$oldNoUseVerb)
     #verbatim_end()
 #end ## macro ## }
 
