@@ -149,7 +149,9 @@ $msg.get("groups.curriculum.contributions.about")
 #if("$!type"!="2")
 #set($showcount = 1 + $showcount)
 #if(($showcount > $startIndex) && ($showcount < ($endIndex + 2)))
+#verbatim_start()
 #groups_contributions_asset($asset $allcols)
+#verbatim_end()
 #end ## showcount > startIndex && showcount < endIndex
 #end ## type != 2
 #end  ## if has view access
