@@ -383,7 +383,7 @@ function cancelInvitation(invitee, spaceName){
 		return;
 	}
 	var pars = "user=" + invitee + "&space=" + spaceName  + "&code=4&xpage=plain";
-  // call url to cancel invitation
+  ## call url to cancel invitation
   var myAjax = new Ajax.XWikiRequest( "Groups", "MembersService", {method: 'get', parameters: pars, onComplete: refreshPage});
   return false;
 }
