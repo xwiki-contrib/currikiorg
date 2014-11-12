@@ -23,6 +23,7 @@
  *
  *#
 #macro(groups_messages)
+    #verbatim_start()
     #groupinit()
     #groupsheader("messages")
     #if(!$isGroupMember && ($s.policy=="closed") && !$hasGlobalAdmin)
@@ -31,8 +32,8 @@
         #groupsdisplaywelcome($msg.get("groups_messages_about_title") $spaceName $doc.name $isGroupAdmin)
         #if($isGroupMember)
             #begingroupsection($msg.get("groups_messages_createmessage_title"),"","","blue",false)
-        #verbatim_start()<a href="$xwiki.getURL("${doc.space}.CreateMessage")">
-            <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>#verbatim_end()
+        <a href="$xwiki.getURL("${doc.space}.CreateMessage")">
+            <img src="$xwiki.getSkinFile("groups-add-message.png")" class="image-left" /></a>
         <div class="add-message-content">
             $msg.get("groups_messages_createmessage_infotxt")
         </div>
@@ -124,11 +125,12 @@
         #endgroupsection()
     #end
     #groupsfooter()
+    #verbatim_end()
 #end
 
 
 #macro(messagelistjs)
-#verbatim_start
+#verbatim_start()
 <script type="text/javascript">
         #if(!$togglemsgsectionvisibility)
             #set($togglemsgsectionvisibility = 1)
@@ -168,7 +170,7 @@
     showhide${seccounter}.setAttribute("onclick", "toggleMsgSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
     showhide${seccounter}.onclick = new Function("toggleMsgSectionVisibility(${seccounter}, showhide${seccounter}); return false;");
 </script>
-#verbatim_end
+#verbatim_end()
 #end
 
 #macro(messagelistmessage $messagePageName)
@@ -388,7 +390,6 @@
     </div>
 </div>
     #if($selectedRoles.size()>0 || $selectedMembers.size()>0)
-    #verbatim_start
     <script type="text/javascript">
             #if($selectedRoles.size()>0)
             enableSelect(document.getElementById('toRole'), 'rolesList');
@@ -401,12 +402,12 @@
             preFillList('addMemberLink', 'membersList','selectedMembers', selectedMembers);
             #end
     </script>
-    #verbatim_end
     #end
 #end
 ##
 
 #macro(groups_message)
+  #verbatim_start()
   ## add full screen js
   #activatefullscreen()
   #groupsinit()
@@ -421,7 +422,6 @@
     #set( $redirect = $xwiki.getRequestURL().replaceAll("&", "&amp;"))
   #end
   #if($doc.hasAccessLevel("edit"))
-      #verbatim_start()
     #wysiwyg_import(true)
     <script src="$xwiki.getSkinFile("Pork.Iframe.js")" type="text/javascript"></script>
     #groupsajaxjs()
@@ -446,7 +446,6 @@
       <a href="javascript:deleteMessage('$doc.space','$doc.name', '$escapetool.url($xredirect)')" title="$deleteText">$deleteText</a>
       </div>
     </div>
-      #verbatim_end()
     <div class="frame-content" id="section${counter}content">
   #else
     #begingroupsection($msgtitle,"Edit","javascript:editMessage('$doc.space','$doc.name','$divid')","blue",false)
@@ -455,11 +454,9 @@
     #groupsdisplayarticleblock($doc)
   </div>
   #if($request.edit=="1")
-    #verbatim_start
     <script type="text/javascript">
       editMessage('$doc.space','$doc.name','$divid');
     </script>
-    #verbatim_end
   #end
   #endgroupsection()
   <a name="comments"></a>#begingroupsection($msg.get("groups_messages_view_comments_title"),"","","blue",false)
@@ -541,9 +538,7 @@
     <div class="button-right"><a class="button-orange" onclick="CurrikiApp.formToggle(document.attachmentAddForm, 'filepath')">$msg.get("addattachment")</a></div>
     <form name="attachmentAddForm" id="attachmentAddForm" action="$doc.getURL("upload")" enctype="multipart/form-data" method="post">
       <input type="hidden" name="form_token" value="$!{services.csrf.getToken()}" />
-      #verbatim_start
       <input type="hidden" name="xredirect" value="$escapetool.xml($xwiki.getRequestURL())" />
-      #verbatim_end
       <fieldset id="attachform">
         <div><input id="xwikiuploadname" type="hidden" name="filename" value="" size="40"/></div>
         <div><label id="xwikiuploadfilelabel" for="xwikiuploadfile">$msg.get("choosefiletoupload"):</label></div>
@@ -557,7 +552,6 @@
   </div>
   #end
   #endgroupsection()
-  #verbatim_start
   <script type="text/javascript">
     function isEditMode(){
         var child = document.getElementById('${divid}').firstChild;
@@ -586,8 +580,8 @@
         return returnValue;
     }
   </script>
-  #verbatim_end
   #groupsfooter()
+  #verbatim_end()
 #end
 
 #**
@@ -595,6 +589,7 @@
  *
  *#
 #macro(groups_message_create)
+    #verbatim_start()
     #groupsinit()
     #groupsheader("messages")
     #if(!$isGroupMember)
@@ -679,10 +674,8 @@
                 #messageIncludeCreateJs()
                 #messageAddSendToFormFields($spaceName, true, [], [])
                 <div class="righttext">
-                    #verbatim_start
                     <input class="button-orange floatright" type="submit" name="formactionsave" value="$msg.get("groups_messages_create_submit_btt")" onclick="document.forms.inline.action='$saveAction'; if(checkForm('inline') == false) return false; document.forms.inline.submit(); return false;"/>
                     <input class="button-grey floatright" type="submit" name="formactioncancel" value="$msg.get("groups_messages_create_cancel_btt")" onclick="history.go(-1); return false;"/>
-                    #verbatim_end
                 </div>
             </form>
         </div>
@@ -690,6 +683,7 @@
         #end
     #end
     #groupsfooter()
+    #verbatim_end()
 #end
 
 
@@ -698,6 +692,7 @@
  *
  *#
 #macro(groups_editmessageform)
+    #verbatim_start()
     #groupsinit()
     #set($pageName = $request.page)
     #set($spaceName = $request.space)
@@ -722,11 +717,9 @@
     $adoc.display("content", "edit")
     <br />
     ## wysiwyg
-    #verbatim_start
     <script type="text/javascript">
     #textarea_jsx_wysiwyg($adoc)
     </script>
-    #verbatim_end
     ## The JavaScript needed is included in Groups.MessageSheet
     #set($viewRightObj = $adoc.getObject("XWiki.XWikiRights", "levels", "view"))
     #set($toGroup = true)
@@ -755,6 +748,7 @@
     </div>
     </p>
 </form>
+#verbatim_end()
 #end
 
 

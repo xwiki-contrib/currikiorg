@@ -124,6 +124,7 @@ $text
   * @author dward@curriki.org
   *#
 #macro(mycurriki_pagefull $pageref $whofor $hasbutton) ## {
+#verbatim_start()
 ## Determine whofor
 #if("$!whofor" == "") ## {
 #if("$!request.user" != "") ## {
@@ -226,6 +227,7 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 		</div>
 	</div>
 </div>
+#verbatim_stop()
 #end ##macro ## }
 
 
@@ -273,6 +275,7 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
   * @author dward@curriki.org
   *#
 #macro(mycurriki_assettitlewithmodesc $asset) ## {
+    #verbatim_start()
 #if("$!descnb" == "") ##{
 #set($descnb=0)
 #end ##}
@@ -282,8 +285,7 @@ $response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")
 #if(!$title || $title.length() == 0) ## {
  #set($title = $msg.get("caption.untitled"))
 #end ## }
-<a id="mycurriki-title-${descnb}" class="curriki-link" href="$asset.getURL("view")">#verbatim_start()$title#verbatim_end()</a>
-#verbatim_start()
+<a id="mycurriki-title-${descnb}" class="curriki-link" href="$asset.getURL("view")">#verbatim($title)</a>
 <script type="text/javascript">
 /* <![CDATA[ */
 #if("$!descpopupjs" == "") ##{
@@ -438,8 +440,7 @@ $msg.get("mycurriki.macro.access.${access}")
 #if($!rollover == "${category}.${subcategory}") ##{
 #set($rollover = $msg.get('search.resource.icon.Unknown.rollover'))
 #end ##}
-#verbatim_start()
-<img id="favorites-filetype-${ftnb}" class="resource-${assetType} category-${category} subcategory-${category}_${subcategory}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${rollover}"/>#verbatim_end()
+<img id="favorites-filetype-${ftnb}" class="resource-${assetType} category-${category} subcategory-${category}_${subcategory}" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" ext:qtip="${rollover}"/>
 #end ## Macro ## }
 
 #**
@@ -1758,6 +1759,7 @@ $msg.get("deleted")
   * @param $userobj Object of the user
   *#
 #macro(mycurriki_collections $userdoc $userobj)
+#verbatim_start()
 #if($context.user=="XWiki.XWikiGuest")
 ## Settings for guests here
 #end
@@ -1774,7 +1776,6 @@ $msg.get("deleted")
 #if($multiple) ##{
 #set($reorder = $xwiki.search("select count(*) from XWikiDocument as doc, BaseObject as obj, IntegerProperty as props where obj.id=props.id.id and doc.fullName=obj.name and obj.className='CurrikiCode.CollectionReorderedClass' and doc.fullName='Coll_${shortname}.WebHome' and props.id.name='reordered' and props.value=1").get(0))
 #set($reordered = ($reorder > 0))
-#verbatim_start()
 <script type="text/javascript">
 /* <![CDATA[ */
 Curriki.data.reorder = {
@@ -1785,7 +1786,6 @@ Curriki.data.reorder = {
 /* ]]> */
 </script>
 <script type="text/javascript" src="/xwiki/js/curriki-module-reorder.js"></script>
-#verbatim_end()
 #end ##}
 #end ##}
 ## Get collections
@@ -1804,7 +1804,6 @@ Curriki.data.reorder = {
  #set($endIndex = $assetList.size() - 1)
 #end
 ##
-#verbatim_start()
 <script type="text/javascript">
 var $hidden = false;
 function toggle_desc(){
@@ -1825,7 +1824,6 @@ function toggle_desc(){
   return false;
 }
 </script>
-#verbatim_end()
 #curriki_fulltitlebar($msg.get("mycurriki.collections.titlebar") $msg.get("mycurriki.collections.titlebarbutton") "" "return toggle_desc();" "red" "hider")
 ## row per item -- number of rows configurable
 #set($showcount = 0)
@@ -1842,6 +1840,7 @@ function toggle_desc(){
 <div class="centertext">$msg.get("mycurriki.collections.noresults")</div>
 #end ## showcount
 #curriki_paginator($msg.get("mycurriki.tab.collections.label") $startIndex $nbToDisplay $assetList.size())
+#verbatim_stop()
 #end ## content macro
 
 #**

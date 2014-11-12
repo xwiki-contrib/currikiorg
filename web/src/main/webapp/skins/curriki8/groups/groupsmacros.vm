@@ -713,6 +713,7 @@ $xwiki.addTooltipJS()
   * @internalapi
   *#
 #macro(groups_homepage)
+#verbatim_start()
 #groupinit()
 #groupsajaxjs()
 #groupsheader("home")
@@ -741,6 +742,7 @@ $xwiki.addTooltipJS()
 #end
 #groupsfooter()
 <br clear="all"/>
+#verbatim_end()
 #end
 
 #**
@@ -748,6 +750,7 @@ $xwiki.addTooltipJS()
   *
   *#
 #macro(groups_homepage_aftercreate)
+#verbatim_start()
 #if($request.firsttime=="1")
 <div id="groups_firsttimewelcome">
 <div id="groups_firsttimewelcome_title">
@@ -759,6 +762,7 @@ $msg.get("groups_home_firsttimewelcome_title")
 #includeInContext("Groups.CreateNewGroupDone")
 </div>
 #end
+#verbatim_end()
 #end
 
 #**
@@ -766,6 +770,7 @@ $msg.get("groups_home_firsttimewelcome_title")
   *
   *#
 #macro(groups_homepage_editmasthead)
+#verbatim_start()
 #set($spaceName = $doc.space)
 #set($s = $sm.getSpace($spaceName))
 #if($request.method=="POST")
@@ -845,8 +850,8 @@ $s.display("description","edit")
 <div class="tooltips">
     #verbatim_start()
 $xwiki.addTooltipJS()
-#verbatim_end()
 </div>
+#verbatim_end()
 #end
 
 #**
@@ -981,7 +986,7 @@ $xwiki.addTooltipJS()
     #set($cls = "spacedoc-first")
   #end
   #set($displayBody = "")
-  #set($displayBody = $!event.displayBody)
+  #set($displayBody = $wiki.renderText($!event.displayBody, $doc))
 <div class="${cls}">
   <span class="spacedoc-date">$xwiki.formatDate($event.date, $msg.get("mycurriki.datetimeFormat"))</span>
   <span class="spacedoc-title">$displayBody</span>
@@ -1101,9 +1106,7 @@ http:&#47;&#47;$s.display("urlshortcut","view")#groups_groupsuffixurl()
 <div class="frame-content">
 ##
 #if($context.action == "view" && ($isGroupMember || $hasGlobalAdmin))##{
-#verbatim_start
   <a class="button-orange" id="groupcontribution-rightbutton" onclick="Curriki.module.addpath.startPath('O', {publishSpace:'Coll_${doc.space}'});" title="$msg.get('groups.curriculum.contributions.addButton_tooltip')">$msg.get('groups.curriculum.contributions.addButton')</a>
-#verbatim_end
 #end ##}
 $msg.get("groups.curriculum.contributions.about")
 	<div style="clear:both;">
@@ -1179,6 +1182,7 @@ $msg.groups_countnotfindgroupbygroupurl
  * Service for showing the group info edit form
  *#
 #macro(groups_editinfoform)
+#verbatim_start()
 #set($sm = $xwiki.csm)
 #set($spaceName = $request.space)
 #set($divid = $request.divid)
@@ -1229,11 +1233,10 @@ http:&#47;&#47; $s.display("urlshortcut","edit") #groups_groupsuffixurl()
 </tr></table>
 </form>
 <div class="tooltips">
-    #verbatim_start()
 $xwiki.addTooltipJS()
-#verbatim_end()
 </div>
 #end
+    #verbatim_end()
 #end
 
 ## End of Groups Macros ## }
