@@ -19,6 +19,7 @@
  * It adds the header and footer of the groups section to the pages
  *#
 #macro(groups_documentationview)
+#verbatim_start()
   #groupinit()
   #groupsheaderdoc("documentation")
   #set($editURL = "")
@@ -52,6 +53,7 @@
   </div>
   #endgroupsection()
   #groupsfooter()
+#verbatim_end()
 #end
 
 
@@ -59,6 +61,7 @@
   * Show Documentation Home page
   *#
 #macro(groups_documentation_home)
+#verbatim_start()
 #groupinit()
 #groupsheader("documentation")
 #if(!$isGroupMember && ($s.policy=="closed") && !$hasadmin)
@@ -110,12 +113,14 @@
 #end ## end if sheets allow to continue render
 #end ## end if has right
 #groupsfooter()
+#verbatim_end()
 #end
 
 #**
   * Show Documentation Home page About zone
   *#
 #macro(groups_documentation_home_about)
+#verbatim_start()
 ## if the sheets allow the page to continue render
 #set( $editLink = "" )
 #set( $editTitle = "" )
@@ -133,12 +138,14 @@
   ## Hack CURRIKI-3338 Fix paragraph carriage return issues in wiki rendered content
   $aboutCreateDoc.getRenderedContent().replaceAll("<br/><p/>","<br/>&nbsp;<p/>")
 #endgroupsection()
+#verbatim_end()
 #end
 
 #**
   * Show Documentation Home page Create Wiki Page Zone
   *#
 #macro(groups_documentation_home_createwikipage)
+#verbatim_start()
 #if( $sm.isMember( $s.spaceName, $context.user ) || $hasadmin ) ## {
 #begingroupsection("${msg.groups_documentation_create_wiki_page_title}" "" "" "blue" true)
   #if( $newDocSaved )
@@ -151,13 +158,15 @@
 </form>
 #endgroupsection()
 #end ## }
+#verbatim_end()
 #end
 
 #**
   * Show Documentation Home page Add Document Zone
   *#
 #macro(groups_documentation_home_adddocument)
-#if( $sm.isMember( $s.spaceName, $context.user ) || $hasadmin ) ## {
+#verbatim_start()
+    #if( $sm.isMember( $s.spaceName, $context.user ) || $hasadmin ) ## {
 #begingroupsection("${msg.groups_documentation_add_document_title}" "" "" "blue" true)
 #if($request.method=="POST")
   #set($filename = $xwiki.fileupload.getFileName("filepath"))
@@ -183,7 +192,6 @@
   <form action="$xwiki.getURL("${s.spaceName}.Documentation", "view")" enctype="multipart/form-data" method="post" onsubmit="if (!checkFileExtension()) return false; else return true;">
 <input id="xwikiuploadname" type="hidden" name="filename" value="" />
 <input id="xwikiuploadfile" type="file" name="filepath" value=""  size="40" />
-#verbatim_start
 <script type="text/javascript">
 function checkFileExtension() {
   var isValid = true;
@@ -217,11 +225,11 @@ function getFileExtension() {
   return "ok";
 }
 </script>
-#verbatim_end
 <button type="submit" class="button-orange">${msg.groups_documentation_add_document_upload}</button>
 </form>
 #endgroupsection()
 #end ## }
+#verbatim_end()
 #end ## macro
 
 #**
@@ -297,7 +305,7 @@ function getFileExtension() {
   *  Documentation New Wiki Page edit about form and handling
   *#
 #macro(groups_documentation_editabout)
-    #verbatim_start()
+#verbatim_start()
 #set( $docName = $docsSpaceName + ".AboutDocumentation" )
 #set( $editDoc = $xwiki.getDocument( $docName ) )
 #if("$!request.xwiki2" == "true")
@@ -374,9 +382,7 @@ $editDoc.setSyntaxId("xwiki/2.1")
   <input type="text" name="doctitle" class="doctitle" value="${dctitle}" />
   <label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
   <textarea name="doctext" id="doctext" rows="20"></textarea>
-  #verbatim_start
   #wysiwyg_editProperty($newDoc 'doctext' true)
-  #verbatim_end
   <div class="button-right">
     <input type="button" onclick="if(confirm('${msg.groups_documentation_new_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " class="button-grey" value="${msg.groups_documentation_new_wiki_cancel}" />
     <input type="submit" class="button-orange" value="${msg.groups_documentation_new_wiki_save}" />
@@ -394,6 +400,7 @@ $editDoc.setSyntaxId("xwiki/2.1")
   *  Documentation New Wiki Page edit page form and handling
   *#
 #macro(groups_documentation_editpage)
+#verbatim_start()
 #if($request.pagename && $sm.isMember( $s.spaceName, $context.user ) )
   #set( $docName = $request.pagename )
   #set( $editDoc = $xwiki.getDocument( $docName ) )
@@ -413,7 +420,6 @@ $editDoc.setSyntaxId("xwiki/2.1")
     #set( $editDocSaved = $request.doctitle )
   #else
     #set($stopRender = "ok")
-    #verbatim_start()
     <div class="edit-history">
       <span class="inactive-link">Wiki</span>
       <a href="${doc.uRL}?action=history&pagename=${request.pagename}">History</a>
@@ -427,10 +433,8 @@ $editDoc.setSyntaxId("xwiki/2.1")
       <label for="doctitle" class="sectitle">${msg.groups_documentation_update_title}</label>
       <input type="text" name="doctitle" class="doctitle" value="$titleField" />
       <label for="doctext" class="doctext sectitle">${msg.groups_documentation_enter_content}</label>
-      #verbatim_start
       <textarea name="doctext" id="doctext" rows="20">$xwiki.getFormEncoded($editDoc.content)</textarea>
       #wysiwyg_editProperty($editDoc 'doctext' true)
-      #verbatim_end
       <div class="button-right">
         <input type="button" onclick="if(confirm('${msg.groups_documentation_edit_wiki_cancel_confirm}')) window.location='$doc.getURL()'; " value="${msg.groups_documentation_edit_wiki_cancel}" class="button-grey" />
         <input type="submit" value="${msg.groups_documentation_edit_wiki_save}" class="button-orange" />
@@ -439,9 +443,9 @@ $editDoc.setSyntaxId("xwiki/2.1")
     #set( $stopRender = "ok" )
     #endgroupsection()
   </div>
-  #verbatim_stop()
   #end ## post
 #end ## pagename
+#verbatim_end()
 #end ## macro
 
 

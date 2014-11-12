@@ -1764,32 +1764,39 @@ $response.setDateHeader("Expires",$expires.getTime())##
   *
   * @param $text the text on which there should be no wiki transformations
   *#
-#macro(verbatim $text)#if($inVerbatim)$!text#else#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end#end
+#macro(verbatim $text)#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)$!text#else#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end#end
 #**
   * Starts a verbatim block
   *#
-#macro(verbatim_start)##
-#if("$!{inVerbatim}"=="" || !$inVerbatim)##
+#macro(verbatim_start)##<!-- verbatim_start: inVerbatim? "$inVerbatim" syntax  -->##
+#if("$!{inVerbatim}"=="" || !$inVerbatim || $inVerbatim==0)##
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
-{{html wiki=false clean=false}}##
+{{html wiki="false" clean="false"}}##
 #else##
 {pre}##
 #end##
-#set($inVerbatim=true)##
+#set($inVerbatim=1)##
+#else#set($inVerbatim=$mathtool.add($inVerbatim,1))
 #end##
+<!-- /verbatim_start: inVerbatim? $inVerbatim syntax $xwiki.getCurrentContentSyntaxId() -->
 #end
+
 #**
   * Ends a verbatim block
   *#
-#macro(verbatim_end)##
-#if($inVerbatim)##
+#macro(verbatim_end)
+#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)<!-- verbatim_end inVerbatim $inVerbatim $xwiki.getCurrentContentSyntaxId() -->##
+#if($inVerbatim==0)
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
 {{/html}}##
 #else##
 {/pre}##
 #end##
-#set($inVerbatim=false)##
+#end
+#set($inVerbatim=$mathtool.sub($inVerbatim,1))##
+#else#set($inVerbatim=0)
 #end##
+##<!-- /verbatim_end: inVerbatim? "$inVerbatim" -->
 #end
 
 #macro(htmlcomment $comment)##
