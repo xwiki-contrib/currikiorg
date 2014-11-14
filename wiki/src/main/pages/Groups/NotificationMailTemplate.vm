@@ -107,7 +107,8 @@
             #set($userDoc=$xwiki.getDocument($groupMember))
             #set($userObj=$userDoc.getObject("XWiki.XWikiUsers"))
             #set($groupMemberName="${userObj.getProperty('first_name').getValue()} ${userObj.getProperty('last_name').getValue()}")
-            #set($groupMemberPageUrl="http://${hostname}/xwiki/bin/view/MyCurriki/Profile?user=${groupMember}")
+            #set($currikiMemberPageUrl="http://${hostname}/xwiki/bin/view/MyCurriki/Profile?user=${groupMember}")
+            #set($groupMemberPageUrl="http://${hostname}/xwiki/bin/view/UserProfiles_${groupName}/${userDoc.name}")
             #set($groupMembersPageUrl="http://${hostname}/xwiki/bin/view/${groupname}/Members")
 
             #set($displayTitle=$event.getDisplayTitle())
@@ -117,7 +118,7 @@
             #if("${event.class}" == "class org.curriki.plugin.activitystream.plugin.MemberActivityEvent")
               #if("${event.getType()}" == "create")
                 <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.member_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
+                $msg.get("groups.notification_mail.member_activity_event", [$date, $currikiMemberPageUrl,$groupMemberName,$groupMembersPageUrl])
                 #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.member_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
               #end
 
@@ -129,7 +130,7 @@
             ## Topics
               #if(($docType.contains("discussion-topic")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                $msg.get("groups.notification_mail.discussion_activity_event.topic.create", [$date, $currikiMemberPageUrl,$groupMemberName, $docTitle, $url])
                 #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.topic.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
@@ -144,7 +145,7 @@
               ## Answers
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("create")))
                 <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                $msg.get("groups.notification_mail.discussion_activity_event.answer.create", [$date, $currikiMemberPageUrl,$groupMemberName, $docTitle, $url])
                 #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.answer.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
@@ -159,7 +160,7 @@
               ## Comments
               #elseif(($docType.contains("discussion-answer")) && ($event.getType().contains("addComment")))
                 <!-- $notificationMailSender.eventTick() events} -->
-                $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $groupMemberPageUrl,$groupMemberName, $docTitle, $url])
+                $msg.get("groups.notification_mail.discussion_activity_event.comment.create", [$date, $currikiMemberPageUrl,$groupMemberName, $docTitle, $url])
                 #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.discussion_activity_event.comment.create.email_subject", [$groupMemberName, $displayGroupname])))
                 <br/><br/>
 
@@ -181,17 +182,17 @@
                 #if("$!{mailTo}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
                   <br/>
-                  $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_members", [$date, $currikiMemberPageUrl,$groupMemberName, $articleTitle, $url, $mailTo])
                 #end
                 #if("$!{recipientRole}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
                   <br/>
-                  $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_role", [$date, $currikiMemberPageUrl,$groupMemberName, $articleTitle, $url, $recipientRole])
                 #end
                 #if("$!{toGroupMail}" != "")
                   <!-- $notificationMailSender.eventTick() events} -->
                   <br/>
-                  $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $groupMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
+                  $msg.get("groups.notification_mail.message_activity_event.message.to_group", [$date, $currikiMemberPageUrl,$groupMemberName, $articleTitle, $url, $toGroupMail])
                 #end
                 <br/><br/>
 
@@ -211,13 +212,14 @@
             #elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.ResourceActivityEvent")
               #set($assetTitle=$event.getParam1())
               <!-- $notificationMailSender.eventTick() events} -->
-              $msg.get("groups.notification_mail.resource_activity_event", [$date, $groupMemberPageUrl,$groupMemberName,$assetTitle,$url])
+              $msg.get("groups.notification_mail.resource_activity_event", [$date, $currikiMemberPageUrl,$groupMemberName,$assetTitle,$url])
               #set($trash=$context.put("EMAIL_SUBJECT", $msg.get("groups.notification_mail.resource_activity_event.email_subject", [$groupMemberName, $displayGroupname])))
             #end
 
             ##elseif("${event.class}" == "class org.curriki.plugin.activitystream.plugin.DocumentationActivityEvent")
             ##    <li>DocumentationActivityEvent: $date, $groupMember, $groupMemberPageUrl, $groupMemberPageUrl</li>
 
+              <p align="right"><small>$msg.get("groups.notification_mail.editPreferencesLink",${groupMemberPageUrl})</small></p>
           </td>
         </tr>
       </table>

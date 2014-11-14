@@ -41,6 +41,7 @@
 ##
 ##
 #macro(displayThread $key $commentThreads, $commentDoc)
+  #verbatim_start()
   ## If request parameter replyto is specified then we show the form under that comment.
   #if($replyTo == "$key" && $replyToConversation == $commentDoc.fullName)
     #displayCommentForm($commentDoc)
@@ -60,6 +61,7 @@
     #end
     </ul>
   #end
+    #verbatim_end()
 #end
 ##
 ##
@@ -308,6 +310,7 @@
 ###
 ###
 #macro(displayTopicAddForm $space)
+    #verbatim_start()
     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
     #if($newTopicDoc.hasAccessLevel("edit"))
@@ -352,6 +355,7 @@
      #end
     </div>
   #end
+  #verbatim_end()
 #end
 ##
 ##
@@ -422,6 +426,7 @@
 #end
 
 #macro(displayTopics)
+  #verbatim_start()
   #set($forumPage = $doc.fullName)
   ## workaround to get programming rights for getTopics function
   #set($ok = $xwiki.includeTopic("ConversationCode.TopicListSheet"))
@@ -436,13 +441,11 @@
   <a href="$doc.getURL("view", "sortfield=${sortfield}&sortorder=${currentorder}&start=${nextstart}")">$msg.get("conversations.forum.more", [$step])</a>
   </div>
   #end
+  #verbatim_end()
 #end
 
 ##
 #macro(displayForumAddThis $topicDoc, $topicTitle) 
-#if(!$request.viewer)
-#verbatim_start()
-#end
 #set($addThisTitle = $msg.get("conversations.addthis.title", [$topicTitle, $topicDoc.getExternalURL()]))
 #set($addThisDesc = $msg.get("conversations.addthis.desc", [$topicTitle, $topicDoc.getExternalURL()]))
 <div class="topic-addthis">
@@ -466,9 +469,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-51acd2cb7dc9d536"></script>
 <!-- AddThis Button END -->
 </div>
-#if(!$request.viewer)
-#verbatim_end()
-#end
 #end
 ##
 #macro(displayForumActions $topicDoc) 
@@ -484,7 +484,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 
 ## TO DO : display all metadata, as specified in requirements
 #macro(displayForumTopic $topic $withdetails)
-  #verbatim_start()
   #set($topicDoc = $xwiki.getDocument($topic))
   #set($topicTitle = $topicDoc.displayTitle)
   #set($topicDescription = $topicDoc.display('description'))
@@ -544,7 +543,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
     </div>  
   #end
   </div>
-  #verbatim_end()
 #end
 ##
 ##
@@ -656,9 +654,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 #end
 
 #macro(displayEditors)
-  #if(!$request.viewer)
-   #verbatim_start()
-  #end 
   #if($myeditors)
     #if($services.wysiwyg.isSyntaxSupported($doc.syntax.toIdString()))
       #wysiwyg_import(true)
@@ -675,9 +670,6 @@ addthis:description="${escapetool.xml($addThisDesc)}"
       #warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$doc.syntax.toIdString()</em>.")
     #end
   #end
-  #if(!$request.viewer)
-   #verbatim_end()
-  #end 
 #end
 ##
 ##
@@ -711,6 +703,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
  * Summary of active discussions
  *#
 #macro(displayTopicsSummary $forumDocName $topicsPage)
+    #verbatim_start()
   ## add js for ajax reload of most viewed topic
   #set($nb = 10)
   #set($start = 0)
@@ -806,6 +799,7 @@ addthis:description="${escapetool.xml($addThisDesc)}"
 	</div>
   #if(!$request.xpart)
    </div>
-  #end 
+  #end
+  #verbatim_stop()
 #end
 

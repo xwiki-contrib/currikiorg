@@ -1,0 +1,21 @@
+{{velocity}}
+#verbatim_start()
+#if($context.action != 'view')
+{{edittitle errorkey="conversations.topic.titleError" /}}
+: $msg.get('conversations.forum.description')
+; $doc.display('description')
+
+## control our buttons
+    #set($showactions=0)
+##<div class="bottombuttons">
+##<div class="buttons">
+<input class="button-grey" type="button" name="formactioncancel" value="$msg.get("cancel")" onclick="document.forms.${formname}.action='$doc.getURL("cancel")'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit(); this.form.submit();"/>
+<input class="button-orange" type="submit" name="formactionsave" value="$msg.get("saveandview")" onclick="document.forms.${formname}.action='$doc.getURL("${saveaction}", $param)'; if (document.forms.${formname}.onsubmit) document.forms.${formname}.onsubmit();if (checkDocumentContent()) document.forms.${formname}.submit(); return false;"/>
+##</div>
+##</div>
+    #activatefullscreen()
+#elseif($context.action == 'view' && $request.viewer != 'conversationstopic')
+    $response.sendRedirect($doc.getURL('view', 'viewer=conversationstopic'))
+#end
+#verbatim_end()
+{{/velocity}}
