@@ -12,4 +12,7 @@
 #if($hasScripts)<script type="text/javascript">CurrikiApp.init();</script>#end
 </body>
 </html>
+#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)
+    #foreach($x in [0..$mathtool.toInteger($inVerbatim)])#verbatim_end()#end
+#end
 

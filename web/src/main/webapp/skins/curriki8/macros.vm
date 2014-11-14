@@ -1769,7 +1769,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
   * Starts a verbatim block
   *#
 #macro(verbatim_start)##<!-- verbatim_start: inVerbatim? "$inVerbatim" syntax  -->##
-#if("$!{inVerbatim}"=="" || !$inVerbatim || $inVerbatim==0)##
+#if("$!{inVerbatim}"=="" || !$inVerbatim || $mathtool.toInteger($inVerbatim)==0)##
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
 {{html wiki="false" clean="false"}}##
 #else##
@@ -1994,11 +1994,11 @@ Wysiwyg.onModuleLoad(function() {
 </script>
 #elseif($services.wysiwyg.isSyntaxSupported($textareadoc.syntax.toIdString()))
 ## Load the rich text object properties using a compact WYSIWYG editor.
-{{html clean=false}}
+## {{html clean=false}}
 #wysiwyg_editProperties($textareadoc $editors true)
-{{/html}}
+## {{/html}}
 #else
-#warning("The new GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$textareadoc.syntax.toIdString()</em>.")
+#warning("The GWT-based WYSIWYG editor doesn't support the syntax of the current document: <em>$textareadoc.syntax.toIdString()</em>.")
 #end
 #end
 #end
@@ -2017,20 +2017,16 @@ Wysiwyg.onModuleLoad(function() {
 #end
 #end
 
-#macro (activatefullscreen) 
+#macro (activatefullscreen)
+#verbatim_start()
 $xwiki.jsfx.use('uicomponents/widgets/fullScreen.js', {'forceSkinAction' : true, 'defer' : false})
 $xwiki.ssfx.use('uicomponents/widgets/fullScreen.css', true)
-#if(!$request.viewer)
-#verbatim_start()
-#end
 <script language="javascript" type="text/javascript">
 /* <![CDATA[ */
 document.observe("dom:loaded", function() { new XWiki.widgets.FullScreen(); });
 /* ]]> */
 </script>
-#if(!$request.viewer)
 #verbatim_end()
-#end
 #end
 
 #macro(outputWithoutHtmlMacro $t)##

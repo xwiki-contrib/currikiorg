@@ -1,0 +1,54 @@
+{{velocity}}##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="csm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#* @vtlvariable name="sm" type="org.curriki.plugin.spacemanager.plugin.CurrikiSpaceManagerPluginApi" *# ##
+#set($spaceName="${doc.web.substring(13)}")##
+### 13 = "UserProfiles_".length()
+#set($sm = $xwiki.csm)##
+#set($space = $sm.getSpace($spaceName))##
+#set($user = "XWiki.${doc.name}")##
+#set($memberName = ${user})##
+#set($mdoc = $xwiki.getDocument($memberName))##
+#set($groupName=$space.getDisplayTitle())##
+#set($memberFullname=$xwiki.getUserName(${user},false))##
+#verbatim_start##
+#groups_grouplogo2($space false)
+<h2>Edit profile of <a href="$mdoc.getURL()">$memberFullname</a> in group
+        <a href="${space.getHomeURL()}">$groupName</a></h2>
+<script type="application/javascript">
+    Ext.onReady(function() {
+        try {
+            Ext.get("breadcrumb").update(Ext.get("fakeBreadCrumb").dom.innerHTML)
+            Ext.get("fakeBreadCrumb").hide()
+        } catch (e) {
+            if(console) console.log("Error : " + e);
+        }
+    });
+</script>
+##
+#set($divid = "")##
+<div class="groups-members"><div id="groups-members-list-0" class="groups-members-list"><div class="groups-members-member group-members-edited">
+<div id="fakeBreadCrumb" style="display:none">
+        <a href="../${spaceName}/">$groupName</a> &gt;
+        <a href="../${spaceName}/Members">$msg.get("groups_members_tabname")</a> &gt;
+        <a href="${doc.name}">$memberFullname</a>
+</div>
+###
+##
+##
+##
+
+##
+##
+##
+   #set($isGroupAdmin = $sm.isAdmin($spaceName, $context.getUser()))
+    #if($isGroupAdmin||$user==$context.user||$hasGlobalAdmin)
+        #groupsdisplayeditmemberinfo($user,$spaceName,$divid)
+    #else
+        $msg.groups_needsadminrights
+    #end
+</div></div></div>#verbatim_end{{/velocity}}

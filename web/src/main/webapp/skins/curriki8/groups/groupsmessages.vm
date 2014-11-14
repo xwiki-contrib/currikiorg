@@ -220,6 +220,7 @@
         #set($modificationDate = $xwiki.formatDate($adoc.date,$msg.get("mycurriki.datetimeFormat")))
     <p><span class="date">$modificationDate</span>, by <a>$xwiki.getLocalUserName($adoc.creator)</a></p>
     <p class="frame-title">$msgtitle</p>
+    #if($msgcontent.startsWith('{{html clean="false" wiki="false"}}') && $msgcontent.endsWith("{{/html}}"))#set($msgcontent=$msgcontent.substring(35, $mathtool.sub($msgcontent.length(),9)))#end
     <p>
         $msgcontent
     </p>
@@ -589,7 +590,6 @@
  *
  *#
 #macro(groups_message_create)
-    #verbatim_start()
     #groupsinit()
     #groupsheader("messages")
     #if(!$isGroupMember)
@@ -664,11 +664,13 @@
                 <div class="fields">
                     <strong>$msg.get("groups_messages_create_messagetitle_instruction")</strong><br />
                     <span class="tmargin full-width">
-                    $bentrydoc.display("title", "edit", $bentryobj)
+                    ##$bentrydoc.display("title", "edit", $bentryobj)
+                    <input size='80' id='XWiki.ArticleClass_0_title' name='XWiki.ArticleClass_0_title' type='text'/>
                     </span><br />
                     <strong>$msg.get("groups_messages_create_messagecontent_instruction")</strong>
                     <br />
-                    $bentrydoc.display("content", "edit", $bentryobj)
+                    ## $bentrydoc.display("content", "edit", $bentryobj)
+                    <textarea id='XWiki.ArticleClass_0_content' rows='22' name='XWiki.ArticleClass_0_content' cols='80'></textarea>
                 </div>
                 #textarea_wysiwyg($bentrydoc)
                 #messageIncludeCreateJs()
@@ -683,7 +685,6 @@
         #end
     #end
     #groupsfooter()
-    #verbatim_end()
 #end
 
 
@@ -692,7 +693,6 @@
  *
  *#
 #macro(groups_editmessageform)
-    #verbatim_start()
     #groupsinit()
     #set($pageName = $request.page)
     #set($spaceName = $request.space)
@@ -748,7 +748,6 @@
     </div>
     </p>
 </form>
-#verbatim_end()
 #end
 
 
