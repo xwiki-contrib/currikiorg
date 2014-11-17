@@ -3,6 +3,7 @@
   * @author Curriki dev team
   *#
 #if($gVersion)#else#template("xwikivars.vm")#end##
+## clean-up language to the supported languages
 <!-- start javascripts.vm -->
 #set($hasScripts=true)##
 #if($globalDebug)##{
@@ -37,13 +38,16 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
         #if("$!request.lang" != "")##{
-                #set($lang = $request.lang)
+                #set($l = $request.lang)
         #else##}{
-                #set($lang = $xwiki.getLanguagePreference())
+                #set($l = $xwiki.getLanguagePreference())
         #end##}
-        #if("$!lang" == "")##{
-                #set($lang = "en")
-        #end##}
+        ## make sure only supported languages are exported
+        #set($langs=$xwiki.getXWikiPreference("languages").split(","))
+        #set($lang="en")
+        #foreach($la in $langs)
+            #if($la==$l)#set($lang=$l)#end
+        #end
 ##
 ## The xwiki translation files are converted for use with javascript
 ## and loaded via the /xwiki/gen/js/0/lang_${lang}.js URL using an apache rewrite rule
