@@ -4,9 +4,27 @@
   * or the standard XWiki view 
   *#
 #curriki_breadcrumb()
-#if($doc.space.startsWith("Documentation_") && $doc.name != "WebPreferences" && $doc.name != "WebHome" && $doc.name != "AboutDocumentation")
+#set($space=$doc.space)#set($name=$doc.name)
+#if($space.startsWith("Documentation_") && $name != "WebPreferences" && $name != "WebHome" && $name != "AboutDocumentation")
 <div id="content">
 #groups_documentationview()
+</div>
+#elseif($doc.space.startsWith("Group_") && ($name=="WebHome" || $name=="Messages" || $name=="Curriculum" || $name=="Contributions" || $name=="Members" || $name=="Documentation"))
+<div id="content"><!-- Within the groups triage -->
+    #if($doc.name=="WebHome")
+        #groups_homepage()
+    #elseif($doc.name=="Messages")
+        #groups_messages()
+    #elseif($doc.name=="Curriculum")
+        #groups_curriculum()
+    #elseif($doc.name=="Contributions")
+        #groups_contributions()
+    #elseif($doc.name=="Members")
+        #groups_members()
+    #elseif($doc.name=="Documentation")
+        #activatefullscreen()
+        #groups_documentation_home()
+    #end
 </div>
 #else
 #if($doc.getObject("CurrikiCode.AssetClass"))
@@ -22,7 +40,7 @@
    #asset_display($doc "view")
  #end
 #else
-<div id="content">
+<div id="content"><!-- Within the default content renderer -->
  $cdoc.getRenderedContent()
 </div>
 #end
