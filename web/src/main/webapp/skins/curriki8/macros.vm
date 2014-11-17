@@ -1764,12 +1764,12 @@ $response.setDateHeader("Expires",$expires.getTime())##
   *
   * @param $text the text on which there should be no wiki transformations
   *#
-#macro(verbatim $text)#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)$!text#else#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end#end
+#macro(verbatim $text)#if($outsideWikiSyntax || "$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)$!text#else#if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0"){{html wiki=false}}$!text{{/html}}#else{pre}$!text{/pre}#end#end#end
 #**
   * Starts a verbatim block
   *#
 #macro(verbatim_start)##<!-- verbatim_start: inVerbatim? "$inVerbatim" syntax  -->##
-#if("$!{inVerbatim}"=="" || !$inVerbatim || $mathtool.toInteger($inVerbatim)==0)##
+#if(("$!outsideWikiSyntax"=="" || "$!outsideWikiSyntax"=="false") && ("$!{inVerbatim}"=="" || !$inVerbatim || $mathtool.toInteger($inVerbatim)==0))##
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
 {{html wiki="false" clean="false"}}##
 #else##

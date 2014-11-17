@@ -40,8 +40,9 @@
    #asset_display($doc "view")
  #end
 #else
-<div id="content"><!-- Within the default content renderer -->
+<div id="content"><!-- Within the default content renderer -->#set($outsideWikiSyntax=false)
  $cdoc.getRenderedContent()
+#set($outsideWikiSyntax=true)
 </div>
 #end
 #end
