@@ -113,7 +113,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 #else ##}{
     #if($forgot == 'login') ##{
     <!-- now forgot login -->
-		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
+		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (lower(prop.value) = '${uemail.toLowerCase()}')")
 		#set($list = $xwiki.searchDocuments($sql , 0 , 0))
 		#if($list.size()==0) ##{
             <h1><!-- 2 -->$msg.get('forgot.title')</h1>
@@ -158,7 +158,7 @@ Event.observe('forgotForm', 'submit', function(event) {
 		#end ##}
 	#elseif($!forgot == 'password') ## password }{
         <h1><!-- 5 -->$msg.get('forgot.title')</h1>
-		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (prop.value = '$!uemail')")
+		#set($sql= ", BaseObject as obj, StringProperty as prop where obj.name=doc.fullName and obj.className='XWiki.XWikiUsers' and prop.id.id = obj.id and prop.name='email' and (lower(prop.value) = '${uemail.toLowerCase()}')")
 		#set($list = $xwiki.searchDocuments($sql))
 		#if($list.size()==0) ## {
 			$msg.get("forgot.error.no_user", [$uemail])

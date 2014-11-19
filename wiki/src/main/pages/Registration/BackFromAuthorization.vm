@@ -45,7 +45,11 @@
   <a style="text-decoration: none; color: #4E83C7; font-size: 12px; font-family: arial, helvetica, sans-serif; line-height:10em"
      id="followMeLink" href="${nextStep}"
      target="_top">
-    $msg.get("registration.jump.proceeding")
+    #if($view=="refused")
+        Finishing refused process.
+    #else
+        $msg.get("registration.jump.proceeding")
+    #end
   </a>
   <br/>
   <button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')>0) {window.top.history.go(-1);} else {window.top.reload();}">
@@ -57,10 +61,10 @@
 var goTop = false;
 Curriki.console.log("Has download? $hasDownload");
   #if($nextStep.startsWith("/xwiki/bin/view/Registration"))
+  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false); (view is ${view})")
   Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, false);
-  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false);")
   #else
-  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true);")
+  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true); (view is ${view})")
   Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, true);
   #end##
 </script>
