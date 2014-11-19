@@ -1,0 +1,20 @@
+{pre}
+#set($email = $!request.email)
+#set($account = $!request.account)
+#set($login = $!request.login)
+{
+#if($account)
+    #set($queryAccount = " and obj.name<>'$account' ")
+#end
+#set($query = ",BaseObject as obj, StringProperty as prop where doc.fullName=obj.name and obj.className='XWiki.XWikiUsers' and obj.id=prop.id.id and prop.id.name='email' and lower(prop.value)='${email.toLowerCase()}'  $!queryAccount")
+##$query
+###foreach ($docfound in $xwiki.searchDocuments($query))
+##  * $docfound
+###end
+"email":#if($xwiki.searchDocuments($query).size()>0)false#else true#end
+#if($login)
+    #set($query = ",BaseObject as obj where doc.name='$login' and doc.fullName=obj.name and obj.className='XWiki.XWikiUsers'")
+,"login":#if($xwiki.searchDocuments($query).size()>0)false#else true#end
+#end
+}
+{/pre}
