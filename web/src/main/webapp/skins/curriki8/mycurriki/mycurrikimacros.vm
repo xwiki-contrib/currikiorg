@@ -764,7 +764,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		#set($first_name = $!userobj.getProperty("first_name").getValue())
 		#if("$!first_name" != "") ##{
 			<li>
-				**$msg.get("view_profile.account_info.name1.title")**
+				<strong>$msg.get("view_profile.account_info.name1.title")</strong>
 				#mycurriki_dashifempty($userdoc.display("first_name", $userobj))
 			</li>
 		#end ##}
@@ -772,16 +772,16 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		#set($last_name = $!userobj.getProperty("last_name").getValue())
 		#if("$!last_name" != "") ##{
 			<li>
-				**$msg.get("view_profile.account_info.name2.title")**
+				<strong>$msg.get("view_profile.account_info.name2.title")</strong>
 				#mycurriki_dashifempty($userdoc.display("last_name", $userobj))
 			</li>
 		#end ##}
 		<li>
-			**$msg.get("view_profile.account_info.login.title")**
+			<strong>$msg.get("view_profile.account_info.login.title")</strong>
 			#mycurriki_dashifempty($userdoc.name)
 		</li>
 ##        <li>
-##           **$msg.get("view_profile.account_info.member_type")**
+##           <strong>$msg.get("view_profile.account_info.member_type")</strong>
 ##            #mycurriki_dashifempty($userdoc.display("member_type", $userobj))
 ##        </li>
 	#end ##}
@@ -790,12 +790,12 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 	#set($show_email = $!userobj.getProperty('show_email').value)
 	#if(!$public_profile||($show_email == 1)||(($show_email == 2) && ($context.user != 'XWiki.XWikiGuest'))) ##{
 		<li>
-			**$msg.get("view_profile.account_info.email.title")**
+			<strong>$msg.get("view_profile.account_info.email.title")</strong>
 			#mycurriki_dashifempty($userdoc.display("email", $userobj))
 		</li>
 	#end ##}
   	<li>
-    		**$msg.get("view_profile.account_info.member_since")**
+    		<strong>$msg.get("view_profile.account_info.member_since")</strong>
     		$xwiki.formatDate($userdoc.creationDate,$msg.get("mycurriki.dateFormat"))
   	</li>
 </ul>
@@ -809,7 +809,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 <div class="fields-wrp">
 <ul>
 	<li>
-		**$msg.get("view_profile.privacy.show_profile.title")**
+		<strong>$msg.get("view_profile.privacy.show_profile.title")</strong>
 		#set($show_profile = "")
 		#set($show_profile = $!userobj.getProperty('show_contact').value)
 		#if($show_profile == "1") ##{
@@ -821,7 +821,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		#end ##}
 	</li>
 	<li>
-		**$msg.get("view_profile.privacy.show_email.title")**
+		<strong>$msg.get("view_profile.privacy.show_email.title")</strong>
 		#set($show_email = "")
 		#set($show_email = $!userobj.getProperty('show_email').value)
 		#if($show_email == 1) ##{
@@ -835,7 +835,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		#end ##}
 	</li>
 	<li>
-		**$msg.get("view_profile.privacy.email_options.title")**
+		<strong>$msg.get("view_profile.privacy.email_options.title")</strong>
 		#set($opt_out = "")
 		#set($opt_out = $!userobj.getProperty('opt_out').value)
 		#if($opt_out == 0) ##{
@@ -909,7 +909,7 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 <ul>
 #if("$!affiliation" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.affiliation.title")**
+		<strong>$msg.get("view_profile.interests.affiliation.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("affiliation", $userobj))
 	</li>
 #end ##}
@@ -919,10 +919,10 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 		<tbody>
 		<tr>
 		#if("$!titems" != "" && $titems.size() > 1) ##{
-			<th class="item-interest-areas-th">**$msg.get("view_profile.interests.subject.title")**</th>
+			<th class="item-interest-areas-th"><strong>$msg.get("view_profile.interests.subject.title")</strong></th>
 		#end ##}
 		#if("$!eitems" != "" && $eitems.size() > 0) ##{
-			<th class="item-interest-areas-th">**$msg.get("view_profile.interests.ed_level.title")**</th>
+			<th class="item-interest-areas-th"><strong>$msg.get("view_profile.interests.ed_level.title")</strong></th>
 		#end ##}
 		</tr>
 		<tr>
@@ -955,61 +955,61 @@ $response.sendRedirect($xwiki.getURL("MyCurriki.Profile", "view", "$userarg"))
 #end ##}
 #if("$!city" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.city.title")**
+		<strong>$msg.get("view_profile.interests.city.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("city", $userobj))
 	</li>
 #end ##}
 #if("$!postalCode" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.postalCode.title")**
+		<strong>$msg.get("view_profile.interests.postalCode.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("postalCode", $userobj))
 	</li>
 #end ##}
 #if("$!state" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.state.title")**
+		<strong>$msg.get("view_profile.interests.state.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("state", $userobj))
 	</li>
 #end ##}
 #if("$!country" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.country.title")**
+		<strong>$msg.get("view_profile.interests.country.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("country", $userobj))
 	</li>
 #end ##}
 #if("$!language" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.language.title")**
+		<strong>$msg.get("view_profile.interests.language.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("language", $userobj))
 	</li>
 #end ##}
 #htmlcomment("<!-- publish_intent=$publish_intent and value_add=$value_add -->")
 #if("$!publish_intent" != "") ##{
-	<li>**$msg.get("view_profile.interests.publish_intent.title")**
+	<li><strong>$msg.get("view_profile.interests.publish_intent.title")</strong>
 		#mycurriki_dashifempty($publish_intent)
 	</li>##}
 #end ##}
 #if("$!value_add" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.value_add.title")**
+		<strong>$msg.get("view_profile.interests.value_add.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("value_add", $userobj))
 	</li>
 #end ##}
 #if("$!comment" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.bio.title")**
+		<strong>$msg.get("view_profile.interests.bio.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("comment", $userobj))
 	</li>
 #end ##}
 #if("$!contact" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.contact.title")**
+		<strong>$msg.get("view_profile.interests.contact.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("contact", $userobj))
 	</li>
 #end ##}
 #if("$!websites" != "") ##{
 	<li>
-		**$msg.get("view_profile.interests.websites.title")**
+		<strong>$msg.get("view_profile.interests.websites.title")</strong>
 		#mycurriki_dashifempty($userdoc.display("websites", $userobj))
 	</li>
 #end ##}
