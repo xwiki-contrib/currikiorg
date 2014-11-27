@@ -314,7 +314,8 @@ $profile
 <input type="hidden" name="space" value="$!spaceName" />
 <input type="hidden" name="divid" value="$!divid" />
 <input type="hidden" name="xpage" value="plain" />
-$uprofile.display("profile","edit")
+##$uprofile.display("profile","edit")
+<textarea id="XWiki.SpaceUserProfileClass_0_profile" rows="7" name="XWiki.SpaceUserProfileClass_0_profile" cols="80"></textarea>
 #if($sm.getRoles($spaceName).size() > 0) ## {
 <div class="select-roles">$msg.get("groups.members.selectroles")</div>
 <div class="instruction">$msg.get("groups.members.selectroles.info")</div>
@@ -326,9 +327,13 @@ $uprofile.display("profile","edit")
 #end ## }
 <br />
 #end ## }
-$uprofile.display("allowNotifications","edit") $msg.get("groups_members_create_membersettings_email")
+## $uprofile.display("allowNotifications","edit")
+<input id="XWiki.SpaceUserProfileClass_0_allowNotifications" value="1" name="XWiki.SpaceUserProfileClass_0_allowNotifications" type="checkbox">
+    $msg.get("groups_members_create_membersettings_email")
 <br />
-$uprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_members_create_membersettings_changenotice")
+## $uprofile.display("allowNotificationsFromSelf","edit")
+<input id="XWiki.SpaceUserProfileClass_0_allowNotificationsFromSelf" value="1" name="XWiki.SpaceUserProfileClass_0_allowNotificationsFromSelf" type="checkbox">
+    $msg.get("groups_members_create_membersettings_changenotice")
 </form>
 #end
 ##
@@ -830,7 +835,7 @@ $msg.get("groups_members_join_alreadymember")
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-      #set($userdoc=$xwiki.getDocument($context.user)){{html}}<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group.", true) -->{{/html}}
+      #set($userdoc=$xwiki.getDocument($context.user))#verbatim_start()<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group.", true) -->#verbatim_end()
       $msg.get("groups_members_join_success")
   #else
    $msg.get("groups_members_join_failure")
@@ -852,7 +857,7 @@ $msg.get("groups_members_join_alreadymember")
     #foreach($role in $wantedRoles) ## {
       #addUserToRole($role $context.user)
     #end ## }
-      #set($userdoc=$xwiki.getDocument($context.user)){{html}}<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->{{/html}}
+      #set($userdoc=$xwiki.getDocument($context.user))#verbatim_start()<!-- Have-joined-with-success, saving userdoc $userdoc $userdoc.saveWithProgrammingRights("Joined group: ${spaceTitle}.", true) -->#verbatim_end()
       $msg.get("groups_members_join_success")
    #else
     $msg.get("groups_members_join_failure")
