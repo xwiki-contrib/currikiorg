@@ -26,6 +26,8 @@
         #groups_documentation_home()
     #end
 </div>
+#elseif($doc.space.startsWith("Group_") && ($name=="WebHome" || $name=="Messages" || $name=="Curriculum" || $name=="Contributions" || $name=="Members" || $name=="Documentation"))
+
 #else
 #if($doc.getObject("CurrikiCode.AssetClass"))
  #if($doc.getObject("CurrikiCode.CompositeAssetClass"))

@@ -18,9 +18,6 @@ public class CurrikiServletURLFactory extends XWikiServletURLFactory {
 
     private URL createSkinURLImpl(String filename, String skin, XWikiContext context) {
 
-        if(filename.endsWith("ICTIcon-Activity.gif")) {
-            System.out.println("Here!");
-        }
         String cdn = context.getWiki().Param("curriki.system.CDN",null);
         StringBuffer newpath = new StringBuffer();
         if(cdn!=null)

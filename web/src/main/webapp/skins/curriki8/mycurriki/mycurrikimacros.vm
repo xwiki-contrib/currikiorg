@@ -544,7 +544,7 @@ $!desc
     <div class="button-right"><button class="button-grey" onclick="window.location='$userdoc.getURL('view')'; return false;">$msg.get('edit_profile.cancel_button')</button></div>
     #profilechange_photo()
     #startregistrationform()
-	#registrationaccountinfo()
+    #registrationaccountinfo()
 	#registrationprivacysettings()
 	#registrationinterests()
 	#endregistrationform()
@@ -651,7 +651,11 @@ $!desc
  *#
 #macro(mycurriki_viewphoto $userdoc) ##{
 <!-- My Curriki View Photo -->
+    #set($mdoc = $xwiki.getDocument($memberName))
 <div class="userpic">
+    #curriki_avatar_width_height($userdoc 80 80)
+</div>
+#* <div class="userpic">
     #set($userobj = $userdoc.getObject("XWiki.XWikiUsers"))
     #set($current_avatar = $userobj.get('avatar'))
     #if("$!current_avatar"!="") ##{
@@ -681,7 +685,7 @@ $!desc
                href="$userdoc.getURL("attach")">$msg.get('profile.changeMyPhoto')</a>
         #end ## }
     #end ##}
-</div>
+</div>*#
 <!-- End My Curriki View Photo -->
 #end ##}
 
