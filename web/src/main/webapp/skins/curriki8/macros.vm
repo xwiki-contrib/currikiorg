@@ -1769,8 +1769,10 @@ $response.setDateHeader("Expires",$expires.getTime())##
   * Starts a verbatim block
   *#
 #macro(verbatim_start)##<!-- verbatim_start: inVerbatim? "$inVerbatim" syntax  -->##
-#if(("$!outsideWikiSyntax"=="" || "$!outsideWikiSyntax"=="false") && ("$!{inVerbatim}"=="" || !$inVerbatim || $mathtool.toInteger($inVerbatim)==0))##
+#if(("$!outsideWikiSyntax"=="" || "$!outsideWikiSyntax"=="false") && ("$!{inVerbatim}"=="" || !$inVerbatim || $mathtool.toInteger($inVerbatim)==0) && ($!context.context.get("isInRenderingEngine")=="" || $context.context.get("isInRenderingEngine")==true))##
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
+    #set($savedIsRenderingEngine=$context.context.get("isInRenderingEngine"))
+    #set($trash=$context.context.put("isInRenderingEngine",false))
 {{html wiki="false" clean="false"}}##
 #else##
 {pre}##
@@ -1786,7 +1788,7 @@ $response.setDateHeader("Expires",$expires.getTime())##
   *#
 #macro(verbatim_end)
 #if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)<!-- verbatim_end inVerbatim $inVerbatim $xwiki.getCurrentContentSyntaxId() -->##
-#if($inVerbatim==0)
+#if($mathtool.toInteger($inVerbatim)==1)
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
 {{/html}}##
 #else##
@@ -1795,6 +1797,11 @@ $response.setDateHeader("Expires",$expires.getTime())##
 #end
 #set($inVerbatim=$mathtool.sub($inVerbatim,1))##
 #else#set($inVerbatim=0)
+    #if("$!savedIsRenderingEngine"!="")
+        #set($trash=$context.context.put("isInRenderingEngine",$savedIsRenderingEngine))
+    #else
+        #set($trash=$context.context.remove("isInRenderingEngine"))
+    #end
 #end##
 ##<!-- /verbatim_end: inVerbatim? "$inVerbatim" -->
 #end

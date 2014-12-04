@@ -180,58 +180,6 @@ function removeMember(memberName,spaceName) {
 #verbatim_end
 #end
 ##
-#macro(groupsdisplaymemberinfo $memberName $spaceName $divid) ## {
-#set($mdoc = $xwiki.getDocument($memberName))
-#if(!$mdoc.isNew())
-<div class="groups-members-memberpic userpic">
-#curriki_avatar_width_height($mdoc 80 80)
-</div>
-#end
-#set($uprofile = $sm.getSpaceUserProfile($spaceName,$memberName))
-#if($isGroupAdmin||$memberName==$context.user)
-<div class="groups-members-membereditlink">
-<a href="javascript:void()" onclick="editProfile('$memberName','$spaceName','$divid'); return false;">$msg.get("groups_members_admin_current_members_editsettings_link")</a>
-</div>
-#end
-#set($memberIsAdmin = $sm.isAdmin($spaceName, $memberName))
-#if($isGroupAdmin)
-#set($adminCount = $sm.getAdmins($spaceName).size())
-#if($memberIsAdmin)
-#if($adminCount>1)
-<div class="groups-members-addadmin">
-<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_removeadmin_confirm")')) {removeAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_removeadmin_link")</a>
-</div>
-#end
-#else
-<div class="groups-members-addadmin">
-<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_addadmin_confirm")')) {addAdmin('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_addadmin_link")</a>
-</div>
-#end
-#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
-<div class="groups-members-remove">
-<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
-</div>
-#end
-#else
-#if((!$memberIsAdmin) || ($memberIsAdmin &&  $adminCount>1))
-#if($memberName==$context.user)
-<div class="groups-members-remove">
-<a href="javascript:void()" onclick="if (window.confirm('$msg.get("groups_members_admin_current_membersettings_remove_confirm")')) {removeMember('$memberName','$spaceName');};return false;">$msg.get("groups_members_admin_current_membersettings_remove_link")</a>
-</div>
-#end
-#end
-#end
-<div class="groups-members-membername">
-<a href="$uprofile.userURL">$!uprofile.firstName $!uprofile.lastName</a>
-</div>
-<div class="groups-members-memberprofile">
-#set($profile = $uprofile.profile)
-#if($profile)
-$profile
-#end
-</div>
-#end
-##
 #macro(groupsdisplaymemberinfo $memberName $spaceName $divid)
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
@@ -296,7 +244,7 @@ $profile
 #macro(groupsdisplayeditmemberinfo $memberName $spaceName $divid)
 #set($mdoc = $xwiki.getDocument($memberName))
 #if(!$mdoc.isNew())
-<div class="groups-members-memberpic userpic">
+<div class="groups-members-memberpic userpic"  style="width:100px">
 #mycurriki_viewphoto($mdoc)
 </div>
 #end

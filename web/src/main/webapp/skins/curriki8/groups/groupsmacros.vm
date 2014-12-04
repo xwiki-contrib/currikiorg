@@ -979,7 +979,7 @@ $xwiki.addTooltipJS()
   #if($velocityCount == 1)
     #set($cls = "spacedoc-first")
   #end
-  #set($displayBody = $!event.displayBody.replaceAll("\[\[([^>]*)\>\>([^]]*)\]\]",'<a href="/xwiki/bin/view/$2">$1</a>').replaceAll('"/xwiki/bin/view/([^.]+)\.([^.]+)"','"/xwiki/bin/view/$1/$2"'))
+  #set($displayBody = $!event.displayBody.replaceAll("\[\[([^>]*)\>\>([^]]*)\]\]",'<a href="/xwiki/bin/view/$2">$1</a>').replaceAll("\[([^>]*)\>([^]]*)\]",'<a href="/xwiki/bin/view/$2">$1</a>').replaceAll('"/xwiki/bin/view/([^.]+)\.([^.]+)"','"/xwiki/bin/view/$1/$2"'))
 <div class="${cls}">
   <span class="spacedoc-date">$xwiki.formatDate($event.date, $msg.get("mycurriki.datetimeFormat"))</span>
   <span class="spacedoc-title">$displayBody</span>

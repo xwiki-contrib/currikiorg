@@ -143,7 +143,6 @@ $userdoc.use("XWiki.XWikiUsers")
 
 
 #macro(startregistrationform) ##{
-{{html clean=false}}
 ###if($g_RegType == 'edit_profile') ##{
 ## <script type="text/javascript" src="${request.contextPath}/tiny_mce32/tiny_mce.js"></script>
 ###end ##}
@@ -394,7 +393,6 @@ $errMsg
 <input id="origpw" name="origpw" type="hidden" value="********" />
 ##{/pre}
 #end ##}
-{{/html}}
 #end ##}
 
 #macro(endregistrationform) ##{
@@ -411,7 +409,6 @@ $errMsg
 </div>
 #end ##}
 ##{pre}
-{{html clean=false}}
 <script type="text/javascript">
 /* <![CDATA[ */
 document.observe('dom:loaded', function(){
@@ -445,7 +442,6 @@ function toggleCorporateFieldsVisible() {
 }
 /* ]]> */
 </script>
-{{/html}}
 ##{/pre}
 #end ##}
 
@@ -494,7 +490,7 @@ function toggleCorporateFieldsVisible() {
       #if($fld == 'email')
         <input size="30" id="2XWiki.XWikiUsers_0_email" value="$userdoc.email" name="2XWiki.XWikiUsers_0_email" type="text" class="input-text">
       #elseif($fld == 'password')
-        <input size="30" id="2XWiki.XWikiUsers_0_password" value=#verbatim_start()"$!{userdoc.password}"#verbatim_end() name="2XWiki.XWikiUsers_0_password" type="password" class="input-text">
+        <input size="30" id="2XWiki.XWikiUsers_0_password" value="$!{userdoc.password}" name="2XWiki.XWikiUsers_0_password" type="password" class="input-text">
       #end
     #else ##}{
       $userdoc.display($fld, "edit")
@@ -508,10 +504,8 @@ function toggleCorporateFieldsVisible() {
 <fieldset class="required">
 	<h3>$msg.get("${pfx}.header")</h3>
     <div class="fields-wrp">
-    {{html clean=false}}
 		<p>$msg.get("${pfx}.intro")
                   $msg.get('register.curriki_intro.required_fields_instruction', [$g_RegReq])</p>
-    {{/html}}
 		<ul>
 			#if($g_RegType == 'register') ##{
 				#set($i = $pfx+'.login')#registrationformtextfield($i 'xwikiname')
@@ -578,7 +572,6 @@ function toggleCorporateFieldsVisible() {
 #set($opt_out = "0")
 #end ##}
 #if($opt_out == "2") ##{
-{{html clean=false}}
 <script type="text/javascript">
 ##{pre}
 /* <![CDATA[ */
@@ -588,7 +581,6 @@ document.observe('dom:loaded', function(){
 /* ]]> */
 ##{/pre}
 </script>
-{{/html}}
 #end ##}
 				<span><label>$msg.get("${pfx}.email_options.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.email_options.tooltip")"/></span>
 				<ul class="radioBtns">
@@ -703,24 +695,18 @@ document.observe('dom:loaded', function(){
             </li>
 		#if($g_RegType == 'edit_profile') ##{
 				<li>
-				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_comment">$msg.get("${pfx}.bio.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.bio.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.bio.description")</p>
-					{{/html}}
 					$userdoc.display('comment', "edit")
 				</li>
 				<li>
-				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_contact">$msg.get("${pfx}.contact.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.contact.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.contact.description")</p>
-					{{/html}}
 					$userdoc.display('contact', "edit")
 				</li>
 				<li>
-				    {{html clean=false}}
 					<span><label for="XWiki.XWikiUsers_0_websites">$msg.get("${pfx}.websites.title")</label><img class="tooltip" alt="" src="$g_ClearPx" ext:qtip="$msg.get("${pfx}.websites.tooltip")"/></span>
 					<p class="instructions">$msg.get("${pfx}.websites.description")</p>
-					{{/html}}
 					$userdoc.display('websites', "edit")
 				</li>
 				#textarea_wysiwyg($userdoc)
@@ -731,7 +717,6 @@ document.observe('dom:loaded', function(){
 #end ##}
 
 #macro(registrationterms) ##{
-{{html clean=false}}
 <fieldset class="required">
 	<h3>$msg.get('register.terms.header')</h3>
 	<div class="fields-wrp">
@@ -751,11 +736,9 @@ document.observe('dom:loaded', function(){
 		<button class="button-orange" type="submit">$msg.get('register.terms.save_button')</button>
 	</div>
 </fieldset>
-{{/html}}
 #end ##}
 
 #macro(profilechange_photo) ##{
-{{html clean=false}}
 <form id="photo-upload" name="photo-upload" action="" method="POST" enctype="multipart/form-data" onsubmit="return validatePhotoForm();">
     <fieldset class="required" style="clear:right;">
 	<h3>$msg.get('edit_profile.change_photo.header')</h3>
@@ -797,5 +780,4 @@ $('profile-removephoto').observe('click', function(){
 	#end  ## } is same user
 #end  ## } has attachment
 </form>
-{{/html}}
 #end ##}
