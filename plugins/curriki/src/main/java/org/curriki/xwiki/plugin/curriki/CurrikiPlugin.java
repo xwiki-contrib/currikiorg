@@ -926,6 +926,11 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             Document apidoc = newdoc.newDocument(context);
 
             if(LOG.isWarnEnabled()) LOG.warn("Action " + context.getAction() + " " + newdoc.getFullName());
+
+            // invalidate config Cache if a CurrikiConfig page was saved: => gives wiki writable configs
+            if("CurrikiConfig".equals(newdoc.getSpace())) {
+                publicConfigCache.remove(newdoc.getName());
+            }
             if (context.getAction().equals("rollback")&&(apidoc instanceof Asset)) {
                 Asset asset = (Asset) apidoc;
                 if (!asset.isLatestVersion()) {
@@ -1139,6 +1144,22 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
             }
         }
         r = context.getWiki().Param("curriki.system." + name, null);
+
+        try {
+            if(context.getWiki().exists("CurrikiConfig." + name, context)) {
+                XWikiDocument doc = context.getWiki().getDocument("CurrikiConfig", name, context);
+                if(!doc.isNew()) {
+                    String content = doc.getContent();
+                    if(content!=null) content = content.replaceAll("\\#.*(\\r|\\n)","").trim();
+                    if(content!=null && content.length()>0)
+                        r = content;
+                }
+            }
+        } catch (XWikiException e) {
+            e.printStackTrace();
+        }
+
+
         if(r==null) r = MISSING;
         if(publicConfigCache.size()>1000) throw new IllegalStateException("Can't have more than 1000 properties for curriki.");
         publicConfigCache.put(name, r);
