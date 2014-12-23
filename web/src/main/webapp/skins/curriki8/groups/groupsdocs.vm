@@ -246,7 +246,7 @@ function getFileExtension() {
 #if($request.startIndex)
    #set($startItem = $xwiki.parseInt($request.startIndex))
 #end
-#set($allSpaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name<>'WebPreferences'" ))
+#set($allSpaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name<>'WebPreferences' and doc.name<>'AboutDocumentation'" ))
 #set($totalcount = $allSpaceDocs.size())
 ##set($spaceDocs = $xwiki.getSpaceDocsName( $docsSpaceName ))
 #set($spaceDocs = $xwiki.searchDocuments( "where doc.web='${docsSpaceName}'  and doc.name<>'WebPreferences'  and doc.name<>'AboutDocumentation' order by doc.contentUpdateDate desc", $itemsPerPage, $startItem ))

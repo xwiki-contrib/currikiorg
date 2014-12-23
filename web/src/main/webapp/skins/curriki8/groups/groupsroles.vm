@@ -194,6 +194,7 @@ $role.title
   * Manage role interface
   *#
 #macro(groups_manageroles)
+#verbatim_start()
 #groupinit()
 ##
 #if(!$isGroupAdmin && !$hasGlobalAdmin) ## {
@@ -254,4 +255,5 @@ $msg.get("groups.roles.manage.intro")
 <div id="groups-manage-roles-return" class="centertext"><a href="/xwiki/bin/view/${spaceName}/Members">$msg.get("groups.roles.manage.returnlink")</a></div>
 #groupsfooter()
 #end ## }
+#verbatim_end()
 #end
