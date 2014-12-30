@@ -191,6 +191,7 @@
 #end
 ##
 #macro(groupsdisplayeditwelcome $spaceName $pageName $divid)
+  #verbatim_start()
   $msg.get("groups_home_editwelcome_direction")
   <br />
   #set($wdoc = $xwiki.getDocument("${spaceName}.${pageName}"))
@@ -216,6 +217,7 @@
     </div>
   </p>
   </form>
+  #verbatim_stop()
 #end
 
 

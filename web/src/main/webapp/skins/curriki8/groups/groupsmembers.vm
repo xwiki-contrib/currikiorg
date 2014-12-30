@@ -740,6 +740,7 @@ $userprofile.display("allowNotificationsFromSelf","edit") $msg.get("groups_membe
   * Join Group Form and Action
   *#
 #macro(groups_joingroup)
+#verbatim_start()
 #groupsheader("members")
 #set($sm = $xwiki.csm)
 ##Loading invitation manager
@@ -823,10 +824,9 @@ $msg.get("groups_members_join_alreadymember")
 #endgroupsection()
 #groupsfooter()
 <div class="tooltips">
-#verbatim_start()
 $xwiki.addTooltipJS()
-#verbatim_end()
 </div>
+#verbatim_end()
 #end
 
 

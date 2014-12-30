@@ -1780,14 +1780,14 @@ $response.setDateHeader("Expires",$expires.getTime())##
 #set($inVerbatim=1)##
 #else#set($inVerbatim=$mathtool.add($inVerbatim,1))
 #end##
-<!-- /verbatim_start: inVerbatim? $inVerbatim syntax $xwiki.getCurrentContentSyntaxId() -->
+## <!-- /verbatim_start: inVerbatim? $inVerbatim syntax $xwiki.getCurrentContentSyntaxId() -->
 #end
 
 #**
   * Ends a verbatim block
   *#
 #macro(verbatim_end)
-#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)<!-- verbatim_end inVerbatim $inVerbatim $xwiki.getCurrentContentSyntaxId() -->##
+#if("$!inVerbatim"!="" && $mathtool.toInteger($inVerbatim)>0)##  <!-- verbatim_end inVerbatim $inVerbatim $xwiki.getCurrentContentSyntaxId() -->
 #if($mathtool.toInteger($inVerbatim)==1 && ("$!outsideWikiSyntax"=="" || "$!outsideWikiSyntax"=="false") && ($!context.context.get("isInRenderingEngine")=="" || $context.context.get("isInRenderingEngine")==true))
 #if($xwiki.getCurrentContentSyntaxId()!="xwiki/1.0")##
 {{/html}}##
