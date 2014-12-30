@@ -313,11 +313,15 @@
     #verbatim_start()
     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
+    <!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
+    $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->
     #if($newTopicDoc.hasAccessLevel("edit"))
     <div class="addconversation-container addtopic-container">
+    #if($request.action!='addconversation')
      <div class="addconversation-container-button addtopic-container-button">
       <a href="$doc.getURL('view', 'action=addconversation')" class="addconversation-activator">$msg.get('conversations.topic.add.activator')</a>
      </div>
+    #end
      #if($request.action=='addconversation')
      <div class="addconversation-container-form addtopic-container-form">
      ## Create a fake topic object to be able to display the status and the type selectors
