@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1309965611000</creationDate>
-<date>1387799105000</date>
-<contentUpdateDate>1387799105000</contentUpdateDate>
-<version>134.1</version>
+<date>1392715679000</date>
+<contentUpdateDate>1392715679000</contentUpdateDate>
+<version>135.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -182,7 +182,9 @@ fieldset h3 {
     color: #666;
     font-weight: bold;
 }
-
+.email_confirmation {
+    display: none;
+}
 &lt;/style&gt;
 &lt;!-- begin javascripts --&gt;##
 #set($globalDebug=true)##
@@ -266,6 +268,15 @@ fieldset h3 {
               &lt;input id="${f}_input" name="${f}" value="$!{tool.email}" ##
                      #if($provider)disabled="disabled" #end##
               &gt;
+          &lt;/p&gt;
+          ##
+          ##
+          ## This is a honeypot field for spam bots
+          ## and should never be filled in by humans.
+          #set($f="email_confirmation")
+          &lt;p class="textfield #computeTrClasses($f) email_confirmation"&gt;
+              &lt;label for="${f}_input"&gt;&lt;b&gt;$msg.get("join.member_email_confirm")&lt;/b&gt;&lt;/label&gt;
+              &lt;input id="${f}_input" name="${f}" value=""&gt;
           &lt;/p&gt;
           ##
           ##

@@ -7,20 +7,20 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ShermanTank</creator>
-<author>XWiki.jpinto</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.jpinto</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1312934189000</creationDate>
-<date>1377722043000</date>
-<contentUpdateDate>1377722043000</contentUpdateDate>
-<version>27.1</version>
-<title>Welcome to Curriki</title>
+<date>1395866911000</date>
+<contentUpdateDate>1395866911000</contentUpdateDate>
+<version>84.1</version>
+<title>You're our newest member!</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
 <comment></comment>
 <minorEdit>false</minorEdit>
-<syntaxId>xwiki/1.0</syntaxId>
+<syntaxId>xwiki/2.0</syntaxId>
 <hidden>false</hidden>
 <object>
 <class>
@@ -57,41 +57,136 @@
 <tags/>
 </property>
 </object>
-<content>#set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
+<content>{{velocity}}
+#set($hostname=${xwiki.xWiki.Param('curriki.system.hostname', 'broken-url')})
 #set($username=$tool.username)
+{{/velocity}}
+{{html clean="false"}}
+&lt;html lang="en"&gt;
+&lt;head&gt;
+    &lt;meta http-equiv="Content-Type" content="text/html; charset=UTF-8"&gt;
+    &lt;meta name="viewport" content="initial-scale=1.0"&gt;    &lt;!-- So that mobile webkit will display zoomed in --&gt;
+    &lt;meta name="format-detection" content="telephone=no"&gt; &lt;!-- disable auto telephone linking in iOS --&gt;
+    &lt;title&gt;Hi there! You are the newest member of Curriki, a community that offers a curated collection of “living” curricula. You can combine and customize free, high-quality K-12 resources so you can save time and perform at your best.&lt;/title&gt;
+    &lt;style type="text/css"&gt;
+        .ReadMsgBody { width: 100%; background-color: #ebebeb;}
+        .ExternalClass {width: 100%; background-color: #ebebeb;}
+        .ExternalClass, .ExternalClass p, .ExternalClass span, .ExternalClass font, .ExternalClass td, .ExternalClass div {line-height:100%;}
+        body {-webkit-text-size-adjust:none; -ms-text-size-adjust:none;}
+        body {margin:0; padding:0;}
+        table {border-spacing:0;}
+        table td {border-collapse:collapse;}
+        .yshortcuts a {border-bottom: none !important;}
+        @media screen and (max-width: 600px) {
+            table[class="container"] {
+                width: 95% !important;
+            }
+        }
+        @media screen and (max-width: 480px) {
+            td[class="container-padding"] {
+                padding-left: 12px !important;
+                padding-right: 12px !important;
+            }
+         }
+    &lt;/style&gt;
+&lt;/head&gt;
+&lt;body style="margin:0; padding:10px 0;" bgcolor="#ebebeb" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0"&gt;
 
-&lt;h3&gt;THANK YOU FOR JOINING CURRIKI!&lt;/h3&gt;
+&lt;br&gt;
 
-You have selected $username as your member login.
+&lt;!-- 100% wrapper (grey background) --&gt;
+&lt;table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" bgcolor="#ebebeb"&gt;
+  &lt;tr&gt;
+    &lt;td align="center" valign="top" bgcolor="#ebebeb" style="background-color: #ebebeb;"&gt;
 
-Welcome to Curriki! While I know you just set up your account, I just wanted to send you a quick note to welcome you to the Curriki community and give you some guidance on how to make the most of your Curriki experience. &lt;P&gt;
-You have selected $username as your member login.
-Login page: http://link.curriki.org/login
+      &lt;!-- 600px container (white background) --&gt;
+      &lt;table border="0" width="600" cellpadding="0" cellspacing="0" class="container" bgcolor="#ffffff"&gt;
+        &lt;tr&gt;
+          &lt;td class="container-padding" bgcolor="#ffffff" style="background-color: #ffffff; padding-left: 30px; padding-right: 30px; font-size: 14px; line-height: 20px; font-family: Helvetica, sans-serif; color: #333;"&gt;
 
+            &lt;table border="0" width="600" cellpadding="0" cellspacing="0" class="container" bgcolor="#ffffff"&gt;
+               &lt;tr&gt;
+                 &lt;td align="center" bgcolor="#ffffff" style="background-color: #ffffff;"&gt;
+                   &lt;br&gt;
+                   &lt;br&gt;
+                   &lt;em style="font-weight: bold; font-size: 36px; line-height: 40px; color:#284EBF; font-style: normal;"&gt;Curriki&lt;/em&gt;
+                 &lt;/td&gt;
+               &lt;/tr&gt;
+            &lt;/table&gt;
 
-&lt;h3&gt;START ENJOYING CURRIKI TODAY&lt;/h3&gt;
+            &lt;br&gt;
 
-&lt;B&gt;- Log In&lt;/B&gt;&lt;br&gt;
-Go to  http://link.curriki.org/login to enter your member login and password, and then click the orange "Submit" button. 
-If you forget your password, click “Forgot Username or Password?”
+            &lt;!-- ### BEGIN CONTENT ### --&gt;
+            &lt;div style="font-weight: bold; font-size: 18px; line-height: 24px; color:#373ACA"&gt;
+            Hi there!
+            &lt;/div&gt;&lt;br&gt;
 
-&lt;B&gt;- Edit Your Profile&lt;/B&gt;&lt;br&gt;
-Once logged in, add a photo or image and a bio to your profile.
+            You are the newest member of Curriki, a community that offers a curated collection of “living” curricula. You can combine and customize free, high-quality K-12 resources so you can save time and perform at your best. We’re excited to have you as a member and can’t wait to see what you contribute to the library of educational materials.
+            &lt;br&gt;&lt;br&gt;
 
-&lt;B&gt;- Find Resources&lt;/B&gt;&lt;br&gt;
-On the homepage, enter your keywords into the search box to begin accessing and collecting resources.
+            You have selected &lt;strong&gt;{{/html}}{{velocity}}$username{{/velocity}}{{html clean="false"}}&lt;/strong&gt; as your member login. Start enjoying Curriki today by &lt;a href="http://{{/html}}{{velocity}}$hostname{{/velocity}}{{html clean="false"}}/xwiki/bin/view/Registration/DirectLogin?xredirect=%2F"&gt;logging in&lt;/a&gt;.
+            &lt;br&gt;&lt;br&gt;
 
-&lt;B&gt;- Share Resources&lt;/B&gt;&lt;br&gt;
-On the homepage, under Resources &amp; Curricula, click Publish Resources  to share your own teaching and learning materials.
+            &lt;strong&gt;A few tips to get the most out of Curriki:&lt;/strong&gt;
+            &lt;ul&gt;
+                &lt;li&gt;If you haven’t already, &lt;a href="http://www.curriki.org/welcome/about-curriki/curriki-newsletter-sign-up/"&gt;sign up for the newsletter&lt;/a&gt; for a monthly alert for the newest and most popular timely content.&lt;/li&gt;
+                &lt;li&gt;In addition to searching for resources by keyword, subject or standard, with your signed in account you can upload resources, build collections of resources that you can share with students or other teachers.&lt;/li&gt;
+                &lt;li&gt;You can align your resources to standards.&lt;/li&gt;
+                &lt;li&gt;Check our &lt;a href="http://{{/html}}{{velocity}}$hostname{{/velocity}}{{html clean="false"}}"&gt;homepage&lt;/a&gt; each month for a set of recommended resources.&lt;/li&gt;
+            &lt;/ul&gt;
 
-&lt;B&gt;- Collaborate with Educators&lt;/B&gt;&lt;br&gt;
-On the homepage, click Collaborate to join or create a group.
+            We're constantly working on improving Curriki and we need your input, so visit often and send us lots of feedback!
+            &lt;br&gt;&lt;br&gt;
 
-It is through your participation that Curriki is able to offer thousands of free lessons, units, educational videos, and professional networking resources. As a member, you can use tools for building or posting your own curricula to share with teachers and students around the globe -- many from schools that would not be able to afford these resources otherwise.
+            Thank you for creating a Curriki account. You’re all ready to go!
+            &lt;br&gt;&lt;br&gt;
 
-Thanks again for joining. Enjoy Curriki!&lt;br&gt;
+            &lt;em style="font-style:italic;"&gt;Janet and the Curriki Team&lt;/em&gt;
+            &lt;br&gt;&lt;br&gt;
 
-Sincerely,&lt;br&gt;&lt;P&gt;
-Janet Pinto&lt;br&gt;&lt;P&gt;
-CAO, Curriki 
- </content></xwikidoc>
+            &lt;table width="100%" class="social"&gt;
+							&lt;tbody&gt;&lt;tr&gt;
+								&lt;td&gt;
+
+									&lt;!-- column 1 --&gt;
+									&lt;table class="column"&gt;
+										&lt;tbody&gt;
+                    &lt;tr align="left"&gt;
+											&lt;td&gt;
+
+												Connect with Us: &lt;br&gt;
+                        &lt;a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #FF6700 !important;" href="http://currikiblog.wordpress.com/"&gt;Curriki Blog&lt;/a&gt;
+												&lt;a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #3B5998 !important;" href="http://www.facebook.com/pages/Curriki/134427817464"&gt;Facebook&lt;/a&gt;
+                        &lt;a style="color: #FFFFFF; display: block; font-size: 12px; font-weight: bold; margin-bottom: 10px; padding: 3px 7px; text-align: center; text-decoration: none; background-color: #1DACED !important;" href="http://twitter.com/curriki"&gt;Twitter&lt;/a&gt;
+
+											&lt;/td&gt;
+											&lt;td align="left"&gt;
+                          &lt;em style="padding: 30px;"&gt; Contact Info: &lt;/em&gt;&lt;br&gt;
+                          &lt;em style="padding: 30px;"&gt; Email: &lt;strong&gt;&lt;a href="emailto:jpinto@curriki.org"&gt;jpinto@curriki.org&lt;/a&gt;&lt;/strong&gt;&lt;/em&gt;&lt;br&gt;
+											&lt;/td&gt;
+										&lt;/tr&gt;
+									&lt;/tbody&gt;&lt;/table&gt;&lt;!-- /column 2 --&gt;
+
+									&lt;span class="clear"&gt;&lt;/span&gt;
+
+								&lt;/td&gt;
+							&lt;/tr&gt;
+						&lt;/tbody&gt;&lt;/table&gt;
+
+            &lt;!-- ### END CONTENT ### --&gt;
+
+          &lt;/td&gt;
+        &lt;/tr&gt;
+      &lt;/table&gt;
+      &lt;!--/600px container --&gt;
+
+    &lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;!--/100% wrapper--&gt;
+&lt;br&gt;
+&lt;br&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+{{/html}}
+</content></xwikidoc>

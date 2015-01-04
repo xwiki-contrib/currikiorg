@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1320776028000</creationDate>
-<date>1344625280000</date>
-<contentUpdateDate>1344625280000</contentUpdateDate>
-<version>2.1</version>
+<date>1401545657000</date>
+<contentUpdateDate>1401545657000</contentUpdateDate>
+<version>4.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -26,6 +26,7 @@
     #template("javascripts.vm")
 #end
 ##
+#set($trash=$response.setHeader("Access-Control-Allow-Origin","*"))
 #set($provider="$!request.provider")
 &lt;script type="text/javascript"&gt;
     Ext.onReady(function() {

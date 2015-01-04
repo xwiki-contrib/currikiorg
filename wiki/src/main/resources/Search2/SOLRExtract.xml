@@ -11,9 +11,9 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1298699906000</creationDate>
-<date>1390440143000</date>
-<contentUpdateDate>1390440143000</contentUpdateDate>
-<version>46.1</version>
+<date>1419179915000</date>
+<contentUpdateDate>1419179915000</contentUpdateDate>
+<version>48.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -91,7 +91,7 @@
 ##
 #if(!$hasGlobalAdmin))$response.sendRedirect("/xwiki/bin/loginsubmit/XWiki/XWikiLogin")#else
 &lt;!-- #set($xt=$xwiki.parseGroovyFromPage("Search2.SOLRExtractorGroovy"))##
-$xt.init($xwiki,$context,$request.getParameter("doc")) Running $xt --&gt;##
+$xt.init($xwiki,$context,$request.getParameter("doc")) Running $escapetool.xml($xt.toString()).replaceAll("--","- -") --&gt;##
     #set($originalResponse=$response)##
     #set($response=$xt.getNeutralizedResponse())##
     #if($request.getParameter("doc"))
@@ -99,7 +99,7 @@ $xt.init($xwiki,$context,$request.getParameter("doc")) Running $xt --&gt;##
         #if($xt.type=="discussion")$originalResponse.sendRedirect("ShowDiscussion?xpage=plain&amp;doc=$request.getParameter('doc')")
         #elseif($xt.isApplicable())
         &lt;!-- This rendering of $escapetool.xml($xt.getFullNameForComments()) is created by
-        $escapetool.xml("${doc.space}.${doc.name}")  with type ${xt.type}.
+        $escapetool.xml("${doc.space}.${doc.name}").replaceAll("--","- -")  with type ${xt.type}.
           This view file is last modified on $doc.date --&gt;
         &lt;!-- type is $xt.type, we start with a  p r e
 {pre}

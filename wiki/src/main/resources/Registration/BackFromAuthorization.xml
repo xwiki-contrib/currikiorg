@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1312990639000</creationDate>
-<date>1321009585000</date>
-<contentUpdateDate>1321009585000</contentUpdateDate>
-<version>26.1</version>
+<date>1400615977000</date>
+<contentUpdateDate>1400615977000</contentUpdateDate>
+<version>30.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -52,7 +52,7 @@
 <name>Registration.BackFromAuthorization</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>20dc2d3f-16ca-4072-92e0-4dae71e5aa99</guid>
 <property>
 <tags/>
 </property>
@@ -66,43 +66,69 @@
 &lt;!-- THIS IS BackFromAuthorization --&gt;
 {pre}
 #if(!$included &amp;&amp; $request.xpage=="plain")
-&lt;html&gt;&lt;head&gt;&lt;title&gt;Redirection&lt;/title&gt;
+  &lt;html&gt;
+  &lt;head&gt;&lt;title&gt;Redirection&lt;/title&gt;
     #template("javascripts.vm")
     #template("stylesheets.vm")
-&lt;/head&gt;&lt;body&gt;##
+  &lt;/head&gt;
+  &lt;body&gt;##
 #elseif($request.xpage=="popup")
-    #set($globalDebug=true)##
-    #template("javascripts.vm")
+  #set($globalDebug=true)##
+  #template("javascripts.vm")
 #end
+
 ## --- init targets ---
 #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
-#set($junk=$targets.init($request,$xwiki))#end&lt;!-- targets is $targets  --&gt;#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
+  #set($junk=$targets.init($request,$xwiki))
+#end
+&lt;!-- targets is $targets  --&gt;
+
+#if($targets=="groovy_missingrights")
+  #warn("warning, missing rights, expect malfunction.")
+#end ##
 #* #if($redir)#else#set($redir=$request.redir)#end##
 #if($redir.startsWith("%2"))#set($redir=$redir.replaceAll("%2F","/"))#end
 #if($redir.contains("Registration/JumpToTop"))#set($redir="/")#end *#
-#set($hasDownload=$targets.isDownloadLink($redir))&lt;!-- hasDownload: $hasDownload --&gt;##
+#set($hasDownload=$targets.isDownloadLink($redir))
+&lt;!-- hasDownload: $hasDownload --&gt;##
+
 #set($nextStep=$redir)##
+
 #if($hasDownload)##
-    $targets.storeFileToDownload()##
-    #set($nextStep=$targets.fromDownloadToResourceOrSelf($redir)) ##
-#end    &lt;!-- nextStep now is $nextStep --&gt;
-&lt;p style="width:100%; height:100%; text-align: center; line-height:2em; background-color: white;"
-        &gt;&lt;a style="text-decoration: none; color: #4E83C7; font-size: 12px; font-family: arial, helvetica, sans-serif; line-height:10em"##
-   id="followMeLink" href="${nextStep}" target="_top"&gt;$msg.get("registration.jump.proceeding")&lt;/a&gt;&lt;br/&gt;
-&lt;button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')&gt;0) {window.top.back();} else {window.top.reload();}"&gt;$msg.get("join.login.cancel_button")&lt;/button&gt;
+  $targets.storeFileToDownload()##
+  #set($nextStep=$targets.fromDownloadToResourceOrSelf($redir)) ##
+#end
+&lt;!-- nextStep now is $nextStep --&gt;
+
+&lt;p style="width:100%; height:100%; text-align: center; line-height:2em; background-color: white;"&gt;
+  &lt;a style="text-decoration: none; color: #4E83C7; font-size: 12px; font-family: arial, helvetica, sans-serif; line-height:10em"
+     id="followMeLink" href="${nextStep}"
+     target="_top"&gt;
+    #if($view=="refused")
+        Finishing refused process.
+    #else
+        $msg.get("registration.jump.proceeding")
+    #end
+  &lt;/a&gt;
+  &lt;br/&gt;
+  &lt;button type="button-grey" onclick="if(window.top.location.href.indexOf('/xwiki/bin/view/Registration')&gt;0) {window.top.history.go(-1);} else {window.top.reload();}"&gt;
+    $msg.get("join.login.cancel_button")
+  &lt;/button&gt;
 &lt;/p&gt;##
+
 &lt;script type="text/javascript"&gt;##
-  var goTop = false;
-    Curriki.console.log("Has download? $hasDownload");
-#if($nextStep.startsWith("/xwiki/bin/view/Registration"))
-    Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, false);
-    //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false);")
+var goTop = false;
+Curriki.console.log("Has download? $hasDownload");
+  #if($nextStep.startsWith("/xwiki/bin/view/Registration"))
+  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, false); (view is ${view})")
+  Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, false);
   #else
-    //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true);")
-    Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, true);
+  //alert("Would do: Curriki.ui.login.finishAuthorizationPopup('${nextStep}', window.opener, window, true); (view is ${view})")
+  Curriki.ui.login.finishAuthorizationPopup("${nextStep}", window.opener, window, true);
   #end##
 &lt;/script&gt;
+
 #if(!$included &amp;&amp; $request.xpage=="plain")
-&lt;/body&gt;&lt;/html&gt;##
+  &lt;/body&gt;&lt;/html&gt;##
 #end
 {/pre}</content></xwikidoc>

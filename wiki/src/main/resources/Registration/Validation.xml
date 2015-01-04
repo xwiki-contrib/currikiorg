@@ -11,14 +11,14 @@
 <customClass></customClass>
 <contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1312409679000</creationDate>
-<date>1378922952000</date>
-<contentUpdateDate>1378922952000</contentUpdateDate>
-<version>150.1</version>
+<date>1392715720000</date>
+<contentUpdateDate>1392715720000</contentUpdateDate>
+<version>151.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment>cli-upload.</comment>
+<comment></comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -103,6 +103,12 @@ public class Validation {
 
         addOk("email");
         return true;
+    }
+
+    public boolean isValidEmailConfirmation(String email_confirmation, boolean echoErrors){
+        // The email_confirmation field is a honeypot for spam bots, since the double opt in
+        // for emails is turned of for GPS
+        return echoErrors ? (email_confirmation == null || "".equals(email_confirmation)) : true;
     }
 
     public boolean isValidPassword(String ps, boolean echoErrors ) {

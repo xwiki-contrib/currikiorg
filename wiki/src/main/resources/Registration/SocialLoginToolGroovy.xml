@@ -7,40 +7,44 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.adminPolx</creator>
-<author>XWiki.flixt</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.flixt</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1309965594000</creationDate>
-<date>1378922941000</date>
-<contentUpdateDate>1378922941000</contentUpdateDate>
-<version>297.1</version>
+<date>1413577119000</date>
+<contentUpdateDate>1413577119000</contentUpdateDate>
+<version>358.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>rather use callbackCurriki.</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
-<content>import org.apache.commons.lang.RandomStringUtils
-import org.brickred.socialauth.AuthProvider;
-import org.brickred.socialauth.AuthProviderFactory;
-import com.xpn.xwiki.api.XWiki;
-import com.xpn.xwiki.api.Context
-import javax.servlet.http.HttpServletResponse
-import javax.servlet.http.HttpServletRequest
-import com.xpn.xwiki.api.Document;
+<content>import com.xpn.xwiki.api.Context
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.XWiki
+import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
 import com.xpn.xwiki.web.XWikiMessageTool
+import groovy.json.JsonSlurper
+import org.apache.commons.lang.RandomStringUtils
 import org.apache.commons.logging.Log
 import org.apache.commons.logging.LogFactory
+import org.apache.http.HttpResponse
+import org.apache.http.client.HttpClient
+import org.apache.http.client.methods.HttpGet
+import org.apache.http.client.methods.HttpPost
+import org.apache.http.entity.StringEntity
+import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.util.EntityUtils
+import org.brickred.socialauth.AuthProvider
+import org.brickred.socialauth.AuthProviderFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
-import com.xpn.xwiki.doc.XWikiAttachment
-import org.xwiki.container.servlet.filters.SavedRequestManager
-import com.xpn.xwiki.plugin.mailsender.MailSenderPluginApi
-import org.apache.commons.httpclient.HttpClient
-import org.apache.commons.httpclient.methods.GetMethod
-import com.xpn.xwiki.api.Attachment;
+
+import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 
 public class SocialLoginToolGroovy {
     // the properties are static... it means they are loaded with the compilation of the groovy class
@@ -54,7 +58,7 @@ public class SocialLoginToolGroovy {
     String providerId = null;
     String city="", state="", country="";
     List warningFields=new ArrayList(), okFields=new ArrayList();
-    String username, password, firstName, lastName, email, memberType, postalCode="", longitude="", latitude="", agree;
+    String username, password, firstName, lastName, email, email_confirmation, memberType, postalCode="", longitude="", latitude="", agree;
     String validKey = null;
     String nowTarget = null;
     boolean hasReadProviderProfile = false;
@@ -173,10 +177,10 @@ public class SocialLoginToolGroovy {
             else maybeRedirect = "";
             String maybeXpage="";
             //if(request.framed=="true")
-            maybeXpage="&amp;xpage=popup";
+            maybeXpage="&amp;xpage=popup&amp;tempskin=curriki8";
 
             String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
-                    request.getPathInfo()  + '?callback=1' + maybeXpage //+ maybeRedirect ;
+                    request.getPathInfo()  + '?callbackCurriki=1' + maybeXpage //+ maybeRedirect ;
 
             // Keep the autoCreateUser flag even when bouncing the provider, so it comes back with the providers answer
             if(autoCreateUser) targetUrl += "&amp;autoCreateUser=" + autoCreateUser;
@@ -194,6 +198,16 @@ public class SocialLoginToolGroovy {
             request.session.setAttribute("org.brickred.socialauth.AuthProvider.hint", request.provider);
             response.sendRedirect(url);
             return "nothing";
+
+
+            def space = xwiki.getDocument("Group_SampleCurrikiGeometryCourse.WebPreferences");
+            println("Space found: " + space);
+            println("* topic: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value);
+            println("* topic class " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("topic").value.getClass());
+            println("* level: " + space.getObject("XWiki.CurrikiSpaceClass").getProperty("educationLevel").value);
+
+
+
         } catch (Exception ex) {
             LOG.warn("Generic error at bounce to provider.", ex);
             errors.add(msg.get('registration.genericError', [ex.message]));
@@ -272,7 +286,7 @@ public class SocialLoginToolGroovy {
                     return tryCreateNewProfile();
                 } else {
                     // take to the display of the form to create the username
-                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&amp;xaction=creationForm"
+                    nowTarget = "/xwiki/bin/view/Registration/SocialLogin?xpage=popup&amp;tempskin=curriki8&amp;xaction=creationForm"
                     return "backFromAuthorization";
                 }
 
@@ -323,6 +337,176 @@ public class SocialLoginToolGroovy {
 
 
     /**
+     * We've got a response from the provider, let's treat it
+     */
+    public String processCleverComAuthArrival() {
+
+        try {
+
+            // perform scenario at https://clever.com/developers/docs#identity-api-sso-oauth2-flow-section
+            String providerId = "clever.com";
+            LOG.info("Welcoming from provider " + providerId);
+            DefaultHttpClient client = new DefaultHttpClient();
+            HttpPost post = new HttpPost(properties.getProperty("clever.com.tokenFetchURL"));
+            post.setHeader("Authorization", "Basic " + properties.getProperty("clever.com.basic.auth"));
+            post.setEntity(new StringEntity("{" +
+                    " \"code\": \""+ request.code + "\",\n" +
+                    "  \"grant_type\": \"authorization_code\",\n" +
+                    "  \"redirect_uri\": \"https://" + xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config') + "/xwiki/bin/view/Registration/SocialLogin\"\n" +
+                    "}","application/json","utf-8"));
+            HttpResponse response = client.execute(post);
+            String result = EntityUtils.toString(response.getEntity());
+            if (response.getStatusLine().getStatusCode() != 200){
+                //TODO: get rid of this unpretty illegal state and show a defined error to the user!?
+                throw new IllegalStateException("Received wrong http status with Http response (StatusCode: " + response.getStatusLine().getStatusCode() + "value:" + result + ".");
+            }
+
+            // "redeem code" convert code to token
+            def obj = new JsonSlurper().parseText(result);
+            String token = obj.access_token;
+            LOG.warn("YAY WE GOT A TOKEN");
+
+            // fetch the info
+            HttpGet get = new HttpGet(properties.getProperty("clever.com.apiURL"));
+//            client.getParams().setAuthenticationPreemptive(false);
+            get.addHeader("Authorization", "Bearer ${token}");
+            response = client.execute(get);
+            def cleverComProfile = (new JsonSlurper().parseText(EntityUtils.toString(response.getEntity()))).data;
+
+            // Search for this profile id in database, find user
+            String queryForSocialProfileValidatedId =", BaseObject userObj, BaseObject socialLoginObj, StringProperty provider, StringProperty profileId where " +
+                    " userObj.className='XWiki.XWikiUsers' and doc.web='XWiki' and doc.fullName=userObj.name " +
+                    " and socialLoginObj.className='XWiki.SocialLoginProfileClass' and " +
+                    " doc.fullName=socialLoginObj.name and " +
+                    " provider.id.id = socialLoginObj.id and profileId.id.id = socialLoginObj.id and " +
+                    " provider.name='provider' and profileId.name='validatedId' and provider.value='clever.com"+
+                    "' and profileId.value='"+cleverComProfile.id+"'";
+            System.out.println("Querying: " + queryForSocialProfileValidatedId);
+            List userDocs = xwiki.searchDocuments(queryForSocialProfileValidatedId,30,0);
+
+
+            System.out.println("Found userDocs for SocialProfile validatedId: " + userDocs);
+            // case with existing email
+            if(userDocs!=null &amp;&amp; !userDocs.isEmpty()) {
+                // already exists?
+                for (String x in userDocs) {
+                    if(x==null) continue;
+                    Document userDoc = xwiki.getDocument(x)
+                    System.out.println("Doc: " + result + " of class " + result.getClass());
+                    authenticateUser(userDoc);
+                }
+            } else if(userDocs==null || userDocs.isEmpty()) {
+                // Not authenticated/redirected yet ? -&gt; You must be new here
+                LOG.warn("Received from " + providerId + " profile " + cleverComProfile + ".");
+
+                // gather profile info
+                if(hasReadProviderProfile) return;
+                hasReadProviderProfile = true;
+                if(cleverComProfile.name){
+                    firstName = cleverComProfile.name.first;
+                    lastName = cleverComProfile.name.last;
+                }
+                email = cleverComProfile.email;
+                if(cleverComProfile.location){
+                    city = cleverComProfile.location.city;
+                    state = cleverComProfile.location.state;
+                    postalCode = cleverComProfile.location.zip;
+                    latitude = cleverComProfile.location.lat;
+                    longitude = cleverComProfile.location.long;
+                }
+                country  = "US"; // profile.get("location.country")
+                password = RandomStringUtils.randomAlphanumeric(8)
+                username = generateUserNameFromSocialProfile();
+
+                // Search for this email in database, find user
+                String queryUserDocsForUserObjectEmail =", BaseObject userObj, StringProperty email where " +
+                        " userObj.className='XWiki.XWikiUsers' and doc.web='XWiki' and doc.fullName=userObj.name and" +
+                        " email.id.id = userObj.id and email.value = '" + cleverComProfile.email + "'";
+                System.out.println("Querying: " + queryUserDocsForUserObjectEmail);
+                List userDocsForEmail = xwiki.searchDocuments(queryUserDocsForUserObjectEmail,30,0);
+
+                // Either create the new user or use the user for the existing email, if there is exactly one
+                Document userDoc = null;
+                if (userDocsForEmail.size() == 0 || email == null || email == "") {
+                    System.out.println("No user for existing email address either -&gt; create a new user doc")
+                    userDoc = createUserDoc();
+                }else if(userDocsForEmail.size() == 1){
+                    System.out.println("Found userDocs for existing email address: " + userDocs);
+                    userDoc = xwiki.getDocument(userDocsForEmail.get(0))
+                } else {
+                    //TODO: get rid of this unpretty illegal state and show a defined error to the user!?
+                    // Well what if we find more than one?? For now we fail, otherwise we potentially authenticate a wrong user
+                    throw new IllegalStateException("Duplicate email address for user profiles... " + cleverComProfile.email);
+                }
+
+                // now create the social-login object
+                def socialProfile = userDoc.getObject('XWiki.SocialLoginProfileClass', true)
+                socialProfile.set('provider', providerId)
+                socialProfile.set('fullName', "XWiki."+username);
+                socialProfile.set('firstName', firstName)
+                socialProfile.set('lastName', lastName)
+                socialProfile.set('displayName', firstName + " " + lastName)
+                socialProfile.set('email', email)
+                socialProfile.set('gender', cleverComProfile.gender)
+                //socialProfile.set('dob', profile.dob) !!! This line raised an error while logging in via facebook, this attribute seems not to be there anymore
+                socialProfile.set('validatedId', cleverComProfile.id)
+                socialProfile.set('country', country)
+
+                def socialPrefs = userDoc.getObject('XWiki.SocialLoginClass', true)
+                socialPrefs.set('preferred_provider', providerId)
+
+                userDoc.saveWithProgrammingRights();
+                authenticateUser(userDoc)
+            }
+
+            // Always redirect to the advanced search page.
+            nowTarget = "/xwiki/bin/view/Search/WebHome";
+            System.out.println("Redirecting to /xwiki/bin/view/Search/WebHome through a redirectOnTop");
+            return "redirectOnTop";
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
+            return "error";
+        };
+    }
+
+    private String generateUserNameFromSocialProfile(String proposedUserName) {
+        String username = "";
+        // Check if the given name is okay, if yes return it.
+        if(proposedUserName != null &amp;&amp; proposedUserName != "" &amp;&amp; validation.isValidUsername(proposedUserName, false)){
+            username = proposedUserName
+
+        // If not generate one
+        } else {
+            // From the email
+            if (email != null &amp;&amp; email != "" &amp;&amp; email.indexOf('@') != -1){
+                username = email.substring(0, email.indexOf('@'));
+
+            // Or the firstname
+            } else if (firstName != null &amp;&amp; firstName != "") {
+                username = firstName;
+
+            // Or just a random one
+            } else {
+                username = RandomStringUtils.randomAscii(8);
+            }
+            username = username.replaceAll("[^a-zA-Z0-9]", "");
+            username = username.replaceAll("_", "").replaceAll("__", "");
+            username = username.replaceAll(" ", "")
+            if (!validation.isValidUsername(username, false)) {
+                int i = 0;
+                while (i &lt; 100) {
+                    if (validation.isValidUsername(username + i, false)) break
+                    i++;
+                }
+                username = username + i;
+            }
+        }
+        return username;
+    }
+
+    /**
      * Create a new user profile from the social profile result
      */
 
@@ -370,6 +554,8 @@ public class SocialLoginToolGroovy {
 
 
         boolean passed = validation.isValidEmail(email, true);
+        // This is not active on GPS since the social auth does not need this honeypot field
+        // passed = validation.isValidEmailConfirmation(email_confirmation, true) &amp; passed;
         passed = validation.isValidUsername(username, true) &amp;&amp; passed;
         passed = validation.isValidPassword(password, true) &amp;&amp; passed;
         passed = validation.isValidMemberType(memberType, true) &amp;&amp; passed;
@@ -473,20 +659,28 @@ public class SocialLoginToolGroovy {
         Locale locale = new Locale(language);
         userObj.set("language",    locale.getISO3Language());
 
-        // activate if from social login, otherwise send mail and put validation key
-        if(profile) {
-            System.out.println("Making profile active.")
-            userObj.set("active", "1");
-            userObj.set("email_undeliverable", "0");
-        } else {
-            System.out.println("Making profile inactive.")
-            userObj.set("active", "0");
-            userObj.set("email_undeliverable", "1");
-            validKey = xwiki.getXWiki().generateValidationKey(16);
-            userObj.set("validkey", validKey);
-            userObj.set("validredirect", request.xredirect);
-        }
+        // Due to request from Bob at the Teammeeting on the
+        // 11th of Feb. 2014 users are always made active after registration
+        // and don't have to validate their email anymore
+        //
+        System.out.println("Making profile active.")
+        userObj.set("active", "1");
+        userObj.set("email_undeliverable", "0");
 
+        // Old code:
+        // activate if from social login, otherwise send mail and put validation key
+//        if(profile) {
+//            System.out.println("Making profile active.")
+//            userObj.set("active", "1");
+//            userObj.set("email_undeliverable", "0");
+//        } else {
+//            System.out.println("Making profile inactive.")
+//            userObj.set("active", "0");
+//            userObj.set("email_undeliverable", "1");
+//            validKey = xwiki.getXWiki().generateValidationKey(16);
+//            userObj.set("validkey", validKey);
+//            userObj.set("validredirect", request.xredirect);
+//        }
 
         //userdoc.setParent("XWiki.XWikiUsers");
         userDoc.setContent('#include' + 'Form("XWiki.XWikiUserSheet")');
@@ -584,12 +778,12 @@ public class SocialLoginToolGroovy {
     public String actionHere(HttpServletRequest request) {
         if(request.error == "access_denied" &amp;&amp; request.error_reason == "user_denied") {
             return "refused";
-        }
-        else if(!request.callback &amp;&amp; request.provider) {
-            return "bounceToProvider";
-        }
-        else if (request.callback){
+        }  else if (request.callbackCurriki=="1"){
             return "processAuthReturn";
+        } else if(request.code) {
+            return "processCleverComAuthArrival";
+        } else if(!request.callback &amp;&amp; request.provider) {
+            return "bounceToProvider";
         } else if(request.xaction &amp;&amp; request.xaction=='creationForm')
             return "creationForm";
         else if (request.xaction &amp;&amp; request.xaction == 'createProfile') {
@@ -658,11 +852,11 @@ public class SocialLoginToolGroovy {
                     name = name.substring(0, name.length()-1);
                 name = name.substring(name.lastIndexOf("/")+1);
             }
-            HttpClient client = new HttpClient();
-            GetMethod method = new GetMethod(u.toExternalForm());
-            int result = client.executeMethod(method);
-            if(result==200) {
-                userDoc.addAttachment(name, method.getResponseBodyAsStream());
+            HttpClient client = new DefaultHttpClient();
+            HttpGet method = new HttpGet(u.toExternalForm());
+            HttpResponse response = client.execute(method);
+            if(response.getStatusLine().statusCode==200) {
+                userDoc.addAttachment(name, response.getEntity().content);
             }
             userObj.set("avatar",name)
         } catch (Exception ex) {
@@ -727,6 +921,7 @@ public class SocialLoginToolGroovy {
         firstName = request.firstName;
         lastName = request.lastName;
         email = request.email;
+        email_confirmation = request.email_confirmation;
         city = request.city;
         country = request.country;
         postalCode = request.postalCode;
@@ -738,6 +933,7 @@ public class SocialLoginToolGroovy {
         if(memberType==null) memberType="-";
 
         boolean passed = validation.isValidEmail(email, true);
+        passed = validation.isValidEmailConfirmation(email_confirmation, true) &amp; passed;
         passed = validation.isValidUsername(username, true) &amp; passed;
         passed = validation.isValidPassword(password, true) &amp; passed;
         passed = validation.isValidMemberType(memberType, true) &amp; passed;
@@ -751,15 +947,17 @@ public class SocialLoginToolGroovy {
     public boolean createUser() {
         Document userDoc = createUserDoc();
         userDoc.saveWithProgrammingRights(msg.get('xwiki.socialLogin.updatedSocialProfile'), true)
-        sendValidationEmail();
-        //authenticateUser(userDoc);
+        //sendValidationEmail();
+        sendConfirmationEmail();
+        authenticateUser(userDoc);
         return true;
     }
 
-
-    public void sendValidationEmail() {
-        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail");
-    }
+//    When reenabling this method make sure the emails which are sent here
+//    are in XWikiSyntax 2 with the velocity macro and html macros used
+//    public void sendValidationEmail() {
+//        sendRegistrationMail("MemberRegKeySentEmail", "CorporateRegKeySentEmail");
+//    }
 
     private void sendRegistrationMail(String nonCorpPage, String corpPage) {
         long time=System.currentTimeMillis();
@@ -769,7 +967,7 @@ public class SocialLoginToolGroovy {
             emailDoc = "Registration." + corpPage;
         LOG.warn("Sending mail to " + email + " with page " + emailDoc + '.');
         emailDoc = xwiki.getDocument(emailDoc);
-        def text = xwiki.renderText(emailDoc.getContent(), emailDoc);
+        def text = emailDoc.getRenderedContent()
         def subject = xwiki.renderText(emailDoc.title, emailDoc);
         System.out.println("Took: " + (System.currentTimeMillis()-time) + " ms to prepare email body.");
         time=System.currentTimeMillis();
@@ -799,7 +997,7 @@ public class SocialLoginToolGroovy {
         userobj.set("active", "1");
         userobj.set("email_undeliverable", "0");
         userdoc.saveWithProgrammingRights("Validation.");
-        // and send validation mail
+        // and send registration complete mail
         sendRegistrationMail("MemberRegCompleteEmail", "CorporateRegCompleteEmail");
         authenticateUser(userdoc);
         return "success";
@@ -856,4 +1054,5 @@ public class SocialLoginToolGroovy {
         }
         request.getSession().setAttribute("curriki.analytics.toLogView", currentValue);
     }
-}</content></xwikidoc>
+}
+</content></xwikidoc>

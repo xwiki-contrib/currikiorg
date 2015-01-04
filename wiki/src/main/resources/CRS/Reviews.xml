@@ -7,13 +7,13 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.ludovic</creator>
-<author>XWiki.adminPolx</author>
+<author>XWiki.flixt</author>
 <customClass></customClass>
-<contentAuthor>XWiki.adminPolx</contentAuthor>
+<contentAuthor>XWiki.flixt</contentAuthor>
 <creationDate>1189370470000</creationDate>
-<date>1291854356000</date>
-<contentUpdateDate>1291854356000</contentUpdateDate>
-<version>13.1</version>
+<date>1399483122000</date>
+<contentUpdateDate>1399483122000</contentUpdateDate>
+<version>17.1</version>
 <title>Reviews</title>
 <template></template>
 <defaultTemplate></defaultTemplate>
@@ -52,7 +52,7 @@
 <name>CRS.Reviews</name>
 <number>0</number>
 <className>XWiki.TagClass</className>
-<guid></guid>
+<guid>2c447cb0-f0f2-4534-82f8-7866cfc374e2</guid>
 <property>
 <tags/>
 </property>
@@ -151,7 +151,7 @@
 <name>CRS.Reviews</name>
 <number>0</number>
 <className>XWiki.XWikiRights</className>
-<guid></guid>
+<guid>a900fc50-05ac-4620-89c4-396bbdfaf526</guid>
 <property>
 <allow>1</allow>
 </property>
@@ -169,10 +169,15 @@
 
 &lt;form action=""&gt;
 $msg.get("curriki.crs.reviews.viewnominated"): &lt;select name="fw_item" onchange="this.form.submit()"&gt;
-&lt;option value="" #if(!$request.fw_item||($request.fw_item=="")) selected #end &gt;$msg.get("curriki.crs.reviews.all")&lt;/option&gt;
+&lt;option value=""&gt;$msg.get("curriki.crs.reviews.all")&lt;/option&gt;
+#if(!$request.fw_item||($request.fw_item==""))
+  #set($fw_item = "FW_masterFramework.Mathematics")
+#else
+  #set($fw_item = $request.fw_item)
+#end
 #foreach($item in $xwiki.searchDocuments("where doc.parent='FW_masterFramework.WebHome' order by doc.title"))
 #set($itemdoc = $xwiki.getDocument($item))
-&lt;option value="$item" #if($item==$request.fw_item) selected #end &gt;$itemdoc.title&lt;/option&gt;
+&lt;option value="$item" #if($item==$fw_item) selected #end &gt;$itemdoc.title&lt;/option&gt;
 #end
 &lt;/select&gt;
 &lt;/form&gt;

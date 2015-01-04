@@ -7,18 +7,18 @@
 <translation>0</translation>
 <parent></parent>
 <creator>XWiki.LudovicDubost</creator>
-<author>XWiki.flixt</author>
+<author>XWiki.adminPolx</author>
 <customClass></customClass>
-<contentAuthor>XWiki.flixt</contentAuthor>
+<contentAuthor>XWiki.adminPolx</contentAuthor>
 <creationDate>1200615531000</creationDate>
-<date>1389306792000</date>
-<contentUpdateDate>1389306792000</contentUpdateDate>
-<version>37.1</version>
+<date>1420405057000</date>
+<contentUpdateDate>1420405057000</contentUpdateDate>
+<version>38.1</version>
 <title></title>
 <template></template>
 <defaultTemplate></defaultTemplate>
 <validationScript></validationScript>
-<comment></comment>
+<comment>ready to release curriki 1.17 (CDN).</comment>
 <minorEdit>false</minorEdit>
 <syntaxId>xwiki/1.0</syntaxId>
 <hidden>false</hidden>
@@ -72,11 +72,21 @@ This script automatically set the owner of the pages in Groups, MyCurriki spaces
 
 #end
 ##
+#foreach($item in $xwiki.searchDocuments("where doc.web='ConversationCode'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
 #foreach($item in $xwiki.searchDocuments("where doc.web='MyCurriki'"))
 * $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
 
 #end
 #foreach($item in $xwiki.searchDocuments("where doc.web='Search2'"))
+* $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
+
+#end
+##
+#foreach($item in $xwiki.searchDocuments("where doc.web='EmbeddedSearch'"))
 * $item #if($request.confirm=="1") $xwiki.getDocument($item).save() #end
 
 #end
@@ -101,8 +111,8 @@ This script automatically set the owner of the pages in Groups, MyCurriki spaces
 
 #end
 ##
-#foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Admin.CopyCollection', 'Admin.ExportPageList', 'Admin.InjectDiscussionsIntoGroup', 'Main.Debug', 'PanelIncludes.TOCPanel', 'Util.ListCollectionsPages', 'XWiki.XWikiSyntax', 'Members.MyBlog', 'XWiki.MyBlogGroovy',
- 'CreateResources.AssetDone', 'CreateResources.StyledMacros','Affiliate.RegistrationTemplate','Affiliate.AffiliateManagement','Affiliate.PartnerEncryptGroovy',
+#foreach($item in $xwiki.searchDocuments("where (doc.fullName in ('Admin.CopyCollection', 'Admin.CrossCounts','Admin.ListGroupLeadersEmails', 'Admin.ExportPageList', 'Admin.InjectDiscussionsIntoGroup','Admin.MassiveUndelete','Admin.QueryActivityStream', 'Main.Debug', 'PanelIncludes.TOCPanel', 'Util.ListCollectionsPages', 'XWiki.XWikiSyntax', 'Members.MyBlog', 'XWiki.MyBlogGroovy',
+ 'CreateResources.AssetDone', 'CreateResources.StyledMacros','CreateResources.StyledMacros20','Affiliate.RegistrationTemplate','Affiliate.AffiliateManagement','Affiliate.PartnerEncryptGroovy',
 'AdWordsJump.LandingPageLogWriter','AdWordsJump.LandingPageLog',
 'AdWordsJump.LandingPageLogExport',
 'AdWordsJump.LandingPageLogTemplate',
