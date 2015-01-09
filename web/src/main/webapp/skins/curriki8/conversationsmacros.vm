@@ -313,9 +313,13 @@
     #verbatim_start()
     #set($newTopicName = $space + "." + $xwiki.getUniquePageName($space, 'Topic'))
     #set($newTopicDoc = $xwiki.getDocument($newTopicName))
+    #if($newTopicDoc.hasAccessLevel("edit"))
     <!-- $newTopicDoc.setTitle("Temporary topic by $context.user")
     $newTopicDoc.saveWithProgrammingRights("staging") staged draft document on $newTopicDoc.fullName -->
-    #if($newTopicDoc.hasAccessLevel("edit"))
+    #set($hql="select doc.fullName from XWikiDocument as doc where doc.web = ? and doc.title LIKE 'Temporary topic by%' and doc.creationDate < ? ")
+    #set($cal = $datetool.systemCalendar)$cal.add(7,-3)
+    #set($olderTempDocs=$xwiki.search($hql,5000, 0, ["Discussions_Group_1811Group",$datetool.toDate($cal)]))
+    #foreach($x in $olderTempDocs)$xwiki.getDocument($x).deleteWithProgrammingRights()#end
     <div class="addconversation-container addtopic-container">
     #if($request.action!='addconversation')
      <div class="addconversation-container-button addtopic-container-button">
