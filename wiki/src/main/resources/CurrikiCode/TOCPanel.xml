@@ -110,8 +110,8 @@
 ##
 #macro(tocToJSON $curDoc $lastAssetName $lastAssetJSON) ##{
 ## set Current asset information
-	#set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'"))
-	#set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&amp;#39;").replaceAll("[\n|\r]+", "&lt;br /&gt;"))
+	#set($curTitle = $curDoc.getDisplayTitle().replaceAll('\\', '\\\\').replaceAll("'", "\\'")).replaceAll("\"", "\\\""));
+	#set($curDesc = $curDoc.getDescription().replaceAll('\\', '\\\\').replace("'", "&amp;#39;").replaceAll("[\n|\r]+", "&lt;br /&gt;")).replaceAll("\"", "\\\""));
 	#set($curHref = $xwiki.getURL($curDoc.fullName, 'view'))
 	#set($curSelected = "")
 	#if($curDoc.fullName == $doc.fullName) ##{

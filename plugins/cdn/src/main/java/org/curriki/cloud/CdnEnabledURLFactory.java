@@ -1,13 +1,15 @@
-package org.curriki.xwiki.servlet;
+package org.curriki.cloud;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.web.XWikiServletURLFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.net.MalformedURLException;
 import java.net.URL;
 
-public class CurrikiServletURLFactory extends XWikiServletURLFactory {
-
+public class CdnEnabledURLFactory extends XWikiServletURLFactory {
+    private static final Logger LOGGER = LoggerFactory.getLogger(CdnEnabledURLFactory.class);
 
     @Override
     public URL createSkinURL(String filename, String skin, XWikiContext context) {
@@ -15,6 +17,8 @@ public class CurrikiServletURLFactory extends XWikiServletURLFactory {
         //System.err.println("Skin file: " + filename + " requested, responded " + u);
         return u;
     }
+
+
 
     private URL createSkinURLImpl(String filename, String skin, XWikiContext context) {
 
@@ -38,6 +42,30 @@ public class CurrikiServletURLFactory extends XWikiServletURLFactory {
         if(url==null) return null;
         return url.toExternalForm();
     }
+
+    public URL createAttachmentURL(String filename, String web, String name, String action, String querystring,
+                                   String xwikidb, XWikiContext context) {
+        URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
+        String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
+        if(cdnBaseURL!=null) {
+            String p = u.toExternalForm();
+            int firstSlash = p.indexOf("/", 7);
+            if (firstSlash <= 7) return u;
+            p = cdnBaseURL + p.substring(firstSlash);
+            LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + p + "\".");
+            try {
+                u = new URL(p);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+        }
+        return u;
+
+
+    }
+
+
+
 
 
     /* currently given up

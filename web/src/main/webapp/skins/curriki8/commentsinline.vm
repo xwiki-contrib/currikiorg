@@ -44,7 +44,7 @@
 			<img src="$xwiki.getSkinFile("noavatar.png")"/>
 				#else
 					#foreach ($attach in $creatorDoc.attachmentList)
-			<a href="$creatorDoc.getURL("view")" ><img src="$creatorDoc.getAttachmentURL($attach.filename,"download")" /></a>
+			<a href="$creatorDoc.getURL("view")" ><img src="$creatorDoc.getAttachmentURL($attach.filename,'download')" /></a>
 					#end
 				#end
 	</div>

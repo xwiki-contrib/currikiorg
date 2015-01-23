@@ -255,7 +255,7 @@
             #if($attach.filename == $avatarFileName)
               #set($pictureurl = $profiledoc.getAttachmentURL($avatarFileName))
               #set($picture = "<img src='")
-              #set($picture = $picture.concat($pictureurl))
+              #set($picture = "${attachmentsCDNbaseURL}$picture.concat($pictureurl)")
               #if ($size > 0)
                 #set($picture = $picture.concat("?width=${escapetool.xml(${size})}&amp;height=${escapetool.xml(${size})}&amp;keepAspectRatio=true"))
               #end

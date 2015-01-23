@@ -428,7 +428,7 @@ $msg.get($prop.name)#end
   *#
 #macro(normalizeattachment $link)
 #if(!($link.startsWith("/") || ($link.startsWith("javascript:")) || ($link.indexOf("://") > 0)) && !$link.equals(""))
-#set($result=$doc.getAttachmentURL($link))
+#set($result="$doc.getAttachmentURL($link)")
 #set ($link = $util.null)
 #setVariable("$link" $result)
 #end
@@ -1566,8 +1566,8 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
         #set($atts="style='max-width:${width}px; max-height:${height}px'")##
     #end##
     #if($current_avatar && "${current_avatar}" != "") ## {
-        #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-        #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
+        ## #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
+        #set($src=$memberdoc.getAttachmentURL($attach.filename,"download"))##
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
         #if($noUseVerb==true)
             <img src="$src${params}" $atts class="photo"/>##
@@ -1992,7 +1992,7 @@ Wysiwyg.onModuleLoad(function() {
         remove_linebreaks : false,
         plugins: 'table, contextmenu, paste, searchreplace',
         wiki_use_style: '$xwiki.useWysiwygStyleToolbar()',
-        wiki_images_path : '${textareadoc.getURL('download')}/',
+        wiki_images_path : '${attachmentsCDNbaseURL}${textareadoc.getURL('download')}/',
         wiki_attach_path : '${textareadoc.URL}',
         wiki_macro_path : '${textareadoc.URL}',
         wiki_plugins: 'core, attachments, macros'

@@ -1123,7 +1123,7 @@ public class CurrikiPlugin extends XWikiDefaultPlugin implements XWikiPluginInte
         }
     }
 
-    private static Set<String> publicConfigNames = new TreeSet(Arrays.asList("hostname", "GA", "addthis", "standardstab", "mediahost", "globalDebug","appserverHost", "mediajwplayerkey", "geometryHome", "CDN", "CDNsemiStatic"));
+    private static Set<String> publicConfigNames = new TreeSet(Arrays.asList("hostname", "GA", "addthis", "standardstab", "mediahost", "globalDebug","appserverHost", "mediajwplayerkey", "geometryHome", "CDN", "CDNsemiStatic", "attachmentsCDNbaseURL"));
     private static Map<String,String> publicConfigCache = new TreeMap<String,String>();
     private static final String MISSING = "----missing----123123";
 

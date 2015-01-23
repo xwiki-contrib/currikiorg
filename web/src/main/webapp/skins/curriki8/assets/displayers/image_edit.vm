@@ -1,7 +1,7 @@
 #asset_displaycontentheader("")
 #if($asset.attachmentList.size() > 0)
 #set($fileName = $asset.attachmentList.get(0).filename)
-#set($url = $asset.getAttachmentURL("$fileName"))
+#set($url = "$asset.getAttachmentURL($fileName)")
 #set($pictSize = "Medium")
 #set($pictSize = $!asset.display("display_size", "view", $asset.getObject("CurrikiCode.ImageAssetClass")))
 #if($pictSize == "small")

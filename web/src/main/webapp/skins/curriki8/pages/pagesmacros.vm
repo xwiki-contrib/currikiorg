@@ -109,7 +109,7 @@ $assetdesc <a class="readmore" href="$assetdoc.getURL()">$msg.get("readmore")...
 #macro(featured_partner_item $title $text $imagelink $fulltextlink)
 <div class="">
 #itemtitle($title $fulltextlink)
-#set($image = $xwiki.getAttachmentURL("Main.Partners", $imagelink))
+#set($image = "$xwiki.getAttachmentURL('Main.Partners', $imagelink)")
 #paragraphimg("portrait" $image "" $text $fulltextlink "" "")
 <div class="clr"></div>
 </div>

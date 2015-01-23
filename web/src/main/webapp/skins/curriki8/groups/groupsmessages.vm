@@ -519,11 +519,11 @@
     <div class="attachments">
       <div class="attachments_icon">#mimeicon($attach.filename)</div>
       <p><span class="date">
-      #set ($attachURL = $doc.getAttachmentURL("${attach.filename}", 'download'))
+      #set ($attachURL = "$doc.getAttachmentURL(${attach.filename}, 'download')")
       <a href="$attachURL" title="$msg.get('downloadthisattachment')">#packName($attach.filename)</a>
       </span> $attach.version
       <span class="right">
-      #set ($attachURL = $doc.getAttachmentURL("${attach.filename}", 'download', 'force-download=1'))
+      #set ($attachURL = "$doc.getAttachmentURL(${attach.filename}, 'download', 'force-download=1')")
       <a href="$attachURL" title="$msg.get('downloadthisattachment')">$msg.get('download')</a>
       #if($hasedit || $hasadmin)
       #set ($attachURL = $doc.getAttachmentURL("${attach.filename}", 'delattachment', "xredirect=${escapetool.url($redirect)}"))

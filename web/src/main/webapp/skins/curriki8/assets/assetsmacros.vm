@@ -481,7 +481,7 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 
 #macro(asset_attachment $asset $attachment)
 #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
-#set($assetAttachmentURL = $asset.getAttachmentURL("$assetAttachmentFilename"))
+#set($assetAttachmentURL = "$asset.getAttachmentURL($assetAttachmentFilename)")
     #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
     #if($loginToDownloadEscapes)#else##
         #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##

@@ -3,7 +3,7 @@
     <div class="asset-display-media-inner">
 #if($request.showembed && $request.showembed=="1")
         #set($fileName = $asset.attachmentList.get(0).filename)
-        #set($url = $asset.getAttachmentURL("$fileName"))
+        #set($url = "$asset.getAttachmentURL($fileName)")
         #set($url = "http://${request.serverName}${url}?basicauth=1")
         <OBJECT id='mediaPlayer' width="320" height="285"
                 classid='CLSID:22d6f312-b0f6-11d0-94ab-0080c74c7e95'
