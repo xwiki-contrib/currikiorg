@@ -56,13 +56,13 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
                 b.append(cdnBaseURL).append(p.substring(firstSlash));
                 if(p.contains("?")) b.append("&"); else b.append("?");
                 b.append("v=").append(context.getWiki().getDocument(web, name, context).getVersion());
-                LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + b + "\".");
+                if(LOGGER.isInfoEnabled()) LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + b + "\".");
                 u = new URL(b.toString());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        System.err.println("createAttachment URL "+ filename +" returning \"" + u + "\".");
+        //System.err.println("createAttachment URL "+ filename +" returning \"" + u + "\".");
         return u;
     }
 
