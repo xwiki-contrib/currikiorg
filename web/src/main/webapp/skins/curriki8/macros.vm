@@ -1556,23 +1556,25 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
     #if("$!width"=="" && "$!height"=="")##
         #set($params="")#set($atts="")##
     #elseif("$!width"=="")##
-        #set($params="?height=$reqHeight")##
+        #set($params="height=$reqHeight")##
         #set($atts="height='${height}'")##
     #elseif("$!height"=="")##
-        #set($params="?width=$width")##
+        #set($params="width=$width")##
         #set($atts="width='${width}'")##
     #else##
-        #set($params="?width=$reqWidth&height=$reqHeight&keepAspectRatio=true")##
+        #set($params="width=$reqWidth&height=$reqHeight&keepAspectRatio=true")##
         #set($atts="style='max-width:${width}px; max-height:${height}px'")##
     #end##
     #if($current_avatar && "${current_avatar}" != "") ## {
-        ## #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-        #set($src=$memberdoc.getAttachmentURL($attach.filename,"download"))##
+        #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
+        #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
+        #if($src.contains("?"))#set($sep='&')#else#set($sep='?')#end
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
+        #set($u="$src$sep$params")
         #if($noUseVerb==true)
-            <img src="$src${params}" $atts class="photo"/>##
+            <img src="$u" $atts class="photo"/>##
         #else
-            <img src="#verbatim($src)${params}" $atts class="photo"/>##
+            <img src="#verbatim($u)" $atts class="photo"/>##
         #end
     </a>
     #else ## } {

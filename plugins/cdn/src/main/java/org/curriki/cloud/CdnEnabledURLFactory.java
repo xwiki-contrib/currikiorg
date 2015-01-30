@@ -48,20 +48,22 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
         URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
         String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
         if(cdnBaseURL!=null) {
-            String p = u.toExternalForm();
-            int firstSlash = p.indexOf("/", 7);
-            if (firstSlash <= 7) return u;
-            p = cdnBaseURL + p.substring(firstSlash);
-            LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + p + "\".");
             try {
-                u = new URL(p);
-            } catch (MalformedURLException e) {
+                String p = u.toExternalForm();
+                int firstSlash = p.indexOf("/", 7);
+                if (firstSlash <= 7) return u;
+                StringBuffer b = new StringBuffer();
+                b.append(cdnBaseURL).append(p.substring(firstSlash));
+                if(p.contains("?")) b.append("&"); else b.append("?");
+                b.append("v=").append(context.getWiki().getDocument(web, name, context).getVersion());
+                LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + b + "\".");
+                u = new URL(b.toString());
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+        System.err.println("createAttachment URL "+ filename +" returning \"" + u + "\".");
         return u;
-
-
     }
 
 
