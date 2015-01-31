@@ -118,6 +118,7 @@ Ext.ns('Curriki.global');
 Curriki.global.username = "$!{context.user}";
 Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
 Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+Curriki.global.attachmentsCDNbaseURL = "$attachmentsCDNbaseURL";
 </script>
 #end ##}
 #if($globalDebug)##{
