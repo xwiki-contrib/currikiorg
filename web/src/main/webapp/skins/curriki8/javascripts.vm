@@ -104,13 +104,18 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
                 #end ##}
         #end ## }
 
-#set($mediaHost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')")##
-#if($mediaHost!='-missing-media-host-')
-<script src="${mediaHost}/media/jwplayer6/jwplayer.js"></script>
+#set($mediahost="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-mediahost-')")##
+#set($jsLibs="$xwiki.curriki.getPublicCurrikiConfig('jsLibs','-missing-jsLibs-')")##
+#if($jsLibs!="-missing-jsLibs-")
+<script src="${jsLibs}/jwplayer6/jwplayer.js"></script>
+#else
+<script src="${mediahost}/media/jwplayer6/jwplayer.js"></script>
+#end
+#if($mediahost!='-missing-media-host-')
 <script type="text/javascript">
     if(typeof(window.jwplayer)=="undefined") window.jwplayer = new Object();
     window.jwplayer.key="$xwiki.curriki.getPublicCurrikiConfig('mediajwplayerkey','-missing-media-mediajwplayerkey-')";
-    window.videoPrefixToDownload = "http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/";
+    window.videoPrefixToDownload = "$mediahost/media/deliver/";
 </script>
 #end##
 <script type="text/javascript">

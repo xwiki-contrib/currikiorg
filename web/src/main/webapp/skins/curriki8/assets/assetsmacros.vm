@@ -480,8 +480,9 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
 
 
 #macro(asset_attachment $asset $attachment)
-#set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
-#set($assetAttachmentURL = "$asset.getAttachmentURL($assetAttachmentFilename)")
+    #set($assetAttachmentFilename = $asset.attachmentList.get(0).filename)
+    #set($assetAttachmentURL = "$asset.getAttachmentURL($assetAttachmentFilename,'download')")
+    #set($assetAttachmentURLForceDownload = "$asset.getAttachmentURL($assetAttachmentFilename,'download','force-download=1')")
     #set($loginToDownloadEscapes=$request.getSession().getServletContext().getAttribute("LoginToDownloadEscapes"))##
     #if($loginToDownloadEscapes)#else##
         #set($processor = $xwiki.parseGroovyFromPage("CurrikiCode.LoginToDownloadExceptionsProcessor"))##
@@ -501,12 +502,12 @@ showhide${seccounter}.onclick = new Function("toggleSectionVisibility(${seccount
      #end
      <a
         href="$assetAttachmentURL" ##
-        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURLForceDownload}'; return false;"##
              >$assetAttachmentFilename</a> (${filesize}kb)
  </p>
  <button class="button-link button-link-download" ##
         ext:qtip="$msg.get("rve.content.view.download.download_button")" ##
-        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURL}?force%2Ddownload=1'; return false;"##
+        onclick="Curriki.logView('/Download/attachment/${asset.space}/${asset.name}/${assetAttachmentFilename}'); location = '${assetAttachmentURLForceDownload}'; return false;"##
             >$msg.get("rve.content.view.download.download_button")
  </button>
 #end

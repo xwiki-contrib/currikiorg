@@ -45,6 +45,7 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
 
     public URL createAttachmentURL(String filename, String web, String name, String action, String querystring,
                                    String xwikidb, XWikiContext context) {
+        if(filename==null || web==null || name==null || action==null || xwikidb==null || context==null) return null;
         URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
         String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
         if(cdnBaseURL!=null) {
