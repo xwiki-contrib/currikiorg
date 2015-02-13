@@ -4,6 +4,7 @@ import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.web.XWikiServletURLFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.xwiki.model.reference.DocumentReference;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -45,10 +46,16 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
 
     public URL createAttachmentURL(String filename, String web, String name, String action, String querystring,
                                    String xwikidb, XWikiContext context) {
-        if(filename==null || web==null || name==null || action==null || xwikidb==null || context==null) return null;
+        if(filename==null || web==null || name==null || action==null || xwikidb==null || context==null)
+            return null;
+        boolean isPublic = false;
+        try {
+            isPublic = context.getWiki().getRightService().hasAccessLevel("view", "XWiki.XWikiGuest",
+                    context.getWiki().getDocument(new DocumentReference(xwikidb, web, name), context).getPrefixedFullName(), context);
+        } catch(Exception ex) {ex.printStackTrace();}
         URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
         String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
-        if(cdnBaseURL!=null) {
+        if(isPublic && cdnBaseURL!=null) {
             try {
                 String p = u.toExternalForm();
                 int firstSlash = p.indexOf("/", 7);
