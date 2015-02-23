@@ -253,7 +253,7 @@ if(this.displayInfo){this.displayEl=Ext.fly(this.el.dom).createChild({cls:"x-pag
 }if(this.dsLoaded){this.onLoad.apply(this,this.dsLoaded)}}});Ext.override(Ext.ux.Andrie.pPageSize,{setPageSize:function(b,a){var c=this.pagingToolbar;
 this.combo.collapse();b=parseInt(b)||parseInt(this.combo.getValue());b=(b>0)?b:1;
 if(b==c.pageSize){return}else{this.pagingToolbar.pageSize=b;this.pagingToolbar.doLoad(Math.floor(this.pagingToolbar.cursor/this.pagingToolbar.pageSize)*this.pagingToolbar.pageSize)
-}this.updateStore()}});Ext.BLANK_IMAGE_URL="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif";
+}this.updateStore()}});Ext.BLANK_IMAGE_URL=Curriki.global.staticCDNbaseURL+"/xwiki/skins/curriki8/extjs/resources/images/default/s.gif";
 Ext.Ajax.defaultHeaders={Accept:"application/json","Content-Type":"application/json; charset=utf-8"};
 Ext.Ajax.disableCaching=false;Ext.Ajax.timeout=120000;if(!("console" in window)||!(console.log)){var names=["log","debug","info","warn","error","assert","dir","dirxml","group","groupEnd","time","timeEnd","count","trace","profile","profileEnd"];
 window.console={};for(var i=0;i<names.length;++i){window.console[names[i]]=Ext.emptyFn
@@ -324,7 +324,7 @@ a.push(c)}});return a}};Ext.ns("Curriki.data.ict");Curriki.data.ict.list=["activ
 Curriki.data.ict.data=[];Curriki.data.ict.list.each(function(a){var b=_("CurrikiCode.AssetClass_instructional_component_"+a);
 if(a==="other"){b="zzz"}Curriki.data.ict.data.push([a,_("CurrikiCode.AssetClass_instructional_component_"+a),b])
 });Curriki.data.ict.store=new Ext.data.SimpleStore({fields:["id","ict","sortValue"],sortInfo:{field:"sortValue",direction:"ASC"},data:Curriki.data.ict.data,id:0});
-Curriki.data.ict.getRolloverDisplay=function(b){var d=b||[];var a="";var c='<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
+Curriki.data.ict.getRolloverDisplay=function(b){var d=b||[];var a="";var c='<div class="ict-{0}"><img class="ict-icon" src="'+Curriki.global.staticCDNbaseURL+'/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
 if("undefined"!==typeof d&&"undefined"!==typeof d[0]){a+=String.format(c,d[0].replace(/_.*/,""),_("CurrikiCode.AssetClass_instructional_component_"+d[0]));
 if("undefined"!==typeof d[1]){a+=String.format(c,d[1].replace(/_.*/,""),_("CurrikiCode.AssetClass_instructional_component_"+d[1]));
 if("undefined"!==typeof d[2]){a+="...<br />"}}}else{a+=String.format(c,"none",_("global.title.popup.ict.missing"))

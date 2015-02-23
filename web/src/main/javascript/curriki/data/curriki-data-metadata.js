@@ -30,7 +30,7 @@ Curriki.data.ict.getRolloverDisplay = function(el_ict){
 	var icts = el_ict||[];
 	var ict = "";
 
-	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
+	var wrap = '<div class="ict-{0}"><img class="ict-icon" src="'+Curriki.global.staticCDNbaseURL+'/xwiki/skins/curriki8/extjs/resources/images/default/s.gif" /><span class="ict-title">{1}</span></div>';
 
 	if ("undefined" !== typeof icts && "undefined" !== typeof icts[0]) {
 		ict += String.format(wrap, icts[0].replace(/_.*/, ''), _('CurrikiCode.AssetClass_instructional_component_'+icts[0]));

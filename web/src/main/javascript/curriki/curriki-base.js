@@ -2,7 +2,7 @@
 /*global Ext */
 /*global _ */
 
-Ext.BLANK_IMAGE_URL = '/xwiki/skins/curriki8/extjs/resources/images/default/s.gif';
+Ext.BLANK_IMAGE_URL = Curriki.global.staticCDNbaseURL + '/xwiki/skins/curriki8/extjs/resources/images/default/s.gif';
 
 Ext.Ajax.defaultHeaders = {
 	 'Accept': 'application/json'

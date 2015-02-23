@@ -81,8 +81,15 @@
 
                 function onLabelClick${treeviewid}(node) {
                     var path = node.labelElId;
-                    if (!(path[path.length - 1] == "/"))
-                        window.open(baseUrl${treeviewid} + "/" + path);
+                    if (!(path[path.length - 1] == "/")) {
+                        var s = baseUrl${treeviewid};
+                        var p = path.indexOf('?');
+                        if(p>0)
+                            s = s.substring(0,p) + "/" + path + s.substring(p, s.length());
+                        else
+                            s = s = "/" + path;
+                        window.open(s);
+                    }
                 }
 
                 function treeInit${treeviewid}() {
