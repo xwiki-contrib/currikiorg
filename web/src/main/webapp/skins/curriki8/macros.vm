@@ -1579,11 +1579,12 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
     </a>
     #else ## } {
     #set($src=$xwiki.getSkinFile("noavatar.png"))##
+    #if($src.contains("?"))#set($sep='&')#else#set($sep='?')#end
     <a target="${target}" href="/xwiki/bin/view/MyCurriki/Profile?user=$userdoc" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)">
         #if($noUseVerb==true)
-            <img src="$src${params}" $atts class="photo"/>##
+            <img src="$src${sep}${params}" $atts class="photo"/>##
         #else
-            <img src="#verbatim($src)${params}" $atts class="photo"/>##
+            <img src="#verbatim($src)${sep}${params}" $atts class="photo"/>##
         #end
     </a>
     #end ## }
