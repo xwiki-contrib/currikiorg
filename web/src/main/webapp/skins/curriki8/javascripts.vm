@@ -35,6 +35,15 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 <script src="${cdn}/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
 <script src="${cdn}/xwiki/skins/curriki20/extjs/ext-all${debugging}.js" type="text/javascript"></script>
 #end
+<script type="text/javascript">
+    Ext.ns('Curriki.global');
+    Curriki.global.username = "$!{context.user}";
+    Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
+    Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+    Curriki.global.attachmentsCDNbaseURL = "$attachmentsCDNbaseURL";
+    Curriki.global.staticCDNbaseURL = "$cdn";
+</script>
+
 
 #if($doc.fullName != "Main.JoinCurriki" || $context.user != "XWiki.XWikiGuest")##{
         #if("$!request.lang" != "")##{
@@ -56,15 +65,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
 ##<script src="/xwiki/bin/view/Util/JSTrans?xpage=plain&language=${lang}"></script>
 ## and comment the next one out instead
 <script src="${cdnSemiStatic}/trans/lang_${lang}.js"></script>
-<script type="text/javascript">
-    Ext.ns('Curriki.global');
-    Curriki.global.username = "$!{context.user}";
-    Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
-    Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
-    Curriki.global.attachmentsCDNbaseURL = "$attachmentsCDNbaseURL";
-    Curriki.global.staticCDNbaseURL = "$cdn";
-</script>
-#end ##}
+
 ## Similarily if using xwiki standalone you need to comment out the #if section and just use the #else section
         #if("$!debugging" == "")##{
 <script src="${cdn}/xwiki/js/curriki-merged.js"></script>
@@ -126,6 +127,7 @@ document.write(unescape("%3Cscript src='" + ejLoc + "ext-all${debugging}.js' typ
     window.videoPrefixToDownload = "$mediahost/media/deliver/";
 </script>
 #end##
+#end ##}
 #if($globalDebug)##{
     <script type="text/javascript">if(Curriki.console) { Curriki.console.log("Now in "+window.name+" on: " + window.location.href ); Curriki.console.log(" inside frame? " + (window.top!=window)); } </script>
 #end##}
