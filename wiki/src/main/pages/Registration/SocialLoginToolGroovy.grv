@@ -18,6 +18,7 @@ import org.brickred.socialauth.AuthProvider
 import org.brickred.socialauth.AuthProviderFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
+import org.brickred.socialauth.util.SocialAuthUtil
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -209,7 +210,7 @@ public class SocialLoginToolGroovy {
 
             try {
                 if(request.error!='access_denied')
-                    profile = providerObj.verifyResponse(request)
+                    profile = providerObj.verifyResponse(SocialAuthUtil.getRequestParametersMap(request))
                 LOG.info("obtained profile: " + profile);
             } catch (Exception ex) { LOG.warn("Error while verifing response", ex); }
             if(profile==null) {
@@ -848,7 +849,7 @@ public class SocialLoginToolGroovy {
         try {
             String pictureApiUrl = "https://www.google.com/m8/feeds/photos/profile/curriki.org/felix";
             AuthProvider providerObj = request.session.getAttribute("org.brickred.socialauth.AuthProvider");
-            providerObj.verifyResponse(request);
+            providerObj.verifyResponse(SocialAuthUtil.getRequestParametersMap(request));
             org.brickred.socialauth.util.Response response = providerObj.api(pictureApiUrl, "GET", new HashMap<String, String>(), new HashMap<String, String>(), "");
             System.out.println("Try to load profile Picture from Google.." + response.getResponseBodyAsString("UTF-8").length() );
         } catch (Exception e){

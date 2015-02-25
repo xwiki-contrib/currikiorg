@@ -20,7 +20,7 @@
     <!-- nextStep now is $nextStep -->
 #end ##
 <html><head><title>Redirection</title>
-#if($hasScripts)#else #template("javascripts.vm")#end
+## #if($hasScripts)#else #template("javascripts.vm")#end
 </head><body>##
 #if($context.user!="XWiki.XWikiGuest" && $request.getHeader("User-Agent").contains(" Chrome") || $request.getHeader("Via"))
     #set($redir="http://$hostname$nextStep")##
@@ -33,7 +33,7 @@
         </p>##
 
 <script type="text/javascript">
-    #if($hasDownload)Curriki.console.log("Has download.");
+    #if($hasDownload)if(console) console.log("Has download.");
     #end
     var w = window;
     try {

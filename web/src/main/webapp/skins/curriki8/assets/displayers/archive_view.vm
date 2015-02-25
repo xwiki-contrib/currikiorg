@@ -44,8 +44,9 @@
             <script type="text/javascript">
 
                 function archiveStartButtonClicked(){
-                  window.open('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');
-                  Curriki.logView('$asset.getAttachmentURL("$attach")$asset.getValue("startfile")');
+                    var u = extendPathOfUrl('$asset.getAttachmentURL("$attach")', '$asset.getValue("startfile")')
+                    window.open(u);
+                    Curriki.logView(u);
                 }
 
                 function showTree(treeId, button) {
@@ -89,10 +90,12 @@
 
                 function onLabelClick${treeviewid}(node) {
                     var path = node.labelElId;
-                    if (!(path[path.length - 1] == "/"))
-                        window.open(baseUrl${treeviewid} + "/" + path);
+                    var u = extendPathOfUrl(baseUrl${treeviewid}, path);
 
-                    Curriki.logView(baseUrl${treeviewid} + "/" + path);
+                    if (!(path[path.length - 1] == "/"))
+                        window.open(u);
+
+                    Curriki.logView(u);
                 }
 
                 function treeInit${treeviewid}() {

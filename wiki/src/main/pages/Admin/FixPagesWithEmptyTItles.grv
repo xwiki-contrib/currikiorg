@@ -1,15 +1,62 @@
 
 // {{groovy}}
+println("{{html clean=false}}");
+
+import com.xpn.xwiki.api.Document
+import com.xpn.xwiki.api.XWiki
+
+boolean confirm = request.confirm!= null && request.confirm.startsWith("Confirm");
+
+String pageNamePattern = request.pattern;
+String prefix = request.prefix; if(prefix && prefix.length()==0) prefix = null;
+String suffix = request.suffix; if(suffix && suffix.length()==0) suffix = null;
 
 println("""
 <form action="${doc.name}" method="POST">
   <h3>Fix Pages with Empty Titles</h3>
   <p>
-  Pattern: <input type="text" name="pattern"/><br/>
-  Prefix to remove: <input type="text" name="prefix"/><br/>
-
+  Pattern: <input type="text" name="pattern" value="${pageNamePattern!=null ? pageNamePattern: ''}"/><br/>
+  Prefix to remove: <input type="text" name="prefix" value="${prefix!=null ? prefix : ''}"/><br/>
+  Suffix to remove: <input type="text" name="suffix" value="${suffix!=null ? suffix : ''}"/><br/>
+  <input type='submit' name='try' value='submit'>
 
 """)
 
+int count = 0;
 
-// {{/groovy}}
+if(request.pattern && request.pattern!="") {
+    String query = "select distinct doc.fullName from XWikiDocument as doc where doc.name LIKE '%${pageNamePattern}%'";
+    List docs = xwiki.search(query);
+    if(docs!=null && docs.size()>0) {
+        println("<p>Evaluating ${docs.size()} documents.</p>");
+        String verb = confirm ? "Converting " : "Would convert ";
+        for(String docFullName in docs) {
+            Document d = xwiki.getDocument(docFullName);
+            if(d.title.length()==0) {
+                String n = d.name;
+                if(prefix && n.startsWith(prefix)) n = n.substring(prefix.length());
+                if(suffix && n.endsWith(suffix))   n = n.substring(0,n.length()-request.suffix.length());
+                n = n.replaceAll("_", " ");
+                print("<li> ${verb} ${d.fullName} to <a href='${d.getURL("view")}'>${n}</a>");
+                if(confirm) {
+                    d.title = n;
+                    d.saveWithProgrammingRights("Restoring a title.");
+                    print("... done")
+                }
+                println(".</li>");
+                count++;
+            };
+        }
+        println("</ul>")
+        if(confirm)
+            println("<p>Processed ${count} documents.");
+        else
+            println("<p>No documents processed.");
+    }
+}
+
+if(request.try && count>0) println("<input type='submit' name='confirm' value='Confirm to process ${count} documents.'>");
+println("</form>");
+
+println("{{/html}}");
+//  {{/groovy}}

@@ -673,3 +673,13 @@ function scheduleDialogRescale(dialogWindow, dialogDoc, iframeName, minWidth, mi
     };
     if(Ext) Ext.onReady(accomplishRescale);
 }
+
+function extendPathOfUrl(base, exten) {
+    if(base==null || exten==null) return '';
+    var qMark = base.indexOf('?');
+    if(qMark>-1) {
+        var params = base.substring(qMark);
+        return base.substring(0, qMark) + exten + params;
+    } else
+        return base+exten;
+}
