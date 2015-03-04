@@ -44,7 +44,8 @@
                 <script type="text/javascript">
 
                     function archiveStartButtonClicked(){
-                        var u = extendPathOfUrl('$asset.getAttachmentURL("$attach")', '/$asset.getValue("startfile")')
+                        #set($p=$asset.getValue("startfile"))#if($p.startsWith("/"))#else#set($p="/${p}")#end
+                        var u = extendPathOfUrl('$asset.getAttachmentURL("$attach")', '${p}')
                         window.open(u);
                         Curriki.logView(u);
                     }
