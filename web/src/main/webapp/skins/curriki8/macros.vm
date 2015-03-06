@@ -1565,9 +1565,8 @@ $called $dFrom - $dTo $msg.get("mycurriki.macro.paginate.of") $of
         #set($params="width=$reqWidth&height=$reqHeight&keepAspectRatio=true")##
         #set($atts="style='max-width:${width}px; max-height:${height}px'")##
     #end##
-    #if($current_avatar && "${current_avatar}" != "") ## {
-        #set($attach = $userdoc.getAttachment("${current_avatar}").attachment)
-        #set($src=$userdoc.getAttachmentURL($attach.filename,"download"))##
+    #if($current_avatar && "${current_avatar}" != "" && $userdoc.getAttachmentURL("${current_avatar}","download")) ## {
+        #set($src=$userdoc.getAttachmentURL($current_avatar,"download"))##
         #if($src.contains("?"))#set($sep='&')#else#set($sep='?')#end
     <a href="$userdoc.getURL("view")" target="${target}" title="$xwiki.curriki.escapeForJS($assetAuthorDisplayName)" class="photo">
         #set($u="$src$sep$params")
