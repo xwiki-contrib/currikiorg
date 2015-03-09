@@ -54,22 +54,24 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
                     context.getWiki().getDocument(new DocumentReference(xwikidb, web, name), context).getPrefixedFullName(), context);
         } catch(Exception ex) {ex.printStackTrace();}
         URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
-        try {
-            String p = u.toExternalForm();
-            StringBuffer b = new StringBuffer();
-            String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
-            if(isPublic && cdnBaseURL!=null) {
-                int firstSlash = p.indexOf("/", 7);
-                if (firstSlash <= 7) return u;
-                b.append(cdnBaseURL).append(p.substring(firstSlash));
-            } else
-                b.append(p);
-            if(p.contains("?")) b.append("&"); else b.append("?");
-            b.append("v=").append(context.getWiki().getDocument(web, name, context).getVersion());
-            if(LOGGER.isInfoEnabled()) LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + b + "\".");
-            u = new URL(b.toString());
-        } catch (Exception e) {
-            e.printStackTrace();
+        if("download".equals(action)) {
+            try {
+                String p = u.toExternalForm();
+                StringBuffer b = new StringBuffer();
+                String cdnBaseURL = context.getWiki().Param("curriki.system.attachmentsCDNbaseURL");
+                if(isPublic && cdnBaseURL!=null) {
+                    int firstSlash = p.indexOf("/", 7);
+                    if (firstSlash <= 7) return u;
+                    b.append(cdnBaseURL).append(p.substring(firstSlash));
+                } else
+                    b.append(p);
+                if(p.contains("?")) b.append("&"); else b.append("?");
+                b.append("v=").append(context.getWiki().getDocument(web, name, context).getVersion());
+                if(LOGGER.isInfoEnabled()) LOGGER.info("createAttachmentURL: " + action + " " + web + " " + name + " " + filename + ": returning \"" + b + "\".");
+                u = new URL(b.toString());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         //System.err.println("createAttachment URL "+ filename +" returning \"" + u + "\".");
         return u;
