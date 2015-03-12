@@ -53,6 +53,7 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
             isPublic = context.getWiki().getRightService().hasAccessLevel("view", "XWiki.XWikiGuest",
                     context.getWiki().getDocument(new DocumentReference(xwikidb, web, name), context).getPrefixedFullName(), context);
         } catch(Exception ex) {ex.printStackTrace();}
+        if(isPublic && web!=null && "Temp".equals(web) || "AssetTemp".equals(web)) isPublic = false;
         URL u = super.createAttachmentURL(filename, web, name, action, querystring, xwikidb, context);
         if("download".equals(action)) {
             try {
