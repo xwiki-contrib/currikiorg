@@ -2,6 +2,17 @@
   * Asset MP3 Displayer in View mode
   *
   *#
+#* @vtlvariable name="xwiki" type="com.xpn.xwiki.api.XWiki" *# ##
+#* @vtlvariable name="context" type="com.xpn.xwiki.api.Context" *# ##
+#* @vtlvariable name="request" type="javax.servlet.http.HttpServletRequest" *# ##
+#* @vtlvariable name="response" type="javax.servlet.http.HttpServletResponse" *# ##
+#* @vtlvariable name="msg" type="com.xpn.xwiki.web.XWikiMessageTool" *# ##
+#* @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset" *# ##
+#* @vtlvariable name="doc" type="com.xpn.xwiki.api.Document" *#
+## @vtlvariable name="asset" type="org.curriki.xwiki.plugin.asset.Asset"
+## @vtlvariable name="document" type="com.xpn.xwiki.api.Document"
+#* @vtlvariable name="util" type="com.xpn.xwiki.api.Util" *# ##
+#* @vtlvariable name="escapetool" type="org.apache.velocity.tools.generic.EscapeTool" *# ##
 #asset_displaycontentheader("text-align:center;")
 <div class="asset-display-media">
 <div class="asset-display-media-inner">
@@ -19,13 +30,14 @@
 <object classid="clsid:d27cdb6e-ae6d-11cf-96b8-444553540000" codebase="http://fpdownload.macromedia.com/
 pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" id="mini_player_mp3" align="middle" height="25" width="331">
 <param name="allowScriptAccess" value="sameDomain">
-#set($playerUrl = "$xwiki.getDocument('MimeType.audio_mp3').getAttachmentURL('mini_player_mp3.swf')")
 #set($mp3Url = $asset.getAttachmentURL($attach.filename))
-<param name="movie" value="${playerUrl}?my_mp3=${mp3Url}&my_text=$attach.filename">
+#set($q="my_text=$escapetool.url($attach.filename)&my_mp3=$escapetool.url($mp3Url)")
+#set($playerUrl = "$xwiki.getDocument('MimeType.audio_mp3').getAttachmentURL('mini_player_mp3.swf','download',$q)")
+<param name="movie" value="${playerUrl}">
 <param name="quality" value="high">
 <param name="bgcolor" value="#ffffff">
 <param name="wmode" value="transparent">
-<embed src="$playerUrl?my_mp3=${mp3Url}&my_text=$attach.filename" wmode="transparent" quality="high" bgcolor="#ffffff" name="mini_player_mp3" allowscriptaccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" align="middle" height="25" width="331">
+<embed src="${playerUrl}" wmode="transparent" quality="high" bgcolor="#ffffff" name="mini_player_mp3" allowscriptaccess="sameDomain" type="application/x-shockwave-flash" pluginspage="http://www.macromedia.com/go/getflashplayer" align="middle" height="25" width="331">
 </object>
 #end
 </div></div>
