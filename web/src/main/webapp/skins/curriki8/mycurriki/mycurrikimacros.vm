@@ -98,7 +98,7 @@ $text
       #if("$n"!="")#set($attach=$n)#end
   #end
   #if("$!attach"!="")
-    <img src="$userdoc.getAttachmentURL($attach,"download")?width=176&height=176&keepAspectRatio=true" />
+    <img src=$userdoc.getAttachmentURL($attach,"download","width=176&height=176&keepAspectRatio=true") />
   #else ##}{
     <img src="$xwiki.getSkinFile("noavatar.png")" />
   #end ##}
