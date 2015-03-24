@@ -1,7 +1,7 @@
 #asset_displaycontentheader("text-align:center;")
 #if($asset.attachmentList.size() > 0)
 #set($fileName = $asset.attachmentList.get(0).filename)
-#set($flashurl = "$asset.getAttachmentURL($fileName)")
+#set($flashurl = "/xwiki/bin/download/$asset.space/$asset.name/$fileName")## "$asset.getAttachmentURL($fileName)"
 <div class="asset-display-media">
 <div class="asset-display-media-inner">
     #set($caption = "")

@@ -19,6 +19,9 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
         return u;
     }
 
+/*    public URL createSkinURL(String filename, boolean forceSkin, XWikiContext context) {
+
+    } */
 
 
     private URL createSkinURLImpl(String filename, String skin, XWikiContext context) {
