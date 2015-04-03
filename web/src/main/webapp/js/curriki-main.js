@@ -496,16 +496,16 @@ if(Ext.isIE){Curriki.ui.login.popupIdentityAuthorization2(c,null)}window.Curriki
 };Curriki.ui.login.popupGCheckout=function(a,b){if(!Ext.isIE){Curriki.ui.login.popupAuthorization4(a,window,"curriki-login-dialog","checkoutWindow")
 }if(b&&b.startsWith("close-now-")){window.top.location.href=b.substring(10)}else{if(b){window.location.href=b
 }}if(Ext.isIE){Curriki.ui.login.popupAuthorization4(a,window,"curriki-login-dialog","checkoutWindow")
-}window.top.name="currikiMainWindow"};Curriki.ui.login.popupAuthorization4=function(c,f,e,d){Curriki.console.log("Opening authorization to "+c);
-if(window!=window.top){window.name="curriki-login-dialog"}if(e){window.name=e}if(d){}else{d="curriki_login_authorize"
-}var b;if(window.frames[d]){Curriki.console.log("Re-using window.");b=window.frames[d];
-b.location.href=c}else{Curriki.console.log("Creating window.");var a=Math.max(0,(screen.width-980)/2);
-var g=Math.max(0,(screen.height-600)/2);b=window.open(c,d,"toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+a+",top="+g);
-if(!b||typeof(b)==undefined){if(d=="checkoutWindow"){if(window.localtion.indexOf()){window.location="http://welcome.curriki.org/about-curriki/donate/"
-}}else{if(d=="curriki_login_authorize"){window.location.pathname="/xwiki/bin/view/Registration/ManualLogin"
+}window.top.name="currikiMainWindow"};Curriki.ui.login.popupAuthorization4=function(c,k,d,h){Curriki.console.log("Opening authorization to "+c);
+if(window!=window.top){window.name="curriki-login-dialog"}if(d){window.name=d}if(h){}else{h="curriki_login_authorize"
+}var a;if(window.frames[h]){Curriki.console.log("Re-using window.");a=window.frames[h];
+a.location.href=c}else{Curriki.console.log("Creating window.");var e=440,b=520;var g=Math.max(0,(screen.width-e)/2);
+var f=Math.max(0,(screen.height-b)/2);a=window.open(c,h,"toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width="+e+",height="+b+",left="+g+",top="+f);
+if(!a||typeof(a)==undefined){if(h=="checkoutWindow"){if(window.localtion.indexOf()){window.location="http://welcome.curriki.org/about-curriki/donate/"
+}}else{if(h=="curriki_login_authorize"){window.location.pathname="/xwiki/bin/view/Registration/ManualLogin"
 }}}}window.focusIt=window.setInterval(function(){window.clearInterval(window.focusIt);
-b.focus()},100);window.Curriki.ui.login.authorizeDialog=b;window.top.Curriki.ui.login.authorizeDialog=b;
-if(f&&f!=null){window.Curriki.ui.login.windowThatShouldNextGoTo=f}return false};Curriki.ui.login.finishAuthorizationPopup=function(a,d,f,c){Curriki.console.log("Finishing popup, (toTop? "+c+") target: "+a);
+a.focus()},100);window.Curriki.ui.login.authorizeDialog=a;window.top.Curriki.ui.login.authorizeDialog=a;
+if(k&&k!=null){window.Curriki.ui.login.windowThatShouldNextGoTo=k}return false};Curriki.ui.login.finishAuthorizationPopup=function(a,d,f,c){Curriki.console.log("Finishing popup, (toTop? "+c+") target: "+a);
 if(typeof(d)=="undefined"||d==window){d=window.open(a,"currikiMainWindow")}if(d){Curriki.console.log("We are in popup, closing and opening popup.");
 var e=d;if(d.Curriki.ui.login.windowThatShouldNextGoTo){e=d.Curriki.ui.login.windowThatShouldNextGoTo
 }Curriki.console.log("targetWindow: "+e+" with force to top "+c);if(c){e=e.top}else{if(d.Ext&&d.Ext.get("loginIframe")){e=d.Ext.get("loginIframe").dom.contentWindow

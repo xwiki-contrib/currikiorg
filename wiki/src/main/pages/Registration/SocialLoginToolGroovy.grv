@@ -19,6 +19,8 @@ import org.brickred.socialauth.AuthProviderFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
 import org.brickred.socialauth.util.SocialAuthUtil
+import org.brickred.socialauth.SocialAuthManager
+import org.brickred.socialauth.SocialAuthConfig
 
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
@@ -43,6 +45,7 @@ public class SocialLoginToolGroovy {
     def targets;
     def profile = null;
     boolean hasAuthenticated = false;
+    private SocialAuthManager sAManager = null;
 
     /**
      * A switch to set if the registration of a new user
@@ -146,7 +149,13 @@ public class SocialLoginToolGroovy {
     public String bounceToProvider(HttpServletResponse response) {
         try {
             System.out.println("Bouncing to Provider " + request.provider);
-            AuthProvider provider = AuthProviderFactory.getInstance(request.provider, properties);
+            if(sAManager == null) {
+                sAManager = new SocialAuthManager();
+                SocialAuthConfig config = new SocialAuthConfig();
+                config.load(properties);
+                sAManager.setSocialAuthConfig(config);
+            }
+            //AuthProvider provider = sAManager.connect(request.provider, properties);
             //println provider; // ???
             String maybeRedirect = request.getParameter("xredirect");
             if(maybeRedirect!=null && maybeRedirect.length()>0)
@@ -166,12 +175,13 @@ public class SocialLoginToolGroovy {
             memberType = request.getParameter("member_type")
             if(memberType != null) targetUrl += ("&member_type=" + memberType)
 
-            provider.setPermission(Permission.AUTHENTICATE_ONLY);
-            String url = provider.getLoginRedirectURL(targetUrl);
+            sAManager.setPermission(request.provider, Permission.AUTHENTICATE_ONLY);
+            String url = sAManager.getAuthenticationUrl(request.provider, targetUrl);
+            url = url + (url.indexOf('?')>=0 ? '&' : '?') + 'display=popup';
             System.out.println("Redirecting to " + url);
 
             // Store in session
-            request.session.setAttribute("org.brickred.socialauth.AuthProvider", provider);
+            request.session.setAttribute("org.brickred.socialauth.SocialAuthManager", sAManager);
             request.session.setAttribute("org.brickred.socialauth.AuthProvider.hint", request.provider);
             response.sendRedirect(url);
             return "nothing";
@@ -198,19 +208,25 @@ public class SocialLoginToolGroovy {
     public String processAuthReturn() {
 
         try {
+
+            SocialAuthManager socialAuthManager = request.getSession().getAttribute("org.brickred.socialauth.SocialAuthManager");
+            Map<String, String> paramsMap = SocialAuthUtil.getRequestParametersMap(request);
+            String p = paramsMap.get("state");
+            if(p!=null && p.contains('=') && p.indexOf('=')+1 < p.length()) paramsMap.put("state", p.substring(p.lastIndexOf('=')+1));
+            AuthProvider provider = socialAuthManager.connect(paramsMap);
+
             // get the provider back from session
-            AuthProvider providerObj = request.session.getAttribute("org.brickred.socialauth.AuthProvider");
             this.providerId = request.session.getAttribute("org.brickred.socialauth.AuthProvider.hint");
             LOG.info("Welcoming from provider " + providerId);
 
             // verify the authentication
-            LOG.info("Verifying " + providerObj + " for provider " + providerId);
+            LOG.info("Verifying " + provider + " for provider " + providerId);
 
             this.autoCreateUser = request.getParameter("autoCreateUser") == "true"
 
             try {
                 if(request.error!='access_denied')
-                    profile = providerObj.verifyResponse(SocialAuthUtil.getRequestParametersMap(request))
+                    profile = provider.getUserProfile();//providerObj.(SocialAuthUtil.getRequestParametersMap(request))
                 LOG.info("obtained profile: " + profile);
             } catch (Exception ex) { LOG.warn("Error while verifing response", ex); }
             if(profile==null) {

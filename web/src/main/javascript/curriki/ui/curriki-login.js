@@ -128,9 +128,10 @@ Curriki.ui.login.popupAuthorization4 = function(requestURL, windowThatShouldNext
         otherWindow.location.href= requestURL;
     } else {
         Curriki.console.log("Creating window.");
-        var x = Math.max(0,(screen.width-980)/2);
-        var y = Math.max(0,(screen.height-600)/2);
-        otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width=980,height=600,left="+x+",top="+y);
+        var defaultW = 440, defaultH = 520;
+        var x = Math.max(0,(screen.width-defaultW)/2);
+        var y = Math.max(0,(screen.height-defaultH)/2);
+        otherWindow = window.open(requestURL, popupName, "toolbar=no,scrollbars=yes,status=yes,menubar=no,resizable=yes,width="+defaultW+",height="+defaultH+",left="+x+",top="+y);
 
         if(!otherWindow || typeof (otherWindow) == undefined){
             if(popupName == "checkoutWindow"){
