@@ -849,6 +849,14 @@ public class SocialLoginToolGroovy {
             HttpGet method = new HttpGet(u.toExternalForm());
             HttpResponse response = client.execute(method);
             if(response.getStatusLine().statusCode==200) {
+                String contentType = response.getEntity().getContentType().value;
+                if(contentType!=null) {
+                    if(contentType.endsWith("image/jpeg") && (!name.endsWith(".jpg") && (!name.endsWith(".jpeg")))) {
+                        name = name+".jpeg";
+                    } else if (contentType.endsWith("image/png").equals(contentType) && !name.endsWith(".png")) {
+                        name = name + ".png";
+                    }
+                }
                 userDoc.addAttachment(name, response.getEntity().content);
             }
             userObj.set("avatar",name)
