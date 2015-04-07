@@ -107,6 +107,11 @@
      #set( $save_success = $newAsset.saveWithProgrammingRights() )
      #if( $!save_success ) ## {
        #set( $newAsset = $newAsset.publish($publishSpace) )
+         #set($q='"')#set($d='$')
+         #set($exp = "${q}/xwiki/bin/download/$publishSpace/${newAsset.name}/${d}2${q}")
+         #set($content = $content.replaceAll("${q}http://${hostname}/xwiki/bin/download/AssetTemp/([^/]*)/([^/]*)${q}", $exp))
+         <!-- saving with revised content $newAsset.setContent($content) $newAsset.saveWithProgrammingRights() -->
+
        #if("$!parentPage"!="") ## {
          #set( $parentAsset = $xwiki.curriki.fetchAsset($parentPage) )
          #set( $ok = $parentAsset.addSubasset($newAsset.fullName) )

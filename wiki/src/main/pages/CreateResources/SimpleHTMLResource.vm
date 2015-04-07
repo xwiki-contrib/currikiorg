@@ -107,7 +107,7 @@ function setUnloadDialog() {
 ## after successful validation via call to checkSimpleResourceForm(), the button
 ## below sets document.forms.inline.action='$msg.get("form.done.url")'
 ##
-<form action="" class="curriki-form1" id="inline" method="post">
+<form action="" class="curriki-form1" id="inline" method="post" onsubmit="rewireText()">
 ## 
 ## Xredirect foo 
 ##
@@ -213,6 +213,17 @@ $newAsset.display("language","edit")
  * this javascript code  must be at end, otherwise  strange   things
  * happen, like "License Deed" doesn't show up...
  */
+
+var baseURL = document.location.protocol + "//" + document.location.host;
+var regexp1 = new RegExp('<!--startimage:(false|true)\\|-\\|attach\\|-\\|([^>]*)--><img src="'+baseURL+'/xwiki/bin/download/AssetTemp/([a-zA-Z0-9]*)/([^?]*)\\?v=[0-9\\.]*(&amp;)?',"g");
+var regexp2 = new RegExp("");
+
+function rewireText() {
+    var textArea = document.getElementById("slp_text");
+    var rewritten = textArea.value;
+    rewritten = rewritten.replace(regexp1,'<!--startimage:$1|-|url|-|'+baseURL+'/xwiki/bin/download/AssetTemp/$3/$4--><img src="'+baseURL+'/xwiki/bin/download/AssetTemp/$3/$4?');
+    textArea.value = rewritten;
+}
 function startWaitingDialog() {
 #if( "$!noDialogs"!="1" )
   Curriki.showLoading();
