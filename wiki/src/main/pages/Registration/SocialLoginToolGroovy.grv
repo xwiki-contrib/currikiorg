@@ -18,6 +18,7 @@ import org.brickred.socialauth.AuthProvider
 import org.brickred.socialauth.AuthProviderFactory
 import org.brickred.socialauth.Permission
 import org.brickred.socialauth.Profile
+import org.brickred.socialauth.exception.SocialAuthException
 import org.brickred.socialauth.util.SocialAuthUtil
 import org.brickred.socialauth.SocialAuthManager
 import org.brickred.socialauth.SocialAuthConfig
@@ -292,6 +293,8 @@ public class SocialLoginToolGroovy {
             }
 
         } catch (Exception ex) {
+            if(ex instanceof SocialAuthException && "Verification code is null".equals(ex.getMessage()))
+                return "refused";
             ex.printStackTrace();
             errors.add(msg.get('xwiki.socialLogin.genericError', [ex.message]));
             return "error";
