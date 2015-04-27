@@ -68,9 +68,10 @@ public class SocialLoginToolGroovy {
         this.targets = targets;
         if(properties==null) {
             properties = new Properties();
-            properties.load(
-                    request.getSession(true).getServletContext().
-                            getResourceAsStream("/WEB-INF/oauth_consumer.properties"));
+            def stream = request.getSession(true).getServletContext().
+                    getResource("/WEB-INF/oauth_consumer.properties");
+            properties.load(stream.openStream());
+            LOG.warn("Read oauth properties from ${stream} with inputStream ${stream.openStream()}")
         }
         validation = xwiki.parseGroovyFromPage("Registration.Validation");
         validation.init(xwiki, errors, warningFields, okFields);
@@ -178,6 +179,8 @@ public class SocialLoginToolGroovy {
 
             sAManager.setPermission(request.provider, Permission.AUTHENTICATE_ONLY);
             String url = sAManager.getAuthenticationUrl(request.provider, targetUrl);
+            int p = url.indexOf('?'), q = url.lastIndexOf('?');
+            if(p>-1 && q>p) url = url.substring(0,p) + url.substring(q);
             url = url + (url.indexOf('?')>=0 ? '&' : '?') + 'display=popup';
             System.out.println("Redirecting to " + url);
 
