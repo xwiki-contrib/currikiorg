@@ -179,6 +179,10 @@ public class SocialLoginToolGroovy {
 
             sAManager.setPermission(request.provider, Permission.AUTHENTICATE_ONLY);
             String url = sAManager.getAuthenticationUrl(request.provider, targetUrl);
+            // fiddle URLs so as to get less permissions
+            if(url.contains("user_birthday")) url = url.replaceAll("user_birthday","");
+            if(url.contains("user_location")) url = url.replaceAll("user_location","");
+            url = url.replaceAll("%2C%2C","%2C");
             int p = url.indexOf('?'), q = url.lastIndexOf('?');
             if(p>-1 && q>p) url = url.substring(0,p) + url.substring(q);
             url = url + (url.indexOf('?')>=0 ? '&' : '?') + 'display=popup';
@@ -313,9 +317,9 @@ public class SocialLoginToolGroovy {
         firstName = profile.getFirstName();
         lastName = profile.getLastName();
         email = profile.getEmail();
-        city = profile.location;
+        if(profile.location) city = profile.location;
         //state = profile.state;
-        country  = profile.country;
+        if(profile.country) country  = profile.country;
 
         username = profile.displayName;
         if(username==null || username=='') {
