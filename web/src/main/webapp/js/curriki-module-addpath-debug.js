@@ -2771,7 +2771,7 @@ Curriki.module.addpath.init = function(){
 
 			// Submit form to post file
 			Ext.Ajax.request({
-				url:'http://'+_('MEDIAHOST')+'/media/upload?key='+Curriki.current.uuid
+				url:_('MEDIAHOST')+'/media/upload?key='+Curriki.current.uuid
 				,isUpload:true
 				,form:formId
 				,headers: {
@@ -2789,7 +2789,7 @@ Curriki.module.addpath.init = function(){
 
 			// Watch status of uploaded file
 			Curriki.current.videoStatusRequest = function() {
-				Ext.ux.JSONP.request('http://'+_('MEDIAHOST')+'/media/uploadStatus', {
+				Ext.ux.JSONP.request(_('MEDIAHOST')+'/media/uploadStatus', {
 					callbackKey: 'callback',
 					params: {
 						key: Curriki.current.uuid,

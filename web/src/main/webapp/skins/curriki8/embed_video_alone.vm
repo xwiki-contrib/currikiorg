@@ -42,7 +42,7 @@
         #end
         <div style="width:100%; height:100%; margin: 0 auto; display: inline-block; " id="video_div_$video_id">
             <img id="video_img_${video_id}_image" alt="$escapetool.xml($msg.get('video.player.loading'))"
-                 src="http://$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/${video_id}-lq.jpg">
+                 src="$xwiki.curriki.getPublicCurrikiConfig('mediahost','-missing-media-host-')/media/deliver/${video_id}-lq.jpg">
         </div>
         <script type="text/javascript">videoInsert("$video_id", "$escapetool.javascript($asset.displayTitle)", "$asset.fullName");</script>
         ##<p style="font-size: smaller;">

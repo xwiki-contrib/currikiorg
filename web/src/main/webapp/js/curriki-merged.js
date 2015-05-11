@@ -836,8 +836,8 @@ a.PostVideo=function(e,d,b){Curriki.current.videoCompleteCallback=e;if(Ext.isEmp
 }if(Ext.isEmpty(b)){Curriki.current.uploadCompleteCallback=function(f){Curriki.assets.CreateAsset(Curriki.current.parentAsset,Curriki.current.publishSpace,function(g){Curriki.current.asset=g;
 Curriki.current.videoId=f.id;Curriki.current.videoCompleteCallback(g)})}}else{Curriki.current.uploadCompleteCallback=b
 }Curriki.current.uuid=Math.uuid(21);Curriki.hideLoadingMask=true;Curriki.current.uploading=true;
-Curriki.current.vu_last_update=0;Curriki.ui.show("apUploadDlg");Ext.Ajax.request({url:"http://"+_("MEDIAHOST")+"/media/upload?key="+Curriki.current.uuid,isUpload:true,form:d,headers:{Accept:"text/html"},callback:function(g,h,f){if(h){}else{console.log("Upload failed",g,f);
-alert(_("add.servertimedout.message.text"))}}});Curriki.current.videoStatusRequest=function(){Ext.ux.JSONP.request("http://"+_("MEDIAHOST")+"/media/uploadStatus",{callbackKey:"callback",params:{key:Curriki.current.uuid,r:Math.uuid(21)},callback:Curriki.current.videoJsonCallback})
+Curriki.current.vu_last_update=0;Curriki.ui.show("apUploadDlg");Ext.Ajax.request({url:_("MEDIAHOST")+"/media/upload?key="+Curriki.current.uuid,isUpload:true,form:d,headers:{Accept:"text/html"},callback:function(g,h,f){if(h){}else{console.log("Upload failed",g,f);
+alert(_("add.servertimedout.message.text"))}}});Curriki.current.videoStatusRequest=function(){Ext.ux.JSONP.request(_("MEDIAHOST")+"/media/uploadStatus",{callbackKey:"callback",params:{key:Curriki.current.uuid,r:Math.uuid(21)},callback:Curriki.current.videoJsonCallback})
 };Curriki.current.videoSuccessCallback=function(f){Curriki.current.uploadCompleteCallback(f)
 };Curriki.current.videoErrorCallback=function(f){console.log("Video Upload Error",f);
 Ext.Msg.alert(_("add.video.cannot.process.title"),_("add.video.cannot.process.txt",_(f.msg)));
