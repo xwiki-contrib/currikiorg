@@ -37,9 +37,9 @@ public class TargetsGroovy {
         String referer = req.getHeader("Referer");
         String refererPath = null;
         try {
-            String hostname = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url');
-            if(referer!=null && referer.startsWith("http://" + hostname))
-                refererPath = referer.substring(7+referer.substring(7).indexOf('/'));
+            String baseURL = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.baseURL', 'broken-url');
+            if(referer!=null && referer.startsWith(baseURL))
+                refererPath = referer.substring(8+referer.substring(8).indexOf('/'));
             def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
 
             // care for srid in request and
@@ -63,8 +63,8 @@ public class TargetsGroovy {
             }
 
             // make host absolute
-            if(afterLogin.startsWith("http://" + hostname))
-                afterLogin = afterLogin.substring(("http://" + hostname).length());
+            if(afterLogin.startsWith(baseURL))
+                afterLogin = afterLogin.substring(baseURL.length());
 
             // special cases?
             // no redirect outside here
@@ -248,6 +248,7 @@ public class TargetsGroovy {
                     +"/logout");
             if(idProviderName!=null) session.setAttribute("header.idProviderName", idProviderName);
             response.sendRedirect("/xwiki/bin/logout/XWiki/XWikiLogout?xredirect=" + URLEncoder.encode(xredirect));
+            System.err.println("Redirected to " + xredirect + " (on the back of xredirect).");
             // debug: response.sendRedirect("/xwiki/bin/view/Registration/SessionAttributes");
             return "true";
         } catch (Exception ex) {

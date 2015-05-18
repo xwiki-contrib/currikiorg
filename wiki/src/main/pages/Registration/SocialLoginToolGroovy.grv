@@ -167,7 +167,7 @@ public class SocialLoginToolGroovy {
             //if(request.framed=="true")
             maybeXpage="&xpage=popup&tempskin=curriki8";
 
-            String targetUrl = "http://" + xwiki.getXWiki().Param('curriki.system.hostname', 'broken-url') +"/xwiki/bin" +
+            String targetUrl = xwiki.getXWiki().Param('curriki.system.baseURL', 'broken-url') +"/xwiki/bin" +
                     request.getPathInfo()  + '?callbackCurriki=1' + maybeXpage //+ maybeRedirect ;
 
             // Keep the autoCreateUser flag even when bouncing the provider, so it comes back with the providers answer
@@ -355,7 +355,7 @@ public class SocialLoginToolGroovy {
             post.setEntity(new StringEntity("{" +
                     " \"code\": \""+ request.code + "\",\n" +
                     "  \"grant_type\": \"authorization_code\",\n" +
-                    "  \"redirect_uri\": \"https://" + xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config') + "/xwiki/bin/view/Registration/SocialLogin\"\n" +
+                    "  \"redirect_uri\": \"" + xwiki.curriki.getPublicCurrikiConfig('baseURL', 'missing-curriki.system.baseURL-property-in-config') + "/xwiki/bin/view/Registration/SocialLogin\"\n" +
                     "}","application/json","utf-8"));
             HttpResponse response = client.execute(post);
             String result = EntityUtils.toString(response.getEntity());

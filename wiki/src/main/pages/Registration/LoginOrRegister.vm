@@ -74,11 +74,11 @@
         <div id="fb-root"></div>
         #if($targets)#else#set($targets=$xwiki.parseGroovyFromPage("Registration.TargetsGroovy"))##
             #set($junk=$targets.init($request,$xwiki))#end<!-- targets is $targets  with afterLogin $!targets.afterLogin and noLogin $!targets.noLogin -->#if($targets=="groovy_missingrights")#warn("warning, missing rights, expect malfunction.")#end ##
-        #set($nextURL="/xwiki/bin/view/Registration/JumpToTop?xpage=plain&tempskin=curriki8&redir=$escapetool.url($targets.afterLogin)")##
+        #set($nextURL="$baseURL/xwiki/bin/view/Registration/JumpToTop?xpage=plain&tempskin=curriki8&redir=$escapetool.url($targets.afterLogin)")##
         #if($request.getHeader("User-Agent") && $request.getHeader("User-Agent").contains(" Chrome/"))##
-            #set($nextURL="https://$hostname$nextURL")#end
+            #set($nextURL="$baseURL$nextURL")#end
         <div id="join_form_contents" class="fields_wrp">
-            <form id="loginForm" action="https://$hostname/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&tempskin=curriki8&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
+            <form id="loginForm" action="$baseURL/xwiki/bin/loginsubmit/XWiki/XWikiLogin?framed=true&tempskin=curriki8&xpage=popup" ## &srid=${targets.createSrid($request,$nextURL)}
                   onsubmit="if(Curriki.ui.login.validateLoginForm()) {Curriki.console.log('loading.'); Curriki.ui.login.showLoginLoading(_('loading.loading_msg')); return true; } else {return false;}" method="post">
                 <div class="hidden">##
                     <input type="hidden" name="xredirect" value="$nextURL"/>

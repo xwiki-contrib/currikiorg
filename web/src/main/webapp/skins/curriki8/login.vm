@@ -30,7 +30,7 @@ $response.sendRedirect("/xwiki/bin/view/Main/Registration/LoginOrRegister$qs")##
   ## store them in session and take them for the next query on http
   $request.session.setAttribute("messagesForNextLoginRequest",$xwiki.parseMessage())##
   $request.session.setAttribute("lastUserName","$!request.j_username")##
-  $response.sendRedirect("http://${xwiki.curriki.getPublicCurrikiConfig('hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
+  $response.sendRedirect("$baseURL/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
 #else## we're on the right place... display login or register
   <!-- this is login.vm -->
     #if(!$skin)## we did not pass initialization already

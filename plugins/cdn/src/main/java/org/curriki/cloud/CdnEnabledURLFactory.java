@@ -2,6 +2,7 @@ package org.curriki.cloud;
 
 import com.xpn.xwiki.XWikiContext;
 import com.xpn.xwiki.web.XWikiServletURLFactory;
+import org.apache.velocity.VelocityContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.xwiki.model.reference.DocumentReference;
@@ -23,6 +24,20 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
 
     } */
 
+    @Override
+    public void init(XWikiContext context) {
+        super.init(context);
+        String hostnameParam = context.getWiki().Param("curriki.system.baseURL");
+        if(hostnameParam!=null && hostnameParam.trim().length()>0)
+            try {
+                super.serverURL = new URL(hostnameParam.trim());
+                LOGGER.warn("Corrected baseURL to " + serverURL);
+            } catch (MalformedURLException ex) {
+                ex.printStackTrace();
+            } else {
+            LOGGER.warn("Did not correct baseURL: vcontext: " + hostnameParam);
+        }
+    }
 
     private URL createSkinURLImpl(String filename, String skin, XWikiContext context) {
 

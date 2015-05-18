@@ -229,7 +229,7 @@ $msg.get("mycurriki.blog.postedBy", [$xwiki.getLocalUserName($bentrydoc.creator)
 <div class="article_footer" style="border: solid 1px #CDCDCD; padding: 10px; margin-bottom: 5px;">
 {pre}
 #set($g_enable_ADDTHIS = true)
-<a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', 'http://$xwiki.curriki.getPublicCurrikiConfig('hostname','www.curriki.org')$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
+<a class="curriki-link" href="http://www.addthis.com/bookmark.php" onmouseover="return addthis_open(this, '', '${baseURL}$bentrydoc.getURL("view")', '$title')" onmouseout="addthis_close()" onclick="return addthis_sendto()">$msg.get("caption.sendToAFriend")</a>
 #if ($bentrydoc.hasAccessLevel("edit"))
 #sep()
 <a class="curriki-link" href="$bentrydoc.getURL("inline")" >$msg.get("caption.edit")</a>

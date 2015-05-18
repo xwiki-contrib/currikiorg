@@ -23,7 +23,7 @@
 ## #if($hasScripts)#else #template("javascripts.vm")#end
 </head><body>##
 #if($context.user!="XWiki.XWikiGuest" && $request.getHeader("User-Agent").contains(" Chrome") || $request.getHeader("Via"))
-    #set($redir="http://$hostname$nextStep")##
+    #set($redir="$baseURL$nextStep")##
     $xwiki.includeForm("Registration.LoginSuccessful",false)##
 #else
 <p style="width:100%; height:100%; text-align: center; line-height:2em; background-color: white;"

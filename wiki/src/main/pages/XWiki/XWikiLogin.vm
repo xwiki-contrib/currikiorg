@@ -34,12 +34,12 @@
     ## Do nothing because the response is already committed!
   #else
       #if($loginHadInvalidCredentials && $request.xredirectFailedLogin)
-        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}$!request.xredirectFailedLogin&$!request.getQueryString()")##
+        $response.sendRedirect("https://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}$!request.xredirectFailedLogin&$!request.getQueryString()")##
       #else
-        $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
+        $response.sendRedirect("https://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/LoginOrRegister?$!request.getQueryString()")##
       #end
   #end
 
 #else
-  $response.sendRedirect("http://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
+  $response.sendRedirect("https://${xwiki.xWiki.Param('curriki.system.hostname', 'missing-curriki.system.hostname-property-in-config')}/xwiki/bin/view/Registration/DirectLogin?$!request.getQueryString()")##
 #end

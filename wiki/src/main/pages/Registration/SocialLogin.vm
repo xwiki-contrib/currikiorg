@@ -24,7 +24,7 @@ $tool.init($xwiki,$context,$request,$msg,$targets)##
     #if($request.method=="POST")##
       $request.session.setAttribute("SocialLoginTool",$tool)##
       $tool.readProviderProfile()##
-      $response.sendRedirect("http://$hostname/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
+      $response.sendRedirect("$baseURL/xwiki/bin/view/Registration/SocialLogin?xaction=creationForm&$!request.getQueryString()")##
     #else##
       $tool.readProviderProfile()##
       $xwiki.includeForm("Registration.RegistrationBootstrap",false)##
