@@ -25,6 +25,7 @@ public class TargetsGroovy {
     String noLogin    = "/";
     HttpServletRequest request;
     static String SAVED_REQUEST_ATTNAME="org.xwiki.container.servlet.filters.SavedRequestManager.SavedRequest_SavedRequests";
+    String baseURL;
 
 
     public void init(HttpServletRequest req, XWiki xwiki) {
@@ -37,7 +38,7 @@ public class TargetsGroovy {
         String referer = req.getHeader("Referer");
         String refererPath = null;
         try {
-            String baseURL = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.baseURL', 'broken-url');
+            baseURL = xwiki.getXWiki()==null ? null : xwiki.getXWiki().Param('curriki.system.baseURL', 'broken-url');
             if(referer!=null && referer.startsWith(baseURL))
                 refererPath = referer.substring(8+referer.substring(8).indexOf('/'));
             def redirectMap = session.getAttribute(SAVED_REQUEST_ATTNAME);
@@ -217,6 +218,7 @@ public class TargetsGroovy {
         try {
             System.err.println("Logging out user " + request.getSession().getAttribute("org.securityfilter.filter.SecurityRequestWrapper.PRINCIPAL"));
             if(xredirect==null || xredirect.length()==0) xredirect = "/"
+            if(xredirect.startsWith('/')) xredirect = baseURL + xredirect;
             if(request.getSession()==null) {
                 response.sendRedirect(xredirect);
                 return "true";
@@ -247,7 +249,7 @@ public class TargetsGroovy {
                     ( idProviderName==null ? "inCurriki" : idProviderName)
                     +"/logout");
             if(idProviderName!=null) session.setAttribute("header.idProviderName", idProviderName);
-            response.sendRedirect("/xwiki/bin/logout/XWiki/XWikiLogout?xredirect=" + URLEncoder.encode(xredirect));
+            response.sendRedirect(baseURL + "/xwiki/bin/logout/XWiki/XWikiLogout?xredirect=" + URLEncoder.encode(xredirect));
             System.err.println("Redirected to " + xredirect + " (on the back of xredirect).");
             // debug: response.sendRedirect("/xwiki/bin/view/Registration/SessionAttributes");
             return "true";
