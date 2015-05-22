@@ -39,6 +39,11 @@ public class CdnEnabledURLFactory extends XWikiServletURLFactory {
         }
     }
 
+    @Override
+    public URL getServerURL(String xwikidb, XWikiContext context) throws MalformedURLException {
+        return serverURL;
+    }
+
     private URL createSkinURLImpl(String filename, String skin, XWikiContext context) {
 
         String cdn = context.getWiki().Param("curriki.system.CDN",null);
