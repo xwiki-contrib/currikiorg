@@ -9,7 +9,7 @@
 ## Get the partner from the partnerPap
 #set($partner = $partnerMap[$partnerName])
 #if("$!{partner}" == "")
-  #set($partner = $partnerMap["default"])
+    #set($partner = $partnerMap["default"])
 #end
 ##
 ## Set the variables from the PartnerMap
@@ -17,9 +17,9 @@
 ## The resourceDisplay is a special case, we do not want to restrict our partners
 ## to a specific path so far
 #if($request.resourceDisplay && $request.resourceDisplay.contains($partner["resourceDisplay"]))
-  #set($resourceDisplay = $request.resourceDisplay)
+    #set($resourceDisplay = $request.resourceDisplay)
 #else
-  #set($resourceDisplay = $partner["resourceDisplay"])
+    #set($resourceDisplay = $partner["resourceDisplay"])
 #end
 #set($embedViewMode = $partner["embedViewMode"])
 #set($restrictions = $partner["restrictions"])
@@ -41,6 +41,28 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
     <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/skin.js"></script>
     <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/adapter/ext/ext-base.js"></script>
     <script type="text/javascript" src="/xwiki/skins/curriki20/extjs/ext-all-debug.js"></script>
+    <script type="text/javascript">
+        ## Set some vars into Curriki object because it is running stand alone
+        Ext.ns('Curriki.global');
+        Curriki.global.username = "$!{context.user}";
+        ## Curriki.global.username = "XWiki.XWikiGuest";
+        Curriki.global.fullname = "$!xwiki.getUserName($context.user, false).replaceAll('"', "\\u0022")";
+        ## Curriki.global.fullname = "XWikiGuest";
+        Curriki.global.isAdmin = #if($hasGlobalAdmin)true#{else}false#{end};
+        ##         Curriki.global.isAdmin = false;
+        Curriki.global.attachmentsCDNbaseURL = "$attachmentsCDNbaseURL";
+        ## Curriki.global.attachmentsCDNbaseURL = "https://attachments-cdn-dev.curriki.org";
+        Curriki.global.staticCDNbaseURL = "$cdn";
+        ## Curriki.global.staticCDNbaseURL = "https://static-cdn.current.dev.curriki.org/current/1.14.5162";
+
+        Ext.ns('Curriki.userinfo');
+        Curriki.userinfo = {
+            isAdmin:    false,
+            userGroups:"",
+            userName:   "XWiki.XWikiGuest"
+        };
+    </script>
+
     <script type="text/javascript" src="/xwiki/js/f33b/curriki-module-search-debug.js" type="text/javascript"></script>
     <script type="text/javascript" src="/xwiki/gen/js/f33b/lang_en.js"></script>
     <script type="text/javascript" src="/xwiki/js/f33b/curriki-merged.js"></script>
@@ -49,7 +71,7 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
     <script type="text/javascript" src="/xwiki/skins/curriki8/f33b/js/presentation.js"></script>
     <script type="text/javascript" src="/xwiki/bin/skin/skins/curriki8/f33b/scripts/shortcuts.js"></script>
 
-    ## Needed to overwrite the default Ext.History Singleton and replace it by one which works in iFrames correctly
+## Needed to overwrite the default Ext.History Singleton and replace it by one which works in iFrames correctly
     <script type="text/javascript" src="/xwiki/js/f33b/ext-embedded-history.js"></script>
 
     <script type="text/javascript">
@@ -72,19 +94,6 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
     </script>
 
     <script type="text/javascript">
-        ## Set some vars into Curriki object because it is running stand alone
-        Ext.ns('Curriki.global');
-        Curriki.global.username = "XWiki.XWikiGuest";
-        Curriki.global.fullname = "XWikiGuest";
-        Curriki.global.isAdmin = false;
-
-        Ext.ns('Curriki.userinfo');
-        Curriki.userinfo = {
-            isAdmin:    false,
-            userGroups:"",
-            userName:   "XWiki.XWikiGuest"
-        };
-
         ## Actually fire up the search interface for the user
         Curriki.module.search.tabList = ['resource'];
         Curriki.module.search.embeddingPartnerUrl = "$embeddingPartnerUrl";
@@ -117,24 +126,24 @@ $response.addHeader("P3P", 'CP="NOI ADM DEV COM NAV OUR STP"')
         <link type="text/css" rel="stylesheet" href="${searchCssFile}">
     #end
 </head>
-    <body style="background-color:transparent; min-width:100%">
+<body style="background-color:transparent; min-width:100%">
 
-        ## The curriki image
-        <div style="position:absolute; top: 15px; right:5px; float:right; z-index:1;">
-            <img height="35px" src="/xwiki/skins/curriki8/images/powered_by_curriki.gif"/>
-        </div>
+## The curriki image
+<div style="position:absolute; top: 15px; right:5px; float:right; z-index:1;">
+    <img height="35px" src="/xwiki/skins/curriki8/images/powered_by_curriki.gif"/>
+</div>
 
-        ## The container for the search frame
-        <div id="test">
-            <div id="search-div" class=" x-panel search-module x-panel-noborder"></div>
-        </div>
+## The container for the search frame
+<div id="test">
+    <div id="search-div" class=" x-panel search-module x-panel-noborder"></div>
+</div>
 
-        ## Hidden form for the history
-        <form class="x-hidden" id="history-form">
-            <input type="hidden" id="x-history-field" value="">
-            <iframe id="x-history-frame"></iframe>
-        </form>
-    </body>
+## Hidden form for the history
+<form class="x-hidden" id="history-form">
+    <input type="hidden" id="x-history-field" value="">
+    <iframe id="x-history-frame"></iframe>
+</form>
+</body>
 </html>
 {{/html}}
 {{/velocity}}
