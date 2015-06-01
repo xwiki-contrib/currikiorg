@@ -90,6 +90,8 @@ cat $PARTNER | $UNCOMPRESS_JS > ../webapp/js/curriki-module-partner-debug.js
 cat $PARTNER | $COMPRESS_JS > ../webapp/js/curriki-module-partner.js
 
 SEARCH="\
+	curriki/search/native.history.js \
+        \
 	curriki/search/global.js \
 	curriki/search/util.js \
 	\
@@ -108,7 +110,7 @@ SEARCH="\
 	curriki/search/curriki-data.js \
 	curriki/search/curriki-form.js \
 	\
-	curriki/search/form.js \
+	curriki/search/form_new.js \
 	"
 
 cat $SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-search-debug.js

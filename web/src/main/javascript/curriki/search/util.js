@@ -1,7 +1,10 @@
 // vim: ts=4:sw=4
 /*global Ext */
 /*global Curriki */
-/*global _ */
+/*global _
+
+MODIFIED BY SLAVKO
+*/
 
 (function(){
 Ext.ns('Curriki.module.search.util');
@@ -13,8 +16,8 @@ module.init = function(){
 	console.log('search util: init');
 
 	module.logFilterList = {
-        'outerResource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir'],
-        'resource':['subject', 'level', 'language', 'ict', 'review', 'special', 'other', 'sort', 'dir']
+        'outerResource':['subject','subjectparent', 'level', 'language', 'ictprfx', 'ict', 'review', 'special', 'other', 'sort', 'dir'],
+        'resource':['subject','subjectparent', 'category', 'level', 'language', 'ictprfx', 'ict', 'review', 'special', 'other', 'sort', 'dir']
 		,'group':['subject', 'level', 'language', 'policy', 'other', 'sort', 'dir']
 		,'member':['subject', 'member_type', 'country', 'other', 'sort', 'dir']
 		,'blog':['other', 'sort', 'dir']
@@ -79,7 +82,7 @@ module.init = function(){
 			,function(store, data, options) {
 				var params = options.params||{};
 				var tab = params.module;
-				var terms = escape(params.terms||'');
+				var terms = encodeURI(params.terms||'');
 				var advancedPanel = Ext.getCmp('search-advanced-'+tab);
 				var advanced = (advancedPanel&&!advancedPanel.collapsed)
 				               ?'advanced'
@@ -89,32 +92,35 @@ module.init = function(){
 					if (params.start !== '0') {
 						page = '/start/'+params.start;
 					}
-				}
+				};
+                if (params.rows) {
+                    if (params.rows != '25') {
+                        page = page + '/rows/'+params.rows;
+                    }
+                }
+
 				var filters = ''; // Need to construct
 				Ext.each(
 					module.logFilterList[tab]
 					,function(filter){
 						if (!Ext.isEmpty(params[filter], false)){
-							filters += '/'+filter+'/'+escape(params[filter]);
+							filters += '/'+filter+'/'+encodeURI(params[filter]);
 						}
 					}
 				);
 
+                var pageurl = '';
 				if(Curriki.module.search.util.isInEmbeddedMode()){
 					Curriki.module.search.util.sendResizeMessageToEmbeddingWindow();
-                    Curriki.logView('/features/embeddedsearch/'+tab+'/'+terms+'/'+advanced+filters+page);
+                    pageurl = '/features/embeddedsearch/'+tab+'/'+terms+'/'+advanced+filters+page;
                 }else {
-                    Curriki.logView('/features/search/'+tab+'/'+terms+'/'+advanced+filters+page);
+                    pageurl = '/features/search/'+tab+'/'+terms+'/'+advanced+filters+page;
                 }
 
+                Curriki.logView(pageurl);
 
 				// Add to history
-                    // TODO: MSIE misery... have commented this out
-				//Search.doSearch(tab, false, true);
-
-                // stop blocking other searches
-                // TODO: MSIE misery here
-                // Search['runningSearch' + modName] = false;
+                Search.saveState('?state='+encodeURI(pageurl));
 
 			}
 		);
