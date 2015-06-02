@@ -470,7 +470,7 @@ if(e!=e){e=0}else{if(e!=0&&e!=Infinity&&e!=-Infinity){e=(e>0||-1)*Math.floor(Mat
 }}}if(e>=a){return -1}for(b=e>=0?e:Math.max(a-Math.abs(e),0);b<a;b++){if(b in d&&d[b]===c){return b
 }}return -1}}(function(){Ext.ns("Curriki.module.search.form");var b=Curriki.module.search;
 var a=b.form;b.init=function(){console.log("search: init");if(!Ext.isEmpty(b.initialized)){alert("Search module already initialized");
-return}if(Ext.isEmpty(b.tabList)){b.tabList=["resource","outerResource","group","member","curriki"]
+return}if(Ext.isEmpty(b.tabList)){b.tabList=["resource","group","member","curriki"]
 }var d=140;b.currentStateUrl=null;b.getState=function(){var h={};if(Ext.getCmp("search-termPanel")&&Ext.getCmp("search-termPanel").getForm){h.all=Ext.getCmp("search-termPanel").getForm().getValues(false)
 }var f={};var g={};Ext.each(b.tabList,function(m){var l=a[m];if(!Ext.isEmpty(l)&&!Ext.isEmpty(l.doSearch)){var k=Ext.getCmp("search-filterPanel-"+m);
 if(!Ext.isEmpty(k)){var n=k.getForm();if(!Ext.isEmpty(n)){h[m]=n.getValues(false);

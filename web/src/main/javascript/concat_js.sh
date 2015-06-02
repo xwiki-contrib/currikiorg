@@ -110,7 +110,7 @@ SEARCH="\
 	curriki/search/curriki-data.js \
 	curriki/search/curriki-form.js \
 	\
-	curriki/search/form_new.js \
+	curriki/search/form-new.js \
 	"
 
 cat $SEARCH | $UNCOMPRESS_JS > ../webapp/js/curriki-module-search-debug.js

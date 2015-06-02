@@ -3486,14 +3486,7 @@ module.init = function(){
                 Curriki.logView(pageurl);
 
 				// Add to history
-                    // TODO: MSIE misery... have commented this out
-				//Search.saveState("#"+pageurl);
-                //todo: /xwiki/bin/view/Search/# needs to be taken from location
                 Search.saveState('?state='+encodeURI(pageurl));
-
-                // stop blocking other searches
-                // TODO: MSIE misery here
-                // Search['runningSearch' + modName] = false;
 
 			}
 		);
@@ -6334,7 +6327,7 @@ if (!Array.prototype.indexOf) {
         }
 
         if (Ext.isEmpty(Search.tabList)) {
-            Search.tabList = ['resource', 'outerResource', 'group', 'member', 'curriki']; //
+            Search.tabList = ['resource',  'group', 'member', 'curriki']; // 'outerResource',
         }
 
         var comboWidth = 140;
